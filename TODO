@@ -1,7 +1,8 @@
 - move the symbol table into a configuration file. This would make it 
   very easy to add new symbols without recompiling. It would also enable 
-  people to distribute Vendor Specific-enabled configuration files 
-- autoconf & automake
-- test framework (i.e. a bunch of reference config files etc). 
-- use getopt() to get command line arguments. 
-- rewrite everything using an XML file format.
+  people to distribute Vendor Specific-enabled configuration files  
+- autoconf & automake -- DONE
+- test framework (i.e. a bunch of reference config files etc)  -- DONE
+- use getopt() to get command line arguments. Probably will need to change args 
+  and break thus compatibility ... 
+- rewrite everything using an XML file format. -- DONE

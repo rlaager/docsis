@@ -1,5 +1,0 @@
-This directory contains a few useful mibs related to DOCSIS.
-Drop them wherever you have net-snmp looking for MIBS; usually
-/usr/local/share/snmp/mibs or /opt/net-snmp/share/snmp/mibs 
-or maybe even /usr/share/snmp/mibs.
-

@@ -1,7 +1,7 @@
 1. General Information
 ======================
 
-This software is 	Copyright (c) 2000,2001,2002,2003 Cornel Ciocirlan
+This software is 	Copyright (c) 1999,2000,2001,2002 Cornel Ciocirlan
 			Copyright (c) 2002,2003 Evvolve Media SRL
 
 To contact the current maintainers and developers, send an E-mail to: docsis@evvolve.com. 
@@ -12,7 +12,7 @@ General questions about this software can be  sent to docsis-users@sourceforge.n
 Visit http://docsis.sourceforge.net and http://sourceforge.net/projects/docsis 
 for the latest news on this program.
 
-PLEASE READ THE FILE COPYING.GPL. 
+PLEASE READ THE FILE License.txt.
 
 Caution: This is Unsupported software that may crash your computer, damage all your data
 or otherwise drive you nuts. You'd better know what you're doing. 
@@ -20,11 +20,11 @@ or otherwise drive you nuts. You'd better know what you're doing.
 2. Description
 ==============
 
-This program encodes text configuration files which contain Configuration File 
-Settings into binary configuration files, as specified by the DOCSIS RFI 1.1
-Specification, Appendix C.
+This program encodes text configuration files which contain Configuration File Settings into 
+binary configuration files, as specified by the DOCSIS Radio Frequency Interface
+ Specification, Appendix C.
 
-It supports most DOCSIS 1.1 Configuration Settings. Not supported (currently):
+It supports most DOCSIS 2.0 Configuration Settings. Not supported (currently):
 
 	* Telephony Settings
 	* Modem Capabilities
@@ -33,17 +33,11 @@ It supports most DOCSIS 1.1 Configuration Settings. Not supported (currently):
 	* TFTP server provisioned modem address
 	* SNMPv3 settings (partial support provided)
 
-See DOCSIS 1.1 Radio Frequency Interface Specification, Appendix C for a 
+Refer to Appendix C of the Radio Frequency Interface Specification  for a
 description of these settings.
 
-A limited range of ASN types are supported for SNMP MibObjects (the most used
-types - Integer, String, HexString, IP Address). Adding a new ASN type is as 
-easy as cut&paste from UCD-SNMP source code into docsis_snmp.c, function 
-encode_vbind (well, maybe a few changes are needed, but I trust the reader can 
-figure it out).
-
-A. DOCSIS 1.0 considerations 
-============================
+DOCSIS 1.0 considerations 
+=========================
 
 More than one (up to 16) ClassOfService statements can appear in the 
 configuration file. Only one BaselinePrivacy (BPI) statement can appear. 
@@ -58,13 +52,6 @@ statement should not appear).
 
 The program is not yet as "intelligent" as to detect these problems 
 automatically (quite trivial).
-
-B. DOCSIS 1.1 considerations
-============================
-
-The DOCSIS 1.1 implementation is still 'beta-quality'. A major rewrite was
-needed to add support for DOCSIS 1.1 and clean up the parsing, encoding
-and decoding. 
 
 3. Usage
 ========

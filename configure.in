@@ -1,0 +1,111 @@
+AC_INIT(configure.in)
+
+AM_CONFIG_HEADER(config.h)
+AM_INIT_AUTOMAKE(docsis, 0.9.0)
+
+AC_LANG_C
+AC_PROG_CC
+AM_PROG_LIBTOOL
+dnl AC_PROG_YACC
+AC_PROG_LEX
+
+AC_CHECK_LIB(resolv, inet_aton)
+
+AC_PATH_PROGS([M4], [gm4 gnum4 m4], [notfound],[/usr/local/bin:/usr/freeware/bin:/usr/gnu/bin:${prefix}/bin:${exec_prefix}/bin:$PATH] )
+if test "x$M4" = "xnotfound"; then
+  AC_MSG_ERROR([M4 is required])
+else
+  ac_m4_vers=`$M4 --version 2>/dev/null | head -1` ;
+  ac_is_gnu_m4=`echo $ac_m4_vers | cut -d' ' -f1`;
+  if test "x$ac_is_gnu_m4" = "xGNU"; then
+	AC_MSG_RESULT([   found $ac_m4_vers at $M4 ])
+  else
+	AC_MSG_ERROR([ GNU M4 is needed	])
+  fi
+fi
+
+dnl check for bison, yacc won't help; 
+
+AC_PATH_PROG([BISON], [bison], [notfound],
+                   [$PATH:${prefix}/bin:${exec_prefix}/bin:/usr/freeware/bin:/usr/gnu/bin:/usr/local/bin:/usr/bin])
+if test "x$BISON" != "xnotfound" ; then
+  ac_bison_vers=`$BISON --version 2>/dev/null | head -1 | cut -d' ' -f4| awk 'BEGIN { FS = "."; } { printf "%d", ($1 * 1000 + $2) * 1000 + $3;}'`
+  if test -n "$ac_bison_vers" && test "$ac_bison_vers" -ge 1028000
+  then
+     YACC="${BISON} -t -d -y"
+     BISON="${YACC}"
+     AC_MSG_RESULT([   found bison version $ac_bison_vers, using $YACC])
+     AC_DEFINE_UNQUOTED(HAVE_BISON, 1, [Defines if your system has GNU bison])
+  else
+     AC_MSG_ERROR([bison version >= 1.28 not found])
+  fi
+else
+  AC_MSG_ERROR([bison not found])
+fi
+
+AC_SUBST(YACC)
+AC_SUBST(BISON)
+
+dnl NET-SNMP check by Cornel Ciocirlan.
+
+AC_PATH_PROG([NETSNMP_CONFIG], [net-snmp-config], [/usr/libexec/net-snmp-config],
+                   [$PATH:${prefix}/bin:${exec_prefix}/bin:/opt/net-snmp/bin:/usr/local/bin:/usr/bin])
+if test -n "$NETSNMP_CONFIG"; then
+  vers=`$NETSNMP_CONFIG --version 2>/dev/null | awk 'BEGIN { FS = "."; } { printf "%d", ($1 * 1000 + $2) * 1000 + $3;}'`
+  if test -n "$vers" && test "$vers" -ge 5000007
+  then
+     NETSNMP_LIBS="`$NETSNMP_CONFIG --libs`"
+     NETSNMP_PREFIX="`$NETSNMP_CONFIG --prefix`"
+     NETSNMP_RPATH=
+     for args in $NETSNMP_LIBS; do
+          case $args in
+            -L*)
+               NETSNMP_RPATH="$NETSNMP_CONFIG $args"
+               ;;
+          esac
+     done
+     NETSNMP_RPATH=`echo $NETSNMP_RPATH | sed -e "s/-L/-R/g"`
+     NETSNMP_CFLAGS="`$NETSNMP_CONFIG --cflags`"
+
+     AC_MSG_RESULT([   found net-snmp version $vers])
+     AC_DEFINE_UNQUOTED(HAVE_NETSNMP, 1, [Defines if your system has the net-snmp library])
+  else
+     AC_MSG_ERROR([You need at least net-snmp 5.0.7, get it at http://www.net-snmp.org])
+  fi
+fi
+
+AC_SUBST(NETSNMP_LIBS)
+AC_SUBST(NETSNMP_CFLAGS)
+AC_SUBST(NETSNMP_RPATH)
+AC_SUBST(NETSNMP_PREFIX)
+
+dnl end libnetsnmp check 
+
+dnl check for Cygwin & NSIS to build docsis_setup.exe 
+
+AC_MSG_CHECKING([for Cygwin])
+if test "x$host_os" = "xcygwin" ; then 
+	AC_MSG_RESULT([ found Cygwin, trying to use NSIS to build setup.exe ])
+dnl save current path in DOS format so we can substitute it in in NSIS setup script
+	CYGWIN_BUILDROOT=`cygpath -w $PWD`
+        NETSNMP_MIBPATH="`cygpath -d ${NETSNMP_PREFIX}/share/snmp/mibs`"
+	AC_MSG_RESULT([   using build root $CYGWIN_BUILDROOT])
+	AC_SUBST(CYGWIN_BUILDROOT)
+	AC_SUBST(NETSNMP_MIBPATH)
+
+	AC_PATH_PROG([MAKENSIS], [makensis], [notfound],[$PATH:$prefix/bin:/cygdrive/c/Program Files/NSIS])
+	if test "x$MAKENSIS" = "xnotfound"; then
+		AC_MSG_RESULT([makensis not found, no setup.exe...])
+	else 
+		AC_MSG_RESULT([found makensis at $MAKENSIS ... ])
+	fi
+else
+	AC_MSG_RESULT([no])
+fi
+
+AM_CONDITIONAL(CYGWIN_BUILD, test "x$host_os" = "xcygwin")
+AM_CONDITIONAL(CYGWIN_BUILD_SETUP_EXE, test "x$host_os" = "xcygwin" -a "x$MAKENSIS" != "xnotfound" )
+
+dnl end check for NSIS
+
+AC_OUTPUT(Makefile src/Makefile doc/Makefile examples/Makefile mibs/Makefile)

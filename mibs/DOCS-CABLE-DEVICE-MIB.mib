@@ -1,8 +1,11 @@
 DOCS-CABLE-DEVICE-MIB DEFINITIONS ::= BEGIN
 
 IMPORTS
+        TRAP-TYPE
+                FROM RFC-1215
         MODULE-IDENTITY,
         OBJECT-TYPE,
+        NOTIFICATION-TYPE,
 -- do not import        BITS,
         IpAddress,
         Unsigned32,
@@ -11,6 +14,7 @@ IMPORTS
         zeroDotZero,
         mib-2
                 FROM SNMPv2-SMI
+        TEXTUAL-CONVENTION,
         RowStatus,
         RowPointer,
         DateAndTime,
@@ -19,8 +23,8 @@ IMPORTS
         OBJECT-GROUP,
         MODULE-COMPLIANCE
                 FROM SNMPv2-CONF
-        SnmpAdminString
-                FROM SNMP-FRAMEWORK-MIB
+--        SnmpAdminString
+--                FROM SNMP-FRAMEWORK-MIB
         InterfaceIndexOrZero
                 FROM IF-MIB;  -- RFC2233
 
@@ -44,6 +48,51 @@ docsDev MODULE-IDENTITY
              Modified by Mike StJohns to add/revise filtering, TOS
              support, software version information objects."
         ::= { mib-2 69 }
+
+
+   SnmpAdminString ::= TEXTUAL-CONVENTION
+       DISPLAY-HINT "255a"
+       STATUS       current
+       DESCRIPTION "An octet string containing administrative
+                    information, preferably in human-readable form.
+
+                    To facilitate internationalization, this
+                    information is represented using the ISO/IEC
+                    IS 10646-1 character set, encoded as an octet
+                    string using the UTF-8 transformation format
+                    described in [RFC2044].
+
+                    Since additional code points are added by
+                    amendments to the 10646 standard from time
+                    to time, implementations must be prepared to
+                    encounter any code point from 0x00000000 to
+                    0x7fffffff.
+
+                    The use of control codes should be avoided.
+
+                    When it is necessary to represent a newline,
+                    the control code sequence CR LF should be used.
+
+                    The use of leading or trailing white space should
+                    be avoided.
+
+                    For code points not directly supported by user
+                    interface hardware or software, an alternative
+                    means of entry and display, such as hexadecimal,
+                    may be provided.
+
+                    For information encoded in 7-bit US-ASCII,
+                    the UTF-8 encoding is identical to the
+                    US-ASCII encoding.
+
+                    Note that when this TC is used for an object that
+                    is used or envisioned to be used as an index, then
+                    a SIZE restriction must be specified so that the
+                    number of sub-identifiers for any object instance
+                    does not exceed the limit of 128, as defined by
+                    [RFC1905].
+                   "
+       SYNTAX       OCTET STRING (SIZE (0..255))
 
 docsDevMIBObjects  OBJECT IDENTIFIER ::= { docsDev 1 }
 docsDevBase OBJECT IDENTIFIER ::= { docsDevMIBObjects 1 }
@@ -131,7 +180,6 @@ docsDevSTPControl OBJECT-TYPE
 -- to the device by network management stations.
 -- Note that access is also constrained by the
 -- community strings and any vendor-specific security.
-
 --
 
 docsDevNmAccessTable OBJECT-TYPE
@@ -171,7 +219,8 @@ DocsDevNmAccessEntry ::= SEQUENCE {
             docsDevNmAccessCommunity     OCTET STRING,
             docsDevNmAccessControl       INTEGER,
             docsDevNmAccessInterfaces    OCTET STRING,
-            docsDevNmAccessStatus        RowStatus
+            docsDevNmAccessStatus        RowStatus,
+            docsDevNmAccessTrapVersion   INTEGER
         }
 
 docsDevNmAccessIndex OBJECT-TYPE
@@ -277,6 +326,18 @@ docsDevNmAccessStatus OBJECT-TYPE
              restriction on changing values in a row of this table while
              the row is active."
         ::= { docsDevNmAccessEntry 7 }
+
+docsDevNmAccessTrapVersion OBJECT-TYPE
+        SYNTAX         INTEGER {
+            version1(1),
+            version2(2)
+        }
+        MAX-ACCESS  read-create
+        STATUS      current
+        DESCRIPTION
+            "Specifies the trap version."
+        DEFVAL { version1 }
+        ::= { docsDevNmAccessEntry 8 }
 
 --
 --  Procedures for using the following group are described in section
@@ -659,6 +720,7 @@ docsDevEventTable OBJECT-TYPE
              of interest in fault isolation and troubleshooting."
         ::= {  docsDevEvent 8 }
 
+
 docsDevEventEntry OBJECT-TYPE
         SYNTAX      DocsDevEventEntry
         MAX-ACCESS  not-accessible
@@ -755,7 +817,6 @@ docsDevEvLevel OBJECT-TYPE
 --
 -- Vendors will provide their own enumerations for the following.
 -- The interpretation of the enumeration is unambiguous for a
-
 -- particular value of the vendor's enterprise number in sysObjectID.
 --
 
@@ -1427,8 +1488,8 @@ docsDevFilterTosEntry OBJECT-TYPE
 DocsDevFilterTosEntry ::= SEQUENCE {
             docsDevFilterTosIndex   Integer32,
             docsDevFilterTosStatus  RowStatus,
-            docsDevFilterTosAndMask OCTET STRING,
-            docsDevFilterTosOrMask  OCTET STRING
+            docsDevFilterTosAndMask OCTET STRING (SIZE (1)),
+            docsDevFilterTosOrMask  OCTET STRING (SIZE (1))
         }
 
 docsDevFilterTosIndex OBJECT-TYPE
@@ -1475,6 +1536,7 @@ docsDevFilterTosOrMask OBJECT-TYPE
              TOS bits are bitwise OR'd with these bits."
         DEFVAL { '00'h }
         ::= { docsDevFilterTosEntry 4 }
+
 
 --
 -- CPE IP Management and anti spoofing group.  Only implemented on
@@ -1598,6 +1660,24 @@ docsDevCpeStatus OBJECT-TYPE
 --
 docsDevNotification OBJECT IDENTIFIER   ::= { docsDev 2 }
 
+--  trapNameV1 TRAP-TYPE
+--      ENTERPRISE  docsDevNotification
+--      VARIABLES   { docsDevEvText }
+--      DESCRIPTION
+--                  "Event report description for SNMP v1."
+--      ::= 0
+
+--  docsDevDummy OBJECT IDENTIFIER   ::= { docsDevNotification 0 }
+
+--  trapNameV2 NOTIFICATION-TYPE
+--    OBJECTS {
+--            docsDevEvText
+--        }
+--    STATUS  current
+--    DESCRIPTION
+--            "Event report description for SNMP v2."
+--    ::= { docsDevDummy 1 }
+
 
 --
 -- Conformance definitions
@@ -1620,6 +1700,7 @@ GROUP docsDevBaseGroup
         DESCRIPTION
             "Mandatory in Cable Modems, optional in Cable Modem
              Termination Systems."
+
 GROUP docsDevEventGroup
         DESCRIPTION
             "Mandatory in Cable Modems, optional in Cable Modem
