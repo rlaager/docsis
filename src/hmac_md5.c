@@ -26,12 +26,13 @@
 
 /*
  * debugging function  
- * prints a MD5 digest found in the arg buffer
+ * print the MD5 digest found in the arg buffer
  */
 
 void md5_print_digest ( unsigned char *digest )
 {
   int j;
+  /* TODO check that the buffer actually contains 16 chars ... */
   printf (" --- MD5 DIGEST: 0x");
   for (j=0;j<16;j++) 
 	printf ("%02x", digest[j] );
@@ -42,6 +43,7 @@ void md5_print_digest ( unsigned char *digest )
 ** Function: hmac_md5 
 ** Mostly cut & paste from RFC 2104
 */
+
 /* unsigned char*  text;                pointer to data stream 		*/
 /* int             text_len;            length of data stream 		*/
 /* unsigned char*  key;                 pointer to authentication key 	*/
@@ -49,7 +51,7 @@ void md5_print_digest ( unsigned char *digest )
 /* unsigned char*  digest;              caller digest to be filled in 	*/
 
 void
-hmac_md5(unsigned char *text, int text_len, unsigned char *key, int key_len, unsigned char *digest)
+hmac_md5(unsigned char *text, int text_len, unsigned char *key, size_t key_len, unsigned char *digest)
 {
         MD5_CTX context;
         unsigned char k_ipad[65];    /* inner padding -

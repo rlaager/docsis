@@ -1,7 +1,7 @@
 /* 
  *  DOCSIS configuration file encoder. 
  *  Copyright (c) 2001 Cornel Ciocirlan, ctrl@users.sourceforge.net.
- *  Copyright (c) 2002,2003 Evvolve Media SRL,office@evvolve.com
+ *  Copyright (c) 2002,2003,2004 Evvolve Media SRL,office@evvolve.com
  *  
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,7 +20,8 @@
  *  DOCSIS is a registered trademark of Cablelabs, http://www.cablelabs.com
  */
 
-#include "docsis.h"
+#include "docsis_snmp.h"
+#include "docsis_decode.h"
 
 extern unsigned int line;	/* from a.l */
 
@@ -95,7 +96,7 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
   switch (oid_asntype)
     {
     case 'i':
-      data_ptr = snmp_build_var_op (out_buffer,
+      data_ptr = _docsis_snmp_build_var_op (out_buffer,
 				    var_name,
 				    &name_len,
 				    ASN_INTEGER,
@@ -108,7 +109,7 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
     case 'g':
 	/* TODO: check that the int is positive ? */
 
-      data_ptr = snmp_build_var_op (out_buffer,
+      data_ptr = _docsis_snmp_build_var_op (out_buffer,
 				    var_name,
 				    &name_len,
 				    ASN_GAUGE,
@@ -169,7 +170,7 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
 	      break;
 	    }
 	}
-      data_ptr = snmp_build_var_op (out_buffer,
+      data_ptr = _docsis_snmp_build_var_op (out_buffer,
 				    var_name,
 				    &name_len,
 				    ASN_OCTET_STR,
@@ -182,7 +183,7 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
 	  printf ("Invalid IP address %s at line %d\n", value->strval, line);
 	  return 0;
 	}
-      data_ptr = snmp_build_var_op (out_buffer,
+      data_ptr = _docsis_snmp_build_var_op (out_buffer,
 				    var_name,
 				    &name_len,
 				    ASN_IPADDRESS,
@@ -240,24 +241,28 @@ decode_vbind (unsigned char *data, unsigned int vb_len)
 
   len = PACKET_LENGTH;
  
-if (netsnmp_ds_get_boolean
+  if (netsnmp_ds_get_boolean
       (NETSNMP_DS_LIBRARY_ID, NETSNMP_DS_LIB_EXTENDED_INDEX))
     {
       netsnmp_ds_toggle_boolean (NETSNMP_DS_LIBRARY_ID,
                                  NETSNMP_DS_LIB_EXTENDED_INDEX);
     } /* Disable extended index format ... makes it harder to parse tokens in lex */
-if (!netsnmp_ds_get_boolean
+  if (!netsnmp_ds_get_boolean
       (NETSNMP_DS_LIBRARY_ID, NETSNMP_DS_LIB_PRINT_NUMERIC_ENUM))
     {
       netsnmp_ds_toggle_boolean (NETSNMP_DS_LIBRARY_ID,
                                  NETSNMP_DS_LIB_PRINT_NUMERIC_ENUM);
     } /* Enable printing numeric enums */
-if (netsnmp_ds_get_boolean
+  if (netsnmp_ds_get_boolean
       (NETSNMP_DS_LIBRARY_ID, NETSNMP_DS_LIB_ESCAPE_QUOTES))
     {
       netsnmp_ds_toggle_boolean (NETSNMP_DS_LIBRARY_ID,
                                  NETSNMP_DS_LIB_ESCAPE_QUOTES);
     } /* Disable escape quotes in string index output  */
+
+  netsnmp_ds_set_int (NETSNMP_DS_LIBRARY_ID,
+			      NETSNMP_DS_LIB_OID_OUTPUT_FORMAT,
+			      NETSNMP_OID_OUTPUT_SUFFIX);
  
   snprint_objid (outbuf, 1023, vp->name, vp->name_length);
 
@@ -583,4 +588,176 @@ decode_snmp_oid (unsigned char *data, unsigned int data_len)
 /*  printf ("%s %d", outbuf, (int) data[data_len - 1]); */
   printf ("%s", outbuf); 
   return 1;
+}
+
+/* 
+ * The following two functions differ from stock net-snmp functions by not supporting a long 
+ * type for the length of the SNMP VarBinds 
+ *
+ * u_char * docsis_snmp_build_var_op(
+ * u_char *data      IN - pointer to the beginning of the output buffer
+ * oid *var_name        IN - object id of variable 
+ * int *var_name_len    IN - length of object id 
+ * u_char var_val_type  IN - type of variable 
+ * int    var_val_len   IN - length of variable 
+ * u_char *var_val      IN - value of variable 
+ * int *listlength      IN/OUT - number of valid bytes left in
+ * output buffer 
+ */
+
+u_char         *
+_docsis_snmp_build_var_op(u_char * data,
+                  oid * var_name,
+                  size_t * var_name_len,
+                  u_char var_val_type,
+                  size_t var_val_len,
+                  u_char * var_val, size_t * listlength)
+{
+    size_t          dummyLen, headerLen;
+    u_char         *dataPtr;
+
+    dummyLen = *listlength;
+    dataPtr = data;
+#if 0
+    data = asn_build_sequence(data, &dummyLen,
+                              (u_char) (ASN_SEQUENCE | ASN_CONSTRUCTOR),
+                              0);
+    if (data == NULL) {
+        return NULL;
+    }
+#endif
+    if (dummyLen < 2)
+        return NULL;
+    data += 2;
+    dummyLen -= 2;
+
+    headerLen = data - dataPtr;
+    *listlength -= headerLen;
+    DEBUGDUMPHEADER("send", "Name");
+    data = asn_build_objid(data, listlength,
+                           (u_char) (ASN_UNIVERSAL | ASN_PRIMITIVE |
+                                     ASN_OBJECT_ID), var_name,
+                           *var_name_len);
+    DEBUGINDENTLESS();
+    if (data == NULL) {
+        ERROR_MSG("Can't build OID for variable");
+        return NULL;
+    }
+    DEBUGDUMPHEADER("send", "Value");
+    switch (var_val_type) {
+    case ASN_INTEGER:
+        data = asn_build_int(data, listlength, var_val_type,
+                             (long *) var_val, var_val_len);
+        break;
+    case ASN_GAUGE:
+    case ASN_COUNTER:
+    case ASN_TIMETICKS:
+    case ASN_UINTEGER:
+        data = asn_build_unsigned_int(data, listlength, var_val_type,
+                                      (u_long *) var_val, var_val_len);
+        break;
+#ifdef OPAQUE_SPECIAL_TYPES
+    case ASN_OPAQUE_COUNTER64:
+    case ASN_OPAQUE_U64:
+#endif
+    case ASN_COUNTER64:
+        data = asn_build_unsigned_int64(data, listlength, var_val_type,
+                                        (struct counter64 *) var_val,
+                                        var_val_len);
+        break;
+    case ASN_OCTET_STR:
+    case ASN_IPADDRESS:
+    case ASN_OPAQUE:
+    case ASN_NSAP:
+        data = asn_build_string(data, listlength, var_val_type,
+                                var_val, var_val_len);
+        break;
+    case ASN_OBJECT_ID:
+        data = asn_build_objid(data, listlength, var_val_type,
+                               (oid *) var_val, var_val_len / sizeof(oid));
+        break;
+    case ASN_NULL:
+        data = asn_build_null(data, listlength, var_val_type);
+        break;
+    case ASN_BIT_STR:
+        data = asn_build_bitstring(data, listlength, var_val_type,
+                                   var_val, var_val_len);
+        break;
+    case SNMP_NOSUCHOBJECT:
+    case SNMP_NOSUCHINSTANCE:
+    case SNMP_ENDOFMIBVIEW:
+        data = asn_build_null(data, listlength, var_val_type);
+        break;
+#ifdef OPAQUE_SPECIAL_TYPES
+    case ASN_OPAQUE_FLOAT:
+        data = asn_build_float(data, listlength, var_val_type,
+                               (float *) var_val, var_val_len);
+        break;
+    case ASN_OPAQUE_DOUBLE:
+        data = asn_build_double(data, listlength, var_val_type,
+                                (double *) var_val, var_val_len);
+        break;
+    case ASN_OPAQUE_I64:
+        data = asn_build_signed_int64(data, listlength, var_val_type,
+                                      (struct counter64 *) var_val,
+                                      var_val_len);
+        break;
+#endif                          /* OPAQUE_SPECIAL_TYPES */
+    default:
+        ERROR_MSG("wrong type");
+        return NULL;
+    }
+    DEBUGINDENTLESS();
+    if (data == NULL) {
+        ERROR_MSG("Can't build value");
+        return NULL;
+    }
+    dummyLen = (data - dataPtr) - headerLen;
+
+    _docsis_asn_build_sequence(dataPtr, &dummyLen,
+                       (u_char) (ASN_SEQUENCE | ASN_CONSTRUCTOR),
+                       dummyLen);
+    return data;
+}
+
+
+
+/*
+ * _docsis_asn_build_sequence - builds an ASN header for a sequence with the ID and
+ * length specified.
+ *  On entry, datalength is input as the number of valid bytes following
+ *   "data".  On exit, it is returned as the number of valid bytes
+ *   in this object following the id and length.
+ *
+ *  This only works on data types < 30, i.e. no extension octets.
+ *  The maximum length is 0xFF;
+ *
+ *  Returns a pointer to the first byte of the contents of this object.
+ *  Returns NULL on any error.
+ 
+ u_char * asn_build_sequence(
+ u_char     *data         IN - pointer to start of object
+ int        *datalength   IN/OUT - number of valid bytes left in buffer
+ u_char      type         IN - asn type of object
+ int         length       IN - length of object
+ */
+u_char         *
+_docsis_asn_build_sequence(u_char * data,
+                   size_t * datalength, u_char type, size_t length)
+{
+
+    if (*datalength <2) {
+        printf(  "SNMP encoding error (build sequence): length %d < 2: PUNT", 
+                (int) *datalength);
+        return NULL;
+    }
+    *datalength -= 2;
+    *data++ = type;
+     if (*datalength >255) { 
+        printf(  "SNMP encoding error (build sequence): length %d >255 : PUNT", 
+                (int) *datalength);
+        return NULL;
+    }
+    *data++ = (u_char) (length & 0xFF);
+    return data;
 }

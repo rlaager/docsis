@@ -5,5 +5,5 @@ htmldocdir = $(prefix)/share/docsis
 EXTRA_DIST=generate-settings.sh index.html config-format.html
 CLEANFILES=config-settings.html
 
-config-settings.html:
+config-settings.html: ../src/docsis_symtable.h
 	/bin/sh generate-settings.sh config-settings.html

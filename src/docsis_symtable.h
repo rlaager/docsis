@@ -1,7 +1,7 @@
 /* 
  *  DOCSIS configuration file encoder. 
  *  Copyright (c) 2001 Cornel Ciocirlan, ctrl@users.sourceforge.net.
- *  Copyright (c) 2002 Evvolve Media SRL,office@evvolve.com
+ *  Copyright (c) 2002,2003,2004 Evvolve Media SRL,office@evvolve.com
  *  
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -214,24 +214,37 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 132, "SnmpV3Kickstart",   		34,   0,  (encode_nothing),   (decode_aggregate),   0,        0          },
 /* TODO: SP-RFI-v2.0 says the SecurityName is UTF8 encoded */
 { 133, "SnmpV3SecurityName",   		1,  132,  (encode_string),   (decode_string),  	 1,        16         },
-{ 134, "SnmpV3MgrPublicNumber", 	2,  132,  (encode_hexstr),    (decode_hexstr),  	 1,        514	      },
+{ 134, "SnmpV3MgrPublicNumber", 	2,  132,  (encode_hexstr),    (decode_hexstr),   1,        514	      },
 
 /* Snmpv3 Notification Receiver */
-{ 135, "SnmpV3TrapReceiver",   		38,   0,  (encode_nothing),   (decode_aggregate),   0,        0          },
-{ 136, "SnmpV3TrapRxIP", 		1,   135, (encode_ip),    	   (decode_ip),  	 0,        0          },
-{ 137, "SnmpV3TrapRxPort",     		2,   135, (encode_ushort),    (decode_ushort),  	 0,        0          },
-{ 138, "SnmpV3TrapRxType",     		3,   135, (encode_ushort),    (decode_ushort),  	 1,        5          },
-{ 139, "SnmpV3TrapRxTimeout",  		4,   135, (encode_ushort),    (decode_ushort),  	 0,        65535      },
-{ 140, "SnmpV3TrapRxRetries",  		5,   135, (encode_ushort),    (decode_ushort),  	 0,        65535      },
+{ 135, "SnmpV3TrapReceiver",   		38,   0,  (encode_nothing),   (decode_aggregate), 0,        0          },
+{ 136, "SnmpV3TrapRxIP", 		1,   135, (encode_ip),    	   (decode_ip),   0,        0          },
+{ 137, "SnmpV3TrapRxPort",     		2,   135, (encode_ushort),    (decode_ushort),   0,        0          },
+{ 138, "SnmpV3TrapRxType",     		3,   135, (encode_ushort),    (decode_ushort),   1,        5          },
+{ 139, "SnmpV3TrapRxTimeout",  		4,   135, (encode_ushort),    (decode_ushort),   0,        65535      },
+{ 140, "SnmpV3TrapRxRetries",  		5,   135, (encode_ushort),    (decode_ushort),   0,        65535      },
 { 141, "SnmpV3TrapRxFilterOID",		6,   135, (encode_oid),       (decode_oid),  	 1,        5          },
 { 142, "SnmpV3TrapRxSecurityName",	7,   135, (encode_string),   (decode_string),  	 1,        16         },
-{ 143, "DocsisTwoEnable",      		39,   0,  (encode_uchar),     (decode_uchar),       0,        1          },
+{ 143, "DocsisTwoEnable",      		39,   0,  (encode_uchar),     (decode_uchar),    0,        1          },
+/* Modem Capabilities Encodings */
+{ 144, "ModemCapabilities",             5,   0,   (encode_nothing),   (decode_aggregate), 0,      0      },
+{ 145, "ConcatenationSupport",          1,   144, (encode_uchar),     (decode_uchar),           0,      1       },
+{ 146, "ModemDocsisVersion",            2,   144, (encode_uchar),     (decode_uchar),           0,      2       },
+{ 147, "FragmentationSupport",          3,   144, (encode_uchar),     (decode_uchar),           0,      1       },
+{ 148, "PHSSupport",          		4,   144, (encode_uchar),     (decode_uchar),           0,      1       },
+{ 149, "IGMPSupport",          		5,   144, (encode_uchar),     (decode_uchar),           0,      1       },
+{ 150, "BaselinePrivacySupport",	6,   144, (encode_uchar),     (decode_uchar),           0,      1       },
+{ 151, "DownstreamSAIDSupport",		7,   144, (encode_uchar),     (decode_uchar),           0,      255       },
+{ 152, "UpstreamSIDSupport",		8,   144, (encode_uchar),     (decode_uchar),           0,      255       },
+{ 153, "DCCSupport",			12,  144, (encode_uchar),     (decode_uchar),           0,      1       },
+{ 154, "SubMgmtControl", 		36,  0,	  (encode_hexstr),    (decode_hexstr), 		3,	3 	},
+{ 155, "SubMgmtFilters", 		37,  0,	  (encode_ushort_list), (decode_ushort_list), 	4,	4 	},
 /* PacketCable MTA Configuration File Delimiter  */
-{ 144, "MtaConfigDelimiter",   		254, 0,   (encode_uchar),     (decode_uchar),     	 1,        255        },
+{ 156, "MtaConfigDelimiter",   		254, 0,   (encode_uchar),     (decode_uchar),    1,        255        },
 
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/
-{ 998, "GenericTLV",           		0, 0,     (encode_nothing),   (decode_special),     1,        255        }, 
-{ 999, "/*EndOfDataMkr*/",     		255, 0,   (encode_nothing),   (decode_special),     0,        0          } 
+{ 998, "GenericTLV",           		0, 0,     (encode_nothing),   (decode_special),  1,        255        }, 
+{ 999, "/*EndOfDataMkr*/",     		255, 0,   (encode_nothing),   (decode_special),  0,        0          } 
 };
 
 #endif /* _DOCSIS_SYMTABLE_H */

@@ -23,7 +23,7 @@
 #ifndef _DOCSIS_GLOBALS_H
 #define _DOCSIS_GLOBALS_H
 
-char prog_name[255];
+char prog_name[255]; 
 struct tlv_list *global_tlvlist;
 symbol_type *global_symtable;
 

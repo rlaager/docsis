@@ -1,7 +1,7 @@
 /* 
  *  DOCSIS configuration file encoder. 
  *  Copyright (c) 2001 Cornel Ciocirlan, ctrl@users.sourceforge.net.
- *  Copyright (c) 2002 Evvolve Media SRL,office@evvolve.com
+ *  Copyright (c) 2002,2003,2004 Evvolve Media SRL,office@evvolve.com
  *  
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -397,6 +397,76 @@ int encode_oid(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
   return ( output_size );
 }
 
+
+int encode_ushort_list( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
+{
+unsigned short numbers[128];
+unsigned long value_found;
+unsigned int i=0,nr_found=0; 
+char *cp; 
+char *endptr[1];
+
+union t_val *helper; /* We only use this to cast the void* we receive to what we think it should be */
+
+  if ( buf == NULL ) {
+        printf ("encode_ushort_list called w/NULL buffer!\n");
+        exit (-1);
+  }
+
+  if ( tval == NULL  ) {
+        printf ("encode_ushort_list called w/NULL value struct !\n");
+        exit (-1);
+  }
+
+  helper = (union t_val *) tval;
+  
+  cp = helper->strval;
+
+  do { 
+	if(*cp ==',' || *cp == ' ') cp++; 
+
+	value_found = strtoul( cp, endptr, 10);
+
+	if (endptr == NULL) 
+
+	if (cp == *endptr) { 
+		printf("Parse error at line %d: expecting digits\n",line); 
+		exit (-11);
+	}
+	if (value_found > 65535) { 
+		printf ("Parse error at line %d: value cannot exceed 65535\n",line);
+		exit (-11);
+	} 
+	nr_found++;
+	numbers[nr_found-1]=htons((unsigned short) value_found);
+	
+	cp=*endptr; 
+		
+  } while (*cp);
+	
+  if (sym_ptr->low_limit || sym_ptr->high_limit) {
+        if (  nr_found < sym_ptr->low_limit ) {
+                printf("Line %d: Not enough numbers, minimum %d\n", line,
+                                                        sym_ptr->low_limit);
+                exit(-1);
+        }
+        if ( sym_ptr->high_limit < nr_found ) {
+                printf("Line %d: too many numbers, max %d\n", line,
+                                                        sym_ptr->high_limit);
+                exit(-1);
+        }
+  }
+
+#ifdef DEBUG
+  printf ("encode_ushort_list: found ");
+  for(i=0; i<nr_found; i++) 
+	printf( "%d ", ntohs(numbers[i]) ); 
+  printf ("\n");  
+		
+#endif /* DEBUG */
+  memcpy ( buf, numbers, nr_found*sizeof(unsigned short));
+  return ( nr_found*sizeof(unsigned short));
+}
 
 int encode_nothing(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr ) 
 {

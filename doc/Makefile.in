@@ -308,7 +308,7 @@ uninstall-am: uninstall-htmldocDATA uninstall-info-am
 	uninstall uninstall-am uninstall-htmldocDATA uninstall-info-am
 
 
-config-settings.html:
+config-settings.html: ../src/docsis_symtable.h
 	/bin/sh generate-settings.sh config-settings.html
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

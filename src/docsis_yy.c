@@ -59,28 +59,29 @@
      T_IDENT_GENERIC = 264,
      T_ETHERMASK = 265,
      T_LABEL_OID = 266,
-     T_IP = 267,
-     T_MAC = 268,
-     T_MAIN = 269,
-     T_STRING = 270,
-     T_HEX_STRING = 271,
-     T_ASNTYPE_INT = 272,
-     T_ASNTYPE_UINT = 273,
-     T_ASNTYPE_GAUGE = 274,
-     T_ASNTYPE_TICKS = 275,
-     T_ASNTYPE_IP = 276,
-     T_ASNTYPE_OBJID = 277,
-     T_ASNTYPE_STRING = 278,
-     T_ASNTYPE_HEXSTR = 279,
-     T_ASNTYPE_DECSTR = 280,
-     T_ASNTYPE_BITSTR = 281,
-     T_ASNTYPE_BIGINT = 282,
-     T_ASNTYPE_UBIGINT = 283,
-     T_ASNTYPE_FLOAT = 284,
-     T_ASNTYPE_DOUBLE = 285,
-     T_TLV_CODE = 286,
-     T_TLV_LENGTH = 287,
-     T_TLV_VALUE = 288
+     T_SUBMGT_FILTERS = 267,
+     T_IP = 268,
+     T_MAC = 269,
+     T_MAIN = 270,
+     T_STRING = 271,
+     T_HEX_STRING = 272,
+     T_ASNTYPE_INT = 273,
+     T_ASNTYPE_UINT = 274,
+     T_ASNTYPE_GAUGE = 275,
+     T_ASNTYPE_TICKS = 276,
+     T_ASNTYPE_IP = 277,
+     T_ASNTYPE_OBJID = 278,
+     T_ASNTYPE_STRING = 279,
+     T_ASNTYPE_HEXSTR = 280,
+     T_ASNTYPE_DECSTR = 281,
+     T_ASNTYPE_BITSTR = 282,
+     T_ASNTYPE_BIGINT = 283,
+     T_ASNTYPE_UBIGINT = 284,
+     T_ASNTYPE_FLOAT = 285,
+     T_ASNTYPE_DOUBLE = 286,
+     T_TLV_CODE = 287,
+     T_TLV_LENGTH = 288,
+     T_TLV_VALUE = 289
    };
 #endif
 #define T_IDENTIFIER 258
@@ -92,28 +93,29 @@
 #define T_IDENT_GENERIC 264
 #define T_ETHERMASK 265
 #define T_LABEL_OID 266
-#define T_IP 267
-#define T_MAC 268
-#define T_MAIN 269
-#define T_STRING 270
-#define T_HEX_STRING 271
-#define T_ASNTYPE_INT 272
-#define T_ASNTYPE_UINT 273
-#define T_ASNTYPE_GAUGE 274
-#define T_ASNTYPE_TICKS 275
-#define T_ASNTYPE_IP 276
-#define T_ASNTYPE_OBJID 277
-#define T_ASNTYPE_STRING 278
-#define T_ASNTYPE_HEXSTR 279
-#define T_ASNTYPE_DECSTR 280
-#define T_ASNTYPE_BITSTR 281
-#define T_ASNTYPE_BIGINT 282
-#define T_ASNTYPE_UBIGINT 283
-#define T_ASNTYPE_FLOAT 284
-#define T_ASNTYPE_DOUBLE 285
-#define T_TLV_CODE 286
-#define T_TLV_LENGTH 287
-#define T_TLV_VALUE 288
+#define T_SUBMGT_FILTERS 267
+#define T_IP 268
+#define T_MAC 269
+#define T_MAIN 270
+#define T_STRING 271
+#define T_HEX_STRING 272
+#define T_ASNTYPE_INT 273
+#define T_ASNTYPE_UINT 274
+#define T_ASNTYPE_GAUGE 275
+#define T_ASNTYPE_TICKS 276
+#define T_ASNTYPE_IP 277
+#define T_ASNTYPE_OBJID 278
+#define T_ASNTYPE_STRING 279
+#define T_ASNTYPE_HEXSTR 280
+#define T_ASNTYPE_DECSTR 281
+#define T_ASNTYPE_BITSTR 282
+#define T_ASNTYPE_BIGINT 283
+#define T_ASNTYPE_UBIGINT 284
+#define T_ASNTYPE_FLOAT 285
+#define T_ASNTYPE_DOUBLE 286
+#define T_TLV_CODE 287
+#define T_TLV_LENGTH 288
+#define T_TLV_VALUE 289
 
 
 
@@ -121,10 +123,12 @@
 /* Copy the first part of user declarations.  */
 #line 23 "docsis_yy.y"
 
-#include "docsis.h"
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+#include "docsis.h"
+#include "docsis_encode.h"
+#include "docsis_snmp.h"
 #if YYTEXT_POINTER
 extern char *yytext;
 #else
@@ -135,6 +139,7 @@ extern unsigned int line; 	/* current line number, defined in a.l */
 extern struct tlv_list *global_tlvlist; /* Global list of all config TLVs */
 extern symbol_type *global_symtable;
 extern FILE *yyin;
+extern char prog_name[255];
  
 
 
@@ -152,19 +157,19 @@ extern FILE *yyin;
 #endif
 
 #ifndef YYSTYPE
-#line 41 "docsis_yy.y"
+#line 44 "docsis_yy.y"
 typedef union { 	/* Token types */
-	int intval;		/* For integers */
-	unsigned int uintval;		/* For integers */
+	int intval;			/* For integers */
+	unsigned int uintval;		/* For unsigned integers */
 	symbol_type *symptr; 		/* For token identifiers */
 	char *strval;		 	/* For strings */
-	unsigned char *ustrval; 	/* For other any other types */
+	unsigned char *ustrval; 	/* For any other types */
 	unsigned int ip;		/* For IP Addresses */
 	struct tlv_list *tlvlist; 	/* For for struct tlvlist pointers */
 	struct tlv *tlvptr;		/* For struct tlv pointers; */
 } yystype;
 /* Line 193 of /usr/share/bison/yacc.c.  */
-#line 168 "docsis_yy.c"
+#line 173 "docsis_yy.c"
 # define YYSTYPE yystype
 # define YYSTYPE_IS_TRIVIAL 1
 #endif
@@ -185,7 +190,7 @@ typedef struct yyltype
 
 
 /* Line 213 of /usr/share/bison/yacc.c.  */
-#line 189 "docsis_yy.c"
+#line 194 "docsis_yy.c"
 
 #if ! defined (yyoverflow) || YYERROR_VERBOSE
 
@@ -283,20 +288,20 @@ union yyalloc
 
 /* YYFINAL -- State number of the termination state. */
 #define YYFINAL  4
-#define YYLAST   62
+#define YYLAST   67
 
 /* YYNTOKENS -- Number of terminals. */
-#define YYNTOKENS  37
+#define YYNTOKENS  38
 /* YYNNTS -- Number of nonterminals. */
 #define YYNNTS  5
 /* YYNRULES -- Number of rules. */
-#define YYNRULES  21
+#define YYNRULES  22
 /* YYNRULES -- Number of states. */
-#define YYNSTATES  58
+#define YYNSTATES  60
 
 /* YYTRANSLATE(YYLEX) -- Bison symbol number corresponding to YYLEX.  */
 #define YYUNDEFTOK  2
-#define YYMAXUTOK   288
+#define YYMAXUTOK   289
 
 #define YYTRANSLATE(X) \
   ((unsigned)(X) <= YYMAXUTOK ? yytranslate[X] : YYUNDEFTOK)
@@ -309,14 +314,14 @@ static const unsigned char yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,    36,
+       2,     2,     2,     2,     2,     2,     2,     2,     2,    37,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,    34,     2,    35,     2,     2,     2,     2,
+       2,     2,     2,    35,     2,    36,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -332,7 +337,7 @@ static const unsigned char yytranslate[] =
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
        5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
       15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
-      25,    26,    27,    28,    29,    30,    31,    32,    33
+      25,    26,    27,    28,    29,    30,    31,    32,    33,    34
 };
 
 #if YYDEBUG
@@ -341,31 +346,31 @@ static const unsigned char yytranslate[] =
 static const unsigned char yyprhs[] =
 {
        0,     0,     3,     8,    11,    13,    16,    18,    23,    27,
-      31,    35,    39,    43,    47,    51,    56,    62,    68,    74,
-      80,    86
+      31,    35,    39,    43,    47,    51,    55,    60,    66,    72,
+      78,    84,    90
 };
 
 /* YYRHS -- A `-1'-separated list of the rules' RHS. */
 static const yysigned_char yyrhs[] =
 {
-      38,     0,    -1,    14,    34,    39,    35,    -1,    39,    41,
-      -1,    41,    -1,    39,    40,    -1,    40,    -1,     3,    34,
-      39,    35,    -1,     3,     4,    36,    -1,     3,    15,    36,
-      -1,     3,    16,    36,    -1,     3,    12,    36,    -1,     3,
-      13,    36,    -1,     3,    10,    36,    -1,     3,    11,    36,
-      -1,     7,    11,     4,    36,    -1,     8,    11,    17,     4,
-      36,    -1,     8,    11,    19,     4,    36,    -1,     8,    11,
-      21,    12,    36,    -1,     8,    11,    23,    15,    36,    -1,
-       8,    11,    24,    16,    36,    -1,     9,    31,     4,    32,
-       4,    33,    16,    36,    -1
+      39,     0,    -1,    15,    35,    40,    36,    -1,    40,    42,
+      -1,    42,    -1,    40,    41,    -1,    41,    -1,     3,    35,
+      40,    36,    -1,     3,     4,    37,    -1,     3,    16,    37,
+      -1,     3,    17,    37,    -1,     3,    12,    37,    -1,     3,
+      13,    37,    -1,     3,    14,    37,    -1,     3,    10,    37,
+      -1,     3,    11,    37,    -1,     7,    11,     4,    37,    -1,
+       8,    11,    18,     4,    37,    -1,     8,    11,    20,     4,
+      37,    -1,     8,    11,    22,    13,    37,    -1,     8,    11,
+      24,    16,    37,    -1,     8,    11,    25,    17,    37,    -1,
+       9,    32,     4,    33,     4,    34,    17,    37,    -1
 };
 
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const unsigned char yyrline[] =
 {
-       0,   122,   122,   126,   127,   128,   130,   134,   138,   140,
-     142,   144,   146,   148,   150,   152,   154,   156,   158,   160,
-     162,   164
+       0,   128,   128,   132,   133,   134,   136,   140,   144,   146,
+     148,   150,   152,   154,   156,   158,   160,   162,   164,   166,
+     168,   170,   172
 };
 #endif
 
@@ -376,9 +381,9 @@ static const char *const yytname[] =
 {
   "$end", "error", "$undefined", "T_IDENTIFIER", "T_INTEGER", "T_IDENT_COS", 
   "T_IDENT_BPI", "T_IDENT_SNMPW", "T_IDENT_SNMPSET", "T_IDENT_GENERIC", 
-  "T_ETHERMASK", "T_LABEL_OID", "T_IP", "T_MAC", "T_MAIN", "T_STRING", 
-  "T_HEX_STRING", "T_ASNTYPE_INT", "T_ASNTYPE_UINT", "T_ASNTYPE_GAUGE", 
-  "T_ASNTYPE_TICKS", "T_ASNTYPE_IP", "T_ASNTYPE_OBJID", 
+  "T_ETHERMASK", "T_LABEL_OID", "T_SUBMGT_FILTERS", "T_IP", "T_MAC", 
+  "T_MAIN", "T_STRING", "T_HEX_STRING", "T_ASNTYPE_INT", "T_ASNTYPE_UINT", 
+  "T_ASNTYPE_GAUGE", "T_ASNTYPE_TICKS", "T_ASNTYPE_IP", "T_ASNTYPE_OBJID", 
   "T_ASNTYPE_STRING", "T_ASNTYPE_HEXSTR", "T_ASNTYPE_DECSTR", 
   "T_ASNTYPE_BITSTR", "T_ASNTYPE_BIGINT", "T_ASNTYPE_UBIGINT", 
   "T_ASNTYPE_FLOAT", "T_ASNTYPE_DOUBLE", "T_TLV_CODE", "T_TLV_LENGTH", 
@@ -395,24 +400,24 @@ static const unsigned short yytoknum[] =
        0,   256,   257,   258,   259,   260,   261,   262,   263,   264,
      265,   266,   267,   268,   269,   270,   271,   272,   273,   274,
      275,   276,   277,   278,   279,   280,   281,   282,   283,   284,
-     285,   286,   287,   288,   123,   125,    59
+     285,   286,   287,   288,   289,   123,   125,    59
 };
 # endif
 
 /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const unsigned char yyr1[] =
 {
-       0,    37,    38,    39,    39,    39,    39,    40,    41,    41,
-      41,    41,    41,    41,    41,    41,    41,    41,    41,    41,
-      41,    41
+       0,    38,    39,    40,    40,    40,    40,    41,    42,    42,
+      42,    42,    42,    42,    42,    42,    42,    42,    42,    42,
+      42,    42,    42
 };
 
 /* YYR2[YYN] -- Number of symbols composing right hand side of rule YYN.  */
 static const unsigned char yyr2[] =
 {
        0,     2,     4,     2,     1,     2,     1,     4,     3,     3,
-       3,     3,     3,     3,     3,     4,     5,     5,     5,     5,
-       5,     8
+       3,     3,     3,     3,     3,     3,     4,     5,     5,     5,
+       5,     5,     8
 };
 
 /* YYDEFACT[STATE-NAME] -- Default rule to reduce with in state
@@ -422,10 +427,10 @@ static const unsigned char yydefact[] =
 {
        0,     0,     0,     0,     1,     0,     0,     0,     0,     0,
        6,     4,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,     2,     5,     3,     8,    13,    14,    11,
-      12,     9,    10,     0,     0,     0,     0,     0,     0,     0,
-       0,     7,    15,     0,     0,     0,     0,     0,     0,    16,
-      17,    18,    19,    20,     0,     0,     0,    21
+       0,     0,     0,     0,     2,     5,     3,     8,    14,    15,
+      11,    12,    13,     9,    10,     0,     0,     0,     0,     0,
+       0,     0,     0,     7,    16,     0,     0,     0,     0,     0,
+       0,    17,    18,    19,    20,    21,     0,     0,     0,    22
 };
 
 /* YYDEFGOTO[NTERM-NUM]. */
@@ -439,18 +444,18 @@ static const yysigned_char yydefgoto[] =
 #define YYPACT_NINF -24
 static const yysigned_char yypact[] =
 {
-      -2,   -23,    13,    34,   -24,     6,     3,     4,   -11,    -3,
-     -24,   -24,   -13,   -12,    -6,     2,     8,     9,    11,    34,
-      24,    10,    32,   -24,   -24,   -24,   -24,   -24,   -24,   -24,
-     -24,   -24,   -24,     0,    12,    35,    42,    37,    36,    38,
-      18,   -24,   -24,    16,    17,    19,    20,    21,    54,   -24,
-     -24,   -24,   -24,   -24,    26,    44,    25,   -24
+      -4,   -23,    13,    22,   -24,     6,     3,     4,   -11,    -3,
+     -24,   -24,   -13,    -5,    -2,     2,     9,    10,    11,    12,
+      22,    30,    20,    33,   -24,   -24,   -24,   -24,   -24,   -24,
+     -24,   -24,   -24,   -24,   -24,     0,    14,    39,    46,    40,
+      36,    37,    23,   -24,   -24,    18,    21,    24,    25,    26,
+      53,   -24,   -24,   -24,   -24,   -24,    31,    42,    27,   -24
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yysigned_char yypgoto[] =
 {
-     -24,   -24,    43,    -8,    -7
+     -24,   -24,    47,    -8,    -7
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]].  What to do in state STATE-NUM.  If
@@ -460,36 +465,36 @@ static const yysigned_char yypgoto[] =
 #define YYTABLE_NINF -1
 static const unsigned char yytable[] =
 {
-       5,    24,    25,     5,     6,     7,     8,     6,     7,     8,
-      12,     3,     1,     4,    20,    21,    13,    14,    15,    16,
-      22,    17,    18,    26,    27,    24,    25,    35,    34,    36,
-      28,    37,    23,    38,    39,    41,    40,     5,    29,    43,
-      19,     6,     7,     8,    30,    31,    44,    32,    42,    45,
-      48,    46,    49,    50,    47,    51,    52,    53,    54,    55,
-      56,    57,    33
+       5,    25,    26,     5,     6,     7,     8,     6,     7,     8,
+      12,     1,     3,     4,    21,    22,    13,    14,    15,    16,
+      17,    23,    18,    19,    27,     5,     0,    25,    26,     6,
+       7,     8,    28,    24,    36,    29,    43,    42,    37,    30,
+      38,    20,    39,    45,    40,    41,    31,    32,    33,    34,
+      46,    44,    48,    47,    49,    51,    50,    56,    52,    58,
+       0,    53,    54,    55,    59,    57,     0,    35
 };
 
-static const unsigned char yycheck[] =
+static const yysigned_char yycheck[] =
 {
        3,     9,     9,     3,     7,     8,     9,     7,     8,     9,
-       4,    34,    14,     0,    11,    11,    10,    11,    12,    13,
-      31,    15,    16,    36,    36,    33,    33,    17,     4,    19,
-      36,    21,    35,    23,    24,    35,     4,     3,    36,     4,
-      34,     7,     8,     9,    36,    36,     4,    36,    36,    12,
-      32,    15,    36,    36,    16,    36,    36,    36,     4,    33,
-      16,    36,    19
+       4,    15,    35,     0,    11,    11,    10,    11,    12,    13,
+      14,    32,    16,    17,    37,     3,    -1,    35,    35,     7,
+       8,     9,    37,    36,     4,    37,    36,     4,    18,    37,
+      20,    35,    22,     4,    24,    25,    37,    37,    37,    37,
+       4,    37,    16,    13,    17,    37,    33,     4,    37,    17,
+      -1,    37,    37,    37,    37,    34,    -1,    20
 };
 
 /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
    symbol of state STATE-NUM.  */
 static const unsigned char yystos[] =
 {
-       0,    14,    38,    34,     0,     3,     7,     8,     9,    39,
-      40,    41,     4,    10,    11,    12,    13,    15,    16,    34,
-      11,    11,    31,    35,    40,    41,    36,    36,    36,    36,
-      36,    36,    36,    39,     4,    17,    19,    21,    23,    24,
-       4,    35,    36,     4,     4,    12,    15,    16,    32,    36,
-      36,    36,    36,    36,     4,    33,    16,    36
+       0,    15,    39,    35,     0,     3,     7,     8,     9,    40,
+      41,    42,     4,    10,    11,    12,    13,    14,    16,    17,
+      35,    11,    11,    32,    36,    41,    42,    37,    37,    37,
+      37,    37,    37,    37,    37,    40,     4,    18,    20,    22,
+      24,    25,     4,    36,    37,     4,     4,    13,    16,    17,
+      33,    37,    37,    37,    37,    37,     4,    34,    17,    37
 };
 
 #if ! defined (YYSIZE_T) && defined (__SIZE_TYPE__)
@@ -1040,119 +1045,125 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 122 "docsis_yy.y"
+#line 128 "docsis_yy.y"
     {
 			global_tlvlist = yyvsp[-1].tlvlist; }
     break;
 
   case 3:
-#line 126 "docsis_yy.y"
+#line 132 "docsis_yy.y"
     { yyval.tlvlist = add_tlv_to_list (yyvsp[-1].tlvlist,yyvsp[0].tlvptr); }
     break;
 
   case 4:
-#line 127 "docsis_yy.y"
+#line 133 "docsis_yy.y"
     {  yyval.tlvlist=add_tlv_to_list(NULL,yyvsp[0].tlvptr); }
     break;
 
   case 5:
-#line 128 "docsis_yy.y"
+#line 134 "docsis_yy.y"
     { 
 			yyval.tlvlist = merge_tlvlist(yyvsp[-1].tlvlist,yyvsp[0].tlvlist);  }
     break;
 
   case 6:
-#line 130 "docsis_yy.y"
+#line 136 "docsis_yy.y"
     { 
 			yyval.tlvlist = merge_tlvlist (NULL, yyvsp[0].tlvlist); }
     break;
 
   case 7:
-#line 134 "docsis_yy.y"
+#line 140 "docsis_yy.y"
     { 
 			yyval.tlvlist = assemble_list_in_parent ( yyvsp[-3].symptr, yyvsp[-1].tlvlist ); }
     break;
 
   case 8:
-#line 138 "docsis_yy.y"
+#line 144 "docsis_yy.y"
     { 
 			yyval.tlvptr = create_tlv (yyvsp[-2].symptr, (union t_val *)&yyvsp[-1].uintval);}
     break;
 
   case 9:
-#line 140 "docsis_yy.y"
-    {
-			yyval.tlvptr = create_tlv (yyvsp[-2].symptr, (union t_val *)&yyvsp[-1].strval);}
-    break;
-
-  case 10:
-#line 142 "docsis_yy.y"
-    {
-			yyval.tlvptr = create_tlv (yyvsp[-2].symptr, (union t_val *)&yyvsp[-1].strval);}
-    break;
-
-  case 11:
-#line 144 "docsis_yy.y"
-    {
-			yyval.tlvptr = create_tlv (yyvsp[-2].symptr, (union t_val *)&yyvsp[-1].strval);}
-    break;
-
-  case 12:
 #line 146 "docsis_yy.y"
     {
 			yyval.tlvptr = create_tlv (yyvsp[-2].symptr, (union t_val *)&yyvsp[-1].strval);}
     break;
 
-  case 13:
+  case 10:
 #line 148 "docsis_yy.y"
     {
 			yyval.tlvptr = create_tlv (yyvsp[-2].symptr, (union t_val *)&yyvsp[-1].strval);}
     break;
 
-  case 14:
+  case 11:
 #line 150 "docsis_yy.y"
     {
 			yyval.tlvptr = create_tlv (yyvsp[-2].symptr, (union t_val *)&yyvsp[-1].strval);}
     break;
 
-  case 15:
+  case 12:
 #line 152 "docsis_yy.y"
+    {
+			yyval.tlvptr = create_tlv (yyvsp[-2].symptr, (union t_val *)&yyvsp[-1].strval);}
+    break;
+
+  case 13:
+#line 154 "docsis_yy.y"
+    {
+			yyval.tlvptr = create_tlv (yyvsp[-2].symptr, (union t_val *)&yyvsp[-1].strval);}
+    break;
+
+  case 14:
+#line 156 "docsis_yy.y"
+    {
+			yyval.tlvptr = create_tlv (yyvsp[-2].symptr, (union t_val *)&yyvsp[-1].strval);}
+    break;
+
+  case 15:
+#line 158 "docsis_yy.y"
+    {
+			yyval.tlvptr = create_tlv (yyvsp[-2].symptr, (union t_val *)&yyvsp[-1].strval);}
+    break;
+
+  case 16:
+#line 160 "docsis_yy.y"
     {    
 			yyval.tlvptr = create_snmpw_tlv ( yyvsp[-3].symptr, yyvsp[-2].strval, (union t_val *) &yyvsp[-1].uintval ); }
     break;
 
-  case 16:
-#line 154 "docsis_yy.y"
+  case 17:
+#line 162 "docsis_yy.y"
     {
 			yyval.tlvptr = create_snmpset_tlv(yyvsp[-4].symptr,yyvsp[-3].strval,'i',(union t_val *)&yyvsp[-1].uintval); }
     break;
 
-  case 17:
-#line 156 "docsis_yy.y"
+  case 18:
+#line 164 "docsis_yy.y"
     {
 			yyval.tlvptr = create_snmpset_tlv(yyvsp[-4].symptr,yyvsp[-3].strval,'g',(union t_val *)&yyvsp[-1].uintval); }
     break;
 
-  case 18:
-#line 158 "docsis_yy.y"
+  case 19:
+#line 166 "docsis_yy.y"
     {
 			yyval.tlvptr = create_snmpset_tlv(yyvsp[-4].symptr,yyvsp[-3].strval,'a',(union t_val *)&yyvsp[-1].strval); }
     break;
 
-  case 19:
-#line 160 "docsis_yy.y"
+  case 20:
+#line 168 "docsis_yy.y"
     {
 			yyval.tlvptr = create_snmpset_tlv(yyvsp[-4].symptr,yyvsp[-3].strval,'s',(union t_val *)&yyvsp[-1].strval); }
     break;
 
-  case 20:
-#line 162 "docsis_yy.y"
+  case 21:
+#line 170 "docsis_yy.y"
     {
 			yyval.tlvptr = create_snmpset_tlv(yyvsp[-4].symptr,yyvsp[-3].strval,'x',(union t_val *)&yyvsp[-1].strval); }
     break;
 
-  case 21:
-#line 164 "docsis_yy.y"
+  case 22:
+#line 172 "docsis_yy.y"
     {
 			yyval.tlvptr = create_generic_tlv(yyvsp[-7].symptr,yyvsp[-5].uintval,yyvsp[-3].uintval, (union t_val *)&yyvsp[-1].strval); }
     break;
@@ -1161,7 +1172,7 @@ yyreduce:
     }
 
 /* Line 1016 of /usr/share/bison/yacc.c.  */
-#line 1165 "docsis_yy.c"
+#line 1176 "docsis_yy.c"
 
   yyvsp -= yylen;
   yyssp -= yylen;
@@ -1380,12 +1391,11 @@ yyreturn:
 }
 
 
-#line 167 "docsis_yy.y"
+#line 175 "docsis_yy.y"
 
 
 int yyerror(char *s) {
-	fprintf(stderr, "%d:%s token %s\n",line,s, yytext ); 
-	fprintf(stderr, "%d:%s token \n",line,s);
+	fprintf(stderr, "%d:%s token %s\n",line,s,yytext ); 
 	return 0;
 }
 
@@ -1397,7 +1407,8 @@ int yyerror(char *s) {
  * an assignment_list + assignment_stmt
  */ 
 
-struct tlv *create_tlv(struct symbol_entry *sym_ptr, union t_val *value) 
+struct tlv *
+create_tlv(struct symbol_entry *sym_ptr, union t_val *value) 
 {
   struct tlv *tlvbuf=NULL;
 
@@ -1411,13 +1422,14 @@ struct tlv *create_tlv(struct symbol_entry *sym_ptr, union t_val *value)
   return tlvbuf;
 }
 
-/* Given a symbol identifier ( well, always SnmpMibObject ), a string 
+/* Given a symbol identifier ( always SnmpMibObject ), a string 
 ** containing an OID name, a string which sets the value of the OID and a t_val 
 ** which contains the raw value (of type oid_asntype), creates a TLV with the 
-** corresponding VariableBinding  
+** corresponding variable binding.
 */
 
-struct tlv *create_snmpset_tlv ( struct symbol_entry *sym_ptr,
+struct tlv *
+create_snmpset_tlv ( struct symbol_entry *sym_ptr,
 				char *oid_string,
 				char oid_asntype, 
 				union t_val *value ) 
@@ -1443,7 +1455,8 @@ struct tlv *create_snmpset_tlv ( struct symbol_entry *sym_ptr,
 ** MIB variable which has the OID as prefix.
 */
 
-struct tlv *create_snmpw_tlv ( struct symbol_entry *sym_ptr,
+struct tlv *
+create_snmpw_tlv ( struct symbol_entry *sym_ptr,
                                char *oid_string,
                                union t_val *value )
 {
@@ -1466,7 +1479,8 @@ struct tlv *create_snmpw_tlv ( struct symbol_entry *sym_ptr,
 ** creates a TLV encoding. This can be used for e.g. VendorSpecific 
 ** Information or unsupported (future?) configuration settings. 
 */
-struct tlv *create_generic_tlv ( struct symbol_entry *sym_ptr,
+struct tlv *
+create_generic_tlv ( struct symbol_entry *sym_ptr,
 				 int tlv_code,
                                  int tlv_length,
                                  union t_val *value )
@@ -1483,7 +1497,7 @@ line );
                         exit (-1);
                 }
                 if (tlvbuf->tlv_len != tlv_length ) {
-                        printf ("Length mismatch while encoding GenericTLV: given length %d, value value length %d at line %d",tlvbuf->tlv_len, tlv_length, line );
+                        printf ("Length mismatch while encoding GenericTLV: given length %d, value length %d at line %d",tlvbuf->tlv_len, tlv_length, line );
 
                         exit (-1);
 		}
@@ -1515,9 +1529,10 @@ struct tlv_list *add_tlv_to_list(struct tlv_list *list, struct tlv *newtlv)
   }
 }
 
-/* Merges two tlvlists into one tlvlist. */
+/* Merge two tlvlists into one tlvlist. */
 
-struct tlv_list *merge_tlvlist( struct tlv_list *list1, struct tlv_list *list2 )
+struct tlv_list *
+merge_tlvlist(struct tlv_list *list1, struct tlv_list *list2)
 {
   struct tlv_list *newtlvlist;
   newtlvlist = (struct tlv_list *) malloc ( sizeof(struct tlv_list) );
@@ -1532,11 +1547,15 @@ struct tlv_list *merge_tlvlist( struct tlv_list *list1, struct tlv_list *list2 )
   } 
   newtlvlist->tlv_count = list1->tlv_count+list2->tlv_count;
   newtlvlist->tlvlist = (struct tlv **) malloc ((newtlvlist->tlv_count)*sizeof ( struct tlv *));
-  memcpy ( &(newtlvlist->tlvlist[0]),&(list1->tlvlist[0]),list1->tlv_count*sizeof(struct tlv *));  
-  memcpy ( &(newtlvlist->tlvlist[list1->tlv_count]),&(list2->tlvlist[0]),list2->tlv_count*sizeof(struct tlv *));
+  memcpy ( &(newtlvlist->tlvlist[0]), &(list1->tlvlist[0]), 
+		list1->tlv_count*sizeof(struct tlv *));  
+  memcpy ( &(newtlvlist->tlvlist[list1->tlv_count]), &(list2->tlvlist[0]),
+		list2->tlv_count*sizeof(struct tlv *));
   free(list1->tlvlist);free(list1);
   free(list2->tlvlist);free(list2);
-/* We don't free the TLVs since they are still referenced by newtlvlist->tlvlist */
+/* We don't free the TLVs themselves since they are still referenced by 
+ *  newtlvlist->tlvlist 
+ */
   return newtlvlist;
 }
 
@@ -1548,7 +1567,8 @@ struct tlv_list *merge_tlvlist( struct tlv_list *list1, struct tlv_list *list2 )
  * Returns a TLV list with the new TLV 
  */
 
-struct tlv_list *assemble_list_in_parent (struct symbol_entry *sym_ptr, struct tlv_list *list) 
+struct tlv_list *
+assemble_list_in_parent (struct symbol_entry *sym_ptr, struct tlv_list *list) 
 {
   struct tlv_list *newtlvlist;
   struct tlv *parent_tlv;
@@ -1564,14 +1584,16 @@ struct tlv_list *assemble_list_in_parent (struct symbol_entry *sym_ptr, struct t
   return newtlvlist;
 }
 
-/* Creates a buffer filled with the TLV bytes sequentially, as they will be 
+/* 
+ * Creates a buffer filled with the TLV bytes sequentially, as they will be 
  * found in the final configuration file. 
- * We use this function either to create a "parent" tlv corresponding to 
- * ClassOfService-like TLVs, or to create the final buffer to which we add the 
- * MIC digests, end-of-data marker and pad and write to the output file.
+ * This function is called either when creating a "parent" tlv corresponding to 
+ * aggregate (e.g. BaselinePrivacy) TLVs, or when creating the final buffer 
+ * before writing the output file.
  */
 
-unsigned int flatten_tlvlist (unsigned char *buf, struct tlv_list *list )
+unsigned int 
+flatten_tlvlist (unsigned char *buf, struct tlv_list *list )
 {
   register unsigned char *cp;
   int i;
@@ -1593,9 +1615,17 @@ unsigned int flatten_tlvlist (unsigned char *buf, struct tlv_list *list )
   return (unsigned int) (cp-buf); 
 }
 
-int parse_input_file ( FILE *thefile ) 
+int parse_config_file ( char *file ) 
 { 
-  yyin = thefile ; 
+  FILE *cf;
+
+  if ( (cf = fopen ( file, "r" ))== NULL ) 
+  {
+	printf ("%s: Can't open config file %s\n",prog_name,file );
+	exit(-5);
+  }
+
+  yyin = cf ; 
 #ifdef DEBUG
   yydebug = 1;
 #endif

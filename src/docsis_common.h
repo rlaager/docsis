@@ -1,4 +1,3 @@
-
 /* 
  *  DOCSIS configuration file encoder. 
  *  Copyright (c) 2001 Cornel Ciocirlan, ctrl@users.sourceforge.net.
@@ -32,7 +31,7 @@
 
 
 #ifndef NUM_IDENTIFIERS
-#define NUM_IDENTIFIERS 147
+#define NUM_IDENTIFIERS 159
 #endif /*  NUM_IDENTIFIERS, needed in docsis_symtable.h  */
 
 #define MAXINT 2000000000 
@@ -71,10 +70,10 @@ struct tlv_list {
 
 union t_val {           /* union for returning token values */
         int intval;             /* For integers */
-        unsigned int uintval;             /* For integers */
+        unsigned int uintval;   /* For unsigned integers */
         symbol_type *symptr;    /* For token identifiers */
         char *strval;           /* For strings */
-        unsigned char *ustrval; /* For strings */
+        unsigned char *ustrval; /* For (unsigned char *) strings */
         unsigned int ip;        /* For IP Addresses */
         struct tlv_list *tlvlist; /* For for struct tlvlist pointers */
         struct tlv *tlvptr;     /* For struct tlv pointers; */

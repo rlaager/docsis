@@ -23,8 +23,9 @@
 #ifndef _DOCSIS_DECODE_H
 #define _DOCSIS_DECODE_H
 
-int decode_tlvbuf (unsigned char *buf, unsigned int buflen, unsigned char docs_parent); 
-int pretty_decode_buffer (unsigned char *buf, unsigned int buflen, unsigned char docs_parent); 
+#include <stdlib.h>
+#include "docsis_common.h"
+
 struct symbol_entry *find_symbol_by_code_and_pid (unsigned char code, unsigned int pid);
 
 void decode_special (unsigned char *tlvbuf, symbol_type *sym);
@@ -41,11 +42,12 @@ void decode_oid (unsigned char *tlvbuf, symbol_type *sym);
 void decode_string (unsigned char *tlvbuf, symbol_type *sym);
 void decode_strzero (unsigned char *tlvbuf, symbol_type *sym);
 void decode_hexstr (unsigned char *tlvbuf, symbol_type *sym);
+void decode_ushort_list (unsigned char *tlvbuf, symbol_type *sym);
 void decode_unknown (unsigned char *tlvbuf, symbol_type *sym);
 void decode_aggregate (unsigned char *tlvbuf, symbol_type *sym);
-void decode_main_aggregate (unsigned char *tlvbuf, unsigned int buflen);
+void decode_main_aggregate (unsigned char *tlvbuf, size_t buflen);
 void decode_vspecific(unsigned char *tlvbuf, symbol_type *sym);
-int hexadecimal_to_binary(const char *, u_char *);
+int hexadecimal_to_binary(const char *string, unsigned char *out_buf);
 int str_isalpha (const char *str, size_t str_len);
 int str_isprint (const char *str, size_t str_len);
 void snprint_hexadecimal ( unsigned char *outbuf, size_t outsize, const char *str, size_t str_len );

@@ -20,19 +20,18 @@
  *  DOCSIS is a registered trademark of Cablelabs, http://www.cablelabs.com
  */
 
-#include "docsis.h"
-#include "docsis_common.h"
+#include <math.h>
+#include <ctype.h>
+
+/* #include "docsis.h" */
 #include "docsis_decode.h"
 #include "docsis_snmp.h"
 #include "ethermac.h"
 
-#include <math.h>
-#include <ctype.h>
-
 extern symbol_type *global_symtable;
 
-
-struct symbol_entry *find_symbol_by_code_and_pid (unsigned char code, unsigned int pid)
+struct symbol_entry *
+find_symbol_by_code_and_pid (unsigned char code, unsigned int pid)
 {
  int i;
 
@@ -168,6 +167,29 @@ void decode_hexstr (unsigned char *tlvbuf, symbol_type *sym)
  free(helper);
 }
 
+void decode_ushort_list (unsigned char *tlvbuf, symbol_type *sym) 
+{
+ char *helper;
+ unsigned int i;
+ unsigned int len;
+
+ len = (unsigned int) tlvbuf[1];
+ helper = (char *) malloc ( len+1 );
+ memset ( helper, 0, len+1);
+ memcpy ( helper, (char *) tlvbuf+2, len );
+ printf ( "%s ", sym->sym_ident);
+ if ( len < 2*sym->low_limit || len > 2*sym->high_limit ) 
+	printf( "/* -- warning: illegal length of buffer --*/"); 
+
+ for(i=0; i<len; i=i+2) {
+        printf("%hu", ntohs( (* (unsigned short *) &helper[i])) );
+	if (i< len-2) printf (",");
+ }
+ printf(";\n");
+ free(helper);
+
+}
+
 void decode_unknown (unsigned char *tlvbuf, symbol_type *sym)
 {
   int len=0;
@@ -299,19 +321,17 @@ void decode_vspecific (unsigned char *tlvbuf, symbol_type *sym)
   printf("}\n");
 }
 
-
-
 /* 
  * This function is needed because we don't have a symbol to call it. 
  * We can't put a "Main" symbol in the symtable because docsis_code is 
  * unsigned char (in struct symbol_entry) and we reserve the values for 
  * DOCSIS use. 
- * It's also a bif different from docsis_aggregate in that docsis_aggregate 
+ * It's also a bit different from docsis_aggregate in that docsis_aggregate 
  * takes an aggregate tlvbuf as argument that INCLUDES the "parent" code and 
  * length. On the main aggregate we don't have a code / length. 
  */
 
-void decode_main_aggregate (unsigned char *tlvbuf, unsigned int buflen)
+void decode_main_aggregate (unsigned char *tlvbuf, size_t buflen)
 {
   register unsigned char *cp;
   symbol_type *current_symbol;
@@ -340,7 +360,7 @@ void decode_main_aggregate (unsigned char *tlvbuf, unsigned int buflen)
 }
 
 int
-hexadecimal_to_binary (const char *str, u_char * bufp)
+hexadecimal_to_binary (const char *str, unsigned char * bufp)
 {
   int len, itmp;
   printf ("Hex string rx'd: %s\n", str);

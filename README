@@ -4,6 +4,8 @@
 This software is 	Copyright (c) 1999,2000,2001,2002 Cornel Ciocirlan
 			Copyright (c) 2002,2003 Evvolve Media SRL
 
+Portions of this program are derived from the RSA Data Security, Inc. MD5 Message-Digest Algorithm.
+
 To contact the current maintainers and developers, send an E-mail to: docsis@evvolve.com. 
 To contact the original author, send an E-mail to: ctrl@users.sourceforge.net.
 

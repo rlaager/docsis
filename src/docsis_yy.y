@@ -1,7 +1,7 @@
 /* 
  *  DOCSIS configuration file encoder. 
  *  Copyright (c) 2001 Cornel Ciocirlan, ctrl@users.sourceforge.net.
- *  Copyright (c) 2002 Evvolve Media SRL,office@evvolve.com
+ *  Copyright (c) 2002,2003,2004 Evvolve Media SRL,office@evvolve.com
  *  
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,10 +21,12 @@
  */
 
 %{
-#include "docsis.h"
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+#include "docsis.h"
+#include "docsis_encode.h"
+#include "docsis_snmp.h"
 #if YYTEXT_POINTER
 extern char *yytext;
 #else
@@ -35,15 +37,16 @@ extern unsigned int line; 	/* current line number, defined in a.l */
 extern struct tlv_list *global_tlvlist; /* Global list of all config TLVs */
 extern symbol_type *global_symtable;
 extern FILE *yyin;
+extern char prog_name[255];
  
 %}                  
 
 %union { 	/* Token types */
-	int intval;		/* For integers */
-	unsigned int uintval;		/* For integers */
+	int intval;			/* For integers */
+	unsigned int uintval;		/* For unsigned integers */
 	symbol_type *symptr; 		/* For token identifiers */
 	char *strval;		 	/* For strings */
-	unsigned char *ustrval; 	/* For other any other types */
+	unsigned char *ustrval; 	/* For any other types */
 	unsigned int ip;		/* For IP Addresses */
 	struct tlv_list *tlvlist; 	/* For for struct tlvlist pointers */
 	struct tlv *tlvptr;		/* For struct tlv pointers; */
@@ -58,6 +61,7 @@ extern FILE *yyin;
 %token <symptr>  T_IDENT_GENERIC
 %token <strval>  T_ETHERMASK
 %token <strval>  T_LABEL_OID
+%token <strval>  T_SUBMGT_FILTERS
 %token <strval>  T_IP
 %token <strval>  T_MAC
 %token <strval>  T_MAIN
@@ -90,9 +94,10 @@ extern FILE *yyin;
 /* %type <tlvlist> config_stmt */
 
 %%
+
 /* 
 
-How this works ? 
+How does this work ? 
 
 When we recognize an assignment statement (for example "MaxCPE 13;") we create 
 a "struct tlv" which contains the type associated with this configuration 
@@ -106,16 +111,17 @@ sub-types) are treated a bit different.
 
 For example, within the ClassOfService statement we have a list of 
 assignment_stmts which are reduced to an assignment_list, and then to a 
-cos_stmt. When we flatten/reduce the cos_stmt to a config_stmt_list we merge the 
-cos_stmt tlvlist with the tlvlist corresponding to config_stmt_list (may be
-empty if cos_stmt is the first statement that appears in the config file) so we
-have a single tlvlist. 
+config_stmt. When we flatten and reduce the config_stmt to an assignment_list we 
+merge the config_stmt tlvlist with the tlvlist corresponding to the 
+assignment_list (may be empty if a config_stmt appears first in 
+the config file) so we have a single tlvlist. 
 
 The idea is that, when we finish parsing, we end up with a "global_tlvlist" 
-which contains pointers to all the struct tlv's that we assembled while parsing
-the configuration file. At this point, we "flatten" this list into a tlvbuf, 
-add CM MIC and CMTS MIC and pad and that's it. */
+which contains pointers to all the top-level struct tlv's that we assembled while 
+parsing the configuration file. At this point, we "flatten" this list into a 
+tlvbuf, add CM MIC and CMTS MIC and pad and that's it. 
 
+*/
 
 /* Definitions of bison/yacc grammar */
 
@@ -140,6 +146,8 @@ assignment_stmt:  T_IDENTIFIER T_INTEGER ';' {
 		| T_IDENTIFIER T_STRING ';'  {
 			$$ = create_tlv ($1, (union t_val *)&$2);}	
 		| T_IDENTIFIER T_HEX_STRING ';'  {
+			$$ = create_tlv ($1, (union t_val *)&$2);}	
+		| T_IDENTIFIER T_SUBMGT_FILTERS ';' {
 			$$ = create_tlv ($1, (union t_val *)&$2);}	
 		| T_IDENTIFIER T_IP ';' {
 			$$ = create_tlv ($1, (union t_val *)&$2);}	
@@ -167,8 +175,7 @@ assignment_stmt:  T_IDENTIFIER T_INTEGER ';' {
 %%
 
 int yyerror(char *s) {
-	fprintf(stderr, "%d:%s token %s\n",line,s, yytext ); 
-	fprintf(stderr, "%d:%s token \n",line,s);
+	fprintf(stderr, "%d:%s token %s\n",line,s,yytext ); 
 	return 0;
 }
 
@@ -180,7 +187,8 @@ int yyerror(char *s) {
  * an assignment_list + assignment_stmt
  */ 
 
-struct tlv *create_tlv(struct symbol_entry *sym_ptr, union t_val *value) 
+struct tlv *
+create_tlv(struct symbol_entry *sym_ptr, union t_val *value) 
 {
   struct tlv *tlvbuf=NULL;
 
@@ -194,13 +202,14 @@ struct tlv *create_tlv(struct symbol_entry *sym_ptr, union t_val *value)
   return tlvbuf;
 }
 
-/* Given a symbol identifier ( well, always SnmpMibObject ), a string 
+/* Given a symbol identifier ( always SnmpMibObject ), a string 
 ** containing an OID name, a string which sets the value of the OID and a t_val 
 ** which contains the raw value (of type oid_asntype), creates a TLV with the 
-** corresponding VariableBinding  
+** corresponding variable binding.
 */
 
-struct tlv *create_snmpset_tlv ( struct symbol_entry *sym_ptr,
+struct tlv *
+create_snmpset_tlv ( struct symbol_entry *sym_ptr,
 				char *oid_string,
 				char oid_asntype, 
 				union t_val *value ) 
@@ -226,7 +235,8 @@ struct tlv *create_snmpset_tlv ( struct symbol_entry *sym_ptr,
 ** MIB variable which has the OID as prefix.
 */
 
-struct tlv *create_snmpw_tlv ( struct symbol_entry *sym_ptr,
+struct tlv *
+create_snmpw_tlv ( struct symbol_entry *sym_ptr,
                                char *oid_string,
                                union t_val *value )
 {
@@ -249,7 +259,8 @@ struct tlv *create_snmpw_tlv ( struct symbol_entry *sym_ptr,
 ** creates a TLV encoding. This can be used for e.g. VendorSpecific 
 ** Information or unsupported (future?) configuration settings. 
 */
-struct tlv *create_generic_tlv ( struct symbol_entry *sym_ptr,
+struct tlv *
+create_generic_tlv ( struct symbol_entry *sym_ptr,
 				 int tlv_code,
                                  int tlv_length,
                                  union t_val *value )
@@ -266,7 +277,7 @@ line );
                         exit (-1);
                 }
                 if (tlvbuf->tlv_len != tlv_length ) {
-                        printf ("Length mismatch while encoding GenericTLV: given length %d, value value length %d at line %d",tlvbuf->tlv_len, tlv_length, line );
+                        printf ("Length mismatch while encoding GenericTLV: given length %d, value length %d at line %d",tlvbuf->tlv_len, tlv_length, line );
 
                         exit (-1);
 		}
@@ -298,9 +309,10 @@ struct tlv_list *add_tlv_to_list(struct tlv_list *list, struct tlv *newtlv)
   }
 }
 
-/* Merges two tlvlists into one tlvlist. */
+/* Merge two tlvlists into one tlvlist. */
 
-struct tlv_list *merge_tlvlist( struct tlv_list *list1, struct tlv_list *list2 )
+struct tlv_list *
+merge_tlvlist(struct tlv_list *list1, struct tlv_list *list2)
 {
   struct tlv_list *newtlvlist;
   newtlvlist = (struct tlv_list *) malloc ( sizeof(struct tlv_list) );
@@ -315,11 +327,15 @@ struct tlv_list *merge_tlvlist( struct tlv_list *list1, struct tlv_list *list2 )
   } 
   newtlvlist->tlv_count = list1->tlv_count+list2->tlv_count;
   newtlvlist->tlvlist = (struct tlv **) malloc ((newtlvlist->tlv_count)*sizeof ( struct tlv *));
-  memcpy ( &(newtlvlist->tlvlist[0]),&(list1->tlvlist[0]),list1->tlv_count*sizeof(struct tlv *));  
-  memcpy ( &(newtlvlist->tlvlist[list1->tlv_count]),&(list2->tlvlist[0]),list2->tlv_count*sizeof(struct tlv *));
+  memcpy ( &(newtlvlist->tlvlist[0]), &(list1->tlvlist[0]), 
+		list1->tlv_count*sizeof(struct tlv *));  
+  memcpy ( &(newtlvlist->tlvlist[list1->tlv_count]), &(list2->tlvlist[0]),
+		list2->tlv_count*sizeof(struct tlv *));
   free(list1->tlvlist);free(list1);
   free(list2->tlvlist);free(list2);
-/* We don't free the TLVs since they are still referenced by newtlvlist->tlvlist */
+/* We don't free the TLVs themselves since they are still referenced by 
+ *  newtlvlist->tlvlist 
+ */
   return newtlvlist;
 }
 
@@ -331,7 +347,8 @@ struct tlv_list *merge_tlvlist( struct tlv_list *list1, struct tlv_list *list2 )
  * Returns a TLV list with the new TLV 
  */
 
-struct tlv_list *assemble_list_in_parent (struct symbol_entry *sym_ptr, struct tlv_list *list) 
+struct tlv_list *
+assemble_list_in_parent (struct symbol_entry *sym_ptr, struct tlv_list *list) 
 {
   struct tlv_list *newtlvlist;
   struct tlv *parent_tlv;
@@ -347,14 +364,16 @@ struct tlv_list *assemble_list_in_parent (struct symbol_entry *sym_ptr, struct t
   return newtlvlist;
 }
 
-/* Creates a buffer filled with the TLV bytes sequentially, as they will be 
+/* 
+ * Creates a buffer filled with the TLV bytes sequentially, as they will be 
  * found in the final configuration file. 
- * We use this function either to create a "parent" tlv corresponding to 
- * ClassOfService-like TLVs, or to create the final buffer to which we add the 
- * MIC digests, end-of-data marker and pad and write to the output file.
+ * This function is called either when creating a "parent" tlv corresponding to 
+ * aggregate (e.g. BaselinePrivacy) TLVs, or when creating the final buffer 
+ * before writing the output file.
  */
 
-unsigned int flatten_tlvlist (unsigned char *buf, struct tlv_list *list )
+unsigned int 
+flatten_tlvlist (unsigned char *buf, struct tlv_list *list )
 {
   register unsigned char *cp;
   int i;
@@ -376,9 +395,17 @@ unsigned int flatten_tlvlist (unsigned char *buf, struct tlv_list *list )
   return (unsigned int) (cp-buf); 
 }
 
-int parse_input_file ( FILE *thefile ) 
+int parse_config_file ( char *file ) 
 { 
-  yyin = thefile ; 
+  FILE *cf;
+
+  if ( (cf = fopen ( file, "r" ))== NULL ) 
+  {
+	printf ("%s: Can't open config file %s\n",prog_name,file );
+	exit(-5);
+  }
+
+  yyin = cf ; 
 #ifdef DEBUG
   yydebug = 1;
 #endif

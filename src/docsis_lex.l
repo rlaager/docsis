@@ -1,7 +1,7 @@
 /* 
  *  DOCSIS configuration file encoder. 
  *  Copyright (c) 2001 Cornel Ciocirlan, ctrl@users.sourceforge.net.
- *  Copyright (c) 2002 Evvolve Media SRL,office@evvolve.com
+ *  Copyright (c) 2002,2003,2004 Evvolve Media SRL, office@evvolve.com
  *  
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,8 +20,6 @@
  *  DOCSIS is a registered trademark of Cablelabs, http://www.cablelabs.com
  */
 
-/*\.([0-9]+\.)*[0-9]+		{ TSAVE(yytext);yylval.strval=tsave; return T_OID; 	  } */
-
 %{ 
 #include "docsis.h"
 #include "docsis_yy.h"
@@ -32,14 +30,15 @@ extern symbol_type *global_symtable;
 unsigned int line=1; /* On parse errors, we print the line number */
 
 char *str; char strbuf[255]; unsigned int strsize;/* max string len = 255; TODO check overflow */
-
 char *tsave;
+
 #define TSAVE(s) tsave=(char*)malloc(yyleng+1);memset(tsave,0,yyleng+1);memcpy(tsave,s,yyleng)
 %}
 %x STRING
 %x COMMENT
 %%
 
+([0-9]+,){3}[0-9]+		{ TSAVE(yytext);yylval.strval=tsave; return T_SUBMGT_FILTERS;	  }
 ([0-9]+\.){3}[0-9]+	 	{ TSAVE(yytext);yylval.strval=tsave; return T_IP;	  }
 0[Xx]([0-9A-Fa-f])+		{ TSAVE(yytext);yylval.strval=tsave; return T_HEX_STRING; }
 ([0-9A-Fa-f][0-9A-Fa-f]:){5}[0-9A-Fa-f][0-9A-Fa-f]\/([0-9A-Fa-f][0-9A-Fa-f]:){5}[0-9A-Fa-f][0-9A-Fa-f]  { TSAVE(yytext);yylval.strval=tsave; return T_ETHERMASK; 			       }
@@ -116,16 +115,17 @@ TlvValue		{ return T_TLV_VALUE; 	}
 .	 { printf("Unrecognized char \"%c\" at line %d\n",*yytext,line); exit(-1); }
 %%
 
-struct symbol_entry *find_symbol_by_name(char *sym_str) {
-int i;
+struct symbol_entry 
+*find_symbol_by_name (char *sym_str) 
+{
+ int i;
 
  for ( i=0; i<NUM_IDENTIFIERS; i++) {
         if (!strcmp(sym_str, global_symtable[i].sym_ident)) {
                 return &global_symtable[i];
         }
-
  }
- printf ("Unrecognized symbol %s at line %d\n", sym_str,line);
+ printf ("Unrecognized symbol %s at line %d\n", sym_str, line);
  exit(-1);
 }          
 

@@ -34,7 +34,7 @@ int ether_aton ( const char *macstr, unsigned char *outbuf )
 int fragval;
 const char *ptr; char *p;
 char fragptr[3];
-unsigned char themac[6]; /* in binary form */
+unsigned char themac[6]; /* MAC address in binary form */
 int i=0,rval=0;
 
 ptr=macstr;
@@ -89,7 +89,7 @@ p = strchr ( ptr, (int) ':' );
 /* 
  * Tranforms the binary-form Ethernet MAC address received as argument into 
  * string-form human readable Ethernet MAC address 
- * themac is a static char so will be overwritten by subsequent calls 
+ * themac is a static char which WILL be overwritten by subsequent calls 
  * to this function 
  */
 char *ether_ntoa ( const unsigned char *mac)

@@ -1,4 +1,3 @@
-
 /* 
  *  DOCSIS configuration file encoder. 
  *  Copyright (c) 2001 Cornel Ciocirlan, ctrl@users.sourceforge.net.
@@ -21,16 +20,32 @@
  *  DOCSIS is a registered trademark of Cablelabs, http://www.cablelabs.com
  */
 
+
 #ifndef _DOCSIS_SNMP_H
 #define _DOCSIS_SNMP_H
 
-/* each of these returns the length of the value parsed ! */
+#include <net-snmp/net-snmp-config.h>
+#include <net-snmp/utilities.h>
+#include <net-snmp/config_api.h>
+#include <net-snmp/output_api.h>
+#include <net-snmp/mib_api.h>
+
+#include "docsis.h"
 
 unsigned int encode_vbind ( char *oid_string, char oid_asntype, union t_val *value,
                         unsigned char *out_buffer, unsigned int out_size );
 int decode_vbind ( unsigned char *, unsigned int);
 unsigned int encode_snmp_oid ( char *oid_string, unsigned char *out_buffer, unsigned int out_size );
 unsigned int decode_snmp_oid ( unsigned char *data, unsigned int data_len); 
+
+unsigned char *_docsis_snmp_build_var_op(unsigned char * data,
+                  oid * var_name,
+                  size_t * var_name_len,
+                  unsigned char var_val_type,
+                  size_t var_val_len,
+                  unsigned char * var_val, size_t * listlength);
+
+unsigned char *_docsis_asn_build_sequence(unsigned char * data, size_t * datalength, unsigned char type, size_t length);
 
 #endif /* _DOCSIS_SNMP_H */
 

@@ -17,7 +17,7 @@ cat > $1 << EOF
 	<body bgcolor=#ffffff>	
 	<h3> DOCSIS Configuration Settings</h3>
 	<p> In the table below you can find a list of all Configuration Settings understood by this program. The name should be self-descriptive, but if you can refer to the DOCSIS RFI specification, Appendix C, for detailed explanations of what each of these mean. 
-	<p> For String and Hexadecimal strings, the "Range" field means the minimum and maximum length of the string. 
+	<p> For String and Hexadecimal strings, the "Range" field means the minimum and maximum length of the string. For "List" types, it represents the number of elements in the list.
 		<table cellpadding=5 bgcolor=#000000>	
 		<tr bgcolor=#ffffff><td><b>Configuration Setting</b></td><td><b>Type</b></td><td><b>Range of values allowed</b></td></tr>
 EOF
@@ -39,6 +39,7 @@ grep -e "^{" ../src/docsis_symtable.h\
 	| sed 's/$/<\/td><\/tr>/g'\
 	| sed 's/uchar/Unsigned Integer/g' \
 	| sed 's/uint/Unsigned Integer/g' \
+	| sed 's/ushort_list/Unsigned Integer List - comma separated/g' \
 	| sed 's/ushort/Unsigned Integer/g' \
 	| sed 's/0xFFFFFFFF/4294967296/g' \
 	| sed 's/ip/IP address/g' \

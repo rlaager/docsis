@@ -1,4 +1,3 @@
-
 /* 
  *  DOCSIS configuration file encoder. 
  *  Copyright (c) 2001 Cornel Ciocirlan, ctrl@users.sourceforge.net.
@@ -36,6 +35,7 @@ int encode_string 	(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr
 int encode_strzero	(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );
 int encode_hexstr 	(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );
 int encode_oid 		(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );
+int encode_ushort_list	(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );
 int encode_nothing	(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );
 
 #endif /* _DOCSIS_ENCODE_H */

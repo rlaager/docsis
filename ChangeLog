@@ -1,3 +1,13 @@
+0.9.1			- add support for ModemCapabilities 
+			- add support for Subscriber Management Filter groups
+			- make SNMP VarBind encoding more "compatible" with 
+			  other encoders
+			- cleanup argument handling, fix bug with error printing
+			- fix bug where SnmpMibObject OID output would switch to
+			  numeric format after a decode_oid 
+			- re-organized and beautified source code
+			  
+
 0.9.0			- fix range of MaxCPE (1-254)
 			- add support for Win32 with Cygwin
 			- fix ReAuthTimeout upper limit (30)
@@ -5,7 +15,7 @@
 			  the symbol table
 			- add NSIS packaging script for Win32
 			- added configure script, re-organized stuff
-			- source code clean-up
+			- minor source code clean-ups
 
 0.8.8  02/07/03		- fix handling of label-hinted suffix to OIDs
 evvolve			- check for string length overflow while parsing
