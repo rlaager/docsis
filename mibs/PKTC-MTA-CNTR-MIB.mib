@@ -1,0 +1,486 @@
+PKTC-MTA-CNTR-MIB
+EXCLUDE pktcMtaDevSecurityEntry
+EXCLUDE pktcMtaCmsMapEntry
+EXCLUDE pktcMtaDevTgsEntry
+EXCLUDE pktcMtaDevSignature
+EXCLUDE pktcMtaDevServerBootState
+EXCLUDE pktcMtaDevServerDhcp
+EXCLUDE pktcMtaDevProvUnsolicitedKeyMeanDev
+EXCLUDE pktcMtaDevCmsUnsolicitedKeyMeanDev
+EXCLUDE pktcMtaDevHardwareVersion
+
+
+DEFINITIONS ::= BEGIN
+
+IMPORTS
+        OBJECT-TYPE
+        	FROM RFC-1212  
+
+
+
+		pktcMtaDevBase,
+		pktcMtaDevSecurity,
+		pktcMtaDevRealmEntry,
+		pktcMtaDevCmsEntry,
+		pktcMtaDevServer
+		FROM PKTC-MTA-MIB;
+
+
+
+pktcMtaDevResetNow OBJECT-TYPE
+DEFAULT test-function-async   	pktcMtaDevBase_test
+DEFAULT set-function-async    	pktcMtaDevBase_set
+DEFAULT get-function-async    	pktcMtaDevBase_get
+DEFAULT next-function-async   	std_next_async
+DEFAULT cookie        		(char *)0
+::= { pktcMtaDevBase 1 }
+pktcMtaDevSerialNumber OBJECT-TYPE
+DEFAULT test-function-async   	it_exists_async
+DEFAULT set-function-async    	null_set_async
+DEFAULT get-function-async    	pktcMtaDevBase_get
+DEFAULT next-function-async   	std_next_async
+DEFAULT cookie        		(char *)0
+::= { pktcMtaDevBase 2 }
+pktcMtaDevHardwareVersion OBJECT-TYPE
+DEFAULT test-function-async   	it_exists_async
+DEFAULT set-function-async    	null_set_async
+DEFAULT get-function-async    	pktcMtaDevBase_get
+DEFAULT next-function-async   	std_next_async
+DEFAULT cookie        		(char *)0
+::= { pktcMtaDevBase 3 }
+pktcMtaDevMacAddress OBJECT-TYPE
+DEFAULT test-function-async   	it_exists_async
+DEFAULT set-function-async    	null_set_async
+DEFAULT get-function-async    	pktcMtaDevBase_get
+DEFAULT next-function-async   	std_next_async
+DEFAULT cookie        		(char *)0
+::= { pktcMtaDevBase 4 }
+pktcMtaDevFQDN OBJECT-TYPE
+DEFAULT test-function-async   	it_exists_async
+DEFAULT set-function-async    	null_set_async
+DEFAULT get-function-async    	pktcMtaDevBase_get
+DEFAULT next-function-async   	std_next_async
+DEFAULT cookie        		(char *)0
+::= { pktcMtaDevBase 5 }
+pktcMtaDevEndPntCount OBJECT-TYPE
+DEFAULT test-function-async   	it_exists_async
+DEFAULT set-function-async    	null_set_async
+DEFAULT get-function-async    	pktcMtaDevBase_get
+DEFAULT next-function-async   	std_next_async
+DEFAULT cookie        		(char *)0
+::= { pktcMtaDevBase 6 }
+pktcMtaDevEnabled OBJECT-TYPE
+DEFAULT test-function-async   	pktcMtaDevBase_test
+DEFAULT set-function-async    	pktcMtaDevBase_set
+DEFAULT get-function-async    	pktcMtaDevBase_get
+DEFAULT next-function-async   	std_next_async
+DEFAULT cookie        		(char *)0
+::= { pktcMtaDevBase 7 }
+pktcMtaDevTypeIdentifier OBJECT-TYPE
+DEFAULT test-function-async   	it_exists_async
+DEFAULT set-function-async    	null_set_async
+DEFAULT get-function-async    	pktcMtaDevBase_get
+DEFAULT next-function-async   	std_next_async
+DEFAULT cookie        		(char *)0
+::= { pktcMtaDevBase 8 }
+pktcMtaDevProvisioningState OBJECT-TYPE
+DEFAULT test-function-async   	it_exists_async
+DEFAULT set-function-async    	null_set_async
+DEFAULT get-function-async    	pktcMtaDevBase_get
+DEFAULT next-function-async   	std_next_async
+DEFAULT cookie        		(char *)0
+::= { pktcMtaDevBase 9 }
+pktcMtaDevHttpAccess OBJECT-TYPE
+DEFAULT test-function-async   	it_exists_async
+DEFAULT set-function-async    	null_set_async
+DEFAULT get-function-async    	pktcMtaDevBase_get
+DEFAULT next-function-async   	std_next_async
+DEFAULT cookie        		(char *)0
+::= { pktcMtaDevBase 10 }
+pktcMtaDevProvisioningTimer OBJECT-TYPE
+DEFAULT test-function-async   	pktcMtaDevBase_test
+DEFAULT set-function-async    	pktcMtaDevBase_set
+DEFAULT get-function-async    	pktcMtaDevBase_get
+DEFAULT next-function-async   	std_next_async
+DEFAULT cookie        		(char *)0
+::= {pktcMtaDevBase 11} 
+pktcMtaDevProvisioningCounter OBJECT-TYPE
+DEFAULT test-function-async   	it_exists_async
+DEFAULT set-function-async    	null_set_async
+DEFAULT get-function-async    	pktcMtaDevBase_get
+DEFAULT next-function-async   	std_next_async
+DEFAULT cookie        		(char *)0
+::= {pktcMtaDevBase 12} 
+pktcMtaDevManufacturerCertificate OBJECT-TYPE
+DEFAULT test-function-async   	it_exists_async
+DEFAULT set-function-async    	null_set_async
+DEFAULT get-function-async    	pktcMtaDevSecurity_get
+DEFAULT next-function-async   	std_next_async
+DEFAULT cookie        		(char *)0
+::= { pktcMtaDevSecurity 1 }
+pktcMtaDevCertificate OBJECT-TYPE
+DEFAULT test-function-async   	it_exists_async
+DEFAULT set-function-async    	null_set_async
+DEFAULT get-function-async    	pktcMtaDevSecurity_get
+DEFAULT next-function-async   	std_next_async
+DEFAULT cookie        		(char *)0
+::= { pktcMtaDevSecurity 2 }
+
+
+
+
+
+
+
+pktcMtaDevCorrelationId OBJECT-TYPE
+DEFAULT test-function-async   	it_exists_async
+DEFAULT set-function-async    	null_set_async
+DEFAULT get-function-async    	pktcMtaDevSecurity_get
+DEFAULT next-function-async   	std_next_async
+DEFAULT cookie        		(char *)0
+::= { pktcMtaDevSecurity 4 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+pktcMtaDevTelephonyRootCertificate OBJECT-TYPE
+DEFAULT test-function-async   	it_exists_async
+DEFAULT set-function-async    	null_set_async
+DEFAULT get-function-async    	pktcMtaDevSecurity_get
+DEFAULT next-function-async   	std_next_async
+DEFAULT cookie        		(char *)0
+::= { pktcMtaDevSecurity 9 }
+pktcMtaDevRealmPkinitGracePeriod OBJECT-TYPE
+DEFAULT test-function-async   	pktcMtaDevRealmEntry_test
+DEFAULT set-function-async    	pktcMtaDevRealmEntry_set
+DEFAULT get-function-async    	pktcMtaDevRealmEntry_get
+DEFAULT next-function-async   	pktcMtaDevRealmEntry_next
+DEFAULT cookie        		(char *)0
+::= { pktcMtaDevRealmEntry 2 }
+pktcMtaDevRealmTgsGracePeriod OBJECT-TYPE
+DEFAULT test-function-async   	pktcMtaDevRealmEntry_test
+DEFAULT set-function-async    	pktcMtaDevRealmEntry_set
+DEFAULT get-function-async    	pktcMtaDevRealmEntry_get
+DEFAULT next-function-async   	pktcMtaDevRealmEntry_next
+DEFAULT cookie        		(char *)0
+::= { pktcMtaDevRealmEntry 3 }
+pktcMtaDevRealmOrgName OBJECT-TYPE
+DEFAULT test-function-async   	pktcMtaDevRealmEntry_test
+DEFAULT set-function-async    	pktcMtaDevRealmEntry_set
+DEFAULT get-function-async    	pktcMtaDevRealmEntry_get
+DEFAULT next-function-async   	pktcMtaDevRealmEntry_next
+DEFAULT cookie        		(char *)0
+::= { pktcMtaDevRealmEntry 4 }
+pktcMtaDevRealmUnsolicitedKeyMaxTimeout OBJECT-TYPE
+DEFAULT test-function-async   	pktcMtaDevRealmEntry_test
+DEFAULT set-function-async    	pktcMtaDevRealmEntry_set
+DEFAULT get-function-async    	pktcMtaDevRealmEntry_get
+DEFAULT next-function-async   	pktcMtaDevRealmEntry_next
+DEFAULT cookie        		(char *)0
+::= { pktcMtaDevRealmEntry 5 }
+pktcMtaDevRealmUnsolicitedKeyNomTimeout OBJECT-TYPE
+DEFAULT test-function-async   	pktcMtaDevRealmEntry_test
+DEFAULT set-function-async    	pktcMtaDevRealmEntry_set
+DEFAULT get-function-async    	pktcMtaDevRealmEntry_get
+DEFAULT next-function-async   	pktcMtaDevRealmEntry_next
+DEFAULT cookie        		(char *)0
+::= { pktcMtaDevRealmEntry 6 }
+pktcMtaDevRealmUnsolicitedKeyMeanDev OBJECT-TYPE
+DEFAULT test-function-async   	it_exists_async
+DEFAULT set-function-async    	null_set_async
+DEFAULT get-function-async    	pktcMtaDevRealmEntry_get
+DEFAULT next-function-async   	pktcMtaDevRealmEntry_next
+DEFAULT cookie        		(char *)0
+::= { pktcMtaDevRealmEntry 7 }
+pktcMtaDevRealmUnsolicitedKeyMaxRetries OBJECT-TYPE
+DEFAULT test-function-async   	pktcMtaDevRealmEntry_test
+DEFAULT set-function-async    	pktcMtaDevRealmEntry_set
+DEFAULT get-function-async    	pktcMtaDevRealmEntry_get
+DEFAULT next-function-async   	pktcMtaDevRealmEntry_next
+DEFAULT cookie        		(char *)0
+::= { pktcMtaDevRealmEntry 8 }
+pktcMtaDevRealmStatus OBJECT-TYPE
+DEFAULT test-function-async   	pktcMtaDevRealmEntry_test
+DEFAULT set-function-async    	pktcMtaDevRealmEntry_set
+DEFAULT get-function-async    	pktcMtaDevRealmEntry_get
+DEFAULT next-function-async   	pktcMtaDevRealmEntry_next
+DEFAULT cookie        		(char *)0
+::= { pktcMtaDevRealmEntry 9 }
+pktcMtaDevCmsKerbRealmName OBJECT-TYPE
+DEFAULT test-function-async   	pktcMtaDevCmsEntry_test
+DEFAULT set-function-async    	pktcMtaDevCmsEntry_set
+DEFAULT get-function-async    	pktcMtaDevCmsEntry_get
+DEFAULT next-function-async   	pktcMtaDevCmsEntry_next
+DEFAULT cookie        		(char *)0
+::= { pktcMtaDevCmsEntry 2 }
+pktcMtaDevCmsMaxClockSkew OBJECT-TYPE
+DEFAULT test-function-async   	pktcMtaDevCmsEntry_test
+DEFAULT set-function-async    	pktcMtaDevCmsEntry_set
+DEFAULT get-function-async    	pktcMtaDevCmsEntry_get
+DEFAULT next-function-async   	pktcMtaDevCmsEntry_next
+DEFAULT cookie        		(char *)0
+::= { pktcMtaDevCmsEntry 3 }
+pktcMtaDevCmsSolicitedKeyTimeout OBJECT-TYPE
+DEFAULT test-function-async   	pktcMtaDevCmsEntry_test
+DEFAULT set-function-async    	pktcMtaDevCmsEntry_set
+DEFAULT get-function-async    	pktcMtaDevCmsEntry_get
+DEFAULT next-function-async   	pktcMtaDevCmsEntry_next
+DEFAULT cookie        		(char *)0
+::= { pktcMtaDevCmsEntry 4 }
+pktcMtaDevCmsUnsolicitedKeyMaxTimeout OBJECT-TYPE
+DEFAULT test-function-async   	pktcMtaDevCmsEntry_test
+DEFAULT set-function-async    	pktcMtaDevCmsEntry_set
+DEFAULT get-function-async    	pktcMtaDevCmsEntry_get
+DEFAULT next-function-async   	pktcMtaDevCmsEntry_next
+DEFAULT cookie        		(char *)0
+::= { pktcMtaDevCmsEntry 5 }
+pktcMtaDevCmsUnsolicitedKeyNomTimeout OBJECT-TYPE
+DEFAULT test-function-async   	pktcMtaDevCmsEntry_test
+DEFAULT set-function-async    	pktcMtaDevCmsEntry_set
+DEFAULT get-function-async    	pktcMtaDevCmsEntry_get
+DEFAULT next-function-async   	pktcMtaDevCmsEntry_next
+DEFAULT cookie        		(char *)0
+::= { pktcMtaDevCmsEntry 6 }
+pktcMtaDevCmsUnsolicitedKeyMeanDev OBJECT-TYPE
+DEFAULT test-function-async   	it_exists_async
+DEFAULT set-function-async    	null_set_async
+DEFAULT get-function-async    	pktcMtaDevCmsEntry_get
+DEFAULT next-function-async   	pktcMtaDevCmsEntry_next
+DEFAULT cookie        		(char *)0
+::= { pktcMtaDevCmsEntry 7 }
+pktcMtaDevCmsUnsolicitedKeyMaxRetries OBJECT-TYPE
+DEFAULT test-function-async   	pktcMtaDevCmsEntry_test
+DEFAULT set-function-async    	pktcMtaDevCmsEntry_set
+DEFAULT get-function-async    	pktcMtaDevCmsEntry_get
+DEFAULT next-function-async   	pktcMtaDevCmsEntry_next
+DEFAULT cookie        		(char *)0
+::= { pktcMtaDevCmsEntry 8 }
+pktcMtaDevCmsStatus OBJECT-TYPE
+DEFAULT test-function-async   	pktcMtaDevCmsEntry_test
+DEFAULT set-function-async    	pktcMtaDevCmsEntry_set
+DEFAULT get-function-async    	pktcMtaDevCmsEntry_get
+DEFAULT next-function-async   	pktcMtaDevCmsEntry_next
+DEFAULT cookie        		(char *)0
+::= { pktcMtaDevCmsEntry 9 }
+pktcMtaDevCmsIpsecCtrl OBJECT-TYPE
+DEFAULT test-function-async   	pktcMtaDevCmsEntry_test
+DEFAULT set-function-async    	pktcMtaDevCmsEntry_set
+DEFAULT get-function-async    	pktcMtaDevCmsEntry_get
+DEFAULT next-function-async   	pktcMtaDevCmsEntry_next
+DEFAULT cookie        		(char *)0
+::= { pktcMtaDevCmsEntry 10 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+pktcMtaDevServerDhcp OBJECT-TYPE
+DEFAULT test-function-async   	it_exists_async
+DEFAULT set-function-async    	null_set_async
+DEFAULT get-function-async    	null_get_async
+DEFAULT next-function-async   	std_next_async
+DEFAULT cookie        		(char *)0
+::= { pktcMtaDevServer 2 }    
+pktcMtaDevServerDhcp1 OBJECT-TYPE
+DEFAULT test-function-async   	it_exists_async
+DEFAULT set-function-async    	null_set_async
+DEFAULT get-function-async    	pktcMtaDevServer_get
+DEFAULT next-function-async   	std_next_async
+DEFAULT cookie        		(char *)0
+::= { pktcMtaDevServer 16 }    
+pktcMtaDevServerDhcp2 OBJECT-TYPE
+DEFAULT test-function-async   	it_exists_async
+DEFAULT set-function-async    	null_set_async
+DEFAULT get-function-async    	pktcMtaDevServer_get
+DEFAULT next-function-async   	std_next_async
+DEFAULT cookie        		(char *)0
+::= { pktcMtaDevServer 17 }
+pktcMtaDevServerDns1 OBJECT-TYPE
+DEFAULT test-function-async   	pktcMtaDevServer_test
+DEFAULT set-function-async    	pktcMtaDevServer_set
+DEFAULT get-function-async    	pktcMtaDevServer_get
+DEFAULT next-function-async   	std_next_async
+DEFAULT cookie        		(char *)0
+::= { pktcMtaDevServer 3 }
+pktcMtaDevServerDns2 OBJECT-TYPE
+DEFAULT test-function-async   	pktcMtaDevServer_test
+DEFAULT set-function-async    	pktcMtaDevServer_set
+DEFAULT get-function-async    	pktcMtaDevServer_get
+DEFAULT next-function-async   	std_next_async
+DEFAULT cookie        		(char *)0
+::= { pktcMtaDevServer 4 }
+pktcMtaDevConfigFile OBJECT-TYPE
+DEFAULT test-function-async   	pktcMtaDevServer_test
+DEFAULT set-function-async    	pktcMtaDevServer_set
+DEFAULT get-function-async    	pktcMtaDevServer_get
+DEFAULT next-function-async   	std_next_async
+DEFAULT cookie        		(char *)0
+::= { pktcMtaDevServer 5 }
+pktcMtaDevSnmpEntity OBJECT-TYPE
+DEFAULT test-function-async   	pktcMtaDevServer_test
+DEFAULT set-function-async    	pktcMtaDevServer_set
+DEFAULT get-function-async    	pktcMtaDevServer_get
+DEFAULT next-function-async   	std_next_async
+DEFAULT cookie        		(char *)0
+::= { pktcMtaDevServer 6 }
+pktcMtaDevProvConfigHash OBJECT-TYPE
+DEFAULT test-function-async   	pktcMtaDevServer_test
+DEFAULT set-function-async    	pktcMtaDevServer_set
+DEFAULT get-function-async    	pktcMtaDevServer_get
+DEFAULT next-function-async   	std_next_async
+DEFAULT cookie        		(char *)0
+::= { pktcMtaDevServer 7 }
+pktcMtaDevProvConfigKey OBJECT-TYPE
+DEFAULT test-function-async   	pktcMtaDevServer_test
+DEFAULT set-function-async    	pktcMtaDevServer_set
+DEFAULT get-function-async    	pktcMtaDevServer_get
+DEFAULT next-function-async   	std_next_async
+DEFAULT cookie        		(char *)0
+::= { pktcMtaDevServer 8 }
+pktcMtaDevProvSolicitedKeyTimeout OBJECT-TYPE
+DEFAULT test-function-async   	pktcMtaDevServer_test
+DEFAULT set-function-async    	pktcMtaDevServer_set
+DEFAULT get-function-async    	pktcMtaDevServer_get
+DEFAULT next-function-async   	std_next_async
+DEFAULT cookie        		(char *)0
+::= { pktcMtaDevServer 9 }
+pktcMtaDevProvUnsolicitedKeyMaxTimeout OBJECT-TYPE
+DEFAULT test-function-async   	it_exists_async
+DEFAULT set-function-async    	null_set_async
+DEFAULT get-function-async    	pktcMtaDevServer_get
+DEFAULT next-function-async   	std_next_async
+DEFAULT cookie        		(char *)0
+::= { pktcMtaDevServer 10 }
+pktcMtaDevProvUnsolicitedKeyNomTimeout OBJECT-TYPE
+DEFAULT test-function-async   	it_exists_async
+DEFAULT set-function-async    	null_set_async
+DEFAULT get-function-async    	pktcMtaDevServer_get
+DEFAULT next-function-async   	std_next_async
+DEFAULT cookie        		(char *)0
+::= { pktcMtaDevServer 11 }
+
+
+
+
+
+
+
+pktcMtaDevProvUnsolicitedKeyMaxRetries OBJECT-TYPE
+DEFAULT test-function-async   	it_exists_async
+DEFAULT set-function-async    	null_set_async
+DEFAULT get-function-async    	pktcMtaDevServer_get
+DEFAULT next-function-async   	std_next_async
+DEFAULT cookie        		(char *)0
+::= { pktcMtaDevServer 13 }
+pktcMtaDevProvKerbRealmName OBJECT-TYPE
+DEFAULT test-function-async   	it_exists_async
+DEFAULT set-function-async    	null_set_async
+DEFAULT get-function-async    	pktcMtaDevServer_get
+DEFAULT next-function-async   	std_next_async
+DEFAULT cookie        		(char *)0
+::= { pktcMtaDevServer 14 }
+pktcMtaDevProvState OBJECT-TYPE
+DEFAULT test-function-async   	it_exists_async
+DEFAULT set-function-async    	null_set_async
+DEFAULT get-function-async    	pktcMtaDevServer_get
+DEFAULT next-function-async   	std_next_async
+DEFAULT cookie        		(char *)0
+::= { pktcMtaDevServer 15 } 
+pktcMtaDevTimeServer OBJECT-TYPE
+DEFAULT test-function-async   	pktcMtaDevServer_test
+DEFAULT set-function-async    	pktcMtaDevServer_set
+DEFAULT get-function-async    	pktcMtaDevServer_get
+DEFAULT next-function-async   	std_next_async
+DEFAULT cookie        		(char *)0
+::= { pktcMtaDevServer 18 }
+
+END

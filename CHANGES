@@ -1,3 +1,12 @@
+0.8.8  02/07/03		- fix handling of label-hinted suffix to OIDs
+evvolve			- check for string length overflow while parsing
+			- added mibs to distribution
+			- change SNMPv3* labels to SNMP* 
+			- add Docsis20Enable configuration setting
+			- complete support for SnmpV3NotificationReceiver
+	
+Many thanks to Rudy Zijlstra for pointing out a few bugs. 
+
 0.8.7  20/6/03		- fix bug with encoding HexStrings with trailing zeros
 Ronald Rosenfeld	- fix double declaration of symbol T_MAC
 			- add support for negative integers 
@@ -7,12 +16,14 @@ evvolve			- change -lcrypto to -lcrypt to make default
 			- fix VendorSpecific decoding
 			- print label as comment for enums
 
+Many thanks to Ronald Rosenfeld for sending in three patches. 
+
 0.8.6  31/05/03		- add support for SNMPv3Kickstart and 
 evvolve		  	  partial support for SNMPv3 Notification Receiver
-			  (untested!)
 			- fix compilation warnings 
 			- add support for PHS Rule (untested)
 			- cleanup indexes in docsis_symtable.h
+			- add regression test script
 
 0.8.4  10/05/03		- fixed SNMP handling ... hopefully for the last time :)
 evvolve			- fixed Solaris support

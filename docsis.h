@@ -93,8 +93,8 @@ struct symbol_entry *find_symbol_by_name (char *sym_str);
 unsigned int encode_vbind ( char *oid_string, char oid_asntype, union t_val *value,
                         unsigned char *out_buffer, unsigned int out_size );
 int decode_vbind ( unsigned char *, unsigned int);
-unsigned int encode_oid ( char *oid_string, unsigned char *out_buffer, unsigned int out_size );
-unsigned int decode_wd ( unsigned char *data, unsigned int data_len); 
+unsigned int encode_snmp_oid ( char *oid_string, unsigned char *out_buffer, unsigned int out_size );
+unsigned int decode_snmp_oid ( unsigned char *data, unsigned int data_len); 
 void hmac_md5(unsigned char *text, int text_len, unsigned char *key, int key_len, unsigned char *digest);
 void md5_print_digest ( unsigned char *digest );
 int init_global_symtable ( void) ;

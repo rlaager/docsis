@@ -1,0 +1,28 @@
+CLAB-DEF-MIB DEFINITIONS ::= BEGIN
+IMPORTS
+	MODULE-IDENTITY,
+	enterprises
+						FROM SNMPv2-SMI;
+
+cableLabs MODULE-IDENTITY
+	LAST-UPDATED "9910280000Z" -- October 28, 1999
+	ORGANIZATION "Packet Cable OSS Group"
+	CONTACT-INFO
+		"Maria Stachelek
+		Cable Labs
+		E-mail: maria@cablelabs.com"
+	DESCRIPTION
+		"This MIB module supplies the basic management
+		object categories for Cable Labs. "
+	::= { enterprises 4491 }
+
+clabFunction 		OBJECT IDENTIFIER ::= { cableLabs 1 }
+clabFuncMib2 		OBJECT IDENTIFIER ::= { clabFunction 1 }
+clabFuncProprietary OBJECT IDENTIFIER ::= { clabFunction 2 }
+clabProject 		OBJECT IDENTIFIER ::= { cableLabs 2 }
+clabProjDocsis 		OBJECT IDENTIFIER ::= { clabProject 1 }
+clabProjPacketCable OBJECT IDENTIFIER ::= { clabProject 2 }
+clabProjOpenCable 	OBJECT IDENTIFIER ::= { clabProject 3 }
+clabProjCableHome   OBJECT IDENTIFIER ::= { clabProject 4 }
+
+END

@@ -189,11 +189,11 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 118, "PHSServiceFlowRef",       	3,   115, (get_ushort),    (decode_ushort),      1,        65535      },
 { 119, "PHSServiceFlowId",        	4,   115, (get_uint),      (decode_uint),        1,        0xFFFFFFFF },
 /* Payload Header Suppression Rule - Appendix C.2.2.10 */
-{ 120, "PHSField",        		7,   115, (get_hexstr),    (decode_hexstr),      1,        255},
-{ 121, "PHSIndex",        		8,   115, (get_uchar),     (decode_uchar),       1,        255},
-{ 122, "PHSMask",        		9,   115, (get_hexstr),    (decode_hexstr),      1,        255},
-{ 123, "PHSSize",        		10,  115, (get_uchar),     (decode_uchar),       1,        255},
-{ 124, "PHSVerify",        		11,  115, (get_uchar),     (decode_uchar),       0,        1},
+{ 120, "PHSField",        		7,   115, (get_hexstr),    (decode_hexstr),      1,        255	      },
+{ 121, "PHSIndex",        		8,   115, (get_uchar),     (decode_uchar),       1,        255	      },
+{ 122, "PHSMask",        		9,   115, (get_hexstr),    (decode_hexstr),      1,        255	      },
+{ 123, "PHSSize",        		10,  115, (get_uchar),     (decode_uchar),       1,        255	      },
+{ 124, "PHSVerify",        		11,  115, (get_uchar),     (decode_uchar),       0,        1	      },
 
 { 125, "MaxClassifiers",       		28,  0,   (get_ushort),    (decode_ushort),      0,        0          },
 { 126, "GlobalPrivacyEnable",  		29,  0,   (get_uchar),     (decode_uchar),       0,        0          },
@@ -212,28 +212,27 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 131, "VendorIdentifier",     		8,  130,  (get_hexstr),    (decode_hexstr),      3,        3          },
 
 /* SNMPv3 Kickstart */
-{ 132, "SNMPv3Kickstart",   		34,   0,  (get_nothing),   (decode_aggregate),   0,        0          },
-{ 133, "SNMPv3SecurityName",   		1,  132,  (get_strzero),   (decode_strzero),  	 1,        255        },
-{ 134, "SNMPv3MgrPublicNumber", 	2,  132,  (get_hexstr),    (decode_hexstr),  	 1,        514	      },
+{ 132, "SnmpV3Kickstart",   		34,   0,  (get_nothing),   (decode_aggregate),   0,        0          },
+/* TODO: SP-RFI-v2.0 says the SecurityName is UTF8 encoded */
+{ 133, "SnmpV3SecurityName",   		1,  132,  (get_string),   (decode_string),  	 1,        16         },
+{ 134, "SnmpV3MgrPublicNumber", 	2,  132,  (get_hexstr),    (decode_hexstr),  	 1,        514	      },
 
-/* SNMPv3 Notification Receiver */
-{ 135, "SNMPv3TrapReceiver",   		38,   0,  (get_nothing),   (decode_aggregate),   0,        0          },
-{ 136, "SNMPv3TrapReceiverIP", 		1,   135, (get_ip),    	   (decode_ip),  	 0,        0          },
-{ 137, "SNMPv3TrapReceiverPort",      	2,   135, (get_ip),    	   (decode_ip),  	 0,        0          },
-{ 138, "SNMPv3TrapReceiverType",      	3,   135, (get_ushort),    (decode_ushort),  	 1,        5          },
-{ 139, "SNMPv3TrapReceiverTimeout",   	4,   135, (get_ushort),    (decode_ushort),  	 0,        65535      },
-{ 140, "SNMPv3TrapReceiverRetries",   	5,   135, (get_ushort),    (decode_ushort),  	 0,        65535      },
-/* TrapReceiverFilterOID - need to add encoding/decoding function for ASN.1 OIDs. */
-/* { 134, "TrapReceiverFilterOID",   6,   128, (get_oid??),    (decode_oid??),  	1,        5          }, */
-{ 141, "TrapReceiverCommunity",		7,   135, (get_strzero),   (decode_strzero),  	1,        5          },
-
+/* Snmpv3 Notification Receiver */
+{ 135, "SnmpV3TrapReceiver",   		38,   0,  (get_nothing),   (decode_aggregate),   0,        0          },
+{ 136, "SnmpV3TrapRxIP", 		1,   135, (get_ip),    	   (decode_ip),  	 0,        0          },
+{ 137, "SnmpV3TrapRxPort",     		2,   135, (get_ushort),    (decode_ushort),  	 0,        0          },
+{ 138, "SnmpV3TrapRxType",     		3,   135, (get_ushort),    (decode_ushort),  	 1,        5          },
+{ 139, "SnmpV3TrapRxTimeout",  		4,   135, (get_ushort),    (decode_ushort),  	 0,        65535      },
+{ 140, "SnmpV3TrapRxRetries",  		5,   135, (get_ushort),    (decode_ushort),  	 0,        65535      },
+{ 141, "SnmpV3TrapRxFilterOID",		6,   135, (get_oid),       (decode_oid),  	 1,        5          },
+{ 142, "SnmpV3TrapRxSecurityName",	7,   135, (get_string),   (decode_string),  	 1,        16         },
+{ 143, "DocsisTwoEnable",      		39,   0,  (get_uchar),     (decode_uchar),       0,        1          },
 /* PacketCable MTA Configuration File Delimiter  */
-{ 142, "MtaConfigDelimiter",   		254, 0,   (get_uchar),     (decode_uchar),      	1,        255        },
-/* Generic TLV ... we only use the limits, code and length don't matter ...*/
+{ 144, "MtaConfigDelimiter",   		254, 0,   (get_uchar),     (decode_uchar),     	 1,        255        },
 
-{ 998, "GenericTLV",           		0, 0,   (get_nothing),   (decode_special),     1,        255        }, 
+/* Generic TLV ... we only use the limits, code and length don't matter ...*/
+{ 998, "GenericTLV",           		0, 0,     (get_nothing),   (decode_special),     1,        255        }, 
 { 999, "/*EndOfDataMkr*/",     		255, 0,   (get_nothing),   (decode_special),     0,        0          } 
 };
 
 #endif /* _DOCSIS_SYMTABLE_H */
-

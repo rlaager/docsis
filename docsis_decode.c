@@ -104,7 +104,17 @@ void decode_md5 (unsigned char *tlvbuf, symbol_type *sym)
 void decode_snmp_wd (unsigned char *tlvbuf, symbol_type *sym)
 {
   printf ( "%s ", sym->sym_ident);
-  decode_wd (tlvbuf+2,(unsigned int) tlvbuf[1]);
+
+  /* last char in this TLV is not part of OID */
+  decode_snmp_oid (tlvbuf+2,(unsigned int) tlvbuf[1]-1); 
+
+  printf(" %d ;\n", (unsigned int) tlvbuf[tlvbuf[1]+1]);
+}
+
+void decode_oid (unsigned char *tlvbuf, symbol_type *sym)
+{
+  printf ( "%s ", sym->sym_ident);
+  decode_snmp_oid (tlvbuf+2,(unsigned int) tlvbuf[1]);
   printf(";\n");
 }
 
@@ -338,9 +348,9 @@ hexadecimal_to_binary (const char *str, u_char * bufp)
     str += 2;
   for (len = 0; *str; str++)
     {
-      if (isspace (*str))
+      if (isspace ((int) *str))
 	continue;
-      if (!isxdigit (*str))
+      if (!isxdigit ((int) *str))
 	return -1;
       len++;
       if (sscanf (str++, "%2x", &itmp) == 0)
@@ -358,7 +368,7 @@ str_isalpha (const char *str, size_t str_len)
   unsigned int i;
 
   for (i=0; i<str_len; i++) 
-		if (!(isalnum(str[i]) && isprint(str[i]) && isascii(str[i])) ) return FALSE; 
+		if (!(isalnum((int) str[i]) && isprint((int) str[i]) && isascii((int) str[i])) ) return FALSE; 
 
   return TRUE;
 }
@@ -369,7 +379,7 @@ str_isprint (const char *str, size_t str_len)
   unsigned int i;
 
   for (i=0; i<str_len; i++) 
-		if (!(isprint(str[i]))) return FALSE; 
+		if (!(isprint((int) str[i]))) return FALSE; 
 
   return TRUE;
 }

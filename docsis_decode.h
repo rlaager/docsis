@@ -39,6 +39,7 @@ void decode_ethermask (unsigned char *tlvbuf, symbol_type *sym);
 void decode_md5 (unsigned char *tlvbuf, symbol_type *sym);
 void decode_snmp_wd (unsigned char *tlvbuf, symbol_type *sym);
 void decode_snmp_object (unsigned char *tlvbuf, symbol_type *sym);
+void decode_oid (unsigned char *tlvbuf, symbol_type *sym);
 void decode_string (unsigned char *tlvbuf, symbol_type *sym);
 void decode_strzero (unsigned char *tlvbuf, symbol_type *sym);
 void decode_hexstr (unsigned char *tlvbuf, symbol_type *sym);

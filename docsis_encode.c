@@ -22,6 +22,7 @@
 
 #include "docsis_encode.h"
 #include "docsis_globals.h"
+#include "docsis.h"
 #include "ethermac.h"
 #include <errno.h>
 #include <string.h>
@@ -377,8 +378,34 @@ int get_hexstr (unsigned char *buf, void *tval, struct symbol_entry *sym_ptr)
   return ( i );  
 }
 
+/* This is for strings which need the terminating 0 at the end, e.g. Service Flow Class Name */
+
+int get_oid(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
+{
+  unsigned int output_size;
+  /* We only use this to cast the void* we receive to what we think it should be */
+  union t_val *helper;
+
+  if ( buf == NULL ) {
+        printf ("get_oid called w/NULL buffer!\n");
+        exit (-1);
+  }
+
+  if ( tval == NULL  ) {
+        printf ("get_oid called w/NULL value struct !\n");
+        exit (-1);
+  }
+
+  helper = (union t_val *) tval;
+
+  output_size = encode_snmp_oid(helper->strval, buf, TLV_VSIZE); 
+  return ( output_size );
+}
+
+
 int get_nothing(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr ) 
 {
 return 0;
 }
+
 

@@ -110,8 +110,7 @@ unsigned int add_cmts_mic (unsigned char *tlvbuf, unsigned int tlvbuflen, unsign
 void usage(char *prog_name ) 
 {
 	printf( "DOCSIS Configuration File creator, version %s.%s\n", VERSION,PATCHLEVEL); 
-	printf ("Copyright (c) 2000 Cornel Ciocirlan, ctrl@users.sourceforge.net\n");
-	printf ("Copyright (c) 2001 Cornel Ciocirlan, ctrl@users.sourceforge.net\n");
+	printf ("Copyright (c) 1999,2000,2001 Cornel Ciocirlan, ctrl@users.sourceforge.net\n");
 	printf ("Copyright (c) 2002,2003 Evvolve Media SRL, docsis@evvolve.com \n\n");
 	printf ("To encode a cable modem configuration file: \n\t %s -e <modem_cfg_file> <key_file> <output_file>\n",prog_name);
 	printf ("To encode a MTA configuration file: \n\t %s -p <mta_cfg_file> <output_file>\n",prog_name);

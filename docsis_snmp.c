@@ -251,6 +251,18 @@ if (netsnmp_ds_get_boolean
       netsnmp_ds_toggle_boolean (NETSNMP_DS_LIBRARY_ID,
                                  NETSNMP_DS_LIB_EXTENDED_INDEX);
     } /* Disable extended index format ... makes it harder to parse tokens in lex */
+if (!netsnmp_ds_get_boolean
+      (NETSNMP_DS_LIBRARY_ID, NETSNMP_DS_LIB_PRINT_NUMERIC_ENUM))
+    {
+      netsnmp_ds_toggle_boolean (NETSNMP_DS_LIBRARY_ID,
+                                 NETSNMP_DS_LIB_PRINT_NUMERIC_ENUM);
+    } /* Enable printing numeric enums */
+if (netsnmp_ds_get_boolean
+      (NETSNMP_DS_LIBRARY_ID, NETSNMP_DS_LIB_ESCAPE_QUOTES))
+    {
+      netsnmp_ds_toggle_boolean (NETSNMP_DS_LIBRARY_ID,
+                                 NETSNMP_DS_LIB_ESCAPE_QUOTES);
+    } /* Disable escape quotes in string index output  */
  
   snprint_objid (outbuf, 1023, vp->name, vp->name_length);
 
@@ -273,11 +285,14 @@ if (netsnmp_ds_get_boolean
 			      NETSNMP_OID_OUTPUT_SUFFIX);
 	}
     }
-  subtree = get_tree (var_name, name_len, get_tree_head() );
 
   printf ("%s", outbuf);
 
-/* The first switch is just for saving the type in the format we actually want to print. */
+/* save the subtree - we need it later to show enums */
+  subtree = get_tree (var_name, name_len, get_tree_head() );
+
+/* This first switch is just for saving the type in the format we actually want 
+   to print. */
 
   switch ((short) vp->type)
     {
@@ -519,7 +534,7 @@ if (netsnmp_ds_get_boolean
 }
 
 unsigned int
-encode_oid (char *oid_string, unsigned char *out_buffer,
+encode_snmp_oid (char *oid_string, unsigned char *out_buffer,
 	    unsigned int out_size)
 {
   oid var_name[MAX_OID_LEN];
@@ -544,7 +559,7 @@ encode_oid (char *oid_string, unsigned char *out_buffer,
 }
 
 unsigned int
-decode_wd (unsigned char *data, unsigned int data_len)
+decode_snmp_oid (unsigned char *data, unsigned int data_len)
 {
   oid this_oid[MAX_OID_LEN];
   size_t oid_len = MAX_OID_LEN;
@@ -555,7 +570,7 @@ decode_wd (unsigned char *data, unsigned int data_len)
 
   memset (outbuf, 0, 1024);
 
-  len = data_len - 1;		/* The last char is the enable/disable switch */
+  len = data_len;		/* The last char is the enable/disable switch */
 
   if ((retval =
        asn_parse_objid (data, &len, &type, this_oid, &oid_len)) == NULL)
@@ -570,6 +585,7 @@ decode_wd (unsigned char *data, unsigned int data_len)
 			  NETSNMP_OID_OUTPUT_NUMERIC);
       snprint_objid (outbuf, 1023, this_oid, oid_len);
     }
-  printf ("%s %d", outbuf, (int) data[data_len - 1]);
+/*  printf ("%s %d", outbuf, (int) data[data_len - 1]); */
+  printf ("%s", outbuf); 
   return 1;
 }

@@ -33,7 +33,7 @@
 #include "version.h"
 
 #ifndef NUM_IDENTIFIERS
-#define NUM_IDENTIFIERS 145
+#define NUM_IDENTIFIERS 147
 #endif /*  NUM_IDENTIFIERS, needed in docsis_symtable.h  */
 
 #define MAXINT 2000000000 

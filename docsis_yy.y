@@ -224,7 +224,7 @@ struct tlv *create_snmpw_tlv ( struct symbol_entry *sym_ptr,
 
   tlvbuf = (struct tlv *) malloc (sizeof(struct tlv));
   tlvbuf->docs_code = sym_ptr->docsis_code;
-  tlvbuf->tlv_len = encode_oid ( oid_string, tlvbuf->tlv_value, TLV_VSIZE );
+  tlvbuf->tlv_len = encode_snmp_oid ( oid_string, tlvbuf->tlv_value, TLV_VSIZE );
                                     
                 if (tlvbuf->tlv_len <= 0 ) {
                         printf ("got len 0 value while scanning for %s\n at line %d",sym_ptr->sym_ident,line );

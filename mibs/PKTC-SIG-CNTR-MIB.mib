@@ -1,0 +1,143 @@
+PKTC-SIG-CNTR-MIB
+
+DEFINITIONS ::= BEGIN
+
+IMPORTS
+        
+        		FROM RFC-1212
+        	pktcSigDevCodecEntry,
+        	pktcSigDevConfigObjects,
+        	pktcSigCapabilityEntry,
+        	pktcNcsEndPntConfigEntry,
+        	pktcSigEndPntConfigEntry   	
+  				FROM PKTC-SIG-MIB;
+
+
+
+pktcSigDevCodecIndex 
+::= { pktcSigDevCodecEntry 1 }
+pktcSigDevCodecType 
+::= { pktcSigDevCodecEntry 2 } 
+pktcSigDevCodecMax 
+::= { pktcSigDevCodecEntry 3 }
+pktcSigDevEchoCancellation 
+::= { pktcSigDevConfigObjects 2 }
+pktcSigDevSilenceSuppression 
+::= { pktcSigDevConfigObjects 3 }
+pktcSigDevConnectionMode 
+::= { pktcSigDevConfigObjects 4 }
+pktcSigDevR0Cadence 
+::= { pktcSigDevConfigObjects 5 }
+pktcSigDevR6Cadence 
+::= { pktcSigDevConfigObjects 6 }
+pktcSigDevR7Cadence 
+::= { pktcSigDevConfigObjects 7 }
+pktcSigDevR1Cadence 
+::= { pktcSigDevConfigObjects 17 }
+pktcSigDevR2Cadence 
+::= { pktcSigDevConfigObjects 18 }
+pktcSigDevR3Cadence 
+::= { pktcSigDevConfigObjects 19 }
+pktcSigDevR4Cadence 
+::= { pktcSigDevConfigObjects 20 }
+pktcSigDevR5Cadence 
+::= { pktcSigDevConfigObjects 21 }
+pktcSigDevRgCadence 
+::= { pktcSigDevConfigObjects 22 }
+pktcSigDevRsCadence 
+::= { pktcSigDevConfigObjects 23 }
+pktcSigDevRtCadence 
+::= { pktcSigDevConfigObjects 24 }
+pktcSigDefCallSigTos 
+::= { pktcSigDevConfigObjects 8 }
+pktcSigDefMediaStreamTos 
+::= { pktcSigDevConfigObjects 9 }
+pktcSigTosFormatSelector 
+::= { pktcSigDevConfigObjects 10 } 
+pktcSigDefNcsReceiveUdpPort      
+::= { pktcSigDevConfigObjects 12 } 
+pktcSigServiceClassNameUS  
+::= { pktcSigDevConfigObjects 13 }
+pktcSigServiceClassNameDS 
+::= { pktcSigDevConfigObjects 14 }   
+pktcSigServiceClassNameMask 
+::= { pktcSigDevConfigObjects 15 }
+pktcSigNcsServiceFlowState 
+::= { pktcSigDevConfigObjects 16 }    
+  
+
+pktcSignalingIndex 
+::= { pktcSigCapabilityEntry 1 }
+pktcSignalingType 
+::= { pktcSigCapabilityEntry 2 }
+pktcSignalingVersion 
+::= { pktcSigCapabilityEntry 3 }
+pktcSignalingVendorExtension 
+::= { pktcSigCapabilityEntry 4 }
+pktcSigEndPntCapabilityIndex 
+::= { pktcSigEndPntConfigEntry 1 }
+pktcNcsEndPntConfigCallAgentId 
+::= { pktcNcsEndPntConfigEntry 1 }
+pktcNcsEndPntConfigCallAgentUdpPort 
+::= { pktcNcsEndPntConfigEntry 2 }
+pktcNcsEndPntConfigPartialDialTO 
+::= { pktcNcsEndPntConfigEntry 3 }
+pktcNcsEndPntConfigCriticalDialTO 
+::= { pktcNcsEndPntConfigEntry 4 }
+pktcNcsEndPntConfigBusyToneTO 
+::= { pktcNcsEndPntConfigEntry 5 }
+pktcNcsEndPntConfigDialToneTO 
+::= { pktcNcsEndPntConfigEntry 6 }
+pktcNcsEndPntConfigMessageWaitingTO 
+::= { pktcNcsEndPntConfigEntry 7 }
+pktcNcsEndPntConfigOffHookWarnToneTO 
+::= { pktcNcsEndPntConfigEntry 8 }
+pktcNcsEndPntConfigRingingTO 
+::= { pktcNcsEndPntConfigEntry 9 }
+pktcNcsEndPntConfigRingBackTO 
+::= { pktcNcsEndPntConfigEntry 10 }
+pktcNcsEndPntConfigReorderToneTO 
+::= { pktcNcsEndPntConfigEntry 11 }
+pktcNcsEndPntConfigStutterDialToneTO 
+::= { pktcNcsEndPntConfigEntry 12 }
+pktcNcsEndPntConfigTSMax 
+::= { pktcNcsEndPntConfigEntry 13 }
+pktcNcsEndPntConfigMax1 
+::= { pktcNcsEndPntConfigEntry 14 }
+pktcNcsEndPntConfigMax2 
+::= { pktcNcsEndPntConfigEntry 15 }
+pktcNcsEndPntConfigMax1QEnable 
+::= { pktcNcsEndPntConfigEntry 16 }
+pktcNcsEndPntConfigMax2QEnable 
+::= { pktcNcsEndPntConfigEntry 17 }
+pktcNcsEndPntConfigMWD 
+::= { pktcNcsEndPntConfigEntry 18 }
+pktcNcsEndPntConfigTdinit 
+::= { pktcNcsEndPntConfigEntry 19 }
+pktcNcsEndPntConfigTdmin 
+::= { pktcNcsEndPntConfigEntry 20 }
+pktcNcsEndPntConfigTdmax 
+::= { pktcNcsEndPntConfigEntry 21 }
+pktcNcsEndPntConfigRtoMax 
+::= { pktcNcsEndPntConfigEntry 22 }
+pktcNcsEndPntConfigRtoInit 
+::= { pktcNcsEndPntConfigEntry 23 }
+pktcNcsEndPntConfigLongDurationKeepAlive 
+::= { pktcNcsEndPntConfigEntry 24 }
+pktcNcsEndPntConfigThist 
+::= { pktcNcsEndPntConfigEntry 25 }
+pktcNcsEndPntConfigStatus 
+::= { pktcNcsEndPntConfigEntry 26 }
+pktcNcsEndPntConfigCallWaitingMaxRep 
+::= { pktcNcsEndPntConfigEntry 27 }
+
+pktcNcsEndPntConfigCallWaitingDelay 
+::= { pktcNcsEndPntConfigEntry 28 }  
+
+pktcNcsEndPntStatusCallIpAddress 
+::= { pktcNcsEndPntConfigEntry 29 }
+ 
+pktcNcsEndPntStatusError 
+::= { pktcNcsEndPntConfigEntry 30 }
+
+END

@@ -1,7 +1,7 @@
 # Makefile for "docsis" program. 
 #
 CC 	=  gcc 
-DEFS	= -DYY_NO_UNPUT # -DDEBUG
+DEFS	= -DYY_NO_UNPUT  -DDEBUG
 #
 # We assume net-snmp is installed in /opt/net-snmp. If not, replace with 
 # actual package location
@@ -18,7 +18,6 @@ LIBS  	= -L/opt/net-snmp/lib -lnetsnmp -lcrypt -lnsl -lfl -lm
 ##### You shouldn't need to change anything below this line 
 docsis: Makefile docsis_decode.o docsis_yy.o docsis_main.o md5.o hmac_md5.o docsis_snmp.o ethermac.h ethermac.o version.h docsis_encode.o 
 	$(CC) $(CFLAGS) $(DEFS) -g -o docsis docsis_main.o docsis_encode.o docsis_decode.o docsis_yy.o md5.o hmac_md5.o docsis_snmp.o ethermac.o $(LIBS)
-	@echo "See mibs/README for instructions on how to install relevant MIB files"
 	@echo "Don't forget to set LD_LIBRARY_PATH - see INSTALL"
 docsis_yy.o: docsis_yy.c
 	$(CC) $(CFLAGS) $(DEFS) -c -o docsis_yy.o docsis_yy.c
