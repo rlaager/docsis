@@ -28,7 +28,12 @@
 #include <string.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#ifdef WIN32
+#include <io.h>
+#include "inet_aton.h"
+#else
 #include <unistd.h>
+#endif
 #include <fcntl.h>
 
 
@@ -121,6 +126,25 @@ int main(int argc,char *argv[] )
 	unsigned int buflen=0,keylen=0;
 	int i;
 
+#ifdef WIN32
+	int	nReturnCode;
+	WSADATA	wsaData;
+	WORD wVersionRequired = MAKEWORD(1, 1);
+	// WinSock DLL initialization
+	nReturnCode = WSAStartup(wVersionRequired, &wsaData);
+	if (nReturnCode != 0) {
+		printf("error: WinSock initialization failure\n");
+		exit(1);
+	}
+	// WinSock version check
+	if (wsaData.wVersion != wVersionRequired) {
+		printf("error: WinSock version unavailable\n");
+		WSACleanup();
+		exit(1);
+	}
+	init_mib();
+#endif
+
 	init_snmp("snmpapp");
 	init_global_symtable();
 
@@ -166,11 +190,19 @@ int main(int argc,char *argv[] )
 		exit (-100); /* we don't overwrite the source file */
 	}
 
+#ifdef WIN32
+	if ( (cf = fopen ( argv[2],"rb" ))== NULL ) { 
+#else
 	if ( (cf = fopen ( argv[2],"r" ))== NULL ) { 
+#endif
 		printf ("%s: Can't open config file %s\n",argv[0],argv[1]);
 		exit(-5);
 	}
+#ifdef WIN32
+	if ( (kf = fopen ( argv[3],"rb" ))== NULL ) { 
+#else
 	if ( (kf = fopen ( argv[3],"r" ))== NULL ) { 
+#endif
 		printf ("%s: Can't open keyfile %s\n",argv[0],argv[2]);
 		exit(-5);
 	}
@@ -206,7 +238,11 @@ int main(int argc,char *argv[] )
 	buflen = add_eod_and_pad ( buffer, buflen );
 	printf ("Final buffer content:\n");
 	decode_main_aggregate ( buffer, buflen );
+#ifdef WIN32
+	if ( (of = fopen ( argv[4],"wb" )) == NULL ) { 
+#else
 	if ( (of = fopen ( argv[4],"w" )) == NULL ) { 
+#endif
 		printf ("%s: Can't open output file %s\n",argv[0],argv[3]);
 		exit(-5);
 	}
@@ -232,7 +268,11 @@ void decode_file(char *file)
 	int rv=0;
 	struct stat st;
 
+#ifdef WIN32
+	if ( (ifd = open (file, O_RDONLY|O_BINARY))==-1 )  {
+#else
 	if ( (ifd = open (file, O_RDONLY))==-1 )  {
+#endif
 		printf("Error opening file %s: %s",file,strerror(errno));
 		exit (-1);
 	}	

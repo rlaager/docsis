@@ -21,6 +21,10 @@
  */
 
 
+#ifdef WIN32
+#include <winsock.h>
+#else
 #include <arpa/inet.h>
+#endif
 
 int inet_aton(const char *cp, struct in_addr *inp ) ;

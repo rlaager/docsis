@@ -158,6 +158,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 {111,   "AdmQosParamsTimeout",	13,100, (get_ushort), 	(decode_ushort),    	0, 65535 },
 /* Downstream Service Flow Specific Params */
 {112,   "MaxDsLatency",		14,100, (get_uint), 	(decode_uint),    	0, 0 },
+/* Payload Header Suppression */
 {113,   "PHS",			26,  0, (get_nothing), 	(decode_aggregate),    	0, 0 },
 {114,   "ClassifierRef",	1, 113, (get_uchar), 	(decode_uchar),    	1, 255 },
 {115,   "ClassifierId",		2, 113, (get_ushort), 	(decode_ushort),    	1, 65535 },

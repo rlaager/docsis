@@ -23,6 +23,11 @@
 #include "docsis.h"
 #include <ctype.h>
 
+#ifdef WIN32
+#undef OPAQUE_SPECIAL_TYPES
+#include "inet_aton.h"
+#endif
+
 extern unsigned int line; /* from a.l */
 
 #define PACKET_LENGTH (8 * 1024)

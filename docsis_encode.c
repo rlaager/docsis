@@ -27,10 +27,17 @@
 #include <string.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#ifdef WIN32
+#include <io.h>
+#include <winsock.h>
+#include "inet_aton.h"
+#else
 #include <unistd.h>
-#include <fcntl.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#endif
+
+#include <fcntl.h>
 #include <math.h>
 
 

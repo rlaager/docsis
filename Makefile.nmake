@@ -1,0 +1,50 @@
+# Makefile for VC++ 6.0
+
+CC 	=  cl /W3
+#DEFS	= /D YY_NO_UNPUT  /D DEBUG  /D WIN32
+DEFS	= /D YY_NO_UNPUT  /D WIN32
+#
+# We assume ucd-snmp is installed in \usr. If not, replace with 
+# actual package location
+# 
+CFLAGS	= /I "\usr\include"
+LIBS  	= \usr\lib\libsnmp.lib wsock32.lib
+
+docsis: Makefile docsis_decode.obj docsis_yy.obj docsis_main.obj md5.obj hmac_md5.obj docsis_snmp.obj ethermac.h ethermac.obj version.h docsis_encode.obj inet_aton.obj libyywrap.obj
+	$(CC) $(CFLAGS) $(DEFS) /Fedocsis docsis_main.obj docsis_encode.obj docsis_decode.obj docsis_yy.obj md5.obj hmac_md5.obj docsis_snmp.obj ethermac.obj inet_aton.obj libyywrap.obj $(LIBS)
+
+# docsis_main (add)
+docsis_main.obj: docsis_main.c
+	$(CC) $(CFLAGS) $(DEFS) /c docsis_main.c
+
+docsis_yy.obj: docsis_yy.c
+	$(CC) $(CFLAGS) $(DEFS) /c docsis_yy.c
+docsis_yy.c: docsis_lex.l docsis_yy.tab.c docsis_symtable.h
+	flex -odocsis_yy.c docsis_lex.l
+docsis_yy.tab.c: docsis_yy.y docsis.h docsis_common.h docsis_encode.h
+	bison -t -v docsis_yy.y
+md5.obj: md5.c md5.h
+	$(CC) $(CFLAGS) $(DEFS) /c md5.c
+hmac_md5.obj: md5.h hmac_md5.c
+	$(CC) $(CFLAGS) $(DEFS) /c hmac_md5.c
+docsis_snmp.obj: docsis.h docsis_snmp.c
+	$(CC) $(CFLAGS) $(DEFS) /c docsis_snmp.c
+docsis_decode.obj: docsis_common.h docsis_decode.h docsis.h docsis_decode.c
+	$(CC) $(CFLAGS) $(DEFS) /c docsis_decode.c
+docsis_encode.obj: docsis_common.h docsis_encode.h docsis_encode.c
+	$(CC) $(CFLAGS) $(DEFS) /c docsis_encode.c
+docsis_main.obj: docsis_common.h docsis_encode.h docsis_decode.h docsis.h docsis_symtable.h docsis_globals.h ethermac.h version.h docsis_main.c
+	$(CC) $(CFLAGS) $(DEFS) /c docsis_main.c
+ethermac.obj: ethermac.h ethermac.c
+	$(CC) $(CFLAGS) $(DEFS) /c ethermac.c
+
+# inet_aton (add)
+inet_aton.obj: inet_aton.c
+	$(CC) $(CFLAGS) $(DEFS) /c inet_aton.c
+
+# libyywrap (add)
+libyywrap.obj: libyywrap.c
+	$(CC) $(CFLAGS) $(DEFS) /c libyywrap.c
+
+clean: 
+	rm -f docsis_yy.output docsis_yy.tab.c docsis_yy.c docsis *.obj

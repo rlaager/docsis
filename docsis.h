@@ -29,9 +29,13 @@
 #include <string.h>
 #include <math.h>
 #include <sys/types.h>
+#ifdef WIN32
+#include <winsock.h>
+#else
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#endif
 
 #include <ucd-snmp/ucd-snmp-config.h>
 #include <ucd-snmp/ucd-snmp-includes.h>

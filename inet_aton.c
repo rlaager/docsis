@@ -20,7 +20,11 @@
  *  DOCSIS is a registered trademark of Cablelabs, http://www.cablelabs.com
  */
 
+#ifdef WIN32
+#include <winsock.h>
+#else
 #include <arpa/inet.h>
+#endif
 
 /* 
  * Implements POSIX inet_aton which is missing on Solaris.
