@@ -1,17 +1,36 @@
-You must have UCD-SNMP installed on your system before compiling this software.
-You can get UCD-SNMP from http://ucd-snmp.ucdavis.edu.
+
+1. System Requirements
+
+You need the following packages to compile this program:
+
+	* ucd-snmp version 4.1.2 (later releases work, see notes) 
+	* flex 2.5.4
+	* bison 1.25
+
+You can get UCD-SNMP (which has just been renamed NET-SNMP) from 
+http://www.net-snmp.org.
 
 You can use "./configure --prefix=/usr" when building UCD-SNMP. If you use the 
 default "./configure", please edit Makefile and adjust CFLAGS and LIBS 
-accordingly (by default, UCD-SNMP installs in /usr/local/).
+accordingly (by default, UCD-SNMP installs in /usr/local/, so you will need 
+to uncomment the "LIBS=-L/usr/local/lib" line in the Makefile).
 
-I used ucd-snmp-4.1.2 myself. It could work with an earlier version however
-this has not been tested so I do not recommend it. 
+I used ucd-snmp-4.1.2 myself.  Earlier releases won't work, later releases may
+work. 
 
 You need flex & bison. I tested with flex 2.5.4 and bison 1.25 on SuSE Linux 
 6.4.
-Lex & Yacc should work fine, although they were not tested. You have to edit 
+Lex & Yacc may work as well, although they were not tested. You have to edit 
 "Makefile" to replace flex with lex and bison with yacc.
+
+To get flex & bison go to ftp://ftp.gnu.org. Almost all recent Linux 
+distributions have them, so you probably don't have to worry about. Try:
+
+$ flex --version
+$ bison --version 
+
+
+2. Installation instructions 
 
 When you have all of the above, do 
 
@@ -21,13 +40,15 @@ unix $ make
 
 If everything works fine, now you have an executable called "docsis". 
 
-If you have problems you can send an E-mail to ctrl@users.sourceforge.net. I will 
-do my best to give you a quick answer but I may be too busy sometimes. 
+If you have problems can send an E-mail to docsis-users@lists.sourceforge.net. 
+
+3. Notes
 
 If your DEFS (in Makefile) include -DDEBUG you will build some debug code 
 which is kinda useful when you're left staring at the stars because it doesn't 
 work. 
 
+If you have ucd-snmp-4.2 or later, you need to add "-lcrypto" to the LIBS 
+variable in Makefile.
+
 If you want to debug the program (using gdb for example), add "-g" to CFLAGS (in Makefile). 
-
-

@@ -20,11 +20,18 @@
  */
 
 #include "docsis.h"
+#include "docsis_symtable.h"
 #include "docsis_globals.h"
 #include "ethermac.h"
+#include <errno.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <fcntl.h>
 
-extern unsigned int line; 	/* defined in a.l */
-extern symbol_type *symtable; 	/* defined in a_symtable.h,included by a_yy.y */
+
+extern unsigned int line; 	/* defined in docsis_lex.l */
 
 
 int get_uint ( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr ) 
@@ -271,37 +278,11 @@ void usage(char *prog_name )
 {
 	printf( "DOCSIS Configuration File creator, version %s.%s\n", VERSION,PATCHLEVEL); 
 	printf ("Copyright (c) 2000 Cornel Ciocirlan, ctrl@users.sourceforge.net\n");
-	printf( "Usage: \n\t %s <modem_cfg_file> <key_file> <output_file>\n",prog_name);
-	printf ( "\nWhere:\n<modem_cfg_file>\t= name of the text (human readable) configuration file\n<key_file>\t\t= text file containing the authentication key to be used\n\t\t\t  for the CMTS MIC (Message Integrity Check).\n<output_file> \t\t= name of the output file where you want the binary data\n\t\t\t  to be written to (if it doesn't exist it is created).\n\t\t\t  This file can be TFTP-downloaded by DOCSIS-compliant\n\t\t\t  cable modems\n"); 
+	printf( "Use to encode: \n\t %s -e <modem_cfg_file> <key_file> <output_file>\n",prog_name);
+	printf( "or to decode: \n\t %s -d <binary_file>\n",prog_name);
+	printf ( "\nWhere:\n<modem_cfg_file>\t= name of the text (human readable) configuration file\n<key_file>\t\t= text file containing the authentication key to be used\n\t\t\t  for the CMTS MIC (Message Integrity Check).\n<output_file> \t\t= name of the output file where you want the binary data\n\t\t\t  to be written to (if it doesn't exist it is created).\n\t\t\t  This file can be TFTP-downloaded by DOCSIS-compliant\n\t\t\t  cable modems\n<binary_file>\t\t= name of the binary file you want to decode\n"); 
 	exit ( -10 );
 }
-
-
-int decode_stdin(unsigned char *key, int keylen) {
-unsigned char buf[1024];
-int len;
-FILE *in;
-unsigned char *cp;
-
-in = fopen ( "gi1.md5", "r");
-memset ( buf, 0, 1024);
-len=fread ( buf, sizeof(unsigned char), 1023, in);
-cp = buf;
-decode_tlvbuf (buf, len, 0);
-/*
-while ( cp -buf <len ) { 
-	if (cp[0]==7)  {
-		add_cmts_mic ( buf,cp-buf,key,keylen); 
-	} else { 
-		cp = cp + 2 + cp[1];
-	}
-} */
-
-decode_tlvbuf (buf, len, 0);
-exit(0);
-}
-
-
 
 int main(int argc,char *argv[] ) 
 {
@@ -313,29 +294,49 @@ int main(int argc,char *argv[] )
 	int i;
 
 	init_snmp("snmpapp");
+	init_global_symtable();
 
    	if (! ds_get_boolean (DS_LIBRARY_ID,DS_LIB_PRINT_NUMERIC_OIDS)) {
         	ds_toggle_boolean(DS_LIBRARY_ID, DS_LIB_PRINT_NUMERIC_OIDS);
    	} /* we want OIDs to appear in numeric form */
+   	if (! ds_get_boolean (DS_LIBRARY_ID,DS_LIB_PRINT_NUMERIC_ENUM)) {
+        	ds_toggle_boolean(DS_LIBRARY_ID, DS_LIB_PRINT_NUMERIC_ENUM);
+   	} /* we want OIDs to appear in numeric form */
    	if (! ds_get_boolean (DS_LIBRARY_ID,DS_LIB_PRINT_FULL_OID)) {
        		ds_toggle_boolean(DS_LIBRARY_ID, DS_LIB_PRINT_FULL_OID);
    	} /* we want to full numeric OID to be printed, including prefix */
+/*   	if (! ds_get_boolean (DS_LIBRARY_ID,DS_LIB_QUICK_PRINT)) {
+        	ds_toggle_boolean(DS_LIBRARY_ID, DS_LIB_QUICK_PRINT);
+   	} *//* quick print for easier parsing */
+   	if (! ds_get_boolean (DS_LIBRARY_ID,DS_LIB_DONT_BREAKDOWN_OIDS)) {
+        	ds_toggle_boolean(DS_LIBRARY_ID, DS_LIB_DONT_BREAKDOWN_OIDS);
+   	} /* quick print for easier parsing */
 
 	memset (prog_name,0,255);
 	strncpy ( prog_name, argv[0], 254);
-	if ( argc != 4 ) { 
-		usage(prog_name);
-	} 
-	if ( !strcmp (argv[1],argv[3]) ) { 
+
+	if (! (argc==3 || argc==5)) usage (prog_name);
+		
+	if ( !strcmp (argv[1],"-e")) { 
+		if ( argc != 5 ) usage(prog_name);
+	} else if ( !strcmp (argv[1],"-d")) {
+		if (argc != 3 ) { 
+			usage(prog_name);
+		} else {
+		 	decode_file (argv[2]);
+		}
+	}
+
+	if ( !strcmp (argv[2],argv[4]) ) { 
 		printf ("Error: source file is same as destination file\n");
 		exit (-100); /* we don't overwrite the source file */
 	}
 
-	if ( (cf = fopen ( argv[1],"r" ))== NULL ) { 
+	if ( (cf = fopen ( argv[2],"r" ))== NULL ) { 
 		printf ("%s: Can't open config file %s\n",argv[0],argv[1]);
 		exit(-5);
 	}
-	if ( (kf = fopen ( argv[2],"r" ))== NULL ) { 
+	if ( (kf = fopen ( argv[3],"r" ))== NULL ) { 
 		printf ("%s: Can't open keyfile %s\n",argv[0],argv[2]);
 		exit(-5);
 	}
@@ -350,8 +351,6 @@ int main(int argc,char *argv[] )
 		keylen--; /* eliminate trailing \n or \r */
 	}
         
-	/* decode_stdin(key,keylen); */
-	
 	parse_input_file(cf);
   	/* decode_tlvlist(global_tlvlist, 0); */
 	if ( global_tlvlist == NULL ) { 
@@ -369,12 +368,11 @@ int main(int argc,char *argv[] )
 	buflen = flatten_tlvlist(buffer, global_tlvlist);
 	decode_tlvbuf ( buffer, buflen, 0);
 	buflen = add_cm_mic ( buffer, buflen );
-	decode_tlvbuf ( buffer, buflen, 0);
 	buflen = add_cmts_mic ( buffer, buflen,key,keylen );
-	printf ("Final buffer content:\n");
 	buflen = add_eod_and_pad ( buffer, buflen );
-	decode_tlvbuf ( buffer, buflen, 0);
-	if ( (of = fopen ( argv[3],"w" )) == NULL ) { 
+	printf ("Final buffer content:\n");
+	pretty_decode_buffer ( buffer, buflen, 0);
+	if ( (of = fopen ( argv[4],"w" )) == NULL ) { 
 		printf ("%s: Can't open output file %s\n",argv[0],argv[3]);
 		exit(-5);
 	}
@@ -382,4 +380,38 @@ int main(int argc,char *argv[] )
 	return 0;
 }
 
+int init_global_symtable(void)
+{
+  global_symtable = (symbol_type *) malloc(sizeof(symbol_type)*NUM_IDENTIFIERS);  if (global_symtable == NULL) {
+        printf ( "Error allocating memory!\n");
+        exit (255);
+  }
+  memcpy(global_symtable, symtable, sizeof(symbol_type)*NUM_IDENTIFIERS);
+  return 1;
+}
 
+
+void decode_file(char *file) 
+{
+	int ifd;
+	unsigned char *buffer;
+	unsigned int buflen=0;
+	int rv=0;
+	struct stat st;
+
+	if ( (ifd = open (file, O_RDONLY))==-1 )  {
+		printf("Error opening file %s: %s",file,strerror(errno));
+		exit (-1);
+	}	
+	if ((rv=fstat(ifd, &st))) { 
+		printf("stat on file %s: %s",file,strerror(errno));
+		exit(-1);
+	}
+	
+	buffer = (unsigned char *) malloc (st.st_size*sizeof(unsigned char)+1);
+	
+	buflen = read(ifd, buffer, st.st_size);
+
+	pretty_decode_buffer ( buffer, buflen, 0);
+	exit(0);
+}

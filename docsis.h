@@ -43,7 +43,7 @@
 #include "version.h"
 
 #ifndef NUM_IDENTIFIERS
-#define NUM_IDENTIFIERS 27
+#define NUM_IDENTIFIERS 29
 #endif /*  NUM_IDENTIFIERS, also defined in docsis_symtable.h  */
 
 #define MAXINT 2000000000 
@@ -131,10 +131,10 @@ unsigned int decode_wd ( unsigned char *data, unsigned int data_len);
 void hmac_md5(unsigned char *text, int text_len, unsigned char *key, int key_len, unsigned char *digest);
 void md5_print_digest ( unsigned char *digest );
 int init_global_symtable ( void) ;
-
 int parse_input_file( FILE *afile );
-
+int hexadecimal_to_binary(const char *, u_char *);
 int yylex(void);
+void decode_file ( char *file );
 
 #endif /* _DOCSIS_H */
 

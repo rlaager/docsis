@@ -114,7 +114,7 @@ int decode_tlvbuf ( unsigned char *buf, unsigned int buflen , unsigned char docs
 			case 4: 
 				switch ( ( unsigned char ) *cp )  {
 					case 6:  /* MaxBurstUp */
-						printf ( "value %hu\n", ntohs((unsigned short) *(cp+2)));
+						printf ( "value %hu\n", ntohs(*(unsigned short *) &cp[2]));
 						break;
 						;;
 					case 7: 
@@ -147,5 +147,159 @@ int decode_tlvbuf ( unsigned char *buf, unsigned int buflen , unsigned char docs
   howmany++;
   }
  return howmany;
+}  
+
+int pretty_decode_buffer ( unsigned char *buf, unsigned int buflen , unsigned char docs_parent ) 
+{
+  register unsigned char *cp;
+  int i,j,matched;
+  int howmany;
+  char filename[255];
+
+  memset (filename, 0, 255);
+
+  if (buf == NULL ) { printf ("Nothing to decode.\n"); return 0; }
+  if ( docs_parent == 0 ) printf( "Main {\n");
+
+  cp = buf; 
+  while ( (unsigned int) (cp - buf) < buflen ) {
+  matched=0;
+  for ( i = 0; i< NUM_IDENTIFIERS; i++ ) { 
+	if ( (global_symtable[i].docsis_code == (unsigned char) *cp ) && (global_symtable[i].docsis_parent == docs_parent )) { 
+		printf ("%s ", global_symtable[i].sym_ident);
+		matched=1;
+		switch ( docs_parent ) {
+			case 0:
+				switch ( (unsigned char) *cp ) { 
+					case 0: /* pad */
+						printf ("\n");
+						break;
+						;;
+					case 1:  /* Downstream Freq */
+						printf ( "%u;\n", ntohl( * (unsigned int * ) &cp[2]));
+						break;
+						;;
+					case 2: /* UpstreamChannelId uchar */
+						printf ( "%hu;\n", (unsigned char) *(cp+2));
+						break;
+						;;
+					case 3: /* NetworkAccess uchar */
+						printf ( "%hu;\n", (unsigned char) *(cp+2));
+						break;
+						;;
+					case 4: /* Class Of Service */
+						printf(" {\n");
+						pretty_decode_buffer ( (unsigned char *) (cp+2), (unsigned char) *(cp+1), 4); 
+						printf("}\n");
+						break;
+						;;
+					case 6: /* Cable Modem Message Integrity Check */
+						for (j=0;j<16;j++) 
+							printf ("%02x", cp[j+2] );
+						printf(";\n");
+						break;
+						;;
+					case 7: /* CMTS Message Integrity Check */
+						for (j=0;j<16;j++) 
+							printf ("%02x", cp[j+2] );
+						printf(";\n");
+						break;
+						;;
+					case 9: /* Software Upgrade Filename */
+						strncpy ( filename, (char *) cp+2, (unsigned int) cp[1] );
+						printf ( "\"%s\";\n", filename );
+						break;
+						;;
+					case 10:  /* SNMP WriteDisable */
+						decode_wd ( cp+2, (unsigned int) cp[1]);
+						printf(";\n");
+						break;
+						;;
+					case 11:  /* SNMP Mib Object */
+						decode_vbind ( cp+2, (unsigned int) cp[1]);
+						printf(";\n");
+						break;
+						;;
+					case 14:  /* CPE MAC Address */
+						printf ("%s;\n", ether_ntoa(cp+2));
+						break;
+						;;
+					case 17:  /* Baseline Privacy */
+						printf ("{\n");
+						pretty_decode_buffer ( (unsigned char *) (cp+2), (unsigned char) *(cp+1), 17); 
+						printf("}\n");
+						break;
+						;;
+					case 18: /* MaxCPEs - uchar */
+						printf ( "%hu;\n", (unsigned char) *(cp+2));
+						break;
+						;;
+					case 21:  /* Software Upgrade Server IP address */
+						printf ( "%s;\n", inet_ntoa(*((struct in_addr *)(cp+2))));
+						break;
+						;;
+					case 255:  /* End-Of-Data Marker */
+						printf ("\n");
+						break;
+						;;
+				}
+				break;
+				;; /* end case 0 -- Main */
+			case 4: 	/* ClassOfService */
+				switch ( ( unsigned char ) *cp )  {
+					case 1:  /* ClassID */
+						printf ( "%hu;\n", (unsigned char) *(cp+2));
+						break;
+						;;
+					case 2:  /* Max Rate Down */
+						printf ( "%u;\n", ntohl( * (unsigned int * ) &cp[2]));
+						break;
+						;;
+					case 3:  /* Max Rate Up */
+						printf ( "%u;\n", ntohl( * (unsigned int * ) &cp[2]));
+						break;
+						;;
+					case 4: /* PriorityUp */
+						printf ( "%hu;\n", (unsigned char) *(cp+2));
+						break;
+						;;
+					case 5:  /* Guaranteed Up */
+						printf ( "%u;\n", ntohl( * (unsigned int * ) &cp[2]));
+						break;
+						;;
+					case 6:  /* MaxBurstUp */
+						printf ( "%hu;\n", ntohs(* (unsigned short *) &cp[2]));
+						break;
+						;;
+					case 7: 
+						printf ( "%hu;\n", (unsigned char) *(cp+2));
+						break;
+						;;
+					default: 
+						printf ( "%u;\n", ntohl( * (unsigned int * ) &cp[2]));
+						;;
+				}
+				break;
+				;; /* end case 4  - Class Of Service */
+			case 17:	
+					/* all BaselinePrivacy values are uint, we don't need a switch() */
+					printf ( "%u;\n", ntohl( * (unsigned int * ) &cp[2]));
+					;;
+					break;
+			}
+  	} /* if */
+  } /* for */
+
+  if (!matched) {
+	printf("GenericUnknownTLV docsis_code %hu length %hu value " , (unsigned char)*cp, (unsigned char) *(cp+1));
+	if ((unsigned char)*(cp+1)) printf("0x"); else printf("none");
+	for (j=0;j<(unsigned char)*(cp+1);j++) printf ("%02x", cp[j+2]);
+	printf("\n");
+  }     
+  cp=(unsigned char*) cp+(((unsigned char)*(cp+1))+2)*sizeof(unsigned char);
+  howmany++;
+  } /* while */
+  if ( docs_parent == 0 ) printf( "}\n");
+  return howmany;
 }  
 

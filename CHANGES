@@ -1,3 +1,10 @@
+0.6.1:  25/03/01
+			added -lcrypto to $LIBS to work with ucd-snmp-4.2
+			cleaned up the sourcecode a bit
+			added support for "decoding" a binary file
+			fixed bug in decoding unsigned shorts (MaxBurstUp)
+			
+
 0.6.0:	23/03/01	
 			added support for generic hexadecimal strings
 			(needed for docsDevNmAccessInterfaces)

@@ -23,14 +23,13 @@
 #ifndef _DOCSIS_SYMTABLE_H
 #define _DOCSIS_SYMTABLE_H
 
-#ifndef NUM_IDENTIFIERS
-#define NUM_IDENTIFIERS 27
-#endif /* NUM_IDENTIFIERS */
+#include "docsis.h"
 
 /* get_nothing is used for non-numeric data */
 
 symbol_type symtable[NUM_IDENTIFIERS] =  {
-{"DownstreamFrequency",	1,  0, (get_uint), 88000000, 860000000 }, 
+{"/* Pad */",			0,  0, (get_nothing), 	0, 0 }, 
+{"DownstreamFrequency",	1,  0, (get_uint), 	88000000, 860000000 }, 
 {"UpstreamChannelId", 	2,  0, (get_uchar), 	0, 255},
 {"NetworkAccess",	3,  0, (get_uchar), 	0, 1},
 {"CmMic",		6,  0, (get_nothing), 	0, 0},
@@ -56,7 +55,8 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 {"TEKGraceTime", 	6, 17, (get_uint), 	1, 1800},
 {"AuthRejectTimeout", 	7, 17, (get_uint), 	1, 600},
 {"MaxCPE", 		18, 0, (get_uchar), 	0, 16},
-{"SwUpgradeServer",	21, 0, (get_ip),   	0, 0}
+{"SwUpgradeServer",	21, 0, (get_ip),   	0, 0},
+{"/* EndOfDataMarker */",	255, 0, (get_nothing),  	0, 0}
 };
 
 #endif /* _DOCSIS_SYMTABLE_H */

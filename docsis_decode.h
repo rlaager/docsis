@@ -23,6 +23,7 @@
 #define _DOCSIS_DECODE_H
 
 int decode_tlvbuf (unsigned char *buf, unsigned int buflen, unsigned char docs_parent); 
+int pretty_decode_buffer (unsigned char *buf, unsigned int buflen, unsigned char docs_parent); 
 
 
 #endif /* _DOCSIS_DECODE_H */

@@ -68,7 +68,7 @@ unsigned int encode_vbind ( char *oid_string, char oid_asntype, union t_val *val
         } else if (oid_asntype == 's'){
           strncpy((char*)buf, value->strval, SPRINT_MAX_LEN);
         } else if (oid_asntype == 'x'){
-           if ( (rv = hex_to_binary(value->strval, buf)) == -1 ) {
+           if ( (rv = hexadecimal_to_binary(value->strval, buf)) == -1 ) {
 		printf("Invalid hexadecimal string at line %d\n", line);
 		exit(-200);
 		}
@@ -289,12 +289,12 @@ unsigned int decode_wd ( unsigned char *data, unsigned int data_len)
     		print_objid(this_oid, oid_len);
 
 	}
-	printf ("%d\n", (int) data[data_len-1]); 
+	printf ("%d", (int) data[data_len-1]); 
 return 1;
 }
  
 int
-hex_to_binary(const char *str,
+hexadecimal_to_binary(const char *str,
               u_char *bufp)
 {
   int len, itmp;

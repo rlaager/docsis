@@ -21,7 +21,6 @@
 
 %{
 #include "docsis.h"
-#include "docsis_symtable.h"
 
 extern unsigned int line; 	/* current line number, defined in a.l */
 extern struct tlv_list *global_tlvlist; /* Global list of all config TLVs */
@@ -79,6 +78,32 @@ extern symbol_type *global_symtable;
 /* %type <tlvlist> config_stmt */
 
 %%
+/* 
+
+How this works ? 
+
+When we recognize an assignment statement (for example "MaxCPE 13;") we create 
+a "struct tlv" which contains the type associated with this configuratin 
+setting, the length of this configuration setting and the value. The type and
+lenth are in docsis_symtable.h. Consecutive assignment_stmts are reduced  
+to an assignment_list, creating a "tlvlist" which is essentially a list of 
+pointers to stuct tlv's. 
+
+"Special" cases like ClassOfService (configuration settings which have 
+sub-types) are treated a bit different.
+
+For example, within the ClassOfService statement we have a list of 
+assignment_stmts which are reduced to an assignment_list, and then to a 
+cos_stmt. When we reduce the cos_stmt to a config_stmt_list we merge the 
+cos_stmt tlvlist with the tlvlist corresponding to config_stmt_list (may be
+empty if cos_stmt is the first statement that appears in the config file) so we
+have a single tlvlist. 
+
+The idea is that, when we finish parsing, we end up with a "global_tlvlist" 
+which contains pointers to all the struct tlv's that we assembled while parsing
+the configuration file. At this point, we "flatten" this list into a tlvbuf, 
+add CM MIC and CMTS MIC and pad and that's it. */
+
 
 /* Definitions of bison/yacc grammar */
 
@@ -293,10 +318,11 @@ struct tlv_list *assemble_list_in_parent (struct symbol_entry *sym_ptr, struct t
   return newtlvlist;
 }
 
-/* Creates a buffer filled with the TLV bytes sequentially. 
+/* Creates a buffer filled with the TLV bytes sequentially, as they will be 
+ * found in the final configuration file. 
  * We use this function either to create a "parent" tlv corresponding to 
  * ClassOfService-like TLVs, or to create the final buffer to which we add the 
- * digests, end-of-data marker and pad and write to the output file.
+ * MIC digests, end-of-data marker and pad and write to the output file.
  */
 
 unsigned int flatten_tlvlist (unsigned char *buf, struct tlv_list *list )
@@ -323,21 +349,9 @@ unsigned int flatten_tlvlist (unsigned char *buf, struct tlv_list *list )
 
 int parse_input_file ( FILE *thefile ) 
 { 
-  init_global_symtable();
   yyin = thefile ; 
 #ifdef DEBUG
   yydebug = 1;
 #endif
   return yyparse();
-}
-
-int init_global_symtable(void) 
-{
-  global_symtable = (symbol_type *) malloc(sizeof(symbol_type)*NUM_IDENTIFIERS);
-  if (global_symtable == NULL) { 
-	printf ( "Error allocating memory!\n"); 
-	exit (255);
-  }
-  memcpy ( global_symtable, symtable, sizeof(symbol_type)*NUM_IDENTIFIERS);
-  return 1;
 }

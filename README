@@ -1,10 +1,14 @@
 1. General Information
 
 This software is (c) 2000 Cornel Ciocirlan. 
-To contact the author,  send an E-mail to: ctrl@users.sourceforge.net
+To contact the author, send an E-mail to: ctrl@users.sourceforge.net.
+
+General questions about this software can be  sent to docsis-users@sourceforge.net. 
+
+Visit http://docsis.sourceforge.net and http://sourceforge.net/projects/docsis 
+for the latest news on this software.
 
 PLEASE READ THE FILE COPYING.GPL. 
-
 
 This is Unsupported software that may crash your computer, damage all your data
 or otherwise drive you nuts. You'd better know what you're doing.
@@ -12,8 +16,8 @@ or otherwise drive you nuts. You'd better know what you're doing.
 2. Description
 
 This program encodes text configuration files which contain Configuration File 
-Settings (as per the DOCSIS RFI 1.0 Specification) into binary configuration 
-files, as specified by the DOCSIS RFI 1.0 Specification, Appendix C.
+Settings into binary configuration files, as specified by the DOCSIS RFI 1.0 
+Specification, Appendix C.
 
 It supports most DOCSIS 1.0 Configuration Settings. Not supported (currently):
 
@@ -27,15 +31,16 @@ It supports most DOCSIS 1.0 Configuration Settings. Not supported (currently):
 See DOCSIS 1.0 Radio Frequency Interface Specification, Appendix C for a 
 description of these settings.
 
-
 A limited range of ASN types are supported for SNMP MibObjects (the most used
-types). Adding a new ASN type is as easy as cut&paste from UCD-SNMP source code into docsis_snmp.c, function encode_vbind (well, maybe a few changes are needed,
-but I trust the reader can figure it out).
+types - Integer, String, HexString, IP Address). Adding a new ASN type is as 
+easy as cut&paste from UCD-SNMP source code into docsis_snmp.c, function 
+encode_vbind (well, maybe a few changes are needed, but I trust the reader can 
+figure it out).
 
-More than one (up to 16) ClassOfService statements can appear. Only one 
-BaselinePrivacy (BPI) statement can appear. The program does not check for the 
-number of ClassOfService statements that appear, you have to make sure not 
-to include more than 16 or unexpected results will occur. 
+More than one (up to 16) ClassOfService statements can appear in the 
+configuration file. Only one BaselinePrivacy (BPI) statement can appear. 
+The program does not check for the number of ClassOfService statements that 
+appear, you have to make sure not to include more than 16 or unexpected results will occur  (modems / CMTSes may reset).
 
 DOCSIS BPI Specification clearly states that the BPI settings MUST NOT be 
 present if Privacy is not enabled in [at least one of] the ClassOfService 
@@ -49,7 +54,7 @@ automatically (quite trivial).
 
 To encode a configuration file, do:
 
-unix $ ./docsis my_config_file.cfg my_key_file my_config_file.md5
+unix $ ./docsis -e my_config_file.cfg my_key_file my_config_file.md5
 
 The format of the text configuration file, although simple, is not described 
 anywhere but the source code (see the grammar in docsis_yy.y and lexical 
@@ -60,3 +65,17 @@ examples/*.cfg).
 An example key is provided in file testkey.key. The key is only a string of 
 characters. Any trailing newline (\n) or carriage return (\r) characters are 
 chopped. 
+
+To decode a binary file, do:
+
+unix $ ./docsis -d my_binary_file.md5
+
+The decoded output is not always "compatible" with itself, eg cannot be 
+directly encoded back into a binary file. 
+
+This is mostly due to the usage of ucd-snmp library functions to print the 
+SnmpMibObjects, which print out a different syntax than what we need.
+
+If you want to encode back a decoded file, you have to fix the syntax of 
+SnmpMibObject settings and delete CmMic and CmtsMic configuration settings. 
+Then you should be able to encode back a file. 

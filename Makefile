@@ -1,19 +1,15 @@
 CC 	=  gcc 
 DEFS	= -DYY_NO_UNPUT  -DDEBUG
-CFLAGS	= -g -Wall  -I/usr/local/include
 #
-# Uncomment below CFLAGS and comment above CFLAGS if UCD-SNMP is 
-# installed in /usr/local/
-
-# CFLAGS = -I/usr/local/include -g -Wall 
-
-LIBS 	= -lsnmp -lfl -lm 
-
-#
-# Use below LIBS and comment above LIBS if UCD-SNMP is installed in /usr/local.
+# We assume ucd-snmp is installed in /usr/local. If not, replace with 
+# actual package location
 # 
-# LIBS  = -L/usr/local/lib -lsnmp -lfl -lm
-#
+CFLAGS	= -g -Wall -I/usr/local/include
+LIBS  	= -L/usr/local/lib -lsnmp -lcrypto -lfl -lm
+CFLAGS	= -g -Wall -I/opt/ucd-snmp-4.2/include
+LIBS  	= -L/opt/ucd-snmp-4.2/lib -lsnmp -lcrypto -lfl -lm
+
+
 docsis: Makefile docsis_main.c docsis_decode.o docsis.h docsis_globals.h docsis_yy.o docsis_main.o docsis_lex.l md5.o hmac_md5.o docsis_snmp.o ethermac.h ethermac.o version.h
 	$(CC) $(CFLAGS) $(DEFS) -g -o docsis docsis_main.c docsis_decode.o docsis_yy.o md5.o hmac_md5.o docsis_snmp.o ethermac.o $(LIBS)
 docsis_yy.o: docsis_yy.c
