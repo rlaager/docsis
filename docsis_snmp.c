@@ -20,6 +20,7 @@
  */
 
 #include "docsis.h"
+#include <ctype.h>
 
 extern unsigned int line; /* from a.l */
 
@@ -35,7 +36,9 @@ unsigned int encode_vbind ( char *oid_string, char oid_asntype, union t_val *val
   struct tree *tp; 
   struct range_list *rp; 
   long len;
-
+  int rv;
+  
+  memset (buf, 0, SPRINT_MAX_LEN);
   if ( !read_objid(oid_string, var_name, &name_len) ) { 
 	if (!get_node(oid_string, var_name, &name_len) ) { 
 		printf("Can't find oid %s at line %d\n", oid_string, line);
@@ -56,18 +59,22 @@ unsigned int encode_vbind ( char *oid_string, char oid_asntype, union t_val *val
 	break;
 	;;
       case 's':
-/*      case 'x':
-        case 'd': 
-        if (type == 'd'){
-          ltmp = ascii_to_binary(value->strval, buf);
+      case 'x':
+      case 'd': 
+        if (oid_asntype == 'd'){
+         /* ltmp = ascii_to_binary(value->strval, buf);
           strncpy((char*)buf, value, SPRINT_MAX_BUF);
-          ltmp = strlen((char*)buf);
-        } else if (type == 's'){
-        } else if (type == 'x'){
-          ltmp = hex_to_binary(value, buf);
-        }
-*/
+          ltmp = strlen((char*)buf); */
+        } else if (oid_asntype == 's'){
           strncpy((char*)buf, value->strval, SPRINT_MAX_LEN);
+        } else if (oid_asntype == 'x'){
+           if ( (rv = hex_to_binary(value->strval, buf)) == -1 ) {
+		printf("Invalid hexadecimal string at line %d\n", line);
+		exit(-200);
+		}
+	   ltmp = (unsigned int ) rv;
+        }
+
           len = strlen((char*)buf);
         if (len < 0 || len > SPRINT_MAX_LEN-1) {
           printf ("String too long at line %d, max allowed %d\n", line,SPRINT_MAX_LEN);
@@ -286,4 +293,22 @@ unsigned int decode_wd ( unsigned char *data, unsigned int data_len)
 return 1;
 }
  
+int
+hex_to_binary(const char *str,
+              u_char *bufp)
+{
+  int len, itmp;
+  printf ("Hex string rx'd: %s\n", str);
+  if (!bufp) return -1;
+  if (*str && *str == '0' && (*(str+1) == 'x' || *(str+1) == 'X')) str += 2;
+  for (len = 0; *str; str++) {
+    if (isspace(*str)) continue;
+    if (!isxdigit(*str)) return -1;
+    len++;
+    if (sscanf(str++, "%2x", &itmp) == 0) return -1;
+    *bufp++ = itmp;
+    if (!*str) return -1; /* odd number of chars is an error */
+  }
+  return len;
+}
 

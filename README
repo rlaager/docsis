@@ -58,4 +58,5 @@ truckload of documentation, I've included a few configuration files (see
 examples/*.cfg).
 
 An example key is provided in file testkey.key. The key is only a string of 
-characters. If the last character of the string is a newline it will be chopped. 
+characters. Any trailing newline (\n) or carriage return (\r) characters are 
+chopped. 

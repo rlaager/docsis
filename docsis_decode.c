@@ -88,7 +88,7 @@ int decode_tlvbuf ( unsigned char *buf, unsigned int buflen , unsigned char docs
 						decode_vbind ( cp+2, (unsigned int) cp[1]);
 						break;
 						;;
-					case 12:  /* CPE MAC Address */
+					case 14:  /* CPE MAC Address */
 						printf ( "mac %s len %d\n", ether_ntoa(cp+2), (unsigned int) cp[1]);
 						break;
 						;;

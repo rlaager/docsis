@@ -316,16 +316,20 @@ int main(int argc,char *argv[] )
 
    	if (! ds_get_boolean (DS_LIBRARY_ID,DS_LIB_PRINT_NUMERIC_OIDS)) {
         	ds_toggle_boolean(DS_LIBRARY_ID, DS_LIB_PRINT_NUMERIC_OIDS);
-   	}
+   	} /* we want OIDs to appear in numeric form */
    	if (! ds_get_boolean (DS_LIBRARY_ID,DS_LIB_PRINT_FULL_OID)) {
        		ds_toggle_boolean(DS_LIBRARY_ID, DS_LIB_PRINT_FULL_OID);
-   	}
+   	} /* we want to full numeric OID to be printed, including prefix */
 
 	memset (prog_name,0,255);
 	strncpy ( prog_name, argv[0], 254);
 	if ( argc != 4 ) { 
 		usage(prog_name);
 	} 
+	if ( !strcmp (argv[1],argv[3]) ) { 
+		printf ("Error: source file is same as destination file\n");
+		exit (-100); /* we don't overwrite the source file */
+	}
 
 	if ( (cf = fopen ( argv[1],"r" ))== NULL ) { 
 		printf ("%s: Can't open config file %s\n",argv[0],argv[1]);
@@ -337,11 +341,13 @@ int main(int argc,char *argv[] )
 	}
         
         keylen = fread (key,sizeof(unsigned char), 64, kf);
-	if (keylen <= 0) {
-		printf ("%s: key must be at least 1 char long\n",argv[0]);
+	if (keylen < 1) {
+		printf ("%s: error: key must be at least 1 char long\n",argv[0]);
+		exit (-101);
 	}
-	if (key[keylen-1] == 10 ) { 
-		keylen--; /* eliminate trailing \n */
+
+	while (key[keylen-1] == 10 || key[keylen-1]==13) { 
+		keylen--; /* eliminate trailing \n or \r */
 	}
         
 	/* decode_stdin(key,keylen); */

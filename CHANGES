@@ -1,3 +1,17 @@
+0.6.0:	23/03/01	
+			added support for generic hexadecimal strings
+			(needed for docsDevNmAccessInterfaces)
+
+			fixed bug involving multiple String-type SNMP vars
+			in the same config file (uninitialized buffer)
+
+			fixed bug with CpeMacAddress decoding (introduced in 
+			0.5.8)
+
+0.5.8: 
+	18/03/01:	various re-organizations 
+			released to sourceforge
+
 0.5.7: 
 	17/03/01: 
 			fixed bug in CPE MAC Address encoding (correct type = 14)

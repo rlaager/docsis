@@ -1,3 +1,24 @@
+/* 
+ *  DOCSIS configuration file encoder. 
+ *  Copyright (c) 2001 Cornel Ciocirlan, ctrl@users.sourceforge.net.
+ *  
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ *  DOCSIS is a registered trademark of Cablelabs, http://www.cablelabs.com
+ */
+
 %{
 #include "docsis.h"
 #include "docsis_symtable.h"
@@ -32,6 +53,7 @@ extern symbol_type *global_symtable;
 %token <strval>  T_MAC
 %token <strval>  T_MAIN
 %token <strval>  T_STRING
+%token <strval>  T_HEX_STRING
 
 %token <uintval>  T_ASNTYPE_INT
 %token <uintval>  T_ASNTYPE_UINT
@@ -58,7 +80,8 @@ extern symbol_type *global_symtable;
 
 %%
 
-/* Definitions of bison grammar */
+/* Definitions of bison/yacc grammar */
+
 config_stmt:  	T_MAIN '{' config_stmt_list '}'	{ 
 			global_tlvlist = $3; }
 	
@@ -99,6 +122,10 @@ snmp_set_stmt: T_IDENT_SNMPSET T_OID T_ASNTYPE_INT T_INTEGER ';' {
 			$$ = create_snmpset_tlv($1,$2,'s',(union t_val *)&$4); }
 	      | T_IDENT_SNMPSET T_LABEL_OID T_ASNTYPE_STRING T_STRING ';' {
 			$$ = create_snmpset_tlv($1,$2,'s',(union t_val *)&$4); }
+	      | T_IDENT_SNMPSET T_OID T_ASNTYPE_HEXSTR T_HEX_STRING ';' {
+			$$ = create_snmpset_tlv($1,$2,'x',(union t_val *)&$4); }
+	      | T_IDENT_SNMPSET T_LABEL_OID T_ASNTYPE_HEXSTR T_HEX_STRING ';' {
+			$$ = create_snmpset_tlv($1,$2,'x',(union t_val *)&$4); }
                 ;                                        
 assignment_stmt:  T_IDENTIFIER T_INTEGER ';' { 
 			$$ = create_tlv ($1, (union t_val *)&$2);} 

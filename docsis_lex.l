@@ -39,6 +39,7 @@ char *tsave;
 
 [0-9]+\.[0-9]+\.[0-9]+\.[0-9]+	 { TSAVE(yytext);yylval.strval=tsave; return T_IP;	}
 \.([0-9]+\.)*[0-9]+		{ TSAVE(yytext);yylval.strval=tsave; return T_OID; }
+0[Xx]([0-9A-Fa-f])+		{ TSAVE(yytext);yylval.strval=tsave; return T_HEX_STRING; }
 [0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f]  { TSAVE(yytext);yylval.strval=tsave; return T_MAC; }
 
 ([A-Za-z]+\.)+[0-9]+		{ TSAVE(yytext);yylval.strval=tsave; return T_LABEL_OID; }
@@ -76,7 +77,7 @@ Double			{ return T_ASNTYPE_DOUBLE; }
 
 [0-9]+	 { yylval.intval=atoi(yytext);return T_INTEGER; }
 [ \t]+	 ;
-\n\r	 { line++; }
+\r\n	 { line++; }
 \n	 { line++; }
 \{ 	 { yylval.strval=yytext;return '{'; }
 \}	 { yylval.strval=yytext;return '}'; }
