@@ -21,6 +21,7 @@
  */
 
 #include "docsis.h"
+#include "docsis_decode.h"
 #include "ethermac.h"
 
 #include <math.h>
@@ -91,10 +92,10 @@ void decode_ethermask (unsigned char *tlvbuf, symbol_type *sym)
 void decode_md5 (unsigned char *tlvbuf, symbol_type *sym)
 {
   int j=0;
-  printf ("%s ", sym->sym_ident);
+  printf ("/* %s ", sym->sym_ident);
   for (j=0;j<16;j++)	printf ("%02x", tlvbuf[j+2]);
 
-  printf(";\n");
+  printf("; */\n");
 }
 
 void decode_snmp_wd (unsigned char *tlvbuf, symbol_type *sym)
@@ -162,11 +163,20 @@ void decode_aggregate (unsigned char *tlvbuf, symbol_type *sym)
   register unsigned char *cp;
   symbol_type *current_symbol;
   
+
   cp = tlvbuf+2; /* skip type,len of parent TLV */
-  printf( "%s {\n", sym->sym_ident);
+
+  printf( "%s\n", sym->sym_ident);
+  __docsis_indent(INDENT_NOOP, TRUE);
+  printf( "{\n");
+
+  __docsis_indent(INDENT_INCREMENT, FALSE);
 
 /*  while ( (unsigned int) (cp - tlvbuf +(sizeof(unsigned char))) < (unsigned int) tlvbuf[1] ) { */
   while ( (unsigned int) (cp - tlvbuf) < (unsigned int) tlvbuf[1] ) {
+
+  __docsis_indent(INDENT_NOOP, TRUE);
+
   current_symbol = find_symbol_by_code_and_pid (cp[0], sym->id);
   if (current_symbol == NULL) { 
 		decode_unknown(cp, NULL);	
@@ -175,6 +185,10 @@ void decode_aggregate (unsigned char *tlvbuf, symbol_type *sym)
   	}
  	cp = (unsigned char*) cp + (((unsigned char)*(cp+1))+2)*sizeof(unsigned char);
   }
+
+  __docsis_indent(INDENT_DECREMENT, FALSE);
+
+  __docsis_indent(INDENT_NOOP, TRUE);
   printf("}\n");
 }
 
@@ -193,9 +207,16 @@ void decode_main_aggregate (unsigned char *tlvbuf, unsigned int buflen)
   symbol_type *current_symbol;
   
   cp = tlvbuf; 
-  printf( "Main {\n");
+
+  __docsis_indent(INDENT_CLEAR, FALSE);
+	  
+  printf( "Main \n{\n");
+  __docsis_indent(INDENT_INCREMENT, FALSE);
 
   while ( (unsigned int) (cp - tlvbuf) < buflen ) {
+
+  __docsis_indent(INDENT_NOOP, TRUE);
+
   current_symbol = find_symbol_by_code_and_pid (cp[0],0);
   if (current_symbol == NULL) { 
 		decode_unknown(cp, NULL);	
@@ -204,5 +225,36 @@ void decode_main_aggregate (unsigned char *tlvbuf, unsigned int buflen)
   	}
  	cp = (unsigned char*) cp + (((unsigned char)*(cp+1))+2)*sizeof(unsigned char);
   }
+  __docsis_indent(INDENT_DECREMENT, FALSE);
   printf("}\n");
 }
+
+void __docsis_indent(int opCode, int doPrint ) 
+{ 
+	static int numtabs;
+	int i;
+
+	switch (opCode)  
+	{
+		case INDENT_INCREMENT: 
+			numtabs++;
+			break;
+			;;
+		case INDENT_DECREMENT: 
+			numtabs--;
+			break; 
+			;;
+		case INDENT_CLEAR: 
+			numtabs=0;
+			break;
+			;;
+	}
+
+	if ( doPrint )  
+	{
+		for (i=0; i<numtabs; i++) printf ("\t"); 
+	}
+
+
+}
+

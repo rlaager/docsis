@@ -1,10 +1,13 @@
 CC 	=  gcc 
 DEFS	= -DYY_NO_UNPUT  -DDEBUG -DSOLARIS
-#
+
+# This is an old Makefile. 
+# If you need support for Solaris send an e-mail to docsis@evvolve.com
 # We assume ucd-snmp is installed in /opt/ucd-snmp-4.2. If not, replace with 
 # actual package location
 # The same goes for OpenSSL, which we assume it's in /usr/local/ssl
 # 
+
 CFLAGS	= -g -Wall -I/usr/local/include
 CFLAGS	= -g -Wall -I/opt/ucd-snmp-4.2/include
 LIBS  	= -L/opt/ucd-snmp-4.2/lib -lsnmp -L/usr/local/ssl/lib -lcrypto -lnsl -lsocket -lfl -lm -lkstat

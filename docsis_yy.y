@@ -46,7 +46,6 @@ extern symbol_type *global_symtable;
 %token <symptr>  T_IDENT_BPI
 %token <symptr>  T_IDENT_SNMPW
 %token <symptr>  T_IDENT_SNMPSET
-%token <strval>  T_OID
 %token <strval>  T_MAC
 %token <strval>  T_ETHERMASK
 %token <strval>  T_LABEL_OID
@@ -64,6 +63,7 @@ extern symbol_type *global_symtable;
 %token <uintval>  T_ASNTYPE_STRING 
 %token <uintval>  T_ASNTYPE_HEXSTR 
 %token <uintval>  T_ASNTYPE_DECSTR 
+%token <uintval>  T_ASNTYPE_BITSTR 
 %token <uintval>  T_ASNTYPE_BIGINT 
 %token <uintval>  T_ASNTYPE_UBIGINT 
 %token <uintval>  T_ASNTYPE_FLOAT 
@@ -110,11 +110,6 @@ main_stmt: 	T_MAIN '{' assignment_list '}' {
 			global_tlvlist = $3; }
 		;
 
-/*	
-config_stmt_list:   { $$=NULL; }
-		| config_stmt_list  assignment_list  {
-			$$ = merge_tlvlist($1,$2) ; }
-		; */
 assignment_list: assignment_list assignment_stmt { $$ = add_tlv_to_list ($1,$2); } 
 		| assignment_stmt {  $$=add_tlv_to_list(NULL,$1); } 
 		| assignment_list config_stmt { 
@@ -139,24 +134,16 @@ assignment_stmt:  T_IDENTIFIER T_INTEGER ';' {
 			$$ = create_tlv ($1, (union t_val *)&$2);}	
 		| T_IDENTIFIER T_ETHERMASK ';' {
 			$$ = create_tlv ($1, (union t_val *)&$2);}	
-		| T_IDENTIFIER T_OID ';' {
+		| T_IDENTIFIER T_LABEL_OID ';' {
 			$$ = create_tlv ($1, (union t_val *)&$2);}	
-		| T_IDENT_SNMPW T_OID T_INTEGER ';' {    
+		| T_IDENT_SNMPW T_LABEL_OID T_INTEGER ';' {    
 			$$ = create_snmpw_tlv ( $1, $2, (union t_val *) &$3 ); }
-		| T_IDENT_SNMPSET T_OID T_ASNTYPE_INT T_INTEGER ';' {
-			$$ = create_snmpset_tlv($1,$2,'i',(union t_val *)&$4); }
 		| T_IDENT_SNMPSET T_LABEL_OID T_ASNTYPE_INT T_INTEGER ';' {
 			$$ = create_snmpset_tlv($1,$2,'i',(union t_val *)&$4); }
-		| T_IDENT_SNMPSET T_OID T_ASNTYPE_IP T_IP ';' {
-			$$ = create_snmpset_tlv($1,$2,'a',(union t_val *)&$4); }
 	        | T_IDENT_SNMPSET T_LABEL_OID T_ASNTYPE_IP T_IP ';' {
 			$$ = create_snmpset_tlv($1,$2,'a',(union t_val *)&$4); }
-		| T_IDENT_SNMPSET T_OID T_ASNTYPE_STRING T_STRING ';' {
-			$$ = create_snmpset_tlv($1,$2,'s',(union t_val *)&$4); }
 		| T_IDENT_SNMPSET T_LABEL_OID T_ASNTYPE_STRING T_STRING ';' {
 			$$ = create_snmpset_tlv($1,$2,'s',(union t_val *)&$4); }
-		| T_IDENT_SNMPSET T_OID T_ASNTYPE_HEXSTR T_HEX_STRING ';' {
-			$$ = create_snmpset_tlv($1,$2,'x',(union t_val *)&$4); }
 		| T_IDENT_SNMPSET T_LABEL_OID T_ASNTYPE_HEXSTR T_HEX_STRING ';' {
 			$$ = create_snmpset_tlv($1,$2,'x',(union t_val *)&$4); }
                 ;                                        

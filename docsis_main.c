@@ -1,7 +1,7 @@
 /* 
  *  DOCSIS configuration file encoder. 
  *  Copyright (c) 2001 Cornel Ciocirlan, ctrl@users.sourceforge.net.
- *  Copyright (c) 2002 Evvolve Media SRL,office@evvolve.com
+ *  Copyright (c) 2002,2003 Evvolve Media SRL,office@evvolve.com
  *  
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -111,9 +111,14 @@ void usage(char *prog_name )
 {
 	printf( "DOCSIS Configuration File creator, version %s.%s\n", VERSION,PATCHLEVEL); 
 	printf ("Copyright (c) 2000 Cornel Ciocirlan, ctrl@users.sourceforge.net\n");
-	printf( "Use to encode: \n\t %s -e <modem_cfg_file> <key_file> <output_file>\n",prog_name);
-	printf( "or to decode: \n\t %s -d <binary_file>\n",prog_name);
-	printf ( "\nWhere:\n<modem_cfg_file>\t= name of the text (human readable) configuration file\n<key_file>\t\t= text file containing the authentication key to be used\n\t\t\t  for the CMTS MIC (Message Integrity Check).\n<output_file> \t\t= name of the output file where you want the binary data\n\t\t\t  to be written to (if it doesn't exist it is created).\n\t\t\t  This file can be TFTP-downloaded by DOCSIS-compliant\n\t\t\t  cable modems\n<binary_file>\t\t= name of the binary file you want to decode\n"); 
+	printf ("Copyright (c) 2001 Cornel Ciocirlan, ctrl@users.sourceforge.net\n");
+	printf ("Copyright (c) 2002,2003 Evvolve Media SRL, docsis@evvolve.com \n\n");
+	printf ("To encode a cable modem configuration file: \n\t %s -e <modem_cfg_file> <key_file> <output_file>\n",prog_name);
+	printf ("To encode a MTA configuration file: \n\t %s -p <mta_cfg_file> <output_file>\n",prog_name);
+	printf ("To decode a CM or MTA config file: \n\t %s -d <binary_file>\n",prog_name);
+	printf ("\nWhere:\n<modem_cfg_file>\t= name of the text (human readable) configuration file\n<key_file>\t\t= text file containing the authentication key to be used\n\t\t\t  for the CMTS MIC (Message Integrity Check).\n<output_file> \t\t= name of the output file where you want the binary data\n\t\t\t  to be written to (if it doesn't exist it is created).\n\t\t\t  This file can be TFTP-downloaded by DOCSIS-compliant\n\t\t\t  cable modems\n<binary_file>\t\t= name of the binary file you want to decode\n"); 
+	printf ("\nSee examples/*.cfg for configuration file format.\n");
+	printf ("\nPlease send bugs or questions to docsis-users@lists.sourceforge.net\n\n");
 	exit ( -10 );
 }
 
@@ -124,6 +129,7 @@ int main(int argc,char *argv[] )
 	FILE *cf,*kf,*of;
 	unsigned char *buffer;
 	unsigned int buflen=0,keylen=0;
+	unsigned int is_mta;
 	int i;
 
 #ifdef WIN32
@@ -145,50 +151,90 @@ int main(int argc,char *argv[] )
 	init_mib();
 #endif
 
+	setenv("MIBS", "ALL", 1);
 	init_snmp("snmpapp");
+        snmp_set_mib_warnings(2);
+
 	init_global_symtable();
 
-   	if (! ds_get_boolean (DS_LIBRARY_ID,DS_LIB_PRINT_NUMERIC_OIDS)) {
-        	ds_toggle_boolean(DS_LIBRARY_ID, DS_LIB_PRINT_NUMERIC_OIDS);
+   	if (! netsnmp_ds_get_boolean (NETSNMP_DS_LIBRARY_ID,  NETSNMP_DS_LIB_PRINT_NUMERIC_OIDS)) {
+        	netsnmp_ds_toggle_boolean(NETSNMP_DS_LIBRARY_ID, NETSNMP_DS_LIB_PRINT_NUMERIC_OIDS);
    	} /* we want OIDs to appear in numeric form */
-   	if (! ds_get_boolean (DS_LIBRARY_ID,DS_LIB_PRINT_NUMERIC_ENUM)) {
-        	ds_toggle_boolean(DS_LIBRARY_ID, DS_LIB_PRINT_NUMERIC_ENUM);
-   	} /* we want OIDs to appear in numeric form */
-   	if (! ds_get_boolean (DS_LIBRARY_ID,DS_LIB_PRINT_FULL_OID)) {
-       		ds_toggle_boolean(DS_LIBRARY_ID, DS_LIB_PRINT_FULL_OID);
+
+   	if (! netsnmp_ds_get_boolean (NETSNMP_DS_LIBRARY_ID,  NETSNMP_DS_LIB_PRINT_NUMERIC_ENUM)) {
+        	netsnmp_ds_toggle_boolean(NETSNMP_DS_LIBRARY_ID, NETSNMP_DS_LIB_PRINT_NUMERIC_ENUM);
+   	} /* we want enums to appear in numeric form as integers */
+
+   	if (! netsnmp_ds_get_boolean (NETSNMP_DS_LIBRARY_ID,  NETSNMP_DS_LIB_PRINT_FULL_OID)) {
+       		netsnmp_ds_toggle_boolean(NETSNMP_DS_LIBRARY_ID, NETSNMP_DS_LIB_PRINT_FULL_OID);
    	} /* we want to full numeric OID to be printed, including prefix */
-/*   	if (! ds_get_boolean (DS_LIBRARY_ID,DS_LIB_QUICK_PRINT)) {
-        	ds_toggle_boolean(DS_LIBRARY_ID, DS_LIB_QUICK_PRINT);
-   	} *//* quick print for easier parsing */
-   	if (! ds_get_boolean (DS_LIBRARY_ID,DS_LIB_DONT_BREAKDOWN_OIDS)) {
-        	ds_toggle_boolean(DS_LIBRARY_ID, DS_LIB_DONT_BREAKDOWN_OIDS);
+
+/*   	if (! netsnmp_ds_get_boolean (NETSNMP_DS_LIBRARY_ID,  NETSNMP_DS_LIB_QUICK_PRINT)) {
+        	netsnmp_ds_toggle_boolean(NETSNMP_DS_LIBRARY_ID, NETSNMP_DS_LIB_QUICK_PRINT);
+   	} */ /* quick print - doesnt give you the type however */
+
+/*   	if (! netsnmp_ds_get_boolean (NETSNMP_DS_LIBRARY_ID,  NETSNMP_DS_LIB_DONT_BREAKDOWN_OIDS)) {
+        	netsnmp_ds_toggle_boolean(NETSNMP_DS_LIBRARY_ID, NETSNMP_DS_LIB_DONT_BREAKDOWN_OIDS);
+   	}  */
+/*
+   	if (! netsnmp_ds_get_boolean (NETSNMP_DS_LIBRARY_ID,  NETSNMP_DS_LIB_PRINT_UCD_STYLE_OID)) {
+        	netsnmp_ds_toggle_boolean(NETSNMP_DS_LIBRARY_ID, NETSNMP_DS_LIB_PRINT_UCD_STYLE_OID);
+   	}   */
+
+   	if (! netsnmp_ds_get_boolean (NETSNMP_DS_LIBRARY_ID,  NETSNMP_DS_LIB_DONT_PRINT_UNITS)) {
+        	netsnmp_ds_toggle_boolean(NETSNMP_DS_LIBRARY_ID, NETSNMP_DS_LIB_DONT_PRINT_UNITS);
    	} 
-   	if (! ds_get_boolean (DS_LIBRARY_ID, DS_LIB_RANDOM_ACCESS)) {
-       		ds_toggle_boolean(DS_LIBRARY_ID, DS_LIB_RANDOM_ACCESS);
+
+        netsnmp_ds_set_int(NETSNMP_DS_LIBRARY_ID, NETSNMP_DS_LIB_OID_OUTPUT_FORMAT,
+                                                      NETSNMP_OID_OUTPUT_SUFFIX); 
+
+   	if (! netsnmp_ds_get_boolean (NETSNMP_DS_LIBRARY_ID, NETSNMP_DS_LIB_RANDOM_ACCESS)) {
+       		netsnmp_ds_toggle_boolean(NETSNMP_DS_LIBRARY_ID, NETSNMP_DS_LIB_RANDOM_ACCESS);
 #ifdef DEBUG
-		printf ("/* Random OID access: %d */\n", ds_get_boolean(DS_LIBRARY_ID,DS_LIB_RANDOM_ACCESS));
+		printf ("/* Random OID access: %d */\n", netsnmp_ds_get_boolean(NETSNMP_DS_LIBRARY_ID,NETSNMP_DS_LIB_RANDOM_ACCESS));
 #endif /* DEBUG */
    	} /* so we can use sysContact.0 instead of system.sysContact.0  */
 
 	memset (prog_name,0,255);
 	strncpy (prog_name, argv[0], 254);
 
-	if (! (argc==3 || argc==5)) usage (prog_name);
-		
-	if ( !strcmp (argv[1],"-e")) { 
-		if ( argc != 5 ) usage(prog_name);
-	} else if ( !strcmp (argv[1],"-d")) {
-		if (argc != 3 ) { 
-			usage(prog_name);
-		} else {
-		 	decode_file (argv[2]);
+	if ( ! (argc == 3 || argc == 4 || argc == 5 ) ) 
+	{
+		usage (prog_name); 
+		exit (10);
+	}
+	
+	if ( !strcmp (argv[1],"-e")) 
+		{ 
+			if ( argc != 5 ) usage(prog_name);
+			is_mta = FALSE;
+			if ( !strcmp (argv[2],argv[4]) ) 
+			{ 
+				printf ("Error: source file is same as destination file\n");
+				exit (-100); /* we don't overwrite the source file */
+			}
+		} 
+	else if ( !strcmp (argv[1], "-p")) 
+		{
+			if ( argc != 4 ) usage(prog_name);
+			is_mta = TRUE;
+			if ( !strcmp (argv[2],argv[3]) ) 
+			{ 
+				printf ("Error: source file is same as destination file\n");
+				exit (-100); 
+			}
 		}
-	}
+		
+	else if ( !strcmp (argv[1],"-d")) 
+		{
+			if (argc != 3 ) 
+			{ 
+				usage(prog_name);
+			} else {
+		 		decode_file (argv[2]);
+			}
+		}
 
-	if ( !strcmp (argv[2],argv[4]) ) { 
-		printf ("Error: source file is same as destination file\n");
-		exit (-100); /* we don't overwrite the source file */
-	}
 
 #ifdef WIN32
 	if ( (cf = fopen ( argv[2],"rb" ))== NULL ) { 
@@ -198,26 +244,32 @@ int main(int argc,char *argv[] )
 		printf ("%s: Can't open config file %s\n",argv[0],argv[1]);
 		exit(-5);
 	}
-#ifdef WIN32
-	if ( (kf = fopen ( argv[3],"rb" ))== NULL ) { 
-#else
-	if ( (kf = fopen ( argv[3],"r" ))== NULL ) { 
-#endif
-		printf ("%s: Can't open keyfile %s\n",argv[0],argv[2]);
-		exit(-5);
-	}
-        
-        keylen = fread (key,sizeof(unsigned char), 64, kf);
-	if (keylen < 1) {
-		printf ("%s: error: key must be at least 1 char long\n",argv[0]);
-		exit (-101);
-	}
 
-	while (key[keylen-1] == 10 || key[keylen-1]==13) { 
-		keylen--; /* eliminate trailing \n or \r */
-	}
+	if (!is_mta) 
+	{
+#ifdef WIN32
+		if ( (kf = fopen ( argv[3],"rb" ))== NULL ) { 
+#else
+		if ( (kf = fopen ( argv[3],"r" ))== NULL ) { 
+#endif
+			printf ("%s: Can't open keyfile %s\n",argv[0],argv[2]);
+			exit(-5);
+		}
+        
+        	keylen = fread (key,sizeof(unsigned char), 64, kf);
+
+		if (keylen < 1) {
+			printf ("%s: error: key must be at least 1 char long\n",argv[0]);
+			exit (-101);
+		}
+
+		while (key[keylen-1] == 10 || key[keylen-1]==13) { 
+			keylen--; /* eliminate trailing \n or \r */
+		}
+	} /* is_mta = FALSE */
         
 	parse_input_file(cf);
+
   	/* decode_tlvlist(global_tlvlist, 0); */
 	if ( global_tlvlist == NULL ) { 
 		printf ( "Error parsing config file %s\n", argv[1]);
@@ -233,19 +285,41 @@ int main(int argc,char *argv[] )
 
 	buflen = flatten_tlvlist(buffer, global_tlvlist);
 	decode_main_aggregate ( buffer, buflen);
-	buflen = add_cm_mic ( buffer, buflen );
-	buflen = add_cmts_mic ( buffer, buflen,key,keylen );
-	buflen = add_eod_and_pad ( buffer, buflen );
+	if (!is_mta)  
+	{
+		/* Don't add CM MIC, CMTS MIC, EoD and pad unless it's a CM config file */
+		buflen = add_cm_mic ( buffer, buflen );
+		buflen = add_cmts_mic ( buffer, buflen,key,keylen );
+		buflen = add_eod_and_pad ( buffer, buflen );
+	} 
 	printf ("Final buffer content:\n");
 	decode_main_aggregate ( buffer, buflen );
+
+	if (!is_mta) 
+		{ 
+	/* Output file is argv[4] */
 #ifdef WIN32
-	if ( (of = fopen ( argv[4],"wb" )) == NULL ) { 
+			if ( (of = fopen ( argv[4],"wb" )) == NULL ) { 
 #else
-	if ( (of = fopen ( argv[4],"w" )) == NULL ) { 
+			if ( (of = fopen ( argv[4],"w" )) == NULL ) { 
 #endif
-		printf ("%s: Can't open output file %s\n",argv[0],argv[3]);
-		exit(-5);
-	}
+				printf ("%s: Can't open output file %s\n",argv[0],argv[3]);
+				exit(-5);
+			}
+		} 
+	else 
+		{
+	
+#ifdef WIN32
+			if ( (of = fopen ( argv[3],"wb" )) == NULL ) { 
+#else
+			if ( (of = fopen ( argv[3],"w" )) == NULL ) { 
+#endif
+				printf ("%s: Can't open output file %s\n",argv[0],argv[3]);
+				exit(-5);
+			}
+		}	
+
 	fwrite ( buffer, sizeof(unsigned char), buflen, of);
 	return 0;
 }

@@ -3,27 +3,32 @@
 
 You need the following packages to compile this program:
 
-	* OpenSSL 0.9.6 or later
-	* ucd-snmp version 4.2 (later releases should work, see notes) 
-	* flex 2.5.4
-	* bison 1.25
+	* OpenSSL 0.9.6 or newer
+	* net-snmp version 5.0.7pre2 (later releases should work, see notes) 
+	* flex 2.5.4 or newer
+	* bison 1.25 or newer
 
 Get OpenSSL from http://www.openssl.org if you don't have it already. Most 
 Linux distributions come with OpenSSL pre-installed.
 
-Get UCD-SNMP (which has just been renamed NET-SNMP) from 
-http://www.net-snmp.org.
+Get NET-SNMP from http://www.net-snmp.org.
 
-You can use "./configure --prefix=/usr" when building UCD-SNMP. If you use the 
-default "./configure", please edit Makefile and adjust CFLAGS and LIBS 
-accordingly (by default, UCD-SNMP installs in /usr/local/, so you will need 
+I used net-snmp-5.0.7pre2 myself. Support for UCD-SNMP has been dropped as of 
+version 0.8.1 of docsis. 
+
+You can use "./configure --prefix=/usr" when building NET-SNMP. If you use the 
+default "./configure", please edit the Makefile and adjust CFLAGS and LIBS 
+accordingly (by default, NET-SNMP installs in /usr/local/, so you will need 
 to uncomment the "LIBS=-L/usr/local/lib" line in the Makefile).
 
-I used ucd-snmp-4.1.2 and ucd-snmp-4.2 myself.  Earlier releases won't work, 
-later releases may work. 
+Many Linux distributions come with UCD-SNMP preinstalled (as of February 2003). 
+This may create some confusion when you install net-snmp and maybe break some programs 
+like Ethereal. The best solution is to remove the ucd-snmp library you got with your 
+distribution, install net-snmp, and recompile the programs that depend on ucd-snmp against 
+net-snmp. 
 
-You need flex & bison. I tested with flex 2.5.4 and bison 1.25 on SuSE Linux 
-6.4 and Solaris 2.6.
+You also need flex & bison. I tested with flex 2.5.4 and bison 1.25 on SuSE Linux 
+8.0 and Solaris 2.6.
 
 Lex and Yacc don't work. It's probably easy to make the code work with them but
 I don't care; if you make it work send me a patch.
@@ -41,20 +46,36 @@ When you have all of the above, do
 
 unix $ gzip -cd docsis-x.y.z-RELEASE.tgz | tar xvf -
 unix $ cd docsis-x.y.z-RELEASE
+# edit Makefile; adjust CFLAGS and LIBS for your net-snmp installation 
 unix $ make  				# if you're on Linux, or 
 unix $ make -f Makefile.solaris 	# if you're on Solaris
 
-If everything works fine, now you have an executable called "docsis". 
+If everything works fine, you now have an executable called "docsis". Try 
 
-If you have problems can send an E-mail to docsis-users@lists.sourceforge.net. 
+unix $ ./docsis 
+
+If you get an error about loading the SNMP shared libraries, you need to 
+
+unix $ LD_LIBRARY_PATH=$LD_LIBRARY_PATH:<location_of_netsnmp_library>
+unix $ export LD_LIBRARY_PATH
+
+For example if NET-SNMP is installed in /opt/net-snmp, you would do:
+
+unix $ LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/net-snmp/lib
+unix $ export LD_LIBRARY_PATH
+
+If you have problems send an e-mail to docsis-users@lists.sourceforge.net.  
+Please include:
+
+	- a description of your platform (operating system, compiler, etc) 
+	- the debug output of the program
+	- the files you are trying to encode/decode 
+	- any other information you deem relevant
 
 3. Notes
 
 If your DEFS (in Makefile) include -DDEBUG you will build some debug code 
 which is kinda useful when you're left staring at the stars because it doesn't 
-work. 
-
-If you have ucd-snmp-4.2 or later, you need to add "-lcrypto" to the LIBS 
-variable in Makefile.
+work.
 
 If you want to debug the program (using gdb for example), add "-g" to CFLAGS (in Makefile). 

@@ -27,7 +27,7 @@
 #endif
 
 /* 
- * Implements POSIX inet_aton which is missing on Solaris.
+ * Implements POSIX inet_aton which is missing on (older) Solaris (2.6-).
  * Based on inet_addr. 
  */
 

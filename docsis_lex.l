@@ -20,6 +20,8 @@
  *  DOCSIS is a registered trademark of Cablelabs, http://www.cablelabs.com
  */
 
+/*\.([0-9]+\.)*[0-9]+		{ TSAVE(yytext);yylval.strval=tsave; return T_OID; 	  } */
+
 %{ 
 #include "docsis.h"
 #include "docsis_yy.tab.c"
@@ -37,13 +39,12 @@ char *tsave;
 %x COMMENT
 %%
 
-[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+	 { TSAVE(yytext);yylval.strval=tsave; return T_IP;	  }
-\.([0-9]+\.)*[0-9]+		{ TSAVE(yytext);yylval.strval=tsave; return T_OID; 	  }
+([0-9]+\.){3}[0-9]+	 	{ TSAVE(yytext);yylval.strval=tsave; return T_IP;	  }
 0[Xx]([0-9A-Fa-f])+		{ TSAVE(yytext);yylval.strval=tsave; return T_HEX_STRING; }
-[0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f]\/[0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f]  { TSAVE(yytext);yylval.strval=tsave; return T_ETHERMASK; 			       }
-[0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f]  { TSAVE(yytext);yylval.strval=tsave; return T_MAC; 			       }
+([0-9A-Fa-f][0-9A-Fa-f]:){5}[0-9A-Fa-f][0-9A-Fa-f]\/([0-9A-Fa-f][0-9A-Fa-f]:){5}[0-9A-Fa-f][0-9A-Fa-f]  { TSAVE(yytext);yylval.strval=tsave; return T_ETHERMASK; 			       }
+([0-9A-Fa-f][0-9A-Fa-f]:){5}[0-9A-Fa-f][0-9A-Fa-f]  { TSAVE(yytext);yylval.strval=tsave; return T_MAC; 			       }
 
-([A-Za-z]+\.)+[0-9]+		{ TSAVE(yytext);yylval.strval=tsave; return T_LABEL_OID; }
+(\.{1})*([A-Za-z0-9_-]+\.)+[0-9]+	{ TSAVE(yytext);yylval.strval=tsave; return T_LABEL_OID; }
 [Mm][Aa][Ii][Nn]        { yylval.strval=yytext;return T_MAIN; }
 SnmpWriteControl	{ yylval.symptr=find_symbol_by_name(yytext);return T_IDENT_SNMPW;		 }
 SnmpMibObject		{ yylval.symptr=find_symbol_by_name(yytext);return T_IDENT_SNMPSET; 	 }
@@ -55,25 +56,29 @@ ObjectID		{ return T_ASNTYPE_OBJID; 	}
 String			{ return T_ASNTYPE_STRING; 	}
 HexString		{ return T_ASNTYPE_HEXSTR; 	}
 DecimalString		{ return T_ASNTYPE_DECSTR; 	}
+BitString		{ return T_ASNTYPE_BITSTR; 	}
 BigInt			{ return T_ASNTYPE_BIGINT; 	}
 UnsignedBigInt		{ return T_ASNTYPE_UBIGINT; 	}
 Float			{ return T_ASNTYPE_FLOAT; 	}
 Double			{ return T_ASNTYPE_DOUBLE; 	}
-[A-Za-z]+	 	{ yylval.symptr=find_symbol_by_name(yytext);
-			  	if(yydebug) printf("yylex:returning T_IDENTIFIER, yylval.symptr->sym_ident=%s\n", 
-						yylval.symptr->sym_ident); 
-			  	return T_IDENTIFIER; }
+[A-Za-z]+	 	{ 
+				yylval.symptr=find_symbol_by_name(yytext);
+		  	  	if(yydebug) printf("yylex:returning T_IDENTIFIER, yylval.symptr->sym_ident=%s\n", 
+					yylval.symptr->sym_ident); 
+			 	return T_IDENTIFIER; 
+			}
 
 \"		{ BEGIN STRING; str=buf; memset(buf,0,100); }	
 <STRING>\\ 	{ *str++ = ' '; }
 <STRING>\;	{ printf("line %d: ';' not allowed in string, unmatched \" ?\n",line); }
 <STRING>\n	{ printf("line %d: \\n not allowed in string, unmatched \" ?\n",line);} 
 <STRING>\t	{ printf("line %d: \\t not allowed in string, unmatched \" ?\n",line);} 
-<STRING>\"	{ *str=0;BEGIN 0; yylval.strval=buf; return T_STRING; }
+<STRING>\"	{ *str=0; BEGIN 0; yylval.strval=buf; return T_STRING; }
 <STRING>.	{ *str++ = *yytext; }
 \/[*]+		{ BEGIN COMMENT; }
 <COMMENT>\n	{ line ++; }
 <COMMENT>.	
+<COMMENT>\/[*]+	{ printf ("line %d: comment-in-comment not supported", line) ; }
 <COMMENT>[*]+\/	{ BEGIN 0; }
 
 [0-9]+	 { yylval.intval=atoi(yytext);return T_INTEGER; }

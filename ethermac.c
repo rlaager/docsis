@@ -20,6 +20,12 @@
  *  DOCSIS is a registered trademark of Cablelabs, http://www.cablelabs.com
  */
 
+/* 
+    change history
+	2002-10-10 fixed overflow causing last two bytes of the MAC address to not be converted
+		   correctly when the format was "xx:xx:xx:xx:xx:x"
+*/
+
 #include "ethermac.h"
 
 int ether_aton ( const char *macstr, unsigned char *outbuf ) 
@@ -40,7 +46,10 @@ p = strchr ( ptr, (int) ':' );
 	    printf ("\nInvalid MAC Address %s\n", macstr);
 	    exit (-3);
  	}
-	memset(fragptr,0,3); memcpy ( fragptr, ptr, p-ptr );
+
+	memset(fragptr,0,3); 
+	memcpy ( fragptr, ptr, p-ptr );
+
 	if ( (rval= sscanf ( fragptr, "%x", &fragval)) == 0 ) { 
 		printf("\nInvalid MAC Address %s\n", macstr );
 		return 0;
@@ -60,7 +69,10 @@ p = strchr ( ptr, (int) ':' );
     printf ("Invalid MAC Address %s\n", macstr);
     return 0;
   }
+
+  memset(fragptr,0,3); 
   memcpy ( fragptr, ptr, strlen(ptr) );
+
   if ( (rval=sscanf ( fragptr, "%x", &fragval)) == 0 ) { 
 	printf("\nInvalid MAC Address %s\n", macstr );
 	return 0;

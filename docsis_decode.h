@@ -29,7 +29,6 @@ int decode_tlvbuf (unsigned char *buf, unsigned int buflen, unsigned char docs_p
 int pretty_decode_buffer (unsigned char *buf, unsigned int buflen, unsigned char docs_parent); 
 struct symbol_entry *find_symbol_by_code_and_pid (unsigned char code, unsigned int pid);
 
-
 void decode_special (unsigned char *tlvbuf, symbol_type *sym);
 void decode_uint (unsigned char *tlvbuf, struct symbol_entry *sym);
 void decode_ushort (unsigned char *tlvbuf, symbol_type *sym);
@@ -45,5 +44,7 @@ void decode_hexstr (unsigned char *tlvbuf, symbol_type *sym);
 void decode_unknown (unsigned char *tlvbuf, symbol_type *sym);
 void decode_aggregate (unsigned char *tlvbuf, symbol_type *sym);
 void decode_main_aggregate (unsigned char *tlvbuf, unsigned int buflen);
+
+void __docsis_indent ( int opCode, int doPrint );
 
 #endif /* _DOCSIS_DECODE_H */

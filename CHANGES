@@ -1,3 +1,18 @@
+0.8.2  30/01/03		- Integrated fixes from Adrian Kwong and Cornel.
+evvolve			- Updated OID format to accept "-" and "_" in labels
+ctrl			- We can now encode decoded files directly !
+akwong			  (thanks to help from Adrian Kwong)
+			- MIB output format changed. 
+			- NET-SNMP 5.x support. 
+			- Dropped support for ucd-snmp. 
+			- Made SNMP decoding smarter - i.e. output OID	
+			  suffix only; but switch to full-OID output 
+			  if MIBs are not installed. 
+			- Hacked support for encoding MTA configuration files. 
+			- Added support for Vendor Specific info.
+			- Worked around string formatting issues in NET-SNMP. 
+			- Added indent functionality.
+evvolve
 0.7.4  18/02/02		Fix condition too strong in docsis_decode.c.
 evvolve			
 

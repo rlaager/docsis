@@ -37,16 +37,15 @@
 #include <arpa/inet.h>
 #endif
 
-#include <ucd-snmp/ucd-snmp-config.h>
-#include <ucd-snmp/ucd-snmp-includes.h>
-#include <ucd-snmp/system.h>
-#include <ucd-snmp/parse.h>
-#include <ucd-snmp/mib.h>
+#include <net-snmp/net-snmp-config.h>
+#include <net-snmp/utilities.h>
+#include <net-snmp/config_api.h>
+#include <net-snmp/output_api.h>
+#include <net-snmp/mib_api.h>
+
 
 #include "md5.h"
 #include "docsis_common.h"
-#include "docsis_decode.h"
-#include "docsis_encode.h"
 
 #ifdef SOLARIS
 #include "inet_aton.h"

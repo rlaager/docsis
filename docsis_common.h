@@ -21,19 +21,30 @@
  *  DOCSIS is a registered trademark of Cablelabs, http://www.cablelabs.com
  */
 
+/* 
+    change history
+	2003-01-10 changed NUM_IDENTIFIERS to match what we have in docsis_symtable.h
+
+*/
+
 #ifndef _DOCSIS_COMMON_H
 #define _DOCSIS_COMMON_H
 
 #include "version.h"
 
 #ifndef NUM_IDENTIFIERS
-#define NUM_IDENTIFIERS 123
+#define NUM_IDENTIFIERS 129
 #endif /*  NUM_IDENTIFIERS, needed in docsis_symtable.h  */
 
 #define MAXINT 2000000000 
 #define TLV_VSIZE 255 
 #define TRUE 1
 #define FALSE 0
+
+#define INDENT_NOOP 		100
+#define INDENT_CLEAR 		101
+#define INDENT_INCREMENT 	102
+#define INDENT_DECREMENT 	103
 
 struct symbol_entry { 
 	unsigned int id;
