@@ -1,6 +1,7 @@
 /* 
  *  DOCSIS configuration file encoder. 
  *  Copyright (c) 2001 Cornel Ciocirlan, ctrl@users.sourceforge.net.
+ *  Copyright (c) 2002 Evvolve Media SRL,office@evvolve.com
  *  
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -47,6 +48,7 @@ extern symbol_type *global_symtable;
 %token <symptr>  T_IDENT_SNMPSET
 %token <strval>  T_OID
 %token <strval>  T_MAC
+%token <strval>  T_ETHERMASK
 %token <strval>  T_LABEL_OID
 %token <strval>  T_IP
 %token <strval>  T_MAC
@@ -69,12 +71,9 @@ extern symbol_type *global_symtable;
 
 
 %type <tlvptr>  assignment_stmt
-%type <tlvptr>  snmp_set_stmt
-%type <tlvptr>  snmp_w_stmt
 %type <tlvlist> assignment_list
-%type <tlvlist> cos_stmt
-%type <tlvlist> bpi_stmt
-%type <tlvlist> config_stmt_list
+%type <tlvlist> config_stmt
+/* %type <tlvlist> config_stmt_list */
 /* %type <tlvlist> config_stmt */
 
 %%
@@ -94,7 +93,7 @@ sub-types) are treated a bit different.
 
 For example, within the ClassOfService statement we have a list of 
 assignment_stmts which are reduced to an assignment_list, and then to a 
-cos_stmt. When we reduce the cos_stmt to a config_stmt_list we merge the 
+cos_stmt. When we flatten/reduce the cos_stmt to a config_stmt_list we merge the 
 cos_stmt tlvlist with the tlvlist corresponding to config_stmt_list (may be
 empty if cos_stmt is the first statement that appears in the config file) so we
 have a single tlvlist. 
@@ -107,64 +106,61 @@ add CM MIC and CMTS MIC and pad and that's it. */
 
 /* Definitions of bison/yacc grammar */
 
-config_stmt:  	T_MAIN '{' config_stmt_list '}'	{ 
+main_stmt: 	T_MAIN '{' assignment_list '}' {
 			global_tlvlist = $3; }
-	
-config_stmt_list: /* empty */  { $$=NULL; }
+		;
+
+/*	
+config_stmt_list:   { $$=NULL; }
 		| config_stmt_list  assignment_list  {
 			$$ = merge_tlvlist($1,$2) ; }
-		| config_stmt_list  cos_stmt {
-			$$ = merge_tlvlist($1,$2) ; }
-		| config_stmt_list  bpi_stmt {
-			$$ = merge_tlvlist($1,$2) ; }
-		| config_stmt_list  snmp_set_stmt {
-			$$ = add_tlv_to_list ($1,$2) ; }
-		| config_stmt_list  snmp_w_stmt {
-			$$ = add_tlv_to_list ($1,$2) ; }
-		;
+		; */
 assignment_list: assignment_list assignment_stmt { $$ = add_tlv_to_list ($1,$2); } 
 		| assignment_stmt {  $$=add_tlv_to_list(NULL,$1); } 
+		| assignment_list config_stmt { 
+			$$ = merge_tlvlist($1,$2);  }
+		| config_stmt { 
+			$$ = merge_tlvlist (NULL, $1); }
 		; 
-cos_stmt: T_IDENT_COS '{' assignment_list '}' { 
-			$$ = assemble_list_in_parent( $1, $3 ); }
-		;
-bpi_stmt: T_IDENT_BPI '{' assignment_list '}'  { 
-			$$ = assemble_list_in_parent( $1, $3 ); }
-                ;                                        
-snmp_w_stmt: T_IDENT_SNMPW T_OID T_INTEGER ';' {    
-			$$ = create_snmpw_tlv ( $1, $2, (union t_val *) &$3 ); }
 
-                ;                                        
-snmp_set_stmt: T_IDENT_SNMPSET T_OID T_ASNTYPE_INT T_INTEGER ';' {
-			$$ = create_snmpset_tlv($1,$2,'i',(union t_val *)&$4); }
-	      | T_IDENT_SNMPSET T_LABEL_OID T_ASNTYPE_INT T_INTEGER ';' {
-			$$ = create_snmpset_tlv($1,$2,'i',(union t_val *)&$4); }
-	      | T_IDENT_SNMPSET T_OID T_ASNTYPE_IP T_IP ';' {
-			$$ = create_snmpset_tlv($1,$2,'a',(union t_val *)&$4); }
-	      | T_IDENT_SNMPSET T_LABEL_OID T_ASNTYPE_IP T_IP ';' {
-			$$ = create_snmpset_tlv($1,$2,'a',(union t_val *)&$4); }
-	      | T_IDENT_SNMPSET T_OID T_ASNTYPE_STRING T_STRING ';' {
-			$$ = create_snmpset_tlv($1,$2,'s',(union t_val *)&$4); }
-	      | T_IDENT_SNMPSET T_LABEL_OID T_ASNTYPE_STRING T_STRING ';' {
-			$$ = create_snmpset_tlv($1,$2,'s',(union t_val *)&$4); }
-	      | T_IDENT_SNMPSET T_OID T_ASNTYPE_HEXSTR T_HEX_STRING ';' {
-			$$ = create_snmpset_tlv($1,$2,'x',(union t_val *)&$4); }
-	      | T_IDENT_SNMPSET T_LABEL_OID T_ASNTYPE_HEXSTR T_HEX_STRING ';' {
-			$$ = create_snmpset_tlv($1,$2,'x',(union t_val *)&$4); }
-                ;                                        
+config_stmt:  	T_IDENTIFIER '{' assignment_list  '}'	{ 
+			$$ = assemble_list_in_parent ( $1, $3 ); }
+		;
+
 assignment_stmt:  T_IDENTIFIER T_INTEGER ';' { 
 			$$ = create_tlv ($1, (union t_val *)&$2);} 
 		| T_IDENTIFIER T_STRING ';'  {
+			$$ = create_tlv ($1, (union t_val *)&$2);}	
+		| T_IDENTIFIER T_HEX_STRING ';'  {
 			$$ = create_tlv ($1, (union t_val *)&$2);}	
 		| T_IDENTIFIER T_IP ';' {
 			$$ = create_tlv ($1, (union t_val *)&$2);}	
 		| T_IDENTIFIER T_MAC ';' {
 			$$ = create_tlv ($1, (union t_val *)&$2);}	
+		| T_IDENTIFIER T_ETHERMASK ';' {
+			$$ = create_tlv ($1, (union t_val *)&$2);}	
 		| T_IDENTIFIER T_OID ';' {
 			$$ = create_tlv ($1, (union t_val *)&$2);}	
-		;
+		| T_IDENT_SNMPW T_OID T_INTEGER ';' {    
+			$$ = create_snmpw_tlv ( $1, $2, (union t_val *) &$3 ); }
+		| T_IDENT_SNMPSET T_OID T_ASNTYPE_INT T_INTEGER ';' {
+			$$ = create_snmpset_tlv($1,$2,'i',(union t_val *)&$4); }
+		| T_IDENT_SNMPSET T_LABEL_OID T_ASNTYPE_INT T_INTEGER ';' {
+			$$ = create_snmpset_tlv($1,$2,'i',(union t_val *)&$4); }
+		| T_IDENT_SNMPSET T_OID T_ASNTYPE_IP T_IP ';' {
+			$$ = create_snmpset_tlv($1,$2,'a',(union t_val *)&$4); }
+	        | T_IDENT_SNMPSET T_LABEL_OID T_ASNTYPE_IP T_IP ';' {
+			$$ = create_snmpset_tlv($1,$2,'a',(union t_val *)&$4); }
+		| T_IDENT_SNMPSET T_OID T_ASNTYPE_STRING T_STRING ';' {
+			$$ = create_snmpset_tlv($1,$2,'s',(union t_val *)&$4); }
+		| T_IDENT_SNMPSET T_LABEL_OID T_ASNTYPE_STRING T_STRING ';' {
+			$$ = create_snmpset_tlv($1,$2,'s',(union t_val *)&$4); }
+		| T_IDENT_SNMPSET T_OID T_ASNTYPE_HEXSTR T_HEX_STRING ';' {
+			$$ = create_snmpset_tlv($1,$2,'x',(union t_val *)&$4); }
+		| T_IDENT_SNMPSET T_LABEL_OID T_ASNTYPE_HEXSTR T_HEX_STRING ';' {
+			$$ = create_snmpset_tlv($1,$2,'x',(union t_val *)&$4); }
+                ;                                        
 %%
-
 
 int yyerror(char *s) {
 	fprintf(stderr, "%d:%s token %s\n",line,s, yytext );

@@ -1,3 +1,4 @@
+
 /* 
  *  DOCSIS configuration file encoder. 
  *  Copyright (c) 2001 Cornel Ciocirlan, ctrl@users.sourceforge.net.
@@ -20,12 +21,22 @@
  *  DOCSIS is a registered trademark of Cablelabs, http://www.cablelabs.com
  */
 
-#ifndef _DOCSIS_GLOBALS_H
-#define _DOCSIS_GLOBALS_H
+#ifndef _DOCSIS_ENCODE_H
+#define _DOCSIS_ENCODE_H
 
-char prog_name[255];
-struct tlv_list *global_tlvlist;
-symbol_type *global_symtable;
+#include "docsis_common.h"
 
-#endif /* _DOCSIS_GLOBALS_H */
+/* each of these returns the length of the value parsed ! */
+
+int get_uint   	(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr ); 
+int get_ushort 	(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr ); 
+int get_uchar  	(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );
+int get_ip     	(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );
+int get_ether	(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );
+int get_ethermask(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );
+int get_string 	(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );
+int get_hexstr 	(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );
+int get_nothing	(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );
+
+#endif /* _DOCSIS_ENCODE_H */
 

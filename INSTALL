@@ -26,7 +26,7 @@ You need flex & bison. I tested with flex 2.5.4 and bison 1.25 on SuSE Linux
 6.4 and Solaris 2.6.
 
 Lex and Yacc don't work. It's probably easy to make the code work with them but
-I don't care, if you make it work send me a patch.
+I don't care; if you make it work send me a patch.
 
 To get flex & bison go to ftp://ftp.gnu.org. All GNU/Linux 
 distributions have them, so you probably don't have to worry about. Try:

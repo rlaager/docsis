@@ -2,6 +2,7 @@
 /* 
  *  DOCSIS configuration file encoder. 
  *  Copyright (c) 2001 Cornel Ciocirlan, ctrl@users.sourceforge.net.
+ *  Copyright (c) 2002 Evvolve Media SRL, office@evvolve.com
  *  
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -39,53 +40,13 @@
 #include <ucd-snmp/mib.h>
 
 #include "md5.h"
+#include "docsis_common.h"
 #include "docsis_decode.h"
-#include "version.h"
+#include "docsis_encode.h"
 
 #ifdef SOLARIS
 #include "inet_aton.h"
 #endif
-
-#ifndef NUM_IDENTIFIERS
-#define NUM_IDENTIFIERS 29
-#endif /*  NUM_IDENTIFIERS, also defined in docsis_symtable.h  */
-
-#define MAXINT 2000000000 
-#define TLV_VSIZE 255 
-
-
-struct symbol_entry { 
-	char sym_ident[30];
-	unsigned char docsis_code;
-	unsigned char docsis_parent;
-	int (*get_value_func) (unsigned char *, void *, struct symbol_entry *);
-	unsigned int low_limit;
-	unsigned int high_limit;
-}; 
-
-typedef struct symbol_entry symbol_type;
-
-struct tlv { 
-	unsigned char docs_code;
-	unsigned char tlv_len;
-	unsigned char tlv_value[TLV_VSIZE];
-};
-
-struct tlv_list {
- 	int tlv_count;	/* How many TLVs we have in this list */ 
-	struct tlv **tlvlist;
-};
-
-union t_val {           /* union for returning token values */
-        int intval;             /* For integers */
-        unsigned int uintval;             /* For integers */
-        symbol_type *symptr;    /* For token identifiers */
-        char *strval;           /* For strings */
-        unsigned char *ustrval; /* For strings */
-        unsigned int ip;        /* For IP Addresses */
-        struct tlv_list *tlvlist; /* For for struct tlvlist pointers */
-        struct tlv *tlvptr;     /* For struct tlv pointers; */
-};
 
 int yyerror(char *s);                  
 
@@ -115,17 +76,10 @@ struct tlv_list *assemble_list_in_parent ( struct symbol_entry *sym_ptr, struct 
 /* flatten a tlvlist to its final binary form */
 unsigned int flatten_tlvlist ( unsigned char *buf, struct tlv_list *list );
 
-/* Find the symbol_entry given the symbol identifier */
-struct symbol_entry *find_sym (char *sym_str);
-/* each of these returns the length of the value parsed ! */
+/* Find the symbol_entry given the symbol identifier -> docsis_lex.l  */
+struct symbol_entry *find_symbol_by_name (char *sym_str);
 
-int get_uint   (unsigned char *buf, void *tval, struct symbol_entry *sym_ptr ); 
-int get_short  (unsigned char *buf, void *tval, struct symbol_entry *sym_ptr ); 
-int get_uchar  (unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );
-int get_ip     (unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );
-int get_mac    (unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );
-int get_string (unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );
-int get_nothing(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );
+/* each of these returns the length of the value parsed ! */
 
 unsigned int encode_vbind ( char *oid_string, char oid_asntype, union t_val *value,
                         unsigned char *out_buffer, unsigned int out_size );

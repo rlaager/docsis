@@ -1,6 +1,7 @@
 /* 
  *  DOCSIS configuration file encoder. 
  *  Copyright (c) 2001 Cornel Ciocirlan, ctrl@users.sourceforge.net.
+ *  Copyright (c) 2002 Evvolve Media SRL,office@evvolve.com
  *  
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -73,8 +74,12 @@ p = strchr ( ptr, (int) ':' );
   return 6;
 }
 
-/* Tranforms the binary-form Ethernet MAC address received as argument into 
- * string-form human readable Ethernet MAC address */
+/* 
+ * Tranforms the binary-form Ethernet MAC address received as argument into 
+ * string-form human readable Ethernet MAC address 
+ * themac is a static char so will be overwritten by subsequent calls 
+ * to this function 
+ */
 char *ether_ntoa ( const unsigned char *mac)
 { 
 

@@ -1,6 +1,7 @@
 /* 
  *  DOCSIS configuration file encoder. 
  *  Copyright (c) 2001 Cornel Ciocirlan, ctrl@users.sourceforge.net.
+ *  Copyright (c) 2002 Evvolve Media SRL,office@evvolve.com
  *  
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,292 +23,185 @@
 #include "docsis.h"
 #include "ethermac.h"
 
+#include <math.h>
+
 extern symbol_type *global_symtable;
 
 
-int decode_tlvbuf ( unsigned char *buf, unsigned int buflen , unsigned char docs_parent ) 
+struct symbol_entry *find_symbol_by_code_and_pid (unsigned char code, unsigned int pid)
+{
+ int i;
+
+ for ( i=0; i<NUM_IDENTIFIERS; i++) {
+        if (global_symtable[i].docsis_code == code && global_symtable[i].parent_id == pid) {
+                return &global_symtable[i];
+        }
+ }
+ return NULL;
+}
+
+void decode_uint (unsigned char *tlvbuf, struct symbol_entry *sym)
+{
+  static unsigned int helper;
+
+  memset( &helper, 0,sizeof(unsigned int));
+  memcpy( &helper, tlvbuf+2, sizeof(unsigned int));
+
+  printf ( "%s %u;\n", sym->sym_ident, ntohl(helper));
+}
+
+void decode_ushort (unsigned char *tlvbuf, symbol_type *sym)
+{
+  static unsigned short helper;
+
+  memset( &helper, 0,sizeof(unsigned short));
+  memcpy( &helper, tlvbuf+2, sizeof(unsigned short));
+
+  printf ( "%s %hu;\n", sym->sym_ident, ntohs(helper));
+}
+
+void decode_uchar (unsigned char *tlvbuf, symbol_type *sym)
+{
+  printf ( "%s %hhu;\n", sym->sym_ident, (unsigned char) *(tlvbuf+2));
+}
+
+void decode_ip (unsigned char *tlvbuf, symbol_type *sym)
+{
+  printf ( "%s %s;\n", 
+	sym->sym_ident, inet_ntoa(*((struct in_addr *)(tlvbuf+2))) );
+}
+
+void decode_ether (unsigned char *tlvbuf, symbol_type *sym)
+{
+  printf ( "%s %s;\n", 
+	sym->sym_ident, ether_ntoa(tlvbuf+2));
+}
+
+void decode_ethermask (unsigned char *tlvbuf, symbol_type *sym)
+{
+/* the return value of ether_ntoa is a pointer to a static string 
+ * in the ether_ntoa function, so we have to print the values in two
+ * "passees" to avoid the 2nd call overwriting the 1st. 
+ */
+  printf ( "%s %s/", sym->sym_ident, ether_ntoa(tlvbuf+2));
+
+  printf( "%s;\n", ether_ntoa(tlvbuf+8));
+}
+
+void decode_md5 (unsigned char *tlvbuf, symbol_type *sym)
+{
+  int j=0;
+  printf ("%s ", sym->sym_ident);
+  for (j=0;j<16;j++)	printf ("%02x", tlvbuf[j+2]);
+
+  printf(";\n");
+}
+
+void decode_snmp_wd (unsigned char *tlvbuf, symbol_type *sym)
+{
+  printf ( "%s ", sym->sym_ident);
+  decode_wd (tlvbuf+2,(unsigned int) tlvbuf[1]);
+  printf(";\n");
+}
+
+void decode_snmp_object (unsigned char *tlvbuf, symbol_type *sym)
+{
+  printf ( "%s ", sym->sym_ident);
+  decode_vbind (tlvbuf+2, (unsigned int) tlvbuf[1]);
+  printf(";\n");
+}
+
+void decode_string (unsigned char *tlvbuf, symbol_type *sym)
+{
+ char *helper; 
+
+ helper = (char *) malloc ( ((unsigned int) tlvbuf[1])+1 ); 
+ memset ( helper, 0, tlvbuf[1]+1);
+ strncpy ( helper, (char *) tlvbuf+2, (unsigned int) tlvbuf[1] );
+ printf ( "%s \"%s\";\n", sym->sym_ident, helper );
+}
+
+void decode_hexstr (unsigned char *tlvbuf, symbol_type *sym)
+{
+ char *helper; 
+ int i;
+
+/* TODO */
+
+ helper = (char *) malloc ( ((unsigned int) tlvbuf[1])+1 ); 
+ memset ( helper, 0, tlvbuf[1]+1);
+ memcpy ( helper, (char *) tlvbuf+2, (unsigned int) tlvbuf[1] );
+ printf ( "%s 0x", sym->sym_ident);
+ for(i=0; i<(int) tlvbuf[1]; i++) { 
+	printf("%02x", (unsigned char) helper[i]);
+ }
+ printf(";\n");
+}
+
+void decode_unknown (unsigned char *tlvbuf, symbol_type *sym)
+{
+  int j=0,len=0;
+
+  len = (int) tlvbuf[1];  
+
+  printf ("/* GenericUnknownTLV code %d len %d value 0x ", 
+			(unsigned int) tlvbuf[0],(unsigned int) tlvbuf[1]);
+
+  for (j=0;j<len;j++)	printf ("%02x", tlvbuf[j+2]);
+
+  printf("; */\n");
+}
+
+void decode_special (unsigned char *tlvbuf, symbol_type *sym)
+{
+  printf ( "%s\n", sym->sym_ident);
+}
+
+void decode_aggregate (unsigned char *tlvbuf, symbol_type *sym)
 {
   register unsigned char *cp;
-  int i,j;
-  int howmany;
-  unsigned int helper;
-  unsigned short shelper;
-  char filename[255];
+  symbol_type *current_symbol;
+  
+  cp = tlvbuf+2; /* skip type,len of parent TLV */
+  printf( "%s {\n", sym->sym_ident);
 
-  memset (filename, 0, 255);
-   
-  if (buf == NULL ) { printf ("Nothing to decode.\n"); return 0; }
-  cp = buf; 
-  while ( (unsigned int) (cp - buf) < buflen ) {
-  for ( i = 0; i< NUM_IDENTIFIERS; i++ ){ 
-	if ( (global_symtable[i].docsis_code == (unsigned char) *cp ) && (global_symtable[i].docsis_parent == docs_parent )) { 
-		printf ("code %hhu ident %s len %hhu ", (unsigned char)*cp, global_symtable[i].sym_ident,(unsigned char) *(cp+1));
-		switch ( docs_parent ) {
-			case 0:
-				switch ( (unsigned char) *cp ) { 
-					case 0: /* pad */
-						printf ("Pad\n");
-						break;
-						;;
-					case 2: /* UpstreamChannelId uchar */
-						printf ( "value %hhu\n", (unsigned char) *(cp+2));
-						break;
-						;;
-					case 3: /* NetworkAccess uchar */
-						printf ( "value %hhu\n", (unsigned char) *(cp+2));
-						break;
-						;;
-					case 4: /* Class Of Service */
-						printf ("ClassOfService {\n");
-						decode_tlvbuf ( (unsigned char *) (cp+2), (unsigned char) *(cp+1), 4); 
-						printf ("}\n");
-						break;
-						;;
-					case 6: /* Cable Modem Message Integrity Check */
-						printf ("digest ");
-						for (j=0;j<16;j++) 
-							printf ("%02x", cp[j+2] );
-						printf("\n");
-						break;
-						;;
-					case 7: /* CMTS Message Integrity Check */
-						printf ("digest ");
-						for (j=0;j<16;j++) 
-							printf ("%02x", cp[j+2] );
-						printf("\n");
-						break;
-						;;
-					case 9: /* Software Upgrade Filename */
-						strncpy ( filename, (char *) cp+2, (unsigned int) cp[1] );
-						printf ( "filename %s\n", filename );
-						break;
-						;;
-					case 10:  /* SNMP WriteDisable */
-						decode_wd ( cp+2, (unsigned int) cp[1]);
-						break;
-						;;
-					case 11:  /* SNMP Mib Object */
-						decode_vbind ( cp+2, (unsigned int) cp[1]);
-						break;
-						;;
-					case 14:  /* CPE MAC Address */
-						printf ( "mac %s len %d\n", ether_ntoa(cp+2), (unsigned int) cp[1]);
-						break;
-						;;
-					case 17:  /* Baseline Privacy */
-						printf ("\n");
-						decode_tlvbuf ( (unsigned char *) (cp+2), (unsigned char) *(cp+1), 17); 
-						break;
-						;;
-					case 18: /* MaxCPEs - uchar */
-						printf ( "value %hhu\n", (unsigned char) *(cp+2));
-						break;
-						;;
-					case 21:  /* Software Upgrade Server IP address */
-						printf ( "value %s\n", inet_ntoa(*((struct in_addr *)(cp+2))));
-						break;
-						;;
-					default:  /* all unsigned int top-level TLVs */
-						memset(&helper,0,sizeof(unsigned int));
-						memcpy(&helper, cp+2, sizeof(unsigned int));
-						printf ( "value %u\n", ntohl(helper));
-						;;
-				}
-				break;
-				;; /* end case 0 */
-			case 4: 
-				switch ( ( unsigned char ) *cp )  {
-					case 6:  /* MaxBurstUp */
-						memset(&shelper,0,sizeof(unsigned short));
-						memcpy(&shelper, cp+2, sizeof(unsigned short));
-						printf ( "value %hu\n", ntohs(shelper));
-						break;
-						;;
-					case 7: 
-						printf ( "value %hhu\n", (unsigned char) *(cp+2));
-						break;
-						;;
-					case 1: 
-						printf ( "value %hhu\n", (unsigned char) *(cp+2));
-						break;
-						;;
-					case 4: 
-						printf ( "value %hhu\n", (unsigned char) *(cp+2));
-						break;
-						;;
-					default: 
-						memset(&helper,0,sizeof(unsigned int));
-						memcpy(&helper, cp+2, sizeof(unsigned int));
-						printf ( "value %u\n", ntohl(helper));
-						;;
-				}
-				break;
-				;; /* end case 4  - Class Of Service */
-			case 17: 
-					/* all BaselinePrivacy values are uint, we don't need a switch() */
-					memset(&helper,0,sizeof(unsigned int));
-					memcpy(&helper, cp+2, sizeof(unsigned int));
-					printf ( "value %u\n", ntohl(helper));
-					;;
-					break;
-			} /* switch */
-  	} /* if */
-  } /* for */
-  cp=(unsigned char*) cp+(((unsigned char)*(cp+1))+2)*sizeof(unsigned char);
-  howmany++;
+  while ( (unsigned int) (cp - tlvbuf +(sizeof(unsigned char))) < (unsigned int) tlvbuf[1] ) {
+  current_symbol = find_symbol_by_code_and_pid (cp[0], sym->id);
+  if (current_symbol == NULL) { 
+		decode_unknown(cp, NULL);	
+  	} else { 
+      		current_symbol->decode_func (cp, current_symbol);
+  	}
+ 	cp = (unsigned char*) cp + (((unsigned char)*(cp+1))+2)*sizeof(unsigned char);
   }
- return howmany;
-}  
+  printf("}\n");
+}
 
-int pretty_decode_buffer ( unsigned char *buf, unsigned int buflen , unsigned char docs_parent ) 
+/* This function is needed because we don't have a symbol to call it. 
+ * We can't put a "Main" symbol in the symtable because docsis_code is 
+ * unsigned char (in struct symbol_entry) and we reserve the values for 
+ * DOCSIS use. 
+ * It's also a bif different from docsis_aggregate in that docsis_aggregate 
+ * takes an aggregate tlvbuf as argument that INCLUDES the "parent" code and 
+ * length. On the main aggregate we don't have a code / length. 
+ */
+
+void decode_main_aggregate (unsigned char *tlvbuf, unsigned int buflen)
 {
   register unsigned char *cp;
-  int i,j,matched;
-  int howmany;
-  unsigned int helper;
-  unsigned short shelper;
-  char filename[255];
+  symbol_type *current_symbol;
+  
+  cp = tlvbuf; 
+  printf( "Main {\n");
 
-  memset (filename, 0, 255);
-
-  if (buf == NULL ) { printf ("Nothing to decode.\n"); return 0; }
-  if ( docs_parent == 0 ) printf( "Main {\n");
-
-  cp = buf; 
-  while ( (unsigned int) (cp - buf) < buflen ) {
-  matched=0;
-  for ( i = 0; i< NUM_IDENTIFIERS; i++ ) { 
-	if ( (global_symtable[i].docsis_code == (unsigned char) *cp ) && (global_symtable[i].docsis_parent == docs_parent )) { 
-		printf ("%s ", global_symtable[i].sym_ident);
-		matched=1;
-		switch ( docs_parent ) {
-			case 0:
-				switch ( (unsigned char) *cp ) { 
-					case 0: /* pad */
-						printf ("\n");
-						break;
-						;;
-					case 1:  /* Downstream Freq */
-						memset(&helper,0,sizeof(unsigned int));
-						memcpy(&helper, cp+2, sizeof(unsigned int));
-						printf ( "%u;\n", ntohl(helper));
-						break;
-						;;
-					case 2: /* UpstreamChannelId uchar */
-						printf ( "%hhu;\n", (unsigned char) *(cp+2));
-						break;
-						;;
-					case 3: /* NetworkAccess uchar */
-						printf ( "%hhu;\n", (unsigned char) *(cp+2));
-						break;
-						;;
-					case 4: /* Class Of Service */
-						printf(" {\n");
-						pretty_decode_buffer ( (unsigned char *) (cp+2), (unsigned char) *(cp+1), 4); 
-						printf("}\n");
-						break;
-						;;
-					case 6: /* Cable Modem Message Integrity Check */
-						for (j=0;j<16;j++) 
-							printf ("%02x", cp[j+2] );
-						printf(";\n");
-						break;
-						;;
-					case 7: /* CMTS Message Integrity Check */
-						for (j=0;j<16;j++) 
-							printf ("%02x", cp[j+2] );
-						printf(";\n");
-						break;
-						;;
-					case 9: /* Software Upgrade Filename */
-						strncpy ( filename, (char *) cp+2, (unsigned int) cp[1] );
-						printf ( "\"%s\";\n", filename );
-						break;
-						;;
-					case 10:  /* SNMP WriteDisable */
-						decode_wd ( cp+2, (unsigned int) cp[1]);
-						printf(";\n");
-						break;
-						;;
-					case 11:  /* SNMP Mib Object */
-						decode_vbind ( cp+2, (unsigned int) cp[1]);
-						printf(";\n");
-						break;
-						;;
-					case 14:  /* CPE MAC Address */
-						printf ("%s;\n", ether_ntoa(cp+2));
-						break;
-						;;
-					case 17:  /* Baseline Privacy */
-						printf ("{\n");
-						pretty_decode_buffer ( (unsigned char *) (cp+2), (unsigned char) *(cp+1), 17); 
-						printf("}\n");
-						break;
-						;;
-					case 18: /* MaxCPEs - uchar */
-						printf ( "%hhu;\n", (unsigned char) *(cp+2));
-						break;
-						;;
-					case 21:  /* Software Upgrade Server IP address */
-						printf ( "%s;\n", inet_ntoa(*((struct in_addr *)(cp+2))));
-						break;
-						;;
-					case 255:  /* End-Of-Data Marker */
-						printf ("\n");
-						break;
-						;;
-				}
-				break;
-				;; /* end case 0 -- Main */
-			case 4: 	/* ClassOfService */
-				switch ( ( unsigned char ) *cp )  {
-					case 1:  /* ClassID */
-						printf ( "%hhu;\n", (unsigned char) *(cp+2));
-						break;
-						;;
-					case 4: /* PriorityUp */
-						printf ( "%hhu;\n", (unsigned char) *(cp+2));
-						break;
-						;;
-					case 6:  /* MaxBurstUp */
-						memset(&shelper,0,sizeof(unsigned short));
-						memcpy(&shelper, cp+2, sizeof(unsigned short));
-						printf ( "%hu;\n", ntohs(shelper));
-						break;
-						;;
-					case 7: 
-						printf ( "%hhu;\n", (unsigned char) *(cp+2));
-						break;
-						;;
-					default: 
-						memset(&helper,0,sizeof(unsigned int));
-						memcpy(&helper, cp+2, sizeof(unsigned int));
-						printf ( "%u;\n", ntohl(helper));
-						;;
-				}
-				break;
-				;; /* end case 4  - Class Of Service */
-			case 17:	
-					/* all BaselinePrivacy values are uint, we don't need a switch() */
-					memset(&helper,0,sizeof(unsigned int));
-					memcpy(&helper, cp+2, sizeof(unsigned int));
-					printf ( "%u;\n", ntohl(helper));
-					;;
-					break;
-			}
-  	} /* if */
-  } /* for */
-
-  if (!matched) {
-	printf("GenericUnknownTLV docsis_code %hhu length %hhu value " , (unsigned char)*cp, (unsigned char) *(cp+1));
-	if ((unsigned char)*(cp+1)) printf("0x"); else printf("none");
-	for (j=0;j<(unsigned char)*(cp+1);j++) printf ("%02x", cp[j+2]);
-	printf("\n");
-  }     
-  cp=(unsigned char*) cp+(((unsigned char)*(cp+1))+2)*sizeof(unsigned char);
-  howmany++;
-  } /* while */
-  if ( docs_parent == 0 ) printf( "}\n");
-  return howmany;
-}  
-
+  while ( (unsigned int) (cp - tlvbuf) < buflen ) {
+  current_symbol = find_symbol_by_code_and_pid (cp[0],0);
+  if (current_symbol == NULL) { 
+		decode_unknown(cp, NULL);	
+  	} else { 
+      		current_symbol->decode_func (cp, current_symbol);
+  	}
+ 	cp = (unsigned char*) cp + (((unsigned char)*(cp+1))+2)*sizeof(unsigned char);
+  }
+  printf("}\n");
+}

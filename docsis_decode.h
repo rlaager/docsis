@@ -1,6 +1,7 @@
 /* 
  *  DOCSIS configuration file encoder. 
  *  Copyright (c) 2001 Cornel Ciocirlan, ctrl@users.sourceforge.net.
+ *  Copyright (c) 2002 Evvolve Media SRL,office@evvolve.com
  *  
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,8 +23,27 @@
 #ifndef _DOCSIS_DECODE_H
 #define _DOCSIS_DECODE_H
 
+#include "docsis_common.h"
+
 int decode_tlvbuf (unsigned char *buf, unsigned int buflen, unsigned char docs_parent); 
 int pretty_decode_buffer (unsigned char *buf, unsigned int buflen, unsigned char docs_parent); 
+struct symbol_entry *find_symbol_by_code_and_pid (unsigned char code, unsigned int pid);
 
+
+void decode_special (unsigned char *tlvbuf, symbol_type *sym);
+void decode_uint (unsigned char *tlvbuf, struct symbol_entry *sym);
+void decode_ushort (unsigned char *tlvbuf, symbol_type *sym);
+void decode_uchar (unsigned char *tlvbuf, symbol_type *sym);
+void decode_ip (unsigned char *tlvbuf, symbol_type *sym);
+void decode_ether (unsigned char *tlvbuf, symbol_type *sym);
+void decode_ethermask (unsigned char *tlvbuf, symbol_type *sym);
+void decode_md5 (unsigned char *tlvbuf, symbol_type *sym);
+void decode_snmp_wd (unsigned char *tlvbuf, symbol_type *sym);
+void decode_snmp_object (unsigned char *tlvbuf, symbol_type *sym);
+void decode_string (unsigned char *tlvbuf, symbol_type *sym);
+void decode_hexstr (unsigned char *tlvbuf, symbol_type *sym);
+void decode_unknown (unsigned char *tlvbuf, symbol_type *sym);
+void decode_aggregate (unsigned char *tlvbuf, symbol_type *sym);
+void decode_main_aggregate (unsigned char *tlvbuf, unsigned int buflen);
 
 #endif /* _DOCSIS_DECODE_H */

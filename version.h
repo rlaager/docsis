@@ -19,5 +19,5 @@
  *  DOCSIS is a registered trademark of Cablelabs, http://www.cablelabs.com
  */
 
-#define VERSION "0.6"
-#define PATCHLEVEL "2"
+#define VERSION "0.7"
+#define PATCHLEVEL "1"

@@ -1,17 +1,38 @@
-0.6.2: 18/07/02		
-			Make the thing compile on Solaris (Makefile.solaris)
+0.7.1  08/02/02		Split encoding functions into docsis_encode.{h,c}	
+evvolve			Implemented Hex String and Ether+Ethermask encoders.
+			Implemented range checking for string and hex string
+			encoders.
+			We added many DOCSIS 1.1 configuration settings to 
+ 			docsis_symtable.h. Got bored, so if you want more please
+			add them yourself and send us a patch.
+			Updated CMTS MIC calculation to use the new 1.1 config
+			settings in addition to the 1.0 ones (as per the 
+			latest DOCSIS RFI). 
+
+0.7.0  06/02/02		New "decoding" framework similar to the encoding 
+evvolve			framework makes adding new "symbols" as easy as 
+ 			editing the "docsis_symtable.h" file. 
+			As an example, support for the DOCSIS 1.1 Downstream
+			Packet Classifiers was added. 
+			Bugs were found and some were even fixed in the 
+			process. 
+			Started adding 1.1 stuff to the project. 
+
+0.6.2: 18/07/01		
+ctrl			Make the thing compile on Solaris (Makefile.solaris)
 			Fix memory alignment errors on Solaris
-			Updated MD5 implementation to avoid warnings
+			Updated MD5 implementation to get rid of annoying 
+			warnings
 
 0.6.1:  25/03/01
-			added -lcrypto to $LIBS to work with ucd-snmp-4.2
+ctrl			added -lcrypto to $LIBS to work with ucd-snmp-4.2
 			cleaned up the sourcecode a bit
 			added support for "decoding" a binary file
 			fixed bug in decoding unsigned shorts (MaxBurstUp)
 			
 
 0.6.0:	23/03/01	
-			added support for generic hexadecimal strings
+ctrl			added support for generic hexadecimal strings
 			(needed for docsDevNmAccessInterfaces)
 
 			fixed bug involving multiple String-type SNMP vars
@@ -21,17 +42,18 @@
 			0.5.8)
 
 0.5.8: 
-	18/03/01:	various re-organizations 
+ctrl	18/03/01:	various re-organizations 
 			released to sourceforge
 
 0.5.7: 
-	17/03/01: 
-			fixed bug in CPE MAC Address encoding (correct type = 14)
+ctrl	17/03/01: 
+			fixed bug in CPE MAC Address encoding (correct 
+			type = 14)
 			added "support" for config files in DOS-format text
 
 0.5.5:
-
+ctrl
 	01/12/00: 	created CHANGES file	
-		  	various small annoyances resolved
+		 	various small annoyances resolved
 	  		added support for CPE MAC Address configuration setting
 			removed references to _A*_H in *.h

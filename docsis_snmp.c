@@ -1,6 +1,7 @@
 /* 
  *  DOCSIS configuration file encoder. 
  *  Copyright (c) 2001 Cornel Ciocirlan, ctrl@users.sourceforge.net.
+ *  Copyright (c) 2002 Evvolve Media SRL,office@evvolve.com
  *  
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -285,6 +286,7 @@ unsigned int decode_wd ( unsigned char *data, unsigned int data_len)
 
   if((retval=asn_parse_objid (data, &len, &type, this_oid, &oid_len) )==NULL) {
 	printf("OID.parse.error");
+	return 0;
 	} else { 
     		print_objid(this_oid, oid_len);
 
@@ -293,9 +295,7 @@ unsigned int decode_wd ( unsigned char *data, unsigned int data_len)
 return 1;
 }
  
-int
-hexadecimal_to_binary(const char *str,
-              u_char *bufp)
+int hexadecimal_to_binary(const char *str, u_char *bufp)
 {
   int len, itmp;
   printf ("Hex string rx'd: %s\n", str);
