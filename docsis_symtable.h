@@ -208,8 +208,8 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 129, "MfgCVCData",           		32,   0,  (get_hexstr),    (decode_hexstr),      0,        255        },
 
 /* Vendor Specific */ 
-{ 130, "VendorSpecific",       		43,   0,  (get_nothing),   (decode_aggregate),   0,        0          },
-{ 131, "VendorIdentifier",     		8,  123,  (get_hexstr),    (decode_hexstr),      3,        3          },
+{ 130, "VendorSpecific",       		43,   0,  (get_nothing),   (decode_vspecific),   0,        0          },
+{ 131, "VendorIdentifier",     		8,  130,  (get_hexstr),    (decode_hexstr),      3,        3          },
 
 /* SNMPv3 Kickstart */
 { 132, "SNMPv3Kickstart",   		34,   0,  (get_nothing),   (decode_aggregate),   0,        0          },

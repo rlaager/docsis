@@ -110,6 +110,19 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
       return data_ptr - out_buffer;
       break;
       ;;
+    case 'g':
+	/* TODO: check that the int is positive ? */
+
+      data_ptr = snmp_build_var_op (out_buffer,
+				    var_name,
+				    &name_len,
+				    ASN_GAUGE,
+				    sizeof (int),
+				    (unsigned char *) &value->intval,
+				    &out_size);
+      return data_ptr - out_buffer;
+      break;
+      ;;
     case 's':
     case 'x':
     case 'd':
@@ -122,6 +135,7 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
       else if (oid_asntype == 's')
 	{
 	  strncpy ((char *) buf, value->strval, SPRINT_MAX_LEN);
+	  len = strlen ((char *) buf);
 	}
       else if (oid_asntype == 'x')
 	{
@@ -131,9 +145,9 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
 	      exit (-200);
 	    }
 	  ltmp = (unsigned int) rv;
+	  len = ltmp;
 	}
 
-      len = strlen ((char *) buf);
       if (len < 0 || len > SPRINT_MAX_LEN - 1)
 	{
 	  printf ("String too long at line %d, max allowed %d\n", line,
@@ -202,7 +216,10 @@ decode_vbind (unsigned char *data, unsigned int vb_len)
   struct variable_list *vp;
   oid objid[MAX_OID_LEN];
   char _docsis_snmp_label[50];	/* To hold the 'name' of the type, i.e. Integer etc */
+  char *enum_string = NULL;
   static char outbuf[1024];
+  struct tree *subtree;
+  struct enum_list *enums;
 
   memset (outbuf, 0, 1024);
 
@@ -244,7 +261,7 @@ if (netsnmp_ds_get_boolean
 	  fprintf (stderr,
 		   "/* Hmm ... can't find oid %s at line %d ... perhaps the MIBs are not installed ? */\n",
 		   outbuf, line);
-	  /* temporarily set full numeric output format */
+	  /* temporarily set full output format */
 	  netsnmp_ds_set_int (NETSNMP_DS_LIBRARY_ID,
 			      NETSNMP_DS_LIB_OID_OUTPUT_FORMAT,
 			      NETSNMP_OID_OUTPUT_FULL);
@@ -256,6 +273,7 @@ if (netsnmp_ds_get_boolean
 			      NETSNMP_OID_OUTPUT_SUFFIX);
 	}
     }
+  subtree = get_tree (var_name, name_len, get_tree_head() );
 
   printf ("%s", outbuf);
 
@@ -472,12 +490,28 @@ if (netsnmp_ds_get_boolean
 
     case ASN_BIT_STR:
 		snprint_hexadecimal (outbuf, 1023, vp->val.bitstring, vp->val_len);
+		break;
  
     default: 
 	snprint_value (outbuf, 1023, vp->name, vp->name_length, vp);
+
     }
 
-  printf (" %s %s ", _docsis_snmp_label, outbuf);
+    if ( subtree ) 
+    {
+   	enums = subtree->enums;	
+	   	for (; enums; enums = enums->next) {
+			if (enums->value == *vp->val.integer) {
+			enum_string = enums->label;
+       			break;
+			}
+		}
+    }
+  if (enum_string) 
+	printf (" %s %s; /* %s */", _docsis_snmp_label, outbuf, enum_string);
+  else
+	printf (" %s %s ;", _docsis_snmp_label, outbuf);
+	 
 
   snmp_free_var (vp);
 

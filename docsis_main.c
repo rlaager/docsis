@@ -233,7 +233,10 @@ int main(int argc,char *argv[] )
 			} else {
 		 		decode_file (argv[2]);
 			}
-		}
+		} else { 
+			
+			usage(prog_name); 
+	     	}
 
 
 #ifdef WIN32

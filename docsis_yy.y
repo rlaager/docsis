@@ -47,7 +47,6 @@ extern symbol_type *global_symtable;
 %token <symptr>  T_IDENT_SNMPW
 %token <symptr>  T_IDENT_SNMPSET
 %token <symptr>  T_IDENT_GENERIC
-%token <strval>  T_MAC
 %token <strval>  T_ETHERMASK
 %token <strval>  T_LABEL_OID
 %token <strval>  T_IP
@@ -58,6 +57,7 @@ extern symbol_type *global_symtable;
 
 %token <uintval>  T_ASNTYPE_INT
 %token <uintval>  T_ASNTYPE_UINT
+%token <uintval>  T_ASNTYPE_GAUGE
 %token <uintval>  T_ASNTYPE_TICKS 
 %token <uintval>  T_ASNTYPE_IP 
 %token <uintval>  T_ASNTYPE_OBJID 
@@ -144,6 +144,8 @@ assignment_stmt:  T_IDENTIFIER T_INTEGER ';' {
 			$$ = create_snmpw_tlv ( $1, $2, (union t_val *) &$3 ); }
 		| T_IDENT_SNMPSET T_LABEL_OID T_ASNTYPE_INT T_INTEGER ';' {
 			$$ = create_snmpset_tlv($1,$2,'i',(union t_val *)&$4); }
+		| T_IDENT_SNMPSET T_LABEL_OID T_ASNTYPE_GAUGE T_INTEGER ';' {
+			$$ = create_snmpset_tlv($1,$2,'g',(union t_val *)&$4); }
 	        | T_IDENT_SNMPSET T_LABEL_OID T_ASNTYPE_IP T_IP ';' {
 			$$ = create_snmpset_tlv($1,$2,'a',(union t_val *)&$4); }
 		| T_IDENT_SNMPSET T_LABEL_OID T_ASNTYPE_STRING T_STRING ';' {

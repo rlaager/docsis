@@ -1,6 +1,15 @@
+0.8.7  20/6/03		- fix bug with encoding HexStrings with trailing zeros
+Ronald Rosenfeld	- fix double declaration of symbol T_MAC
+			- add support for negative integers 
+evvolve			- change -lcrypto to -lcrypt to make default 
+			  more "mainstream".
+			- add support for ASN_GAUGE encodings
+			- fix VendorSpecific decoding
+			- print label as comment for enums
+
 0.8.6  31/05/03		- add support for SNMPv3Kickstart and 
 evvolve		  	  partial support for SNMPv3 Notification Receiver
-ctrl			  (untested!)
+			  (untested!)
 			- fix compilation warnings 
 			- add support for PHS Rule (untested)
 			- cleanup indexes in docsis_symtable.h

@@ -9,7 +9,7 @@ DEFS	= -DYY_NO_UNPUT  -DDEBUG
 # -lcrypto is OpenSSL. 
 # 
 CFLAGS	= -g -Wall -I/opt/net-snmp/include
-LIBS  	= -L/opt/net-snmp/lib -lnetsnmp -lcrypto -lnsl -lfl -lm
+LIBS  	= -L/opt/net-snmp/lib -lnetsnmp -lcrypt -lnsl -lfl -lm
 
 # If you installed NET-SNMP in /usr/local, uncomment the following two lines:
 # CFLAGS	= -g -Wall -I/usr/local/include

@@ -112,7 +112,8 @@ void decode_snmp_object (unsigned char *tlvbuf, symbol_type *sym)
 {
   printf ( "%s ", sym->sym_ident);
   decode_vbind (tlvbuf+2, (unsigned int) tlvbuf[1]);
-  printf(";\n");
+/*  22-06-03  decode_vbind prints the trailing ';' as well  */
+  printf("\n"); 
 }
 
 void decode_string (unsigned char *tlvbuf, symbol_type *sym)
@@ -139,7 +140,7 @@ void decode_strzero (unsigned char *tlvbuf, symbol_type *sym)
 void decode_hexstr (unsigned char *tlvbuf, symbol_type *sym)
 {
  char *helper; 
- int i;
+ unsigned int i;
  unsigned int len;
 
 /* TODO */
@@ -250,17 +251,22 @@ void decode_vspecific (unsigned char *tlvbuf, symbol_type *sym)
   first_symbol = find_symbol_by_code_and_pid (cp[0], sym->id); 
   
   if (first_symbol == NULL) {
-		printf ("/* Invalid VendorSpecific option - 1st element is NOT VendorIdentifier */");
+  		__docsis_indent(INDENT_NOOP, TRUE);
+		printf ("/* WARNING: Invalid VendorSpecific option - 1st element is NOT VendorIdentifier */\n");
+  		__docsis_indent(INDENT_NOOP, TRUE);
                 decode_unknown(cp, NULL);
         } else {
 	/* Symbol found ... check if it's the right one */ 
-		if (strcmp (first_symbol->sym_ident, "VendorIdentifier")) 
+		if (!strncmp (first_symbol->sym_ident, "VendorIdentifier", 16)) 
 		{ 
+  			__docsis_indent(INDENT_NOOP, TRUE);
 	                first_symbol->decode_func(cp, first_symbol);
 		} 
 		else 
 		{ 
+  			__docsis_indent(INDENT_NOOP, TRUE);
 			printf ("/* Invalid VendorSpecific option - 1st element is NOT VendorIdentifier */");
+  			__docsis_indent(INDENT_NOOP, TRUE);
 			decode_unknown(cp, NULL);
 		}
         }
@@ -389,7 +395,7 @@ snprint_hexadecimal ( unsigned char *outbuf, size_t outsize, const char *str, si
   sprintf(cp, "0x");
   cp = cp +2*sizeof(char);
 
-  for (i=0; i<str_len && (cp-outbuf) < outsize; i++) { 
+  for (i=0; i<str_len && (unsigned int) (cp-outbuf) < outsize; i++) { 
 	sprintf(cp, "%02x", (unsigned char) str[i]);
 	cp = cp +2*sizeof(char);
   }

@@ -31,7 +31,7 @@ It supports most DOCSIS 1.1 Configuration Settings. Not supported (currently):
 	* Vendor ID (Partial support provided)
 	* TFTP server timestamp
 	* TFTP server provisioned modem address
-	* SNMPv3 settings
+	* SNMPv3 settings (partial support provided)
 
 See DOCSIS 1.1 Radio Frequency Interface Specification, Appendix C for a 
 description of these settings.

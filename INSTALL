@@ -9,7 +9,7 @@ You need the following packages to compile this program:
 	* bison 1.25 or newer
 
 Get OpenSSL from http://www.openssl.org if you don't have it already. Most 
-Linux distributions come with OpenSSL pre-installed.
+Linux distributions come with OpenSSL pre-installed (e.g. -lcrypt)
 
 Get NET-SNMP from http://www.net-snmp.org.
 
@@ -31,14 +31,13 @@ You also need flex & bison. I tested with flex 2.5.4 and bison 1.25 on SuSE Linu
 8.0 and Solaris 2.6.
 
 Lex and Yacc don't work. It's probably easy to make the code work with them but
-I don't care; if you make it work send me a patch.
+I don't care; if you make it work send us a patch.
 
 To get flex & bison go to ftp://ftp.gnu.org. All GNU/Linux 
 distributions have them, so you probably don't have to worry about. Try:
 
 $ flex --version
 $ bison --version 
-
 
 2. Installation instructions 
 
@@ -79,3 +78,6 @@ which is kinda useful when you're left staring at the stars because it doesn't
 work.
 
 If you want to debug the program (using gdb for example), add "-g" to CFLAGS (in Makefile). 
+
+If you leave "-g -DDEBUG" for your final ("production") executable you will suffer 
+a little performance penalty. 

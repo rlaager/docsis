@@ -50,6 +50,7 @@ SnmpWriteControl	{ yylval.symptr=find_symbol_by_name(yytext);return T_IDENT_SNMP
 SnmpMibObject		{ yylval.symptr=find_symbol_by_name(yytext);return T_IDENT_SNMPSET; }
 Integer			{ return T_ASNTYPE_INT; 	}
 UnsignedInteger		{ return T_ASNTYPE_UINT; 	}
+Gauge			{ return T_ASNTYPE_GAUGE; 	}
 TimeTicks		{ return T_ASNTYPE_TICKS; 	}
 IPAddress		{ return T_ASNTYPE_IP; 		}
 ObjectID		{ return T_ASNTYPE_OBJID; 	}
@@ -86,6 +87,7 @@ TlvValue		{ return T_TLV_VALUE; 	}
 <COMMENT>[*]+\/	{ BEGIN 0; }
 
 [0-9]+	 { yylval.intval=atoi(yytext);return T_INTEGER; }
+-[0-9]+	 { yylval.intval=atoi(yytext);return T_INTEGER; }
 [ \t]+	 ;
 \r\n	 { line++; }
 \n	 { line++; }

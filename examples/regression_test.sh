@@ -3,6 +3,8 @@
 # This file is part of the docsis distribution. 
 # Copyright (c) 2003, Evvolve SRL; All Rights Reserved.  
 
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/net-snmp/lib
+
 failed=0;
 
 version=`grep VERSION ../version.h| awk '{print $3}' | sed 's/\"//g' `
