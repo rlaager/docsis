@@ -1,0 +1,11 @@
+0.5.7: 
+	17/03/01: 
+			fixed bug in CPE MAC Address encoding (correct type = 14)
+			added "support" for config files in DOS-format text
+
+0.5.5:
+
+	01/12/00: 	created CHANGES file	
+		  	various small annoyances resolved
+	  		added support for CPE MAC Address configuration setting
+			removed references to _A*_H in *.h

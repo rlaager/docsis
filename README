@@ -1,0 +1,61 @@
+1. General Information
+
+This software is (c) 2000 Cornel Ciocirlan. 
+To contact the author,  send an E-mail to: ctrl@users.sourceforge.net
+
+PLEASE READ THE FILE COPYING.GPL. 
+
+
+This is Unsupported software that may crash your computer, damage all your data
+or otherwise drive you nuts. You'd better know what you're doing.
+
+2. Description
+
+This program encodes text configuration files which contain Configuration File 
+Settings (as per the DOCSIS RFI 1.0 Specification) into binary configuration 
+files, as specified by the DOCSIS RFI 1.0 Specification, Appendix C.
+
+It supports most DOCSIS 1.0 Configuration Settings. Not supported (currently):
+
+	* Telephony Settings
+	* Modem Capabilities
+	* Vendor-specific information
+	* Vendor ID
+	* TFTP server timestamp
+	* TFTP server provisioned modem address
+
+See DOCSIS 1.0 Radio Frequency Interface Specification, Appendix C for a 
+description of these settings.
+
+
+A limited range of ASN types are supported for SNMP MibObjects (the most used
+types). Adding a new ASN type is as easy as cut&paste from UCD-SNMP source code into docsis_snmp.c, function encode_vbind (well, maybe a few changes are needed,
+but I trust the reader can figure it out).
+
+More than one (up to 16) ClassOfService statements can appear. Only one 
+BaselinePrivacy (BPI) statement can appear. The program does not check for the 
+number of ClassOfService statements that appear, you have to make sure not 
+to include more than 16 or unexpected results will occur. 
+
+DOCSIS BPI Specification clearly states that the BPI settings MUST NOT be 
+present if Privacy is not enabled in [at least one of] the ClassOfService 
+parameters (for example if PrivacyEnable is 0 for all classes of service, BPI
+statement should not appear). 
+
+The program is not yet as "intelligent" as to detect these problems 
+automatically (quite trivial).
+
+3. Usage
+
+To encode a configuration file, do:
+
+unix $ ./docsis my_config_file.cfg my_key_file my_config_file.md5
+
+The format of the text configuration file, although simple, is not described 
+anywhere but the source code (see the grammar in docsis_yy.y and lexical 
+analyzer in docsis_lex.l). As sometimes an example is more useful than a 
+truckload of documentation, I've included a few configuration files (see 
+examples/*.cfg).
+
+An example key is provided in file testkey.key. The key is only a string of 
+characters. If the last character of the string is a newline it will be chopped. 

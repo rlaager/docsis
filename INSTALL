@@ -1,0 +1,33 @@
+You must have UCD-SNMP installed on your system before compiling this software.
+You can get UCD-SNMP from http://ucd-snmp.ucdavis.edu.
+
+You can use "./configure --prefix=/usr" when building UCD-SNMP. If you use the 
+default "./configure", please edit Makefile and adjust CFLAGS and LIBS 
+accordingly (by default, UCD-SNMP installs in /usr/local/).
+
+I used ucd-snmp-4.1.2 myself. It could work with an earlier version however
+this has not been tested so I do not recommend it. 
+
+You need flex & bison. I tested with flex 2.5.4 and bison 1.25 on SuSE Linux 
+6.4.
+Lex & Yacc should work fine, although they were not tested. You have to edit 
+"Makefile" to replace flex with lex and bison with yacc.
+
+When you have all of the above, do 
+
+unix $ gzip -cd docsis-x.y.z-RELEASE.tgz | tar xvf -
+unix $ cd docsis-x.y.z-RELEASE
+unix $ make 
+
+If everything works fine, now you have an executable called "docsis". 
+
+If you have problems you can send an E-mail to ctrl@users.sourceforge.net. I will 
+do my best to give you a quick answer but I may be too busy sometimes. 
+
+If your DEFS (in Makefile) include -DDEBUG you will build some debug code 
+which is kinda useful when you're left staring at the stars because it doesn't 
+work. 
+
+If you want to debug the program (using gdb for example), add "-g" to CFLAGS (in Makefile). 
+
+
