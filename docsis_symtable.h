@@ -93,7 +93,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 53,   "VlanID",		2, 51, (get_ushort), 	(decode_ushort),    	0, 0 },      
 /* TODO: Vendor Specific support in the IEEE802Classifier */
 
-{ 54,	"DsPacketClass",	22, 0, (get_nothing), 	(decode_aggregate),	0, 0 },
+{ 54,	"DsPacketClass",	23, 0, (get_nothing), 	(decode_aggregate),	0, 0 },
 { 55,	"ClassifierRef",	1, 54, (get_uchar), 	(decode_uchar),		1, 255 },
 { 56,	"ClassifierId",		2, 54, (get_ushort), 	(decode_ushort),	1, 65535 },
 { 57,	"ServiceFlowRef",	3, 54, (get_ushort), 	(decode_ushort),	1, 65535 },
@@ -144,7 +144,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 98,   "GrantsPerInterval",	22,80, (get_uchar), 	(decode_uchar),    	0, 127 },
 { 99,   "IpTosOverwrite",	23,80, (get_hexstr), 	(decode_hexstr),    	2, 2 },
 /* Downstream Service Flow */
-{100,   "DsServiceFlow",	25,100,(get_nothing), 	(decode_aggregate),    	0, 0 },      
+{100,   "DsServiceFlow",	25,  0,(get_nothing), 	(decode_aggregate),    	0, 0 },      
 {101,   "ServiceFlowRef",	1, 100, (get_ushort), 	(decode_ushort),    	1, 65535 },      
 {102,   "ServiceFlowId",	2, 100, (get_uint), 	(decode_uint),    	1, 0xFFFFFFFF },  
 {103,   "ServiceClassName",	4, 100, (get_string), 	(decode_string),    	2, 16 },      

@@ -142,9 +142,9 @@ int main(int argc,char *argv[] )
    	if (! ds_get_boolean (DS_LIBRARY_ID, DS_LIB_RANDOM_ACCESS)) {
        		ds_toggle_boolean(DS_LIBRARY_ID, DS_LIB_RANDOM_ACCESS);
 #ifdef DEBUG
-		printf ("Random OID access: %d\n", ds_get_boolean(DS_LIBRARY_ID,DS_LIB_RANDOM_ACCESS));
+		printf ("/* Random OID access: %d */\n", ds_get_boolean(DS_LIBRARY_ID,DS_LIB_RANDOM_ACCESS));
 #endif /* DEBUG */
-   	} /* we can use sysContact.0 instead of system.sysContact.0  */
+   	} /* so we can use sysContact.0 instead of system.sysContact.0  */
 
 	memset (prog_name,0,255);
 	strncpy (prog_name, argv[0], 254);
