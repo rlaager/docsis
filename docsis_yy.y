@@ -83,7 +83,7 @@ extern symbol_type *global_symtable;
 How this works ? 
 
 When we recognize an assignment statement (for example "MaxCPE 13;") we create 
-a "struct tlv" which contains the type associated with this configuratin 
+a "struct tlv" which contains the type associated with this configuration 
 setting, the length of this configuration setting and the value. The type and
 lenth are in docsis_symtable.h. Consecutive assignment_stmts are reduced  
 to an assignment_list, creating a "tlvlist" which is essentially a list of 

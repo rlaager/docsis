@@ -3,11 +3,15 @@
 
 You need the following packages to compile this program:
 
-	* ucd-snmp version 4.1.2 (later releases work, see notes) 
+	* OpenSSL 0.9.6 or later
+	* ucd-snmp version 4.2 (later releases should work, see notes) 
 	* flex 2.5.4
 	* bison 1.25
 
-You can get UCD-SNMP (which has just been renamed NET-SNMP) from 
+Get OpenSSL from http://www.openssl.org if you don't have it already. Most 
+Linux distributions come with OpenSSL pre-installed.
+
+Get UCD-SNMP (which has just been renamed NET-SNMP) from 
 http://www.net-snmp.org.
 
 You can use "./configure --prefix=/usr" when building UCD-SNMP. If you use the 
@@ -15,15 +19,16 @@ default "./configure", please edit Makefile and adjust CFLAGS and LIBS
 accordingly (by default, UCD-SNMP installs in /usr/local/, so you will need 
 to uncomment the "LIBS=-L/usr/local/lib" line in the Makefile).
 
-I used ucd-snmp-4.1.2 myself.  Earlier releases won't work, later releases may
-work. 
+I used ucd-snmp-4.1.2 and ucd-snmp-4.2 myself.  Earlier releases won't work, 
+later releases may work. 
 
 You need flex & bison. I tested with flex 2.5.4 and bison 1.25 on SuSE Linux 
-6.4.
-Lex & Yacc may work as well, although they were not tested. You have to edit 
-"Makefile" to replace flex with lex and bison with yacc.
+6.4 and Solaris 2.6.
 
-To get flex & bison go to ftp://ftp.gnu.org. Almost all recent Linux 
+Lex and Yacc don't work. It's probably easy to make the code work with them but
+I don't care, if you make it work send me a patch.
+
+To get flex & bison go to ftp://ftp.gnu.org. All GNU/Linux 
 distributions have them, so you probably don't have to worry about. Try:
 
 $ flex --version
@@ -36,7 +41,8 @@ When you have all of the above, do
 
 unix $ gzip -cd docsis-x.y.z-RELEASE.tgz | tar xvf -
 unix $ cd docsis-x.y.z-RELEASE
-unix $ make 
+unix $ make  				# if you're on Linux, or 
+unix $ make -f Makefile.solaris 	# if you're on Solaris
 
 If everything works fine, now you have an executable called "docsis". 
 

@@ -59,6 +59,8 @@ hmac_md5(unsigned char *text, int text_len, unsigned char *key, int key_len, uns
                                       */
         unsigned char tk[16];
         int i;
+ 	unsigned char tmpdigest[16];
+	
         /* if key is longer than 64 bytes reset it to key=MD5(key) */
         if (key_len > 64) {
 
@@ -66,9 +68,9 @@ hmac_md5(unsigned char *text, int text_len, unsigned char *key, int key_len, uns
 
                 MD5Init(&tctx);
                 MD5Update(&tctx, key, key_len);
-                MD5Final(&tctx);
+                MD5Final(tmpdigest,&tctx);
 
-                memcpy (tk, &tctx.digest, 16);
+                memcpy (tk, tmpdigest, 16);
 		key = tk;
                 key_len = 16;
         }
@@ -102,8 +104,7 @@ hmac_md5(unsigned char *text, int text_len, unsigned char *key, int key_len, uns
                                               * pass */
         MD5Update(&context, k_ipad, 64);      /* start with inner pad */
         MD5Update(&context, text, text_len); /* then text of datagram */
-        MD5Final(&context);          /* finish up 1st pass */
-	memcpy (digest, &context.digest, 16);
+        MD5Final(digest, &context);          /* finish up 1st pass */
         /*
          * perform outer MD5
          */
@@ -112,6 +113,5 @@ hmac_md5(unsigned char *text, int text_len, unsigned char *key, int key_len, uns
         MD5Update(&context, k_opad, 64);     /* start with outer pad */
         MD5Update(&context, digest, 16);     /* then results of 1st
                                               * hash */
-        MD5Final(&context);          /* finish up 2nd pass */
-	memcpy (digest, &context.digest, 16);
+        MD5Final(digest,&context);          /* finish up 2nd pass */
 }

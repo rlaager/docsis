@@ -1,3 +1,4 @@
+
 /* 
  *  DOCSIS configuration file encoder. 
  *  Copyright (c) 2001 Cornel Ciocirlan, ctrl@users.sourceforge.net.
@@ -19,5 +20,25 @@
  *  DOCSIS is a registered trademark of Cablelabs, http://www.cablelabs.com
  */
 
-#define VERSION "0.6"
-#define PATCHLEVEL "2"
+#include <arpa/inet.h>
+
+/* 
+ * Implements POSIX inet_aton which is missing on Solaris.
+ * Based on inet_addr. 
+ */
+
+int inet_aton(const char *cp, struct in_addr *inp ) { 
+
+  if (!strcmp(cp,"255.255.255.255")) { 
+	inp->s_addr = (unsigned int) -1;
+	return 1;
+  }
+
+  inp->s_addr = inet_addr ( cp );
+
+  if ((int) inp->s_addr ==  -1 ) { 
+	return 0;
+  }
+  
+  return 1;
+}

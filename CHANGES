@@ -1,3 +1,8 @@
+0.6.2: 18/07/02		
+			Make the thing compile on Solaris (Makefile.solaris)
+			Fix memory alignment errors on Solaris
+			Updated MD5 implementation to avoid warnings
+
 0.6.1:  25/03/01
 			added -lcrypto to $LIBS to work with ucd-snmp-4.2
 			cleaned up the sourcecode a bit

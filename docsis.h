@@ -42,6 +42,10 @@
 #include "docsis_decode.h"
 #include "version.h"
 
+#ifdef SOLARIS
+#include "inet_aton.h"
+#endif
+
 #ifndef NUM_IDENTIFIERS
 #define NUM_IDENTIFIERS 29
 #endif /*  NUM_IDENTIFIERS, also defined in docsis_symtable.h  */

@@ -54,11 +54,11 @@ int get_uint ( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
 		exit(-15);
 	}
   }
-  int_value = htonl( helper->uintval );
+  int_value  = htonl( helper->uintval );
 #ifdef DEBUG
-  printf ("get_uint: found %s value %hd\n",sym_ptr->sym_ident, helper->uintval);
+  printf ("get_uint: found %s value %d\n",sym_ptr->sym_ident, helper->uintval);
 #endif /* DEBUG */
-  memcpy ( buf,&int_value, sizeof(unsigned int));
+  memcpy ( buf,&int_value, sizeof(unsigned int)); 
   return ( sizeof(unsigned int));
 }
 
@@ -212,13 +212,14 @@ return 0;
 unsigned int add_cm_mic ( unsigned char *tlvbuf, unsigned int tlvbuflen ) 
 {
   MD5_CTX mdContext; 
-  
+  unsigned char digest[16];
+
   MD5Init(&mdContext );
   MD5Update(&mdContext, tlvbuf, tlvbuflen );
-  MD5Final(&mdContext);
+  MD5Final(digest,&mdContext);
   tlvbuf[tlvbuflen]= 6;
   tlvbuf[tlvbuflen+1]=16;
-  memcpy ( tlvbuf+tlvbuflen+2, &(mdContext.digest), 16);
+  memcpy ( tlvbuf+tlvbuflen+2, digest, 16);
   return (tlvbuflen+18); /* we added the CM Message Integrity Check  */
 }
 

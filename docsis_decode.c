@@ -30,6 +30,8 @@ int decode_tlvbuf ( unsigned char *buf, unsigned int buflen , unsigned char docs
   register unsigned char *cp;
   int i,j;
   int howmany;
+  unsigned int helper;
+  unsigned short shelper;
   char filename[255];
 
   memset (filename, 0, 255);
@@ -39,7 +41,7 @@ int decode_tlvbuf ( unsigned char *buf, unsigned int buflen , unsigned char docs
   while ( (unsigned int) (cp - buf) < buflen ) {
   for ( i = 0; i< NUM_IDENTIFIERS; i++ ){ 
 	if ( (global_symtable[i].docsis_code == (unsigned char) *cp ) && (global_symtable[i].docsis_parent == docs_parent )) { 
-		printf ("code %hu ident %s len %hu ", (unsigned char)*cp, global_symtable[i].sym_ident,(unsigned char) *(cp+1));
+		printf ("code %hhu ident %s len %hhu ", (unsigned char)*cp, global_symtable[i].sym_ident,(unsigned char) *(cp+1));
 		switch ( docs_parent ) {
 			case 0:
 				switch ( (unsigned char) *cp ) { 
@@ -48,11 +50,11 @@ int decode_tlvbuf ( unsigned char *buf, unsigned int buflen , unsigned char docs
 						break;
 						;;
 					case 2: /* UpstreamChannelId uchar */
-						printf ( "value %hu\n", (unsigned char) *(cp+2));
+						printf ( "value %hhu\n", (unsigned char) *(cp+2));
 						break;
 						;;
 					case 3: /* NetworkAccess uchar */
-						printf ( "value %hu\n", (unsigned char) *(cp+2));
+						printf ( "value %hhu\n", (unsigned char) *(cp+2));
 						break;
 						;;
 					case 4: /* Class Of Service */
@@ -98,7 +100,7 @@ int decode_tlvbuf ( unsigned char *buf, unsigned int buflen , unsigned char docs
 						break;
 						;;
 					case 18: /* MaxCPEs - uchar */
-						printf ( "value %hu\n", (unsigned char) *(cp+2));
+						printf ( "value %hhu\n", (unsigned char) *(cp+2));
 						break;
 						;;
 					case 21:  /* Software Upgrade Server IP address */
@@ -106,7 +108,9 @@ int decode_tlvbuf ( unsigned char *buf, unsigned int buflen , unsigned char docs
 						break;
 						;;
 					default:  /* all unsigned int top-level TLVs */
-						printf ( "value %u\n", ntohl( * (unsigned int * ) &cp[2]));
+						memset(&helper,0,sizeof(unsigned int));
+						memcpy(&helper, cp+2, sizeof(unsigned int));
+						printf ( "value %u\n", ntohl(helper));
 						;;
 				}
 				break;
@@ -114,35 +118,41 @@ int decode_tlvbuf ( unsigned char *buf, unsigned int buflen , unsigned char docs
 			case 4: 
 				switch ( ( unsigned char ) *cp )  {
 					case 6:  /* MaxBurstUp */
-						printf ( "value %hu\n", ntohs(*(unsigned short *) &cp[2]));
+						memset(&shelper,0,sizeof(unsigned short));
+						memcpy(&shelper, cp+2, sizeof(unsigned short));
+						printf ( "value %hu\n", ntohs(shelper));
 						break;
 						;;
 					case 7: 
-						printf ( "value %hu\n", (unsigned char) *(cp+2));
+						printf ( "value %hhu\n", (unsigned char) *(cp+2));
 						break;
 						;;
 					case 1: 
-						printf ( "value %hu\n", (unsigned char) *(cp+2));
+						printf ( "value %hhu\n", (unsigned char) *(cp+2));
 						break;
 						;;
 					case 4: 
-						printf ( "value %hu\n", (unsigned char) *(cp+2));
+						printf ( "value %hhu\n", (unsigned char) *(cp+2));
 						break;
 						;;
 					default: 
-						printf ( "value %u\n", ntohl( * (unsigned int * ) &cp[2]));
+						memset(&helper,0,sizeof(unsigned int));
+						memcpy(&helper, cp+2, sizeof(unsigned int));
+						printf ( "value %u\n", ntohl(helper));
 						;;
 				}
 				break;
 				;; /* end case 4  - Class Of Service */
 			case 17: 
 					/* all BaselinePrivacy values are uint, we don't need a switch() */
-					printf ( "value %u\n", ntohl( * (unsigned int * ) &cp[2]));
+					memset(&helper,0,sizeof(unsigned int));
+					memcpy(&helper, cp+2, sizeof(unsigned int));
+					printf ( "value %u\n", ntohl(helper));
 					;;
 					break;
-			}
-  	}
-  }
+			} /* switch */
+  	} /* if */
+  } /* for */
   cp=(unsigned char*) cp+(((unsigned char)*(cp+1))+2)*sizeof(unsigned char);
   howmany++;
   }
@@ -154,6 +164,8 @@ int pretty_decode_buffer ( unsigned char *buf, unsigned int buflen , unsigned ch
   register unsigned char *cp;
   int i,j,matched;
   int howmany;
+  unsigned int helper;
+  unsigned short shelper;
   char filename[255];
 
   memset (filename, 0, 255);
@@ -176,15 +188,17 @@ int pretty_decode_buffer ( unsigned char *buf, unsigned int buflen , unsigned ch
 						break;
 						;;
 					case 1:  /* Downstream Freq */
-						printf ( "%u;\n", ntohl( * (unsigned int * ) &cp[2]));
+						memset(&helper,0,sizeof(unsigned int));
+						memcpy(&helper, cp+2, sizeof(unsigned int));
+						printf ( "%u;\n", ntohl(helper));
 						break;
 						;;
 					case 2: /* UpstreamChannelId uchar */
-						printf ( "%hu;\n", (unsigned char) *(cp+2));
+						printf ( "%hhu;\n", (unsigned char) *(cp+2));
 						break;
 						;;
 					case 3: /* NetworkAccess uchar */
-						printf ( "%hu;\n", (unsigned char) *(cp+2));
+						printf ( "%hhu;\n", (unsigned char) *(cp+2));
 						break;
 						;;
 					case 4: /* Class Of Service */
@@ -231,7 +245,7 @@ int pretty_decode_buffer ( unsigned char *buf, unsigned int buflen , unsigned ch
 						break;
 						;;
 					case 18: /* MaxCPEs - uchar */
-						printf ( "%hu;\n", (unsigned char) *(cp+2));
+						printf ( "%hhu;\n", (unsigned char) *(cp+2));
 						break;
 						;;
 					case 21:  /* Software Upgrade Server IP address */
@@ -248,42 +262,36 @@ int pretty_decode_buffer ( unsigned char *buf, unsigned int buflen , unsigned ch
 			case 4: 	/* ClassOfService */
 				switch ( ( unsigned char ) *cp )  {
 					case 1:  /* ClassID */
-						printf ( "%hu;\n", (unsigned char) *(cp+2));
-						break;
-						;;
-					case 2:  /* Max Rate Down */
-						printf ( "%u;\n", ntohl( * (unsigned int * ) &cp[2]));
-						break;
-						;;
-					case 3:  /* Max Rate Up */
-						printf ( "%u;\n", ntohl( * (unsigned int * ) &cp[2]));
+						printf ( "%hhu;\n", (unsigned char) *(cp+2));
 						break;
 						;;
 					case 4: /* PriorityUp */
-						printf ( "%hu;\n", (unsigned char) *(cp+2));
-						break;
-						;;
-					case 5:  /* Guaranteed Up */
-						printf ( "%u;\n", ntohl( * (unsigned int * ) &cp[2]));
+						printf ( "%hhu;\n", (unsigned char) *(cp+2));
 						break;
 						;;
 					case 6:  /* MaxBurstUp */
-						printf ( "%hu;\n", ntohs(* (unsigned short *) &cp[2]));
+						memset(&shelper,0,sizeof(unsigned short));
+						memcpy(&shelper, cp+2, sizeof(unsigned short));
+						printf ( "%hu;\n", ntohs(shelper));
 						break;
 						;;
 					case 7: 
-						printf ( "%hu;\n", (unsigned char) *(cp+2));
+						printf ( "%hhu;\n", (unsigned char) *(cp+2));
 						break;
 						;;
 					default: 
-						printf ( "%u;\n", ntohl( * (unsigned int * ) &cp[2]));
+						memset(&helper,0,sizeof(unsigned int));
+						memcpy(&helper, cp+2, sizeof(unsigned int));
+						printf ( "%u;\n", ntohl(helper));
 						;;
 				}
 				break;
 				;; /* end case 4  - Class Of Service */
 			case 17:	
 					/* all BaselinePrivacy values are uint, we don't need a switch() */
-					printf ( "%u;\n", ntohl( * (unsigned int * ) &cp[2]));
+					memset(&helper,0,sizeof(unsigned int));
+					memcpy(&helper, cp+2, sizeof(unsigned int));
+					printf ( "%u;\n", ntohl(helper));
 					;;
 					break;
 			}
@@ -291,7 +299,7 @@ int pretty_decode_buffer ( unsigned char *buf, unsigned int buflen , unsigned ch
   } /* for */
 
   if (!matched) {
-	printf("GenericUnknownTLV docsis_code %hu length %hu value " , (unsigned char)*cp, (unsigned char) *(cp+1));
+	printf("GenericUnknownTLV docsis_code %hhu length %hhu value " , (unsigned char)*cp, (unsigned char) *(cp+1));
 	if ((unsigned char)*(cp+1)) printf("0x"); else printf("none");
 	for (j=0;j<(unsigned char)*(cp+1);j++) printf ("%02x", cp[j+2]);
 	printf("\n");
