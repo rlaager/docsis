@@ -22,13 +22,14 @@
 
 /* 
     change history 
+	2004-07-29 fix bug # 970994 ... SubMgmtControl had wrong docsis code 
 	2003-01-10 added three new TLV types for BPI+ (courtesy of Adrian Kwong)
 
 */
 
 
 #ifndef _DOCSIS_SYMTABLE_H
-#define _DOCSIS_SYMTABLE_H
+
 
 #include "docsis_common.h"
 #include "docsis_decode.h"
@@ -237,7 +238,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 151, "DownstreamSAIDSupport",		7,   144, (encode_uchar),     (decode_uchar),           0,      255       },
 { 152, "UpstreamSIDSupport",		8,   144, (encode_uchar),     (decode_uchar),           0,      255       },
 { 153, "DCCSupport",			12,  144, (encode_uchar),     (decode_uchar),           0,      1       },
-{ 154, "SubMgmtControl", 		36,  0,	  (encode_hexstr),    (decode_hexstr), 		3,	3 	},
+{ 154, "SubMgmtControl", 		35,  0,	  (encode_hexstr),    (decode_hexstr), 		3,	3 	},
 { 155, "SubMgmtFilters", 		37,  0,	  (encode_ushort_list), (decode_ushort_list), 	4,	4 	},
 /* PacketCable MTA Configuration File Delimiter  */
 { 156, "MtaConfigDelimiter",   		254, 0,   (encode_uchar),     (decode_uchar),    1,        255        },

@@ -305,8 +305,8 @@ main (int argc, char *argv[])
   printf ("Final content of config file:\n");
 
   decode_main_aggregate (buffer, buflen);
-
-  if ((of = fopen (output_file, "w")) == NULL)
+/* fix bug #914121... use "wb" for Windows compatibility */
+  if ((of = fopen (output_file, "wb")) == NULL)
     {
       printf ("%s: error: can't open output file %s\n", prog_name, output_file);
       exit (-5);
@@ -340,12 +340,12 @@ decode_file (char *file)
   struct stat st;
   if ((ifd = open (file, O_RDONLY)) == -1)
     {
-      printf ("Error opening binary file %s: %s", file, strerror (errno));
+      printf ("Error opening binary file %s: %s\n", file, strerror (errno));
       exit (-1);
     }
   if ((rv = fstat (ifd, &st)))
     {
-      printf ("Can't stat file %s: %s", file, strerror (errno));
+      printf ("Can't stat file %s: %s\n", file, strerror (errno));
       exit (-1);
     }
   buffer = (unsigned char *) malloc (st.st_size * sizeof (unsigned char) + 1);

@@ -169,6 +169,8 @@ assignment_stmt:  T_IDENTIFIER T_INTEGER ';' {
 			$$ = create_snmpset_tlv($1,$2,'s',(union t_val *)&$4); }
 		| T_IDENT_SNMPSET T_LABEL_OID T_ASNTYPE_HEXSTR T_HEX_STRING ';' {
 			$$ = create_snmpset_tlv($1,$2,'x',(union t_val *)&$4); }
+		| T_IDENT_SNMPSET T_LABEL_OID T_ASNTYPE_OBJID T_LABEL_OID ';' {
+			$$ = create_snmpset_tlv($1,$2,'o',(union t_val *)&$4); }
 		| T_IDENT_GENERIC T_TLV_CODE T_INTEGER T_TLV_LENGTH T_INTEGER T_TLV_VALUE T_HEX_STRING ';' {
 			$$ = create_generic_tlv($1,$3,$5, (union t_val *)&$7); }
                 ;                                        
@@ -222,7 +224,7 @@ create_snmpset_tlv ( struct symbol_entry *sym_ptr,
 			            tlvbuf->tlv_value,TLV_VSIZE );
 				    
 		if (tlvbuf->tlv_len <= 0 ) { 
-			printf ("got len 0 value while scanning for %s\n at line %d",sym_ptr->sym_ident,line );
+			printf ("got len 0 value while scanning for %s\n at line %d\n",sym_ptr->sym_ident,line );
 			exit (-1);
    		}
   return tlvbuf;
@@ -247,7 +249,7 @@ create_snmpw_tlv ( struct symbol_entry *sym_ptr,
   tlvbuf->tlv_len = encode_snmp_oid ( oid_string, tlvbuf->tlv_value, TLV_VSIZE );
                                     
                 if (tlvbuf->tlv_len <= 0 ) {
-                        printf ("got len 0 value while scanning for %s\n at line %d",sym_ptr->sym_ident,line );
+                        printf ("got len 0 value while scanning for %s\n at line %d\n",sym_ptr->sym_ident,line );
                         exit (-1);
                 }
   tlvbuf->tlv_value[tlvbuf->tlv_len] = (unsigned char) value->intval ;
@@ -272,12 +274,12 @@ create_generic_tlv ( struct symbol_entry *sym_ptr,
   tlvbuf->tlv_len = encode_hexstr ( tlvbuf->tlv_value, value, sym_ptr );
 
                 if (tlvbuf->tlv_len <= 0 ) {
-                        printf ("got len 0 value while scanning for %s\n at line %d",sym_ptr->sym_ident,
+                        printf ("got len 0 value while scanning for %s\n at line %d\n",sym_ptr->sym_ident,
 line );
                         exit (-1);
                 }
                 if (tlvbuf->tlv_len != tlv_length ) {
-                        printf ("Length mismatch while encoding GenericTLV: given length %d, value length %d at line %d",tlvbuf->tlv_len, tlv_length, line );
+                        printf ("Length mismatch while encoding GenericTLV: given length %d, value length %d at line %d\n",tlvbuf->tlv_len, tlv_length, line );
 
                         exit (-1);
 		}

@@ -1,4 +1,4 @@
-/* A Bison parser, made from docsis_yy.y, by GNU bison 1.75.  */
+/* A Bison parser, made by GNU Bison 1.875.  */
 
 /* Skeleton parser for Yacc-like parsing with Bison,
    Copyright (C) 1984, 1989, 1990, 2000, 2001, 2002 Free Software Foundation, Inc.
@@ -22,9 +22,6 @@
    Bison output file, you may use that output file without restriction.
    This special exception was added by the Free Software Foundation
    in version 1.24 of Bison.  */
-
-#ifndef BISON_DOCSIS_YY_H
-# define BISON_DOCSIS_YY_H
 
 /* Tokens.  */
 #ifndef YYTOKENTYPE
@@ -102,9 +99,9 @@
 
 
 
-#ifndef YYSTYPE
+#if ! defined (YYSTYPE) && ! defined (YYSTYPE_IS_DECLARED)
 #line 44 "docsis_yy.y"
-typedef union { 	/* Token types */
+typedef union YYSTYPE { 	/* Token types */
 	int intval;			/* For integers */
 	unsigned int uintval;		/* For unsigned integers */
 	symbol_type *symptr; 		/* For token identifiers */
@@ -113,14 +110,15 @@ typedef union { 	/* Token types */
 	unsigned int ip;		/* For IP Addresses */
 	struct tlv_list *tlvlist; 	/* For for struct tlvlist pointers */
 	struct tlv *tlvptr;		/* For struct tlv pointers; */
-} yystype;
-/* Line 1281 of /usr/share/bison/yacc.c.  */
-#line 119 "y.tab.h"
-# define YYSTYPE yystype
+} YYSTYPE;
+/* Line 1249 of yacc.c.  */
+#line 115 "y.tab.h"
+# define yystype YYSTYPE /* obsolescent; will be withdrawn */
+# define YYSTYPE_IS_DECLARED 1
+# define YYSTYPE_IS_TRIVIAL 1
 #endif
 
 extern YYSTYPE yylval;
 
 
-#endif /* not BISON_DOCSIS_YY_H */
 

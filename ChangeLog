@@ -1,3 +1,8 @@
+0.9.2			- add support for ObjectID variable bindings 
+			- fix bug when writing files on Win32
+			- fix the docsis_code for subscriber manangement filters
+
+
 0.9.1			- add support for ModemCapabilities 
 			- add support for Subscriber Management Filter groups
 			- make SNMP VarBind encoding more "compatible" with 

@@ -33,6 +33,8 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
 {
   oid var_name[MAX_OID_LEN];
   size_t name_len = MAX_OID_LEN;
+  oid oid_value[MAX_OID_LEN];
+  size_t oid_value_len = MAX_OID_LEN;
   unsigned char *data_ptr;
   unsigned char buf[SPRINT_MAX_LEN];
   unsigned int ltmp;
@@ -174,9 +176,11 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
 				    var_name,
 				    &name_len,
 				    ASN_OCTET_STR,
-				    len, (unsigned char *) buf, &out_size);
+				    len, (unsigned char *) buf, 
+				    &out_size);
       return data_ptr - out_buffer;
       break;
+      ;;
     case 'a':
       if (!inet_aton (value->strval, (struct in_addr *) &ltmp))
 	{
@@ -192,8 +196,29 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
       return data_ptr - out_buffer;
       break;
       ;;
+    case 'o':
+
+	strncpy ((char *) buf, value->strval, SPRINT_MAX_LEN);
+	len = strlen ((char *) buf);
+
+	if (!read_objid (buf, oid_value, &oid_value_len))
+	  {
+		printf ("Can't find oid %s at line %d\n", buf, line);
+		exit (-37);
+    	  }
+
+	data_ptr = _docsis_snmp_build_var_op (out_buffer,
+                                    var_name,
+                                    &name_len,
+                                    ASN_OBJECT_ID,
+                                    oid_value_len*sizeof(oid),
+                                    (unsigned char *) &oid_value, &out_size);
+	return data_ptr - out_buffer;
+	break;
+	;;
+
     default:
-      printf ("Variable type %s not supported yet", &oid_asntype);
+      printf ("Variable type %s not supported yet\n", &oid_asntype);
       return 0;
       ;;
     }
@@ -505,6 +530,15 @@ decode_vbind (unsigned char *data, unsigned int vb_len)
 
     case ASN_BIT_STR:
 		snprint_hexadecimal (outbuf, 1023, vp->val.bitstring, vp->val_len);
+		break;
+    case ASN_OBJECT_ID:
+      		netsnmp_ds_set_int (NETSNMP_DS_LIBRARY_ID,
+			  	NETSNMP_DS_LIB_OID_OUTPUT_FORMAT,
+			  	NETSNMP_OID_OUTPUT_NUMERIC);
+		snprint_value (outbuf, 1023, vp->name, vp->name_length, vp);
+      		netsnmp_ds_set_int (NETSNMP_DS_LIBRARY_ID,
+				NETSNMP_DS_LIB_OID_OUTPUT_FORMAT,
+				NETSNMP_OID_OUTPUT_SUFFIX);
 		break;
  
     default: 
