@@ -1,16 +1,16 @@
 1. General Information
+======================
 
 This software is 	Copyright (c) 2000,2001 Cornel Ciocirlan
 			Copyright (c) 2002 Evvolve Media SRL
 
 To contact the original author, send an E-mail to: ctrl@users.sourceforge.net.
-To contact the current developers, send an E-mail to: office@evvolve.com. If 
-you need new features they can help.
+To contact the current maintainers developers, send an E-mail to: office@evvolve.com. 
 
 General questions about this software can be  sent to docsis-users@sourceforge.net. 
 
 Visit http://docsis.sourceforge.net and http://sourceforge.net/projects/docsis 
-for the latest news on this software.
+for the latest news on this program.
 
 PLEASE READ THE FILE COPYING.GPL. 
 
@@ -18,6 +18,7 @@ This is Unsupported software that may crash your computer, damage all your data
 or otherwise drive you nuts. You'd better know what you're doing. 
 
 2. Description
+==============
 
 This program encodes text configuration files which contain Configuration File 
 Settings into binary configuration files, as specified by the DOCSIS RFI 1.1
@@ -43,6 +44,7 @@ encode_vbind (well, maybe a few changes are needed, but I trust the reader can
 figure it out).
 
 A. DOCSIS 1.0 considerations 
+============================
 
 More than one (up to 16) ClassOfService statements can appear in the 
 configuration file. Only one BaselinePrivacy (BPI) statement can appear. 
@@ -58,6 +60,7 @@ The program is not yet as "intelligent" as to detect these problems
 automatically (quite trivial).
 
 B. DOCSIS 1.1 considerations
+============================
 
 The DOCSIS 1.1 implementation is being tested. A major rewrite was needed to 
 add support for DOCSIS 1.1 and clean up the parsing, encoding and decoding, so
@@ -67,6 +70,7 @@ guys) the bugs will be much easier to fix and the new features (configuration
 settings) A LOT easier to add. 
 
 3. Usage
+========
 
 To encode a configuration file, do:
 
@@ -95,4 +99,18 @@ SnmpMibObjects, which print out a different syntax than what we need.
 If you want to encode back a decoded file, you have to fix the syntax of 
 SnmpMibObject settings and delete CM MIC and CMTS MIC lines. 
 Then you should be able to encode the file back.
+
+4. Adding new configuration settings
+====================================
+
+To add new configuration settings, in most cases the only thing you need to 
+do is add them to the docsis_symtable.h (make sure you select the correct 
+type-functions for encoding and decoding). 
+
+Because of the way the encoder works, the {symbol_name, docsis_code} pair 
+must be unique, e.g. if two symbols share the same name they MUST share the 
+same docsis_code, type-functions, limits etc. Only the id and parent can be 
+different.
+
+
 

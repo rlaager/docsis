@@ -162,10 +162,10 @@ void decode_aggregate (unsigned char *tlvbuf, symbol_type *sym)
   register unsigned char *cp;
   symbol_type *current_symbol;
   
-  cp = tlvbuf+2; /* skip type,len of parent TLV */
+  cp = tlvbuf+2*sizeof(unsigned char); /* skip type,len of parent TLV */
   printf( "%s {\n", sym->sym_ident);
 
-  while ( (unsigned int) (cp - tlvbuf +(sizeof(unsigned char))) < (unsigned int) tlvbuf[1] ) {
+  while ( (unsigned int) (cp - tlvbuf)  < (unsigned int) tlvbuf[1] ) {
   current_symbol = find_symbol_by_code_and_pid (cp[0], sym->id);
   if (current_symbol == NULL) { 
 		decode_unknown(cp, NULL);	
@@ -183,7 +183,8 @@ void decode_aggregate (unsigned char *tlvbuf, symbol_type *sym)
  * DOCSIS use. 
  * It's also a bif different from docsis_aggregate in that docsis_aggregate 
  * takes an aggregate tlvbuf as argument that INCLUDES the "parent" code and 
- * length. On the main aggregate we don't have a code / length. 
+ * length. On the main aggregate we don't have a "parent" code / length, the 
+ * first code/length is the first configuration setting.
  */
 
 void decode_main_aggregate (unsigned char *tlvbuf, unsigned int buflen)

@@ -1,3 +1,15 @@
+0.7.4  18/02/02		Fix condition too strong in docsis_decode.c.
+evvolve			
+
+0.7.3  16/02/02		Change symbols so that {symbol_name,docsis_code} is 
+evvolve			"primary key" (the above pairs are unique in the
+			entire symbol table).
+			Fix errors with IpTos encoding (still buggy)
+			We took over full maintainership from Cornel.
+
+0.7.2  12/02/02		Fix typos in docsis_symtable.h
+evvolve			
+
 0.7.1  08/02/02		Split encoding functions into docsis_encode.{h,c}	
 evvolve			Implemented Hex String and Ether+Ethermask encoders.
 			Implemented range checking for string and hex string
