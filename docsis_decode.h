@@ -40,10 +40,16 @@ void decode_md5 (unsigned char *tlvbuf, symbol_type *sym);
 void decode_snmp_wd (unsigned char *tlvbuf, symbol_type *sym);
 void decode_snmp_object (unsigned char *tlvbuf, symbol_type *sym);
 void decode_string (unsigned char *tlvbuf, symbol_type *sym);
+void decode_strzero (unsigned char *tlvbuf, symbol_type *sym);
 void decode_hexstr (unsigned char *tlvbuf, symbol_type *sym);
 void decode_unknown (unsigned char *tlvbuf, symbol_type *sym);
 void decode_aggregate (unsigned char *tlvbuf, symbol_type *sym);
 void decode_main_aggregate (unsigned char *tlvbuf, unsigned int buflen);
+void decode_vspecific(unsigned char *tlvbuf, symbol_type *sym);
+int hexadecimal_to_binary(const char *, u_char *);
+int str_isalpha (const char *str, size_t str_len);
+int str_isprint (const char *str, size_t str_len);
+void snprint_hexadecimal ( unsigned char *outbuf, size_t outsize, const char *str, size_t str_len );
 
 void __docsis_indent ( int opCode, int doPrint );
 

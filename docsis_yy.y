@@ -46,6 +46,7 @@ extern symbol_type *global_symtable;
 %token <symptr>  T_IDENT_BPI
 %token <symptr>  T_IDENT_SNMPW
 %token <symptr>  T_IDENT_SNMPSET
+%token <symptr>  T_IDENT_GENERIC
 %token <strval>  T_MAC
 %token <strval>  T_ETHERMASK
 %token <strval>  T_LABEL_OID
@@ -68,6 +69,9 @@ extern symbol_type *global_symtable;
 %token <uintval>  T_ASNTYPE_UBIGINT 
 %token <uintval>  T_ASNTYPE_FLOAT 
 %token <uintval>  T_ASNTYPE_DOUBLE     
+%token <uintval>  T_TLV_CODE
+%token <uintval>  T_TLV_LENGTH
+%token <uintval>  T_TLV_VALUE
 
 
 %type <tlvptr>  assignment_stmt
@@ -146,6 +150,8 @@ assignment_stmt:  T_IDENTIFIER T_INTEGER ';' {
 			$$ = create_snmpset_tlv($1,$2,'s',(union t_val *)&$4); }
 		| T_IDENT_SNMPSET T_LABEL_OID T_ASNTYPE_HEXSTR T_HEX_STRING ';' {
 			$$ = create_snmpset_tlv($1,$2,'x',(union t_val *)&$4); }
+		| T_IDENT_GENERIC T_TLV_CODE T_INTEGER T_TLV_LENGTH T_INTEGER T_TLV_VALUE T_HEX_STRING ';' {
+			$$ = create_generic_tlv($1,$3,$5, (union t_val *)&$7); }
                 ;                                        
 %%
 
@@ -226,6 +232,34 @@ struct tlv *create_snmpw_tlv ( struct symbol_entry *sym_ptr,
   tlvbuf->tlv_len++;
   return tlvbuf;
 }         
+
+/* Given a code, length and raw value (encoded as a hex string), 
+** creates a TLV encoding. This can be used for e.g. VendorSpecific 
+** Information or unsupported (future?) configuration settings. 
+*/
+struct tlv *create_generic_tlv ( struct symbol_entry *sym_ptr,
+				 int tlv_code,
+                                 int tlv_length,
+                                 union t_val *value )
+{
+  struct tlv *tlvbuf=NULL;
+
+  tlvbuf = (struct tlv *) malloc (sizeof(struct tlv));
+  tlvbuf->docs_code = tlv_code;
+  tlvbuf->tlv_len = get_hexstr ( tlvbuf->tlv_value, value, sym_ptr );
+
+                if (tlvbuf->tlv_len <= 0 ) {
+                        printf ("got len 0 value while scanning for %s\n at line %d",sym_ptr->sym_ident,
+line );
+                        exit (-1);
+                }
+                if (tlvbuf->tlv_len != tlv_length ) {
+                        printf ("Length mismatch while encoding GenericTLV: given length %d, value value length %d at line %d",tlvbuf->tlv_len, tlv_length, line );
+
+                        exit (-1);
+		}
+  return tlvbuf;
+}
 
 /* Adds a TLV to a tlvlist. If the tlvlist pointer we are called with is NULL, 
  * we create the new tlvlist. 

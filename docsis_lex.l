@@ -46,8 +46,8 @@ char *tsave;
 
 (\.{1})*([A-Za-z0-9_-]+\.)+[0-9]+	{ TSAVE(yytext);yylval.strval=tsave; return T_LABEL_OID; }
 [Mm][Aa][Ii][Nn]        { yylval.strval=yytext;return T_MAIN; }
-SnmpWriteControl	{ yylval.symptr=find_symbol_by_name(yytext);return T_IDENT_SNMPW;		 }
-SnmpMibObject		{ yylval.symptr=find_symbol_by_name(yytext);return T_IDENT_SNMPSET; 	 }
+SnmpWriteControl	{ yylval.symptr=find_symbol_by_name(yytext);return T_IDENT_SNMPW;   }
+SnmpMibObject		{ yylval.symptr=find_symbol_by_name(yytext);return T_IDENT_SNMPSET; }
 Integer			{ return T_ASNTYPE_INT; 	}
 UnsignedInteger		{ return T_ASNTYPE_UINT; 	}
 TimeTicks		{ return T_ASNTYPE_TICKS; 	}
@@ -61,6 +61,10 @@ BigInt			{ return T_ASNTYPE_BIGINT; 	}
 UnsignedBigInt		{ return T_ASNTYPE_UBIGINT; 	}
 Float			{ return T_ASNTYPE_FLOAT; 	}
 Double			{ return T_ASNTYPE_DOUBLE; 	}
+GenericTLV 		{ yylval.symptr=find_symbol_by_name(yytext);return T_IDENT_GENERIC;   }
+TlvCode 		{ return T_TLV_CODE; 	}
+TlvLength 		{ return T_TLV_LENGTH; 	}
+TlvValue		{ return T_TLV_VALUE; 	}
 [A-Za-z]+	 	{ 
 				yylval.symptr=find_symbol_by_name(yytext);
 		  	  	if(yydebug) printf("yylex:returning T_IDENTIFIER, yylval.symptr->sym_ident=%s\n", 

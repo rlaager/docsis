@@ -21,7 +21,6 @@
  */
 
 #include "docsis.h"
-#include <ctype.h>
 
 #ifdef WIN32
 #undef OPAQUE_SPECIAL_TYPES
@@ -204,7 +203,6 @@ decode_vbind (unsigned char *data, unsigned int vb_len)
   oid objid[MAX_OID_LEN];
   char _docsis_snmp_label[50];	/* To hold the 'name' of the type, i.e. Integer etc */
   static char outbuf[1024];
-  char *cp;
 
   memset (outbuf, 0, 1024);
 
@@ -229,7 +227,14 @@ decode_vbind (unsigned char *data, unsigned int vb_len)
     return -1;
 
   len = PACKET_LENGTH;
-
+ 
+if (netsnmp_ds_get_boolean
+      (NETSNMP_DS_LIBRARY_ID, NETSNMP_DS_LIB_EXTENDED_INDEX))
+    {
+      netsnmp_ds_toggle_boolean (NETSNMP_DS_LIBRARY_ID,
+                                 NETSNMP_DS_LIB_EXTENDED_INDEX);
+    } /* Disable extended index format ... makes it harder to parse tokens in lex */
+ 
   snprint_objid (outbuf, 1023, vp->name, vp->name_length);
 
   if (!get_node (outbuf, var_name, &name_len))
@@ -452,34 +457,27 @@ decode_vbind (unsigned char *data, unsigned int vb_len)
 				 NETSNMP_DS_LIB_ESCAPE_QUOTES);
     }
 
-  snprint_value (outbuf, 1023, vp->name, vp->name_length, vp);
-
-  /* few kludges to accommodate NET-SNMP behavior with Display-Hints. 
-     When the MIBs are compiled, most of our strings will have a DISPLAY-HINT (255a for example) 
-     This is a problem since these strings will be printed by NET-SNMP unquoted. 
-     However if there are variables in the file for which we don't have a MIB (and therefore a 
-     DisplayString) NET-SNMP will print them quoted. 
-     Probably cheap MIB object that don't have a DISPLAY-HINT end up being quoted as well */
-
-  cp = outbuf;
-
-  if (strstr (outbuf, "\"STRING:") == outbuf)	/* outbuf begins with "STRING: */
+  switch ((short) vp->type)
     {
-      cp = outbuf + 8 * sizeof (char);	/* skip "STRING: */
-      *cp = '"';		/* Replace space with " */
-    }
-  else
-    {
-      if (strstr (outbuf, "STRING:") == outbuf)	/* outbuf begins with STRING: */
-	{
-	  cp = strcat (outbuf, "\"");
-	  cp = outbuf + 7 * sizeof (char);	/* skip STRING: */
-	  *cp = '"';
-	}
+    case ASN_OCTET_STR:
+	if (str_isprint(vp->val.string, vp->val_len)) 
+		{
+		 	snprintf(outbuf, 1023, "\"%s\"", vp->val.string);
+		} else { 
+			snprint_hexadecimal (outbuf, 1023, vp->val.string, vp->val_len);
+      			memset (_docsis_snmp_label, 0, 50);
+      			sprintf (_docsis_snmp_label, "HexString");
+		}
+	break;
+
+    case ASN_BIT_STR:
+		snprint_hexadecimal (outbuf, 1023, vp->val.bitstring, vp->val_len);
+ 
+    default: 
+	snprint_value (outbuf, 1023, vp->name, vp->name_length, vp);
     }
 
-
-  printf (" %s %s ", _docsis_snmp_label, cp);
+  printf (" %s %s ", _docsis_snmp_label, outbuf);
 
   snmp_free_var (vp);
 
@@ -535,38 +533,9 @@ decode_wd (unsigned char *data, unsigned int data_len)
     {
       netsnmp_ds_set_int (NETSNMP_DS_LIBRARY_ID,
 			  NETSNMP_DS_LIB_OID_OUTPUT_FORMAT,
-			  NETSNMP_OID_OUTPUT_FULL);
+			  NETSNMP_OID_OUTPUT_NUMERIC);
       snprint_objid (outbuf, 1023, this_oid, oid_len);
-      netsnmp_ds_set_int (NETSNMP_DS_LIBRARY_ID,
-			  NETSNMP_DS_LIB_OID_OUTPUT_FORMAT,
-			  NETSNMP_OID_OUTPUT_SUFFIX);
-
     }
   printf ("%s %d", outbuf, (int) data[data_len - 1]);
   return 1;
-}
-
-int
-hexadecimal_to_binary (const char *str, u_char * bufp)
-{
-  int len, itmp;
-  printf ("Hex string rx'd: %s\n", str);
-  if (!bufp)
-    return -1;
-  if (*str && *str == '0' && (*(str + 1) == 'x' || *(str + 1) == 'X'))
-    str += 2;
-  for (len = 0; *str; str++)
-    {
-      if (isspace (*str))
-	continue;
-      if (!isxdigit (*str))
-	return -1;
-      len++;
-      if (sscanf (str++, "%2x", &itmp) == 0)
-	return -1;
-      *bufp++ = itmp;
-      if (!*str)
-	return -1;		/* odd number of chars is an error */
-    }
-  return len;
 }

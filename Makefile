@@ -18,6 +18,7 @@ LIBS  	= -L/opt/net-snmp/lib -lnetsnmp -lcrypto -lnsl -lfl -lm
 ##### You shouldn't need to change anything below this line 
 docsis: Makefile docsis_decode.o docsis_yy.o docsis_main.o md5.o hmac_md5.o docsis_snmp.o ethermac.h ethermac.o version.h docsis_encode.o 
 	$(CC) $(CFLAGS) $(DEFS) -g -o docsis docsis_main.o docsis_encode.o docsis_decode.o docsis_yy.o md5.o hmac_md5.o docsis_snmp.o ethermac.o $(LIBS)
+	@echo "Don't forget to set LD_LIBRARY_PATH - see INSTALL"
 docsis_yy.o: docsis_yy.c
 	$(CC) $(CFLAGS) $(DEFS) -c -o docsis_yy.o docsis_yy.c
 docsis_yy.c: docsis_lex.l docsis_yy.tab.c docsis_symtable.h
@@ -38,5 +39,7 @@ docsis_main.o: docsis_common.h docsis_encode.h docsis_decode.h docsis.h docsis_s
 	$(CC) $(CFLAGS) $(DEFS) -c -o docsis_main.o docsis_main.c
 ethermac.o: ethermac.h ethermac.c
 	$(CC) $(CFLAGS) $(DEFS) -c -o ethermac.o ethermac.c
+test:
+	cd examples; sh regression_test.sh
 clean: 
-	rm -f docsis_yy.output docsis_yy.tab.c docsis_yy.c docsis *.o  core
+	rm -f docsis_yy.output docsis_yy.tab.c docsis_yy.c docsis *.o  core 

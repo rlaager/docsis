@@ -2,10 +2,10 @@
 ======================
 
 This software is 	Copyright (c) 2000,2001,2002,2003 Cornel Ciocirlan
-			Copyright (c) 2002 Evvolve Media SRL
+			Copyright (c) 2002,2003 Evvolve Media SRL
 
-To contact the original author, send an E-mail to: ctrl@users.sourceforge.net.
 To contact the current maintainers and developers, send an E-mail to: docsis@evvolve.com. 
+To contact the original author, send an E-mail to: ctrl@users.sourceforge.net.
 
 General questions about this software can be  sent to docsis-users@sourceforge.net. 
 
@@ -28,7 +28,7 @@ It supports most DOCSIS 1.1 Configuration Settings. Not supported (currently):
 
 	* Telephony Settings
 	* Modem Capabilities
-	* Vendor ID
+	* Vendor ID (Partial support provided)
 	* TFTP server timestamp
 	* TFTP server provisioned modem address
 	* SNMPv3 settings
@@ -62,12 +62,9 @@ automatically (quite trivial).
 B. DOCSIS 1.1 considerations
 ============================
 
-The DOCSIS 1.1 implementation is being tested. A major rewrite was needed to 
-add support for DOCSIS 1.1 and clean up the parsing, encoding and decoding, so
-expect the docsis-0.7.x versions to be be less stable/bug-free than the 
-docsis-0.6.x series. However because of the cleanup (mostly done by the Evvolve
-guys) bugs will be much easier to fix and new features (configuration
-settings) A LOT easier to add. 
+The DOCSIS 1.1 implementation is still 'beta-quality'. A major rewrite was
+needed to add support for DOCSIS 1.1 and clean up the parsing, encoding
+and decoding. 
 
 3. Usage
 ========
@@ -80,20 +77,20 @@ a). Encoding CM configuration files
 
     unix $ docsis -e cm_config_file.cfg my_key_file cm_config_file.bin
 
-    The format of the text configuration file, although simple, is not described 
-    anywhere but the source code (see the grammar in docsis_yy.y and lexical 
-    analyzer in docsis_lex.l). As sometimes an example is more useful than a 
-    truckload of documentation, I've included a few configuration files (see 
-    examples/cm/*.cfg).
+    The format of the text configuration file, although simple, is not 
+    described anywhere but the source code (see the grammar in docsis_yy.y 
+    and lexical analyzer in docsis_lex.l). As sometimes an example is more 
+    useful than a truckload of documentation, we've included a few 
+    configuration files (see examples/cm/*.cfg).
 
     In this mode of operation (triggered by the "-e" switch), the program will 
     need a keyfile; it will calculate the CM MIC and use the string in the 
-    keyfile to calculate a CMTS MIC; and it will add the DOCSIS End of Data marker 
-    as well as pad at the end. 
+    keyfile to calculate a CMTS MIC; and it will add the DOCSIS End of Data 
+    marker as well as pad at the end. 
 
     An example key is provided in file testkey.key. The key is only a string of 
-    characters. Any trailing newline (\n) or carriage return (\r) characters are 
-    chopped to avoid confusion. 
+    characters. Any trailing newline (\n) or carriage return (\r) characters 
+    are chopped to avoid confusion. 
 
 b). Encoding PacketCable MTA configuration files
 
@@ -103,10 +100,11 @@ b). Encoding PacketCable MTA configuration files
 
     unix $ docsis -p mta_config_file.cfg mta_config_file.bin
 
-    PacketCable MTA config files MUST start with the "MtaConfigDelimiter 1" configuration 
-    setting and MUST end with "MtaConfigDelimiter 255". All other configuration settings 
-    must be either SnmpMibObject or VendorSpecific. The program does not enforce this 
-    policy so you must make sure you abide by it or the MTA will reject the file.
+    PacketCable MTA config files MUST start with the "MtaConfigDelimiter 1" 
+    configuration setting and MUST end with "MtaConfigDelimiter 255". All 
+    other configuration settings must be either SnmpMibObject or 
+    VendorSpecific. The program does not enforce this policy so you must make 
+    sure you abide by it or the MTA will reject the file.
    
 c). Decoding CM or MTA binary configuration files 
 
@@ -127,7 +125,7 @@ c). Decoding CM or MTA binary configuration files
     unix $ docsis -d mta_test.bin > mta_test.cfg
     unix $ docsis -p mta_test.cfg mta_test.bin
 
-    should work. 
+    should work, save for still remaining bugs.
 
 4. Adding new configuration settings
 ====================================

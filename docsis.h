@@ -46,6 +46,8 @@
 
 #include "md5.h"
 #include "docsis_common.h"
+#include "docsis_decode.h"
+#include "docsis_encode.h"
 
 #ifdef SOLARIS
 #include "inet_aton.h"
@@ -61,6 +63,10 @@ struct tlv *create_snmpset_tlv( struct symbol_entry *sym_ptr,
                                 char *oid_name,
                                 char oid_type,
                                 union t_val *value ); 
+struct tlv *create_generic_tlv ( struct symbol_entry *sym_ptr,  
+				 int tlv_code,
+                                 int tlv_length,
+                                 union t_val *value ); 
 struct tlv *create_snmpw_tlv ( struct symbol_entry *sym_ptr,
                                char *oid_string,
                                union t_val *value );         
@@ -94,6 +100,8 @@ void md5_print_digest ( unsigned char *digest );
 int init_global_symtable ( void) ;
 int parse_input_file( FILE *afile );
 int hexadecimal_to_binary(const char *, u_char *);
+int str_isalpha (const char *str, size_t str_len);
+void snprint_hexadecimal ( unsigned char *outbuf, size_t outsize, const char *str, size_t str_len );
 int yylex(void);
 void decode_file ( char *file );
 

@@ -44,7 +44,7 @@ p = strchr ( ptr, (int) ':' );
   while (p && i<5) { 
 	if ( p-ptr > 2 || p == NULL ) { 
 	    printf ("\nInvalid MAC Address %s\n", macstr);
-	    exit (-3);
+	    return 0;
  	}
 
 	memset(fragptr,0,3); 

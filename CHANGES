@@ -1,3 +1,15 @@
+0.8.6  31/05/03		- add support for SNMPv3Kickstart and 
+evvolve		  	  partial support for SNMPv3 Notification Receiver
+ctrl			  (untested!)
+			- fix compilation warnings 
+			- add support for PHS Rule (untested)
+			- cleanup indexes in docsis_symtable.h
+
+0.8.4  10/05/03		- fixed SNMP handling ... hopefully for the last time :)
+evvolve			- fixed Solaris support
+ctrl			- added support for VendorSpecific TLVs
+
+
 0.8.2  30/01/03		- Integrated fixes from Adrian Kwong and Cornel.
 evvolve			- Updated OID format to accept "-" and "_" in labels
 ctrl			- We can now encode decoded files directly !

@@ -271,11 +271,51 @@ int get_string(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
   return ( string_size );  
 }
 
+/* This is for strings which need the terminating 0 at the end, e.g. Service Flow Class Name */
+
+int get_strzero(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
+{
+  unsigned int string_size;
+  /* We only use this to cast the void* we receive to what we think it should be */
+  union t_val *helper;
+
+  if ( buf == NULL ) {
+        printf ("get_string called w/NULL buffer!\n");
+        exit (-1);
+  }
+
+  if ( tval == NULL  ) {
+        printf ("get_string called w/NULL value struct !\n");
+        exit (-1);
+  }
+  helper = (union t_val *) tval;
+  string_size = strlen ( helper->strval );
+  if (sym_ptr->low_limit || sym_ptr->high_limit) {
+        if ( string_size < sym_ptr->low_limit ) {
+                printf("get_string: String too short, must be min %d chars\n",
+                                                        sym_ptr->low_limit);
+                exit(-1);
+        }
+        if ( sym_ptr->high_limit < string_size ) {
+                printf("get_string: String too long, must be max %d chars\n",
+                                                        sym_ptr->high_limit);
+                exit(-1);
+        }
+  }
+
+#ifdef DEBUG
+  printf ("get_string: found '%s' on line %d\n", helper->strval, line );
+#endif /* DEBUG */
+  memset(buf,0,string_size+1);
+  memcpy ( buf, helper->strval, string_size);
+  return ( string_size+1 );
+}
 
 int get_hexstr (unsigned char *buf, void *tval, struct symbol_entry *sym_ptr) 
 { 
   unsigned int fragval;
-  int i,rval;
+  unsigned int i;
+  int rval;
   char *p;
   unsigned int string_size;
   /* We only use this to cast the void * we receive  and extract the data from the union */
@@ -306,6 +346,7 @@ int get_hexstr (unsigned char *buf, void *tval, struct symbol_entry *sym_ptr)
   }
 
   p += 2*sizeof(char);
+
   i=0; 
 
   while (*p) { 

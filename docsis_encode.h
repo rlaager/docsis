@@ -35,6 +35,7 @@ int get_ip     	(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );
 int get_ether	(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );
 int get_ethermask(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );
 int get_string 	(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );
+int get_strzero	(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );
 int get_hexstr 	(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );
 int get_nothing	(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );
 
