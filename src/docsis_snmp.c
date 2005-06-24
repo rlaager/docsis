@@ -172,12 +172,24 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
 	      break;
 	    }
 	}
-      data_ptr = _docsis_snmp_build_var_op (out_buffer,
+      if (len+name_len+8 < 0x7f ) {  
+     		data_ptr = _docsis_snmp_build_var_op (out_buffer,
+                                    var_name,
+                                    &name_len,
+                                    ASN_OCTET_STR,
+                                    len, (unsigned char *) buf,
+                                    &out_size);
+      } else {
+      		data_ptr = snmp_build_var_op (out_buffer,
 				    var_name,
 				    &name_len,
 				    ASN_OCTET_STR,
 				    len, (unsigned char *) buf, 
 				    &out_size);
+      }
+#ifdef DEBUG
+      fprintf (stderr, "encoded len %ld var_len %d leftover %ud difference %d\n", len, name_len, out_size, (data_ptr - out_buffer) ); 
+#endif
       return data_ptr - out_buffer;
       break;
       ;;
@@ -255,8 +267,7 @@ decode_vbind (unsigned char *data, unsigned int vb_len)
   vp->val.string = NULL;
   vp->name_length = MAX_OID_LEN;
   vp->name = 0;
-  data =
-    snmp_parse_var_op (data, objid, &vp->name_length, &vp->type, &vp->val_len,
+  data = snmp_parse_var_op (data, objid, &vp->name_length, &vp->type, &vp->val_len,
 		       &var_val, (size_t *) & vb_len);
 
   if (data == NULL)
@@ -460,7 +471,8 @@ decode_vbind (unsigned char *data, unsigned int vb_len)
 	}
       else
 	{
-	  vp->val.string = (u_char *) malloc ((unsigned) vp->val_len);
+	  vp->val.string = (u_char *) malloc ((unsigned) vp->val_len+1);
+	  memset(vp->val.string, 0, vp->val_len+1);
 	}
       asn_parse_string (var_val, &len, &vp->type, vp->val.string,
 			&vp->val_len);
@@ -520,7 +532,7 @@ decode_vbind (unsigned char *data, unsigned int vb_len)
     case ASN_OCTET_STR:
 	if (str_isprint(vp->val.string, vp->val_len)) 
 		{
-		 	snprintf(outbuf, 1023, "\"%s\"", vp->val.string);
+		 	snprintf(outbuf, vp->val_len+5, "\"%s\"", vp->val.string);
 		} else { 
 			snprint_hexadecimal (outbuf, 1023, vp->val.string, vp->val_len);
       			memset (_docsis_snmp_label, 0, 50);
@@ -648,6 +660,7 @@ _docsis_snmp_build_var_op(u_char * data,
                   u_char * var_val, size_t * listlength)
 {
     size_t          dummyLen, headerLen;
+    u_char	 *tmpDataPtr;
     u_char         *dataPtr;
 
     dummyLen = *listlength;
@@ -668,6 +681,7 @@ _docsis_snmp_build_var_op(u_char * data,
     headerLen = data - dataPtr;
     *listlength -= headerLen;
     DEBUGDUMPHEADER("send", "Name");
+    tmpDataPtr = data;
     data = asn_build_objid(data, listlength,
                            (u_char) (ASN_UNIVERSAL | ASN_PRIMITIVE |
                                      ASN_OBJECT_ID), var_name,
@@ -703,6 +717,7 @@ _docsis_snmp_build_var_op(u_char * data,
     case ASN_IPADDRESS:
     case ASN_OPAQUE:
     case ASN_NSAP:
+    	tmpDataPtr = data;
         data = asn_build_string(data, listlength, var_val_type,
                                 var_val, var_val_len);
         break;
@@ -779,7 +794,10 @@ u_char         *
 _docsis_asn_build_sequence(u_char * data,
                    size_t * datalength, u_char type, size_t length)
 {
-
+    if (length > 0x7f)  {
+	printf("Warning: string too long, may result in illegal encoding\n"); 
+    }
+    
     if (*datalength <2) {
         printf(  "SNMP encoding error (build sequence): length %d < 2: PUNT", 
                 (int) *datalength);
@@ -788,7 +806,7 @@ _docsis_asn_build_sequence(u_char * data,
     *datalength -= 2;
     *data++ = type;
      if (*datalength >255) { 
-        printf(  "SNMP encoding error (build sequence): length %d >255 : PUNT", 
+        printf(  "SNMP encoding error (_docsis_build sequence): length %d >255 : PUNT", 
                 (int) *datalength);
         return NULL;
     }

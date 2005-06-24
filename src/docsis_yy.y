@@ -1,6 +1,6 @@
 /* 
  *  DOCSIS configuration file encoder. 
- *  Copyright (c) 2001 Cornel Ciocirlan, ctrl@users.sourceforge.net.
+ *  Copyright (c) 2001,2005 Cornel Ciocirlan, ctrl@users.sourceforge.net.
  *  Copyright (c) 2002,2003,2004 Evvolve Media SRL,office@evvolve.com
  *  
  *  This program is free software; you can redistribute it and/or modify
@@ -85,6 +85,8 @@ extern char prog_name[255];
 %token <uintval>  T_TLV_CODE
 %token <uintval>  T_TLV_LENGTH
 %token <uintval>  T_TLV_VALUE
+%token <uintval>  T_TLV_STR_VALUE
+%token <uintval>  T_TLV_STRZERO_VALUE
 
 
 %type <tlvptr>  assignment_stmt
@@ -173,6 +175,10 @@ assignment_stmt:  T_IDENTIFIER T_INTEGER ';' {
 			$$ = create_snmpset_tlv($1,$2,'o',(union t_val *)&$4); }
 		| T_IDENT_GENERIC T_TLV_CODE T_INTEGER T_TLV_LENGTH T_INTEGER T_TLV_VALUE T_HEX_STRING ';' {
 			$$ = create_generic_tlv($1,$3,$5, (union t_val *)&$7); }
+		| T_IDENT_GENERIC T_TLV_CODE T_INTEGER T_TLV_STR_VALUE T_STRING ';' {
+			$$ = create_generic_str_tlv($1,$3, (union t_val *)&$5); }
+		| T_IDENT_GENERIC T_TLV_CODE T_INTEGER T_TLV_STRZERO_VALUE T_STRING ';' {
+			$$ = create_generic_strzero_tlv($1,$3, (union t_val *)&$5); }
                 ;                                        
 %%
 
@@ -227,6 +233,12 @@ create_snmpset_tlv ( struct symbol_entry *sym_ptr,
 			printf ("got len 0 value while scanning for %s\n at line %d\n",sym_ptr->sym_ident,line );
 			exit (-1);
    		}
+  free(oid_string);  
+/* We only free non-string values since we parse strings into a static buffer in docsis_lex.l */
+  if (	oid_asntype == 'x' || oid_asntype == 'a' || 
+	oid_asntype == 'd' || oid_asntype == 'o' )  {
+	 	free(value->strval);  
+  }
   return tlvbuf;
 }
 
@@ -254,6 +266,7 @@ create_snmpw_tlv ( struct symbol_entry *sym_ptr,
                 }
   tlvbuf->tlv_value[tlvbuf->tlv_len] = (unsigned char) value->intval ;
   tlvbuf->tlv_len++;
+  free(oid_string);
   return tlvbuf;
 }         
 
@@ -279,10 +292,68 @@ line );
                         exit (-1);
                 }
                 if (tlvbuf->tlv_len != tlv_length ) {
-                        printf ("Length mismatch while encoding GenericTLV: given length %d, value length %d at line %d\n",tlvbuf->tlv_len, tlv_length, line );
+                        printf ("Length mismatch while encoding GenericTLV: given length %d, value length %d at line %d\n", tlvbuf->tlv_len, tlv_length, line );
 
                         exit (-1);
 		}
+  return tlvbuf;
+}
+
+/* 
+** Same as above, except the value is encoded as a string.  
+*/
+
+struct tlv *
+create_generic_str_tlv ( struct symbol_entry *sym_ptr,
+                                 int tlv_code,
+                                 union t_val *value )
+{
+  struct tlv *tlvbuf=NULL;
+
+  tlvbuf = (struct tlv *) malloc (sizeof(struct tlv));
+  tlvbuf->docs_code = tlv_code;
+  tlvbuf->tlv_len = encode_string ( tlvbuf->tlv_value, value, sym_ptr );
+
+                if (tlvbuf->tlv_len <= 0 ) {
+                        printf ("got len 0 value while scanning for %s\n at line %d\n",sym_ptr->sym_ident,
+line );
+                        exit (-1);
+                }
+                if (tlvbuf->tlv_len > 255 ) {
+                        printf ("Warning: string length %d longer than 255, line %d\n",tlvbuf->tlv_len, line );
+
+                }
+  /* don't free strings - we use a static buffer to parse them */
+  return tlvbuf;
+}
+
+/*
+** Same as above, except the value is encoded as a zero-terminated string.
+*/
+
+struct tlv *
+create_generic_strzero_tlv ( struct symbol_entry *sym_ptr,
+                                 int tlv_code,
+                                 union t_val *value )
+{
+  struct tlv *tlvbuf=NULL;
+
+  tlvbuf = (struct tlv *) malloc (sizeof(struct tlv));
+  tlvbuf->docs_code = tlv_code;
+  tlvbuf->tlv_len = encode_string ( tlvbuf->tlv_value, value, sym_ptr );
+
+                if (tlvbuf->tlv_len <= 0 ) {
+                        printf ("got 0-length value while scanning for %s\n at line %d\n",sym_ptr->sym_ident,
+line );
+                        exit (-1);
+                }
+                if (tlvbuf->tlv_len > 254 ) {
+                        printf ("Warning: total string length %d longer than 255, line %d\n",tlvbuf->tlv_len, line );
+
+                } else { 
+			tlvbuf->tlv_len = tlvbuf->tlv_len + 1; /* add terminating 0 */
+		}
+  tlvbuf->tlv_value[tlvbuf->tlv_len]=0; 
   return tlvbuf;
 }
 
@@ -297,18 +368,17 @@ struct tlv_list *add_tlv_to_list(struct tlv_list *list, struct tlv *newtlv)
   if ( list == NULL ) {  /* assignment_list :== assignment_stmt  */
 /* create list of tlv pointers with 1 tlv pointer */
 	newtlvlist->tlv_count = 1;	
-	newtlvlist->tlvlist   = (struct tlv **) malloc ( sizeof (struct tlv *));
+	newtlvlist->tlvlist   = (struct tlv **) malloc (sizeof(struct tlv *));
   	newtlvlist->tlvlist[0] = newtlv;
-	return newtlvlist;
   } else { /* assignment_list :== assignment_list assignment_stmt */
 /* add a new tlv pointer to the existing list of tlv pointers */
 	newtlvlist->tlv_count = list->tlv_count + 1;
 	newtlvlist->tlvlist = (struct tlv **) malloc((newtlvlist->tlv_count)*sizeof(struct tlv *));
-	memcpy(&(newtlvlist->tlvlist[0]),&(list->tlvlist[0]),list->tlv_count*sizeof(struct tlv *));
+	memcpy(&(newtlvlist->tlvlist[0]),&(list->tlvlist[0]), list->tlv_count*sizeof(struct tlv *));
 	newtlvlist->tlvlist[newtlvlist->tlv_count-1]=newtlv;
-	free (list->tlvlist); free(list);
-  	return newtlvlist;
+  /*	free(list->tlvlist); free(list); */
   }
+  return newtlvlist;
 }
 
 /* Merge two tlvlists into one tlvlist. */
@@ -343,7 +413,7 @@ merge_tlvlist(struct tlv_list *list1, struct tlv_list *list2)
 
 /* 
  * Used for creating a top-level list corresponding to ClassOfService,
- * BaselinePrivacy, Telephony Settings etc.
+ * BaselinePrivacy etc.
  * Creates a "flat" TLV buffer out of a tlvlist, and assembles the 
  * TLV buffer into a new TLV which has the parent's docsis_code. 
  * Returns a TLV list with the new TLV 
@@ -361,8 +431,13 @@ assemble_list_in_parent (struct symbol_entry *sym_ptr, struct tlv_list *list)
   
   parent_tlv->docs_code = sym_ptr->docsis_code;
   parent_tlv->tlv_len = flatten_tlvlist(parent_tlv->tlv_value,list);
+  if (parent_tlv->tlv_len > 255) { 
+	printf("Error: aggregate TLV ending at line %d is larger than 255.\n", line); 
+	exit (-234); 
+  }
   newtlvlist->tlv_count=1;
   newtlvlist->tlvlist[0]=parent_tlv;
+  free(list->tlvlist); free(list); 
   return newtlvlist;
 }
 
@@ -378,6 +453,7 @@ unsigned int
 flatten_tlvlist (unsigned char *buf, struct tlv_list *list )
 {
   register unsigned char *cp;
+  unsigned short netshort;
   int i;
 
   if ( buf == NULL ) { 
@@ -387,10 +463,24 @@ flatten_tlvlist (unsigned char *buf, struct tlv_list *list )
   cp = buf;
 
   for ( i=0; i< list->tlv_count; i++ ) { 
-	*cp = (unsigned char) list->tlvlist[i]->docs_code; cp++;
-	*cp = (unsigned char) list->tlvlist[i]->tlv_len; cp++;
-	memcpy ( cp, list->tlvlist[i]->tlv_value, list->tlvlist[i]->tlv_len ); 
-  	     cp = cp + list->tlvlist[i]->tlv_len;
+	if (list->tlvlist[i]->tlv_len <= 255) { 
+		*cp = (unsigned char) list->tlvlist[i]->docs_code; cp++;
+		*cp = (unsigned char) list->tlvlist[i]->tlv_len; cp++;
+		memcpy ( cp, list->tlvlist[i]->tlv_value, list->tlvlist[i]->tlv_len ); 
+  	     	cp = cp + list->tlvlist[i]->tlv_len;
+	} else { 
+	/* convert TLV11 to TLV 64 */
+		if (list->tlvlist[i]->docs_code == 11) {
+			*cp = 64; cp++;
+		        netshort =  htons(list->tlvlist[i]->tlv_len); 
+			memcpy ( cp, &netshort, sizeof(unsigned short)); cp=cp+2;
+       			memcpy ( cp, list->tlvlist[i]->tlv_value, list->tlvlist[i]->tlv_len );
+             		cp = cp + list->tlvlist[i]->tlv_len; 
+		} else { 
+			printf("Error at line %d: Non-SNMP Object TLV larger than 255... bailing out.\n", line); 
+			exit(-5); 
+		}
+	}
 	free ( list->tlvlist[i] ); /* The TLV won't be referenced anymore */
   }
   /* We leave it to the caller to free the list */
@@ -400,6 +490,7 @@ flatten_tlvlist (unsigned char *buf, struct tlv_list *list )
 int parse_config_file ( char *file ) 
 { 
   FILE *cf;
+  int rval;
 
   if ( (cf = fopen ( file, "r" ))== NULL ) 
   {
@@ -411,5 +502,7 @@ int parse_config_file ( char *file )
 #ifdef DEBUG
   yydebug = 1;
 #endif
-  return yyparse();
+  rval = yyparse();
+  fclose(cf);
+  return rval;
 }

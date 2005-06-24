@@ -84,7 +84,9 @@
      T_ASNTYPE_DOUBLE = 286,
      T_TLV_CODE = 287,
      T_TLV_LENGTH = 288,
-     T_TLV_VALUE = 289
+     T_TLV_VALUE = 289,
+     T_TLV_STR_VALUE = 290,
+     T_TLV_STRZERO_VALUE = 291
    };
 #endif
 #define T_IDENTIFIER 258
@@ -119,6 +121,8 @@
 #define T_TLV_CODE 287
 #define T_TLV_LENGTH 288
 #define T_TLV_VALUE 289
+#define T_TLV_STR_VALUE 290
+#define T_TLV_STRZERO_VALUE 291
 
 
 
@@ -172,7 +176,7 @@ typedef union YYSTYPE { 	/* Token types */
 	struct tlv *tlvptr;		/* For struct tlv pointers; */
 } YYSTYPE;
 /* Line 191 of yacc.c.  */
-#line 175 "docsis_yy.c"
+#line 179 "docsis_yy.c"
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
 # define YYSTYPE_IS_TRIVIAL 1
@@ -184,7 +188,7 @@ typedef union YYSTYPE { 	/* Token types */
 
 
 /* Line 214 of yacc.c.  */
-#line 187 "docsis_yy.c"
+#line 191 "docsis_yy.c"
 
 #if ! defined (yyoverflow) || YYERROR_VERBOSE
 
@@ -283,20 +287,20 @@ union yyalloc
 /* YYFINAL -- State number of the termination state. */
 #define YYFINAL  4
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   67
+#define YYLAST   73
 
 /* YYNTOKENS -- Number of terminals. */
-#define YYNTOKENS  38
+#define YYNTOKENS  40
 /* YYNNTS -- Number of nonterminals. */
 #define YYNNTS  5
 /* YYNRULES -- Number of rules. */
-#define YYNRULES  23
+#define YYNRULES  25
 /* YYNRULES -- Number of states. */
-#define YYNSTATES  63
+#define YYNSTATES  69
 
 /* YYTRANSLATE(YYLEX) -- Bison symbol number corresponding to YYLEX.  */
 #define YYUNDEFTOK  2
-#define YYMAXUTOK   289
+#define YYMAXUTOK   291
 
 #define YYTRANSLATE(YYX) 						\
   ((unsigned int) (YYX) <= YYMAXUTOK ? yytranslate[YYX] : YYUNDEFTOK)
@@ -309,14 +313,14 @@ static const unsigned char yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,    37,
+       2,     2,     2,     2,     2,     2,     2,     2,     2,    39,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,    35,     2,    36,     2,     2,     2,     2,
+       2,     2,     2,    37,     2,    38,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -332,7 +336,8 @@ static const unsigned char yytranslate[] =
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
        5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
       15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
-      25,    26,    27,    28,    29,    30,    31,    32,    33,    34
+      25,    26,    27,    28,    29,    30,    31,    32,    33,    34,
+      35,    36
 };
 
 #if YYDEBUG
@@ -342,31 +347,32 @@ static const unsigned char yyprhs[] =
 {
        0,     0,     3,     8,    11,    13,    16,    18,    23,    27,
       31,    35,    39,    43,    47,    51,    55,    60,    66,    72,
-      78,    84,    90,    96
+      78,    84,    90,    96,   105,   112
 };
 
 /* YYRHS -- A `-1'-separated list of the rules' RHS. */
 static const yysigned_char yyrhs[] =
 {
-      39,     0,    -1,    15,    35,    40,    36,    -1,    40,    42,
-      -1,    42,    -1,    40,    41,    -1,    41,    -1,     3,    35,
-      40,    36,    -1,     3,     4,    37,    -1,     3,    16,    37,
-      -1,     3,    17,    37,    -1,     3,    12,    37,    -1,     3,
-      13,    37,    -1,     3,    14,    37,    -1,     3,    10,    37,
-      -1,     3,    11,    37,    -1,     7,    11,     4,    37,    -1,
-       8,    11,    18,     4,    37,    -1,     8,    11,    20,     4,
-      37,    -1,     8,    11,    22,    13,    37,    -1,     8,    11,
-      24,    16,    37,    -1,     8,    11,    25,    17,    37,    -1,
-       8,    11,    23,    11,    37,    -1,     9,    32,     4,    33,
-       4,    34,    17,    37,    -1
+      41,     0,    -1,    15,    37,    42,    38,    -1,    42,    44,
+      -1,    44,    -1,    42,    43,    -1,    43,    -1,     3,    37,
+      42,    38,    -1,     3,     4,    39,    -1,     3,    16,    39,
+      -1,     3,    17,    39,    -1,     3,    12,    39,    -1,     3,
+      13,    39,    -1,     3,    14,    39,    -1,     3,    10,    39,
+      -1,     3,    11,    39,    -1,     7,    11,     4,    39,    -1,
+       8,    11,    18,     4,    39,    -1,     8,    11,    20,     4,
+      39,    -1,     8,    11,    22,    13,    39,    -1,     8,    11,
+      24,    16,    39,    -1,     8,    11,    25,    17,    39,    -1,
+       8,    11,    23,    11,    39,    -1,     9,    32,     4,    33,
+       4,    34,    17,    39,    -1,     9,    32,     4,    35,    16,
+      39,    -1,     9,    32,     4,    36,    16,    39,    -1
 };
 
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const unsigned char yyrline[] =
 {
-       0,   128,   128,   132,   133,   134,   136,   140,   144,   146,
-     148,   150,   152,   154,   156,   158,   160,   162,   164,   166,
-     168,   170,   172,   174
+       0,   130,   130,   134,   135,   136,   138,   142,   146,   148,
+     150,   152,   154,   156,   158,   160,   162,   164,   166,   168,
+     170,   172,   174,   176,   178,   180
 };
 #endif
 
@@ -383,8 +389,9 @@ static const char *const yytname[] =
   "T_ASNTYPE_STRING", "T_ASNTYPE_HEXSTR", "T_ASNTYPE_DECSTR", 
   "T_ASNTYPE_BITSTR", "T_ASNTYPE_BIGINT", "T_ASNTYPE_UBIGINT", 
   "T_ASNTYPE_FLOAT", "T_ASNTYPE_DOUBLE", "T_TLV_CODE", "T_TLV_LENGTH", 
-  "T_TLV_VALUE", "'{'", "'}'", "';'", "$accept", "main_stmt", 
-  "assignment_list", "config_stmt", "assignment_stmt", 0
+  "T_TLV_VALUE", "T_TLV_STR_VALUE", "T_TLV_STRZERO_VALUE", "'{'", "'}'", 
+  "';'", "$accept", "main_stmt", "assignment_list", "config_stmt", 
+  "assignment_stmt", 0
 };
 #endif
 
@@ -396,16 +403,16 @@ static const unsigned short yytoknum[] =
        0,   256,   257,   258,   259,   260,   261,   262,   263,   264,
      265,   266,   267,   268,   269,   270,   271,   272,   273,   274,
      275,   276,   277,   278,   279,   280,   281,   282,   283,   284,
-     285,   286,   287,   288,   289,   123,   125,    59
+     285,   286,   287,   288,   289,   290,   291,   123,   125,    59
 };
 # endif
 
 /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const unsigned char yyr1[] =
 {
-       0,    38,    39,    40,    40,    40,    40,    41,    42,    42,
-      42,    42,    42,    42,    42,    42,    42,    42,    42,    42,
-      42,    42,    42,    42
+       0,    40,    41,    42,    42,    42,    42,    43,    44,    44,
+      44,    44,    44,    44,    44,    44,    44,    44,    44,    44,
+      44,    44,    44,    44,    44,    44
 };
 
 /* YYR2[YYN] -- Number of symbols composing right hand side of rule YYN.  */
@@ -413,7 +420,7 @@ static const unsigned char yyr2[] =
 {
        0,     2,     4,     2,     1,     2,     1,     4,     3,     3,
        3,     3,     3,     3,     3,     3,     4,     5,     5,     5,
-       5,     5,     5,     8
+       5,     5,     5,     8,     6,     6
 };
 
 /* YYDEFACT[STATE-NAME] -- Default rule to reduce with in state
@@ -426,8 +433,8 @@ static const unsigned char yydefact[] =
        0,     0,     0,     0,     2,     5,     3,     8,    14,    15,
       11,    12,    13,     9,    10,     0,     0,     0,     0,     0,
        0,     0,     0,     0,     7,    16,     0,     0,     0,     0,
-       0,     0,     0,    17,    18,    19,    22,    20,    21,     0,
-       0,     0,    23
+       0,     0,     0,     0,     0,    17,    18,    19,    22,    20,
+      21,     0,     0,     0,     0,    24,    25,     0,    23
 };
 
 /* YYDEFGOTO[NTERM-NUM]. */
@@ -438,22 +445,22 @@ static const yysigned_char yydefgoto[] =
 
 /* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
    STATE-NUM.  */
-#define YYPACT_NINF -24
+#define YYPACT_NINF -26
 static const yysigned_char yypact[] =
 {
-      -4,   -23,    13,    22,   -24,     6,     3,     4,   -11,    -3,
-     -24,   -24,   -13,    -5,    -2,     2,     9,    10,    11,    12,
-      22,    30,    20,    33,   -24,   -24,   -24,   -24,   -24,   -24,
-     -24,   -24,   -24,   -24,   -24,     0,    14,    46,    48,    40,
-      15,    38,    39,    24,   -24,   -24,    18,    21,    23,    25,
-      26,    27,    55,   -24,   -24,   -24,   -24,   -24,   -24,    31,
-      44,    29,   -24
+       9,   -25,    15,    23,   -26,     6,    10,    14,     1,    -3,
+     -26,   -26,   -10,    -5,    -2,     2,    11,    12,    13,    16,
+      23,    32,    22,    35,   -26,   -26,   -26,   -26,   -26,   -26,
+     -26,   -26,   -26,   -26,   -26,     0,    17,    44,    45,    40,
+      43,    41,    42,   -22,   -26,   -26,    19,    21,    24,    25,
+      26,    27,    57,    46,    51,   -26,   -26,   -26,   -26,   -26,
+     -26,    34,    30,    31,    54,   -26,   -26,    33,   -26
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yysigned_char yypgoto[] =
 {
-     -24,   -24,    47,    -8,    -7
+     -26,   -26,    53,    -8,    -7
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]].  What to do in state STATE-NUM.  If
@@ -464,36 +471,38 @@ static const yysigned_char yypgoto[] =
 static const unsigned char yytable[] =
 {
        5,    25,    26,     5,     6,     7,     8,     6,     7,     8,
-      12,     1,     3,     4,    21,    22,    13,    14,    15,    16,
-      17,    23,    18,    19,    27,     5,    49,    25,    26,     6,
-       7,     8,    28,    24,    36,    29,    44,    43,    37,    30,
-      38,    20,    39,    40,    41,    42,    31,    32,    33,    34,
-      46,    45,    47,    48,    50,    53,    51,    52,    54,    59,
-      55,    61,    56,    57,    58,    60,    62,    35
+      12,    52,     3,    53,    54,     4,    13,    14,    15,    16,
+      17,    21,    18,    19,     1,    22,     5,    25,    26,    27,
+       6,     7,     8,    23,    28,    24,    36,    29,    44,    43,
+      37,    30,    38,    20,    39,    40,    41,    42,    46,    47,
+      31,    32,    33,    48,    49,    34,    45,    50,    55,    51,
+      56,    61,    62,    57,    58,    59,    60,    63,    64,    65,
+      66,    67,    68,    35
 };
 
 static const unsigned char yycheck[] =
 {
        3,     9,     9,     3,     7,     8,     9,     7,     8,     9,
-       4,    15,    35,     0,    11,    11,    10,    11,    12,    13,
-      14,    32,    16,    17,    37,     3,    11,    35,    35,     7,
-       8,     9,    37,    36,     4,    37,    36,     4,    18,    37,
-      20,    35,    22,    23,    24,    25,    37,    37,    37,    37,
-       4,    37,     4,    13,    16,    37,    17,    33,    37,     4,
-      37,    17,    37,    37,    37,    34,    37,    20
+       4,    33,    37,    35,    36,     0,    10,    11,    12,    13,
+      14,    11,    16,    17,    15,    11,     3,    35,    35,    39,
+       7,     8,     9,    32,    39,    38,     4,    39,    38,     4,
+      18,    39,    20,    37,    22,    23,    24,    25,     4,     4,
+      39,    39,    39,    13,    11,    39,    39,    16,    39,    17,
+      39,     4,    16,    39,    39,    39,    39,    16,    34,    39,
+      39,    17,    39,    20
 };
 
 /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
    symbol of state STATE-NUM.  */
 static const unsigned char yystos[] =
 {
-       0,    15,    39,    35,     0,     3,     7,     8,     9,    40,
-      41,    42,     4,    10,    11,    12,    13,    14,    16,    17,
-      35,    11,    11,    32,    36,    41,    42,    37,    37,    37,
-      37,    37,    37,    37,    37,    40,     4,    18,    20,    22,
-      23,    24,    25,     4,    36,    37,     4,     4,    13,    11,
-      16,    17,    33,    37,    37,    37,    37,    37,    37,     4,
-      34,    17,    37
+       0,    15,    41,    37,     0,     3,     7,     8,     9,    42,
+      43,    44,     4,    10,    11,    12,    13,    14,    16,    17,
+      37,    11,    11,    32,    38,    43,    44,    39,    39,    39,
+      39,    39,    39,    39,    39,    42,     4,    18,    20,    22,
+      23,    24,    25,     4,    38,    39,     4,     4,    13,    11,
+      16,    17,    33,    35,    36,    39,    39,    39,    39,    39,
+      39,     4,    16,    16,    34,    39,    39,    17,    39
 };
 
 #if ! defined (YYSIZE_T) && defined (__SIZE_TYPE__)
@@ -1103,140 +1112,152 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 128 "docsis_yy.y"
+#line 130 "docsis_yy.y"
     {
 			global_tlvlist = yyvsp[-1].tlvlist; }
     break;
 
   case 3:
-#line 132 "docsis_yy.y"
+#line 134 "docsis_yy.y"
     { yyval.tlvlist = add_tlv_to_list (yyvsp[-1].tlvlist,yyvsp[0].tlvptr); }
     break;
 
   case 4:
-#line 133 "docsis_yy.y"
+#line 135 "docsis_yy.y"
     {  yyval.tlvlist=add_tlv_to_list(NULL,yyvsp[0].tlvptr); }
     break;
 
   case 5:
-#line 134 "docsis_yy.y"
+#line 136 "docsis_yy.y"
     { 
 			yyval.tlvlist = merge_tlvlist(yyvsp[-1].tlvlist,yyvsp[0].tlvlist);  }
     break;
 
   case 6:
-#line 136 "docsis_yy.y"
+#line 138 "docsis_yy.y"
     { 
 			yyval.tlvlist = merge_tlvlist (NULL, yyvsp[0].tlvlist); }
     break;
 
   case 7:
-#line 140 "docsis_yy.y"
+#line 142 "docsis_yy.y"
     { 
 			yyval.tlvlist = assemble_list_in_parent ( yyvsp[-3].symptr, yyvsp[-1].tlvlist ); }
     break;
 
   case 8:
-#line 144 "docsis_yy.y"
+#line 146 "docsis_yy.y"
     { 
 			yyval.tlvptr = create_tlv (yyvsp[-2].symptr, (union t_val *)&yyvsp[-1].uintval);}
     break;
 
   case 9:
-#line 146 "docsis_yy.y"
-    {
-			yyval.tlvptr = create_tlv (yyvsp[-2].symptr, (union t_val *)&yyvsp[-1].strval);}
-    break;
-
-  case 10:
 #line 148 "docsis_yy.y"
     {
 			yyval.tlvptr = create_tlv (yyvsp[-2].symptr, (union t_val *)&yyvsp[-1].strval);}
     break;
 
-  case 11:
+  case 10:
 #line 150 "docsis_yy.y"
     {
 			yyval.tlvptr = create_tlv (yyvsp[-2].symptr, (union t_val *)&yyvsp[-1].strval);}
     break;
 
-  case 12:
+  case 11:
 #line 152 "docsis_yy.y"
     {
 			yyval.tlvptr = create_tlv (yyvsp[-2].symptr, (union t_val *)&yyvsp[-1].strval);}
     break;
 
-  case 13:
+  case 12:
 #line 154 "docsis_yy.y"
     {
 			yyval.tlvptr = create_tlv (yyvsp[-2].symptr, (union t_val *)&yyvsp[-1].strval);}
     break;
 
-  case 14:
+  case 13:
 #line 156 "docsis_yy.y"
     {
 			yyval.tlvptr = create_tlv (yyvsp[-2].symptr, (union t_val *)&yyvsp[-1].strval);}
     break;
 
-  case 15:
+  case 14:
 #line 158 "docsis_yy.y"
     {
 			yyval.tlvptr = create_tlv (yyvsp[-2].symptr, (union t_val *)&yyvsp[-1].strval);}
     break;
 
-  case 16:
+  case 15:
 #line 160 "docsis_yy.y"
+    {
+			yyval.tlvptr = create_tlv (yyvsp[-2].symptr, (union t_val *)&yyvsp[-1].strval);}
+    break;
+
+  case 16:
+#line 162 "docsis_yy.y"
     {    
 			yyval.tlvptr = create_snmpw_tlv ( yyvsp[-3].symptr, yyvsp[-2].strval, (union t_val *) &yyvsp[-1].uintval ); }
     break;
 
   case 17:
-#line 162 "docsis_yy.y"
+#line 164 "docsis_yy.y"
     {
 			yyval.tlvptr = create_snmpset_tlv(yyvsp[-4].symptr,yyvsp[-3].strval,'i',(union t_val *)&yyvsp[-1].uintval); }
     break;
 
   case 18:
-#line 164 "docsis_yy.y"
+#line 166 "docsis_yy.y"
     {
 			yyval.tlvptr = create_snmpset_tlv(yyvsp[-4].symptr,yyvsp[-3].strval,'g',(union t_val *)&yyvsp[-1].uintval); }
     break;
 
   case 19:
-#line 166 "docsis_yy.y"
+#line 168 "docsis_yy.y"
     {
 			yyval.tlvptr = create_snmpset_tlv(yyvsp[-4].symptr,yyvsp[-3].strval,'a',(union t_val *)&yyvsp[-1].strval); }
     break;
 
   case 20:
-#line 168 "docsis_yy.y"
+#line 170 "docsis_yy.y"
     {
 			yyval.tlvptr = create_snmpset_tlv(yyvsp[-4].symptr,yyvsp[-3].strval,'s',(union t_val *)&yyvsp[-1].strval); }
     break;
 
   case 21:
-#line 170 "docsis_yy.y"
+#line 172 "docsis_yy.y"
     {
 			yyval.tlvptr = create_snmpset_tlv(yyvsp[-4].symptr,yyvsp[-3].strval,'x',(union t_val *)&yyvsp[-1].strval); }
     break;
 
   case 22:
-#line 172 "docsis_yy.y"
+#line 174 "docsis_yy.y"
     {
 			yyval.tlvptr = create_snmpset_tlv(yyvsp[-4].symptr,yyvsp[-3].strval,'o',(union t_val *)&yyvsp[-1].strval); }
     break;
 
   case 23:
-#line 174 "docsis_yy.y"
+#line 176 "docsis_yy.y"
     {
 			yyval.tlvptr = create_generic_tlv(yyvsp[-7].symptr,yyvsp[-5].uintval,yyvsp[-3].uintval, (union t_val *)&yyvsp[-1].strval); }
+    break;
+
+  case 24:
+#line 178 "docsis_yy.y"
+    {
+			yyval.tlvptr = create_generic_str_tlv(yyvsp[-5].symptr,yyvsp[-3].uintval, (union t_val *)&yyvsp[-1].strval); }
+    break;
+
+  case 25:
+#line 180 "docsis_yy.y"
+    {
+			yyval.tlvptr = create_generic_strzero_tlv(yyvsp[-5].symptr,yyvsp[-3].uintval, (union t_val *)&yyvsp[-1].strval); }
     break;
 
 
     }
 
 /* Line 991 of yacc.c.  */
-#line 1239 "docsis_yy.c"
+#line 1260 "docsis_yy.c"
 
   yyvsp -= yylen;
   yyssp -= yylen;
@@ -1446,7 +1467,7 @@ yyreturn:
 }
 
 
-#line 177 "docsis_yy.y"
+#line 183 "docsis_yy.y"
 
 
 int yyerror(char *s) {
@@ -1500,6 +1521,12 @@ create_snmpset_tlv ( struct symbol_entry *sym_ptr,
 			printf ("got len 0 value while scanning for %s\n at line %d\n",sym_ptr->sym_ident,line );
 			exit (-1);
    		}
+  free(oid_string);  
+/* We only free non-string values since we parse strings into a static buffer in docsis_lex.l */
+  if (	oid_asntype == 'x' || oid_asntype == 'a' || 
+	oid_asntype == 'd' || oid_asntype == 'o' )  {
+	 	free(value->strval);  
+  }
   return tlvbuf;
 }
 
@@ -1527,6 +1554,7 @@ create_snmpw_tlv ( struct symbol_entry *sym_ptr,
                 }
   tlvbuf->tlv_value[tlvbuf->tlv_len] = (unsigned char) value->intval ;
   tlvbuf->tlv_len++;
+  free(oid_string);
   return tlvbuf;
 }         
 
@@ -1552,10 +1580,68 @@ line );
                         exit (-1);
                 }
                 if (tlvbuf->tlv_len != tlv_length ) {
-                        printf ("Length mismatch while encoding GenericTLV: given length %d, value length %d at line %d\n",tlvbuf->tlv_len, tlv_length, line );
+                        printf ("Length mismatch while encoding GenericTLV: given length %d, value length %d at line %d\n", tlvbuf->tlv_len, tlv_length, line );
 
                         exit (-1);
 		}
+  return tlvbuf;
+}
+
+/* 
+** Same as above, except the value is encoded as a string.  
+*/
+
+struct tlv *
+create_generic_str_tlv ( struct symbol_entry *sym_ptr,
+                                 int tlv_code,
+                                 union t_val *value )
+{
+  struct tlv *tlvbuf=NULL;
+
+  tlvbuf = (struct tlv *) malloc (sizeof(struct tlv));
+  tlvbuf->docs_code = tlv_code;
+  tlvbuf->tlv_len = encode_string ( tlvbuf->tlv_value, value, sym_ptr );
+
+                if (tlvbuf->tlv_len <= 0 ) {
+                        printf ("got len 0 value while scanning for %s\n at line %d\n",sym_ptr->sym_ident,
+line );
+                        exit (-1);
+                }
+                if (tlvbuf->tlv_len > 255 ) {
+                        printf ("Warning: string length %d longer than 255, line %d\n",tlvbuf->tlv_len, line );
+
+                }
+  /* don't free strings - we use a static buffer to parse them */
+  return tlvbuf;
+}
+
+/*
+** Same as above, except the value is encoded as a zero-terminated string.
+*/
+
+struct tlv *
+create_generic_strzero_tlv ( struct symbol_entry *sym_ptr,
+                                 int tlv_code,
+                                 union t_val *value )
+{
+  struct tlv *tlvbuf=NULL;
+
+  tlvbuf = (struct tlv *) malloc (sizeof(struct tlv));
+  tlvbuf->docs_code = tlv_code;
+  tlvbuf->tlv_len = encode_string ( tlvbuf->tlv_value, value, sym_ptr );
+
+                if (tlvbuf->tlv_len <= 0 ) {
+                        printf ("got 0-length value while scanning for %s\n at line %d\n",sym_ptr->sym_ident,
+line );
+                        exit (-1);
+                }
+                if (tlvbuf->tlv_len > 254 ) {
+                        printf ("Warning: total string length %d longer than 255, line %d\n",tlvbuf->tlv_len, line );
+
+                } else { 
+			tlvbuf->tlv_len = tlvbuf->tlv_len + 1; /* add terminating 0 */
+		}
+  tlvbuf->tlv_value[tlvbuf->tlv_len]=0; 
   return tlvbuf;
 }
 
@@ -1570,18 +1656,17 @@ struct tlv_list *add_tlv_to_list(struct tlv_list *list, struct tlv *newtlv)
   if ( list == NULL ) {  /* assignment_list :== assignment_stmt  */
 /* create list of tlv pointers with 1 tlv pointer */
 	newtlvlist->tlv_count = 1;	
-	newtlvlist->tlvlist   = (struct tlv **) malloc ( sizeof (struct tlv *));
+	newtlvlist->tlvlist   = (struct tlv **) malloc (sizeof(struct tlv *));
   	newtlvlist->tlvlist[0] = newtlv;
-	return newtlvlist;
   } else { /* assignment_list :== assignment_list assignment_stmt */
 /* add a new tlv pointer to the existing list of tlv pointers */
 	newtlvlist->tlv_count = list->tlv_count + 1;
 	newtlvlist->tlvlist = (struct tlv **) malloc((newtlvlist->tlv_count)*sizeof(struct tlv *));
-	memcpy(&(newtlvlist->tlvlist[0]),&(list->tlvlist[0]),list->tlv_count*sizeof(struct tlv *));
+	memcpy(&(newtlvlist->tlvlist[0]),&(list->tlvlist[0]), list->tlv_count*sizeof(struct tlv *));
 	newtlvlist->tlvlist[newtlvlist->tlv_count-1]=newtlv;
-	free (list->tlvlist); free(list);
-  	return newtlvlist;
+  /*	free(list->tlvlist); free(list); */
   }
+  return newtlvlist;
 }
 
 /* Merge two tlvlists into one tlvlist. */
@@ -1616,7 +1701,7 @@ merge_tlvlist(struct tlv_list *list1, struct tlv_list *list2)
 
 /* 
  * Used for creating a top-level list corresponding to ClassOfService,
- * BaselinePrivacy, Telephony Settings etc.
+ * BaselinePrivacy etc.
  * Creates a "flat" TLV buffer out of a tlvlist, and assembles the 
  * TLV buffer into a new TLV which has the parent's docsis_code. 
  * Returns a TLV list with the new TLV 
@@ -1634,8 +1719,13 @@ assemble_list_in_parent (struct symbol_entry *sym_ptr, struct tlv_list *list)
   
   parent_tlv->docs_code = sym_ptr->docsis_code;
   parent_tlv->tlv_len = flatten_tlvlist(parent_tlv->tlv_value,list);
+  if (parent_tlv->tlv_len > 255) { 
+	printf("Error: aggregate TLV ending at line %d is larger than 255.\n", line); 
+	exit (-234); 
+  }
   newtlvlist->tlv_count=1;
   newtlvlist->tlvlist[0]=parent_tlv;
+  free(list->tlvlist); free(list); 
   return newtlvlist;
 }
 
@@ -1651,6 +1741,7 @@ unsigned int
 flatten_tlvlist (unsigned char *buf, struct tlv_list *list )
 {
   register unsigned char *cp;
+  unsigned short netshort;
   int i;
 
   if ( buf == NULL ) { 
@@ -1660,10 +1751,24 @@ flatten_tlvlist (unsigned char *buf, struct tlv_list *list )
   cp = buf;
 
   for ( i=0; i< list->tlv_count; i++ ) { 
-	*cp = (unsigned char) list->tlvlist[i]->docs_code; cp++;
-	*cp = (unsigned char) list->tlvlist[i]->tlv_len; cp++;
-	memcpy ( cp, list->tlvlist[i]->tlv_value, list->tlvlist[i]->tlv_len ); 
-  	     cp = cp + list->tlvlist[i]->tlv_len;
+	if (list->tlvlist[i]->tlv_len <= 255) { 
+		*cp = (unsigned char) list->tlvlist[i]->docs_code; cp++;
+		*cp = (unsigned char) list->tlvlist[i]->tlv_len; cp++;
+		memcpy ( cp, list->tlvlist[i]->tlv_value, list->tlvlist[i]->tlv_len ); 
+  	     	cp = cp + list->tlvlist[i]->tlv_len;
+	} else { 
+	/* convert TLV11 to TLV 64 */
+		if (list->tlvlist[i]->docs_code == 11) {
+			*cp = 64; cp++;
+		        netshort =  htons(list->tlvlist[i]->tlv_len); 
+			memcpy ( cp, &netshort, sizeof(unsigned short)); cp=cp+2;
+       			memcpy ( cp, list->tlvlist[i]->tlv_value, list->tlvlist[i]->tlv_len );
+             		cp = cp + list->tlvlist[i]->tlv_len; 
+		} else { 
+			printf("Error at line %d: Non-SNMP Object TLV larger than 255... bailing out.\n", line); 
+			exit(-5); 
+		}
+	}
 	free ( list->tlvlist[i] ); /* The TLV won't be referenced anymore */
   }
   /* We leave it to the caller to free the list */
@@ -1673,6 +1778,7 @@ flatten_tlvlist (unsigned char *buf, struct tlv_list *list )
 int parse_config_file ( char *file ) 
 { 
   FILE *cf;
+  int rval;
 
   if ( (cf = fopen ( file, "r" ))== NULL ) 
   {
@@ -1684,6 +1790,8 @@ int parse_config_file ( char *file )
 #ifdef DEBUG
   yydebug = 1;
 #endif
-  return yyparse();
+  rval = yyparse();
+  fclose(cf);
+  return rval;
 }
 

@@ -60,7 +60,9 @@
      T_ASNTYPE_DOUBLE = 286,
      T_TLV_CODE = 287,
      T_TLV_LENGTH = 288,
-     T_TLV_VALUE = 289
+     T_TLV_VALUE = 289,
+     T_TLV_STR_VALUE = 290,
+     T_TLV_STRZERO_VALUE = 291
    };
 #endif
 #define T_IDENTIFIER 258
@@ -95,6 +97,8 @@
 #define T_TLV_CODE 287
 #define T_TLV_LENGTH 288
 #define T_TLV_VALUE 289
+#define T_TLV_STR_VALUE 290
+#define T_TLV_STRZERO_VALUE 291
 
 
 
@@ -112,7 +116,7 @@ typedef union YYSTYPE { 	/* Token types */
 	struct tlv *tlvptr;		/* For struct tlv pointers; */
 } YYSTYPE;
 /* Line 1249 of yacc.c.  */
-#line 115 "y.tab.h"
+#line 119 "docsis_yy.h"
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
 # define YYSTYPE_IS_TRIVIAL 1

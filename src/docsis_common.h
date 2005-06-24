@@ -31,11 +31,11 @@
 
 
 #ifndef NUM_IDENTIFIERS
-#define NUM_IDENTIFIERS 159
+#define NUM_IDENTIFIERS 172 
 #endif /*  NUM_IDENTIFIERS, needed in docsis_symtable.h  */
 
 #define MAXINT 2000000000 
-#define TLV_VSIZE 255 
+#define TLV_VSIZE 1024
 #define TRUE 1
 #define FALSE 0
 
@@ -50,7 +50,7 @@ struct symbol_entry {
 	unsigned char docsis_code;
 	unsigned int parent_id;
 	int (*encode_func) (unsigned char *, void *, struct symbol_entry *);
-	void (*decode_func) (unsigned char *, struct symbol_entry *);
+	void (*decode_func) (unsigned char *, struct symbol_entry *, size_t length);
 	unsigned int low_limit;
 	unsigned int high_limit;
 }; 
@@ -58,8 +58,8 @@ struct symbol_entry {
 typedef struct symbol_entry symbol_type;
 
 struct tlv { 
-	unsigned char docs_code;
-	unsigned char tlv_len;
+	unsigned short docs_code;
+	unsigned short tlv_len;
 	unsigned char tlv_value[TLV_VSIZE];
 };
 

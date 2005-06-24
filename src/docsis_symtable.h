@@ -240,9 +240,21 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 153, "DCCSupport",			12,  144, (encode_uchar),     (decode_uchar),           0,      1       },
 { 154, "SubMgmtControl", 		35,  0,	  (encode_hexstr),    (decode_hexstr), 		3,	3 	},
 { 155, "SubMgmtFilters", 		37,  0,	  (encode_ushort_list), (decode_ushort_list), 	4,	4 	},
+{ 156, "SnmpMibObject",   		64, 0,    (encode_nothing),     (decode_snmp_object),    1,        2048       },
 /* PacketCable MTA Configuration File Delimiter  */
-{ 156, "MtaConfigDelimiter",   		254, 0,   (encode_uchar),     (decode_uchar),    1,        255        },
-
+{ 157, "MtaConfigDelimiter",   		254, 0,   (encode_uchar),     (decode_uchar),    1,        255        },
+{ 158, "DsChannelList",   		41, 0,    (encode_nothing),     (decode_aggregate),    1,        255        },
+{ 159, "SingleDsChannel",   		1, 158,   (encode_nothing),     (decode_aggregate),    1,        255        },
+{ 160, "SingleDsTimeout",   		1, 159,   (encode_ushort),     (decode_ushort),    0,        65535 },
+{ 161, "SingleDsFrequency",   		2, 159,   (encode_uint),     (decode_uint),    0,        0xFFFFFFFF },
+{ 162, "DsFreqRange",   		2, 158,   (encode_nothing),     (decode_aggregate),    1,        255        },
+{ 163, "DsFreqRangeTimeout",   		1, 162,   (encode_ushort),     (decode_ushort),    0,        65535 },
+{ 164, "DsFreqRangeStart",   		2, 162,   (encode_uint),     (decode_uint),    0,        0xFFFFFFFF },
+{ 165, "DsFreqRangeEnd",   		3, 162,   (encode_uint),     (decode_uint),    0,        0xFFFFFFFF },
+{ 166, "DsFreqRangeStepSize",   	4, 162,   (encode_uint),     (decode_uint),    0,        0xFFFFFFFF },
+{ 167, "DefaultScanTimeout",   		3, 158,   (encode_ushort),     (decode_ushort),    0,        65535 },
+{ 168, "TftpTimestamp",   		19, 0,    (encode_uint),     (decode_uint),    0,        0xFFFFFFFF        },
+{ 169, "TftpModemAddress",   		20, 0,    (encode_ip),     (decode_ip),    0,        0     },
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/
 { 998, "GenericTLV",           		0, 0,     (encode_nothing),   (decode_special),  1,        255        }, 
 { 999, "/*EndOfDataMkr*/",     		255, 0,   (encode_nothing),   (decode_special),  0,        0          } 

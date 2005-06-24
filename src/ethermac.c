@@ -48,7 +48,7 @@ p = strchr ( ptr, (int) ':' );
  	}
 
 	memset(fragptr,0,3); 
-	memcpy ( fragptr, ptr, p-ptr );
+	memcpy ( fragptr, ptr, (size_t)(p-ptr) );
 
 	if ( (rval= sscanf ( fragptr, "%x", &fragval)) == 0 ) { 
 		printf("\nInvalid MAC Address %s\n", macstr );

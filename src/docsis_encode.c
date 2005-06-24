@@ -1,6 +1,6 @@
 /* 
  *  DOCSIS configuration file encoder. 
- *  Copyright (c) 2001 Cornel Ciocirlan, ctrl@users.sourceforge.net.
+ *  Copyright (c) 2001,2005 Cornel Ciocirlan, ctrl@users.sourceforge.net.
  *  Copyright (c) 2002,2003,2004 Evvolve Media SRL,office@evvolve.com
  *  
  *  This program is free software; you can redistribute it and/or modify
@@ -131,7 +131,6 @@ int encode_uchar ( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr 
   return ( sizeof(unsigned char));
 }             
 
-
 int encode_ip( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr ) 
 {
 struct in_addr in;
@@ -158,6 +157,7 @@ union t_val *helper; /* We only use this to cast the void* we receive to what we
   printf ("encode_ip: found %s at line %d\n",inet_ntoa(in), line);
 #endif /* DEBUG */
   memcpy ( buf, &in, sizeof(struct in_addr));
+  free(helper->strval);
   return ( sizeof(struct in_addr));      
 }
 
@@ -186,6 +186,7 @@ union t_val *helper; /* We only use this to cast the void* we receive to what we
 #ifdef DEBUG
   printf ("encode_ether: found %s at line %d\n", ether_ntoa(buf), line);
 #endif  /* DEBUG */
+  free(helper->strval); 
   return retval;  /* hopefully this equals 6 :) */     
 }
 
@@ -227,6 +228,7 @@ union t_val *helper; /* We only use this to cast the void* we receive to what we
 #ifdef DEBUG
   printf ("encode_ethermask: found %s/%s at line %d\n", ether_ntoa(buf), ether_ntoa(buf+reta*sizeof(char)), line);
 #endif  /* DEBUG */
+  free(helper->strval); 
   return (reta+retb);  /* hopefully this equals 12 :) */     
 }
  
@@ -254,8 +256,8 @@ int encode_string(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
 		exit(-1);
 	}
 	if ( sym_ptr->high_limit < string_size ) { 
-		printf("encode_string: String too long, must be max %d chars\n", 
-							sym_ptr->high_limit);  
+		printf("encode_string: String too long (%d chars), must be max %d chars\n", 
+							string_size, sym_ptr->high_limit);  
 		exit(-1);
 	}
   }
@@ -265,6 +267,7 @@ int encode_string(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
 #endif /* DEBUG */ 
   memset(buf,0,string_size+1);
   memcpy ( buf, helper->strval, string_size);
+ /* No need to free strings because we use a static buffer to parse them */
   return ( string_size );  
 }
 
@@ -305,6 +308,7 @@ int encode_strzero(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr 
 #endif /* DEBUG */
   memset(buf,0,string_size+1);
   memcpy ( buf, helper->strval, string_size);
+  free(helper->strval); 
   return ( string_size+1 );
 }
 
@@ -370,6 +374,7 @@ int encode_hexstr (unsigned char *buf, void *tval, struct symbol_entry *sym_ptr)
 #ifdef DEBUG
   printf ("encode_hexstr: found '%s' on line %d\n", helper->strval, line );
 #endif /* DEBUG */ 
+  free(helper->strval); 
   return ( i );  
 }
 
@@ -395,6 +400,7 @@ int encode_oid(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
 
   output_size = encode_snmp_oid(helper->strval, buf, TLV_VSIZE); 
   return ( output_size );
+  free(helper->strval); 
 }
 
 
@@ -402,9 +408,12 @@ int encode_ushort_list( unsigned char *buf, void *tval, struct symbol_entry *sym
 {
 unsigned short numbers[128];
 unsigned long value_found;
-unsigned int i=0,nr_found=0; 
+unsigned int nr_found=0; 
 char *cp; 
 char *endptr[1];
+#ifdef DEBUG
+int i;
+#endif
 
 union t_val *helper; /* We only use this to cast the void* we receive to what we think it should be */
 
@@ -465,6 +474,7 @@ union t_val *helper; /* We only use this to cast the void* we receive to what we
 		
 #endif /* DEBUG */
   memcpy ( buf, numbers, nr_found*sizeof(unsigned short));
+  free(helper->strval);
   return ( nr_found*sizeof(unsigned short));
 }
 
@@ -472,5 +482,3 @@ int encode_nothing(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr 
 {
 return 0;
 }
-
-

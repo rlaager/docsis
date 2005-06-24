@@ -51,6 +51,12 @@ struct tlv *create_snmpset_tlv (struct symbol_entry *sym_ptr,
 struct tlv *create_generic_tlv (struct symbol_entry *sym_ptr,
 				int tlv_code,
 				int tlv_length, union t_val *value);
+struct tlv *create_generic_str_tlv (struct symbol_entry *sym_ptr,
+				int tlv_code,
+				union t_val *value);
+struct tlv *create_generic_strzero_tlv (struct symbol_entry *sym_ptr,
+				int tlv_code,
+				union t_val *value);
 struct tlv *create_snmpw_tlv (struct symbol_entry *sym_ptr,
 			      char *oid_string, union t_val *value);
 

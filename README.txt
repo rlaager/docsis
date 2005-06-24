@@ -1,8 +1,8 @@
 1. Quick, how do I use this ?
 =============================
 
-This program can only be used from a command line. From a command prompt, type "docsis" - you should 
-get the default help message. 
+This program can only be used from a command line. From a command prompt, type "docsis" 
+and you will get the default help message. 
 
 See doc/index.html for more information.
 

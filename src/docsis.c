@@ -83,9 +83,9 @@ add_cmts_mic (unsigned char *tlvbuf, unsigned int tlvbuflen,
   register unsigned char *cp, *dp;
 
 /* Only these configuration TLVs must be used to calculate the CMTS MIC */
-#define NR_TLVS 17
+#define NR_TLVS 21
   unsigned char digest_order[NR_TLVS] =
-    { 1, 2, 3, 4, 17, 43, 6, 18, 19, 20, 22, 23, 24, 25, 28, 29, 26 };
+    { 1, 2, 3, 4, 17, 43, 6, 18, 19, 20, 22, 23, 24, 25, 28, 29, 26, 35, 36, 37, 40 };
   unsigned char *cmts_tlvs;
   unsigned char digest[17];
   cmts_tlvs = (unsigned char *) malloc (tlvbuflen + 1);
@@ -268,6 +268,7 @@ main (int argc, char *argv[])
   if (decode_bin)
     {
       decode_file (config_file);
+      exit(0); // TODO: clean shutdown 
     }
   else
     {
@@ -278,6 +279,11 @@ main (int argc, char *argv[])
       printf ("Error parsing config file %s\n", config_file);
       exit (70);
     }
+/* Check whether we're encoding PacketCable */ 
+  if (global_tlvlist->tlvlist[0]->docs_code == 254) { 
+	printf("First TLV is MtaConfigDelimiter, writing PacketCable MTA file.\n"); 
+	encode_docsis=0;
+  }
 
 /* Find out how much memory we need to malloc to hold all TLVs */
 
@@ -312,6 +318,9 @@ main (int argc, char *argv[])
       exit (-5);
     }
   fwrite (buffer, sizeof (unsigned char), buflen, of);
+  free(buffer);
+  free(global_tlvlist->tlvlist); free(global_tlvlist); free(global_symtable);
+  shutdown_mib();
   return 0;
 }
 
@@ -351,5 +360,5 @@ decode_file (char *file)
   buffer = (unsigned char *) malloc (st.st_size * sizeof (unsigned char) + 1);
   buflen = read (ifd, buffer, st.st_size);
   decode_main_aggregate (buffer, buflen);
-  exit (0);
+  free(buffer);
 }

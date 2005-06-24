@@ -1,6 +1,6 @@
 /* 
  *  DOCSIS configuration file encoder. 
- *  Copyright (c) 2001 Cornel Ciocirlan, ctrl@users.sourceforge.net.
+ *  Copyright (c) 2001,2005 Cornel Ciocirlan, ctrl@users.sourceforge.net.
  *  Copyright (c) 2002,2003,2004 Evvolve Media SRL, office@evvolve.com
  *  
  *  This program is free software; you can redistribute it and/or modify
@@ -29,7 +29,7 @@ extern symbol_type *global_symtable;
 
 unsigned int line=1; /* On parse errors, we print the line number */
 
-char *str; char strbuf[255]; unsigned int strsize;/* max string len = 255; TODO check overflow */
+char *str; char strbuf[2048]; unsigned int strsize;/* max string len = 2048; TODO check overflow */
 char *tsave;
 
 #define TSAVE(s) tsave=(char*)malloc(yyleng+1);memset(tsave,0,yyleng+1);memcpy(tsave,s,yyleng)
@@ -45,7 +45,7 @@ char *tsave;
 ([0-9A-Fa-f][0-9A-Fa-f]:){5}[0-9A-Fa-f][0-9A-Fa-f]  { TSAVE(yytext);yylval.strval=tsave; return T_MAC; 			       }
 
 (\.{1})*([A-Za-z0-9_-]+\.)+[A-Za-z0-9]+	{ TSAVE(yytext);yylval.strval=tsave; return T_LABEL_OID; }
-(\.{1})*([A-Za-z0-9_-]+\.)+'[A-Za-z0-9,:_\-\.]+'	{ TSAVE(yytext);yylval.strval=tsave; return T_LABEL_OID; }
+(\.{1})*([A-Za-z0-9_-]+\.)+'[\[A-Za-z0-9,:_\-\.\]]+'	{ TSAVE(yytext);yylval.strval=tsave; return T_LABEL_OID; }
 (\.{1})*([A-Za-z0-9_-]+\.)+((\"{1})*[A-Za-z0-9,:_\-\.]+(\"{1})*)+	{ TSAVE(yytext);yylval.strval=tsave; return T_LABEL_OID; }
 [Mm][Aa][Ii][Nn]        { yylval.strval=yytext;return T_MAIN; }
 SnmpWriteControl	{ yylval.symptr=find_symbol_by_name(yytext);return T_IDENT_SNMPW;   }
@@ -68,6 +68,8 @@ GenericTLV 		{ yylval.symptr=find_symbol_by_name(yytext);return T_IDENT_GENERIC;
 TlvCode 		{ return T_TLV_CODE; 	}
 TlvLength 		{ return T_TLV_LENGTH; 	}
 TlvValue		{ return T_TLV_VALUE; 	}
+TlvString		{ return T_TLV_STR_VALUE; 	}
+TlvStringZero		{ return T_TLV_STRZERO_VALUE; 	}
 [A-Za-z]+[A-Za-z0-9]*	{ 
 				yylval.symptr=find_symbol_by_name(yytext);
 		  	  	if(yydebug) printf("yylex:returning T_IDENTIFIER, yylval.symptr->sym_ident=%s\n", 
@@ -75,14 +77,14 @@ TlvValue		{ return T_TLV_VALUE; 	}
 			 	return T_IDENTIFIER; 
 			}
 
-\"		{ BEGIN STRING; str=strbuf; memset(strbuf,0,255); strsize=0; }	
+\"		{ BEGIN STRING; str=strbuf; memset(strbuf,0,2048); strsize=0; }	
 <STRING>\\ 	{ 
-			if (strsize<255)  
+			if (strsize<2048)  
 			{
 				*str++ = ' '; 
 				strsize++;
 			} else {
-			  printf("line %d: string too long (max 255 characters)\n",line); exit(-1);  
+			  printf("line %d: string too long (max 2048 characters)\n",line); exit(-1);  
 			}
 		}
 <STRING>\;	{ printf("line %d: ';' not allowed in string, unmatched \" ?\n",line); exit(-1); }
@@ -90,12 +92,12 @@ TlvValue		{ return T_TLV_VALUE; 	}
 <STRING>\t	{ printf("line %d: \\t not allowed in string, unmatched \" ?\n",line); exit(-1); } 
 <STRING>\"	{ *str=0; BEGIN 0; yylval.strval=strbuf; return T_STRING; }
 <STRING>.	{ 
-			if (strsize<255)  
+			if (strsize<2048)  
 			{
 				*str++ = *yytext; 
 				strsize++;
 			} else {
-			  printf("line %d: string too long (max 255 characters)\n",line); exit(-1);  
+			  printf("line %d: string too long (max 2048 characters)\n",line); exit(-1);  
 			}
 		}
 \/[*]+		{ BEGIN COMMENT; }

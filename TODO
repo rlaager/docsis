@@ -1,4 +1,4 @@
-- move the symbol table into a configuration file. This would make it 
+- move the symbol table into an XML configuration file. This would make it 
   very easy to add new symbols without recompiling. It would also enable 
   people to distribute Vendor Specific-enabled configuration files  
 - autoconf & automake -- DONE

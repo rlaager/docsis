@@ -6,7 +6,7 @@
 !include "MUI.nsh"
 
 !define MUI_PRODUCT "docsis"
-!define MUI_VERSION "0.9.2"
+!define MUI_VERSION "0.9.3"
 
 !insertmacro MUI_PAGE_WELCOME
 !insertmacro MUI_PAGE_LICENSE
