@@ -36,33 +36,36 @@
      T_IDENT_SNMPW = 262,
      T_IDENT_SNMPSET = 263,
      T_IDENT_GENERIC = 264,
-     T_ETHERMASK = 265,
-     T_LABEL_OID = 266,
-     T_SUBMGT_FILTERS = 267,
-     T_IP = 268,
-     T_MAC = 269,
-     T_MAIN = 270,
-     T_STRING = 271,
-     T_HEX_STRING = 272,
-     T_ASNTYPE_INT = 273,
-     T_ASNTYPE_UINT = 274,
-     T_ASNTYPE_GAUGE = 275,
-     T_ASNTYPE_TICKS = 276,
-     T_ASNTYPE_IP = 277,
-     T_ASNTYPE_OBJID = 278,
-     T_ASNTYPE_STRING = 279,
-     T_ASNTYPE_HEXSTR = 280,
-     T_ASNTYPE_DECSTR = 281,
-     T_ASNTYPE_BITSTR = 282,
-     T_ASNTYPE_BIGINT = 283,
-     T_ASNTYPE_UBIGINT = 284,
-     T_ASNTYPE_FLOAT = 285,
-     T_ASNTYPE_DOUBLE = 286,
-     T_TLV_CODE = 287,
-     T_TLV_LENGTH = 288,
-     T_TLV_VALUE = 289,
-     T_TLV_STR_VALUE = 290,
-     T_TLV_STRZERO_VALUE = 291
+     T_IDENT_CVC = 265,
+     T_ETHERMASK = 266,
+     T_LABEL_OID = 267,
+     T_SUBMGT_FILTERS = 268,
+     T_IP = 269,
+     T_MAC = 270,
+     T_MAIN = 271,
+     T_STRING = 272,
+     T_HEX_STRING = 273,
+     T_TIMETICKS = 274,
+     T_ASNTYPE_INT = 275,
+     T_ASNTYPE_UINT = 276,
+     T_ASNTYPE_GAUGE = 277,
+     T_ASNTYPE_COUNTER = 278,
+     T_ASNTYPE_TIMETICKS = 279,
+     T_ASNTYPE_IP = 280,
+     T_ASNTYPE_OBJID = 281,
+     T_ASNTYPE_STRING = 282,
+     T_ASNTYPE_HEXSTR = 283,
+     T_ASNTYPE_DECSTR = 284,
+     T_ASNTYPE_BITSTR = 285,
+     T_ASNTYPE_BIGINT = 286,
+     T_ASNTYPE_UBIGINT = 287,
+     T_ASNTYPE_FLOAT = 288,
+     T_ASNTYPE_DOUBLE = 289,
+     T_TLV_CODE = 290,
+     T_TLV_LENGTH = 291,
+     T_TLV_VALUE = 292,
+     T_TLV_STR_VALUE = 293,
+     T_TLV_STRZERO_VALUE = 294
    };
 #endif
 #define T_IDENTIFIER 258
@@ -72,39 +75,42 @@
 #define T_IDENT_SNMPW 262
 #define T_IDENT_SNMPSET 263
 #define T_IDENT_GENERIC 264
-#define T_ETHERMASK 265
-#define T_LABEL_OID 266
-#define T_SUBMGT_FILTERS 267
-#define T_IP 268
-#define T_MAC 269
-#define T_MAIN 270
-#define T_STRING 271
-#define T_HEX_STRING 272
-#define T_ASNTYPE_INT 273
-#define T_ASNTYPE_UINT 274
-#define T_ASNTYPE_GAUGE 275
-#define T_ASNTYPE_TICKS 276
-#define T_ASNTYPE_IP 277
-#define T_ASNTYPE_OBJID 278
-#define T_ASNTYPE_STRING 279
-#define T_ASNTYPE_HEXSTR 280
-#define T_ASNTYPE_DECSTR 281
-#define T_ASNTYPE_BITSTR 282
-#define T_ASNTYPE_BIGINT 283
-#define T_ASNTYPE_UBIGINT 284
-#define T_ASNTYPE_FLOAT 285
-#define T_ASNTYPE_DOUBLE 286
-#define T_TLV_CODE 287
-#define T_TLV_LENGTH 288
-#define T_TLV_VALUE 289
-#define T_TLV_STR_VALUE 290
-#define T_TLV_STRZERO_VALUE 291
+#define T_IDENT_CVC 265
+#define T_ETHERMASK 266
+#define T_LABEL_OID 267
+#define T_SUBMGT_FILTERS 268
+#define T_IP 269
+#define T_MAC 270
+#define T_MAIN 271
+#define T_STRING 272
+#define T_HEX_STRING 273
+#define T_TIMETICKS 274
+#define T_ASNTYPE_INT 275
+#define T_ASNTYPE_UINT 276
+#define T_ASNTYPE_GAUGE 277
+#define T_ASNTYPE_COUNTER 278
+#define T_ASNTYPE_TIMETICKS 279
+#define T_ASNTYPE_IP 280
+#define T_ASNTYPE_OBJID 281
+#define T_ASNTYPE_STRING 282
+#define T_ASNTYPE_HEXSTR 283
+#define T_ASNTYPE_DECSTR 284
+#define T_ASNTYPE_BITSTR 285
+#define T_ASNTYPE_BIGINT 286
+#define T_ASNTYPE_UBIGINT 287
+#define T_ASNTYPE_FLOAT 288
+#define T_ASNTYPE_DOUBLE 289
+#define T_TLV_CODE 290
+#define T_TLV_LENGTH 291
+#define T_TLV_VALUE 292
+#define T_TLV_STR_VALUE 293
+#define T_TLV_STRZERO_VALUE 294
 
 
 
 
 #if ! defined (YYSTYPE) && ! defined (YYSTYPE_IS_DECLARED)
-#line 44 "docsis_yy.y"
+#line 46 "docsis_yy.y"
 typedef union YYSTYPE { 	/* Token types */
 	int intval;			/* For integers */
 	unsigned int uintval;		/* For unsigned integers */
@@ -116,7 +122,7 @@ typedef union YYSTYPE { 	/* Token types */
 	struct tlv *tlvptr;		/* For struct tlv pointers; */
 } YYSTYPE;
 /* Line 1249 of yacc.c.  */
-#line 119 "docsis_yy.h"
+#line 125 "docsis_yy.h"
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
 # define YYSTYPE_IS_TRIVIAL 1

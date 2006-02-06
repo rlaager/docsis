@@ -1,7 +1,7 @@
 /* 
  *  DOCSIS configuration file encoder. 
  *  Copyright (c) 2001 Cornel Ciocirlan, ctrl@users.sourceforge.net.
- *  Copyright (c) 2002,2003,2004 Evvolve Media SRL,office@evvolve.com
+ *  Copyright (c) 2002,2003,2004,2005 Evvolve Media SRL,office@evvolve.com
  *  
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -82,13 +82,13 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
 						 NETSNMP_DS_LIB_REGEX_ACCESS);
 		    }
 
-		  if (!get_node (oid_string, var_name, &name_len))
+		  if (!get_wild_node (oid_string, var_name, &name_len))
 		    {
 		      /* Ran out of ideas. */
 		      printf ("/* Error: Can't find oid %s at line %d */\n",
 			      oid_string, line);
 		      snmp_perror ("encode_vbind");
-		      exit (-37);
+		      return 0;
 		    }
 		}
 	    }
@@ -109,8 +109,6 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
       break;
       ;;
     case 'g':
-	/* TODO: check that the int is positive ? */
-
       data_ptr = _docsis_snmp_build_var_op (out_buffer,
 				    var_name,
 				    &name_len,
@@ -118,6 +116,39 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
 				    sizeof (int),
 				    (unsigned char *) &value->intval,
 				    &out_size);
+      return data_ptr - out_buffer;
+      break;
+      ;;
+    case 'c':
+      data_ptr = _docsis_snmp_build_var_op (out_buffer,
+				    var_name,
+				    &name_len,
+				    ASN_COUNTER,
+				    sizeof (int),
+				    (unsigned char *) &value->intval,
+				    &out_size);
+      return data_ptr - out_buffer;
+      break;
+      ;;
+    case 'u':
+      data_ptr = _docsis_snmp_build_var_op (out_buffer,
+				    var_name,
+				    &name_len,
+				    ASN_GAUGE,
+				    sizeof (int),
+				    (unsigned char *) &value->intval,
+				    &out_size);
+      return data_ptr - out_buffer;
+      break;
+      ;;
+    case 't':
+      data_ptr = _docsis_snmp_build_var_op (out_buffer,
+                                    var_name,
+                                    &name_len,
+                                    ASN_TIMETICKS,
+                                    sizeof (int),
+                                    (unsigned char *) &value->intval,
+                                    &out_size);
       return data_ptr - out_buffer;
       break;
       ;;
@@ -140,7 +171,7 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
 	  if ((rv = hexadecimal_to_binary (value->strval, buf)) == -1)
 	    {
 	      printf ("Invalid hexadecimal string at line %d\n", line);
-	      exit (-200);
+	      return 0;
 	    }
 	  ltmp = (unsigned int) rv;
 	  len = ltmp;
@@ -150,7 +181,7 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
 	{
 	  printf ("String too long at line %d, max allowed %d\n", line,
 		  SPRINT_MAX_LEN);
-	  exit (67);
+	  return 0;
 	  break;
 	}
       tp = get_tree (var_name, name_len, get_tree_head ());
@@ -168,10 +199,11 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
 	  if (!rp)
 	    {
 	      printf ("Value too long at line %d\n", line);
-	      exit (68);
+	      return 0;
 	      break;
 	    }
 	}
+      /* If length is more than 127, won't fit into a 1-byte quantity */
       if (len+name_len+8 < 0x7f ) {  
      		data_ptr = _docsis_snmp_build_var_op (out_buffer,
                                     var_name,
@@ -216,7 +248,7 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
 	if (!read_objid (buf, oid_value, &oid_value_len))
 	  {
 		printf ("Can't find oid %s at line %d\n", buf, line);
-		exit (-37);
+		return 0;
     	  }
 
 	data_ptr = _docsis_snmp_build_var_op (out_buffer,
@@ -259,7 +291,8 @@ decode_vbind (unsigned char *data, unsigned int vb_len)
   vp = (struct variable_list *) malloc (sizeof (struct variable_list));
   if (vp == NULL)
     {
-      exit (-12);
+      fprintf (stderr, "Out of memory\n"); 
+      return 0; 
     }
   memset (vp, 0, sizeof (struct variable_list));
 
@@ -338,11 +371,11 @@ decode_vbind (unsigned char *data, unsigned int vb_len)
       break;
     case ASN_COUNTER:
       memset (_docsis_snmp_label, 0, 50);
-      sprintf (_docsis_snmp_label, "Counter");
+      sprintf (_docsis_snmp_label, "Counter32");
       break;
     case ASN_GAUGE:
       memset (_docsis_snmp_label, 0, 50);
-      sprintf (_docsis_snmp_label, "Gauge");
+      sprintf (_docsis_snmp_label, "Gauge32");
       break;
     case ASN_TIMETICKS:
       memset (_docsis_snmp_label, 0, 50);
@@ -350,7 +383,7 @@ decode_vbind (unsigned char *data, unsigned int vb_len)
       break;
     case ASN_UINTEGER:
       memset (_docsis_snmp_label, 0, 50);
-      sprintf (_docsis_snmp_label, "UnsignedInteger");
+      sprintf (_docsis_snmp_label, "Unsigned32");
       break;
 #ifdef OPAQUE_SPECIAL_TYPES
     case ASN_OPAQUE_COUNTER64:
@@ -592,7 +625,7 @@ encode_snmp_oid (char *oid_string, unsigned char *out_buffer,
       if (!get_node (oid_string, var_name, &name_len))
 	{
 	  printf ("Can't find oid %s at line %d\n", oid_string, line);
-	  exit (-37);
+	  return 0;
 	}
 
     }

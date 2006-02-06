@@ -1,7 +1,7 @@
 /* 
  *  DOCSIS configuration file encoder. 
  *  Copyright (c) 2001,2005 Cornel Ciocirlan, ctrl@users.sourceforge.net.
- *  Copyright (c) 2002,2003,2004 Evvolve Media SRL, office@evvolve.com
+ *  Copyright (c) 2002,2003,2004,2005 Evvolve Media SRL, office@evvolve.com
  *  
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -47,13 +47,18 @@ char *tsave;
 (\.{1})*([A-Za-z0-9_-]+\.)+[A-Za-z0-9]+	{ TSAVE(yytext);yylval.strval=tsave; return T_LABEL_OID; }
 (\.{1})*([A-Za-z0-9_-]+\.)+'[\[A-Za-z0-9,:_\-\.\]]+'	{ TSAVE(yytext);yylval.strval=tsave; return T_LABEL_OID; }
 (\.{1})*([A-Za-z0-9_-]+\.)+((\"{1})*[A-Za-z0-9,:_\-\.]+(\"{1})*)+	{ TSAVE(yytext);yylval.strval=tsave; return T_LABEL_OID; }
+([0-9]+:){3}[0-9]+\.[0-9]+	{ TSAVE(yytext);yylval.strval=tsave; return T_TIMETICKS; }
 [Mm][Aa][Ii][Nn]        { yylval.strval=yytext;return T_MAIN; }
 SnmpWriteControl	{ yylval.symptr=find_symbol_by_name(yytext);return T_IDENT_SNMPW;   }
 SnmpMibObject		{ yylval.symptr=find_symbol_by_name(yytext);return T_IDENT_SNMPSET; }
+ManufacturerCVC		{ yylval.symptr=find_symbol_by_name(yytext);return T_IDENT_CVC; }
+CoSignerCVC		{ yylval.symptr=find_symbol_by_name(yytext);return T_IDENT_CVC; }
 Integer			{ return T_ASNTYPE_INT; 	}
-UnsignedInteger		{ return T_ASNTYPE_UINT; 	}
+Unsigned32		{ return T_ASNTYPE_UINT; 	}
 Gauge			{ return T_ASNTYPE_GAUGE; 	}
-TimeTicks		{ return T_ASNTYPE_TICKS; 	}
+Gauge32			{ return T_ASNTYPE_GAUGE; 	}
+Counter32 		{ return T_ASNTYPE_COUNTER; 	}
+TimeTicks		{ return T_ASNTYPE_TIMETICKS; 	}
 IPAddress		{ return T_ASNTYPE_IP; 		}
 ObjectID		{ return T_ASNTYPE_OBJID; 	}
 String			{ return T_ASNTYPE_STRING; 	}
@@ -72,7 +77,8 @@ TlvString		{ return T_TLV_STR_VALUE; 	}
 TlvStringZero		{ return T_TLV_STRZERO_VALUE; 	}
 [A-Za-z]+[A-Za-z0-9]*	{ 
 				yylval.symptr=find_symbol_by_name(yytext);
-		  	  	if(yydebug) printf("yylex:returning T_IDENTIFIER, yylval.symptr->sym_ident=%s\n", 
+		  	  	if(yydebug) 
+				        printf("yylex:returning T_IDENTIFIER, yylval.symptr->sym_ident=%s\n", 
 					yylval.symptr->sym_ident); 
 			 	return T_IDENTIFIER; 
 			}
@@ -87,7 +93,6 @@ TlvStringZero		{ return T_TLV_STRZERO_VALUE; 	}
 			  printf("line %d: string too long (max 2048 characters)\n",line); exit(-1);  
 			}
 		}
-<STRING>\;	{ printf("line %d: ';' not allowed in string, unmatched \" ?\n",line); exit(-1); }
 <STRING>\n	{ printf("line %d: \\n not allowed in string, unmatched \" ?\n",line); exit(-1); } 
 <STRING>\t	{ printf("line %d: \\t not allowed in string, unmatched \" ?\n",line); exit(-1); } 
 <STRING>\"	{ *str=0; BEGIN 0; yylval.strval=strbuf; return T_STRING; }

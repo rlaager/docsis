@@ -1,7 +1,7 @@
 /* 
  *  DOCSIS configuration file encoder. 
  *  Copyright (c) 2001 Cornel Ciocirlan, ctrl@users.sourceforge.net.
- *  Copyright (c) 2002,2003,2004 Evvolve Media SRL,office@evvolve.com
+ *  Copyright (c) 2002,2003,2004,2005 Evvolve Media SRL,office@evvolve.com
  *  
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -255,6 +255,10 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 167, "DefaultScanTimeout",   		3, 158,   (encode_ushort),     (decode_ushort),    0,        65535 },
 { 168, "TftpTimestamp",   		19, 0,    (encode_uint),     (decode_uint),    0,        0xFFFFFFFF        },
 { 169, "TftpModemAddress",   		20, 0,    (encode_ip),     (decode_ip),    0,        0     },
+{ 170, "ManufacturerCVC",      		32,   0,  (encode_nothing),    (decode_hexstr),      0,        255    },
+{ 171, "CoSignerCVCData",      		33,   0,  (encode_hexstr),    (decode_hexstr),      0,        255    },
+{ 172, "CoSignerCVC",      		33,   0,  (encode_nothing),    (decode_hexstr),      0,        255    },
+
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/
 { 998, "GenericTLV",           		0, 0,     (encode_nothing),   (decode_special),  1,        255        }, 
 { 999, "/*EndOfDataMkr*/",     		255, 0,   (encode_nothing),   (decode_special),  0,        0          } 

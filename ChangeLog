@@ -1,26 +1,40 @@
-0.9.4			- fix parsing of square brackets in string OID labels
-			- close the file descriptor in parse_config_file
-			- re-work of decoding infrastructure for CableHome
+0.9.5			- allow semi-colon characters in strings 
+ctrl			- add support for TimeTicks SNMP encoding. 
+			- simplify and improve parser (it now returns a 
+		          "parse tree")
+			- add support for ManufacturerCVC and CoSignerCVC 
+			  (reading files directly) 		
+			- print warning if TLV64 present in DOCSIS config files
+			- multiple file encoding in one pass (preliminary)
+			  Performance: up to 200 files / second 
+			- Support Gauge32 and Counter32. Unsigned32 gets 
+			  encoded as a Gauge32 as well. 
 
-0.9.3			- update CMTS MIC calculation per DOCSIS 2.0 (added SubMgmt 
-			  settings to CMTS MIC calculation)
-			- fix decoding of long Strings in SNMP Objects
-			- add support for long Variable Bindings (>127) 
-			- add support for TLV64 encode/decode for long SNMP Objects.
-			- add support for Downstream Channel List TLVs
-			- add support for TftpModemAddress and TftpTimeout TLVs
-			- make GenericTLVs easier to decode/encode when printable strings
-			  are used
-			- fixed memory leaks (for the sake of it)
+0.9.4			- fix parsing of square brackets in string OID labels
+evvolve			- close the file descriptor in parse_config_file
+ctrl			- re-work of decoding infrastructure for CableHome
+
+0.9.3			- update CMTS MIC calculation per DOCSIS 2.0 (added 
+evvolve			  SubMgmt settings to CMTS MIC calculation)
+ctrl			- fix decoding of long Strings in SNMP Objects
+ctrl			- add support for long Variable Bindings (>127) 
+ctrl			- add support for TLV64 encode/decode for long SNMP 
+ctrl			  Objects.
+evvolve			- add support for Downstream Channel List TLVs
+evvolve			- add support for TftpModemAddress and TftpTimeout TLVs
+ctrl			- make GenericTLVs easier to decode/encode when 
+ctrl			  printable strings are used
+ctrl			  
+ctrl			- fixed memory leaks (for the sake of it)
 			  
 			
 0.9.2			- add support for ObjectID variable bindings 
-			- fix bug when writing files on Win32
+evvolve			- fix bug when writing files on Win32
 			- fix the docsis_code for subscriber management filters
 
 
 0.9.1			- add support for ModemCapabilities 
-			- add support for Subscriber Management Filter groups
+evvolve			- add support for Subscriber Management Filter groups
 			- make SNMP VarBind encoding more "compatible" with 
 			  other encoders
 			- cleanup argument handling, fix bug with error printing
@@ -30,7 +44,7 @@
 			  
 
 0.9.0			- fix range of MaxCPE (1-254)
-			- add support for Win32 with Cygwin
+evvolve			- add support for Win32 with Cygwin
 			- fix ReAuthTimeout upper limit (30)
 			- add script to generate HTML help from 
 			  the symbol table

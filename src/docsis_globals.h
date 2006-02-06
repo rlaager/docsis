@@ -1,7 +1,7 @@
 /* 
  *  DOCSIS configuration file encoder. 
  *  Copyright (c) 2001 Cornel Ciocirlan, ctrl@users.sourceforge.net.
- *  Copyright (c) 2002 Evvolve Media SRL,office@evvolve.com
+ *  Copyright (c) 2002,2003,2004,2005 Evvolve Media SRL,office@evvolve.com
  *  
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
 #define _DOCSIS_GLOBALS_H
 
 char prog_name[255]; 
-struct tlv_list *global_tlvlist;
+struct tlv *global_tlvtree_head;
 symbol_type *global_symtable;
 
 #endif /* _DOCSIS_GLOBALS_H */

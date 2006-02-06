@@ -47,7 +47,7 @@ void decode_uint (unsigned char *tlvbuf, struct symbol_entry *sym, size_t length
 {
   static unsigned int helper;
   if (length != sizeof(unsigned int) ) { 
-	printf("u_int length mismatch!"); 
+	printf("u_int length mismatch!\n"); 
 	exit(-45); 
   }
   memset( &helper, 0, sizeof(unsigned int));
@@ -60,7 +60,7 @@ void decode_ushort (unsigned char *tlvbuf, symbol_type *sym, size_t length)
 {
   static unsigned short helper;
   if (length != sizeof(unsigned short) ) {
-        printf("u_short length mismatch!");
+        printf("u_short length mismatch!\n");
         exit(-45);
   }
 
@@ -79,7 +79,7 @@ void decode_ip (unsigned char *tlvbuf, symbol_type *sym, size_t length )
 {
   static struct in_addr helper;
   if (length != sizeof(struct in_addr) ) {
-        printf("ip address length mismatch!");
+        printf("ip address length mismatch!\n");
         exit(-45);
   }
 
@@ -92,7 +92,7 @@ void decode_ether (unsigned char *tlvbuf, symbol_type *sym, size_t length )
 {
   
  if (length != 6 ) {
-        printf("ethermac length mismatch!");
+        printf("ethermac length mismatch!\n");
         exit(-45);
  }
  printf ( "%s %s;\n", 
@@ -106,7 +106,7 @@ void decode_ethermask (unsigned char *tlvbuf, symbol_type *sym, size_t length)
  * "passees" to avoid the 2nd call overwriting the 1st. 
  */
   if (length != 12 ) {
-        printf("ethermac_and_mask length mismatch!");
+        printf("ethermac_and_mask length mismatch!\n");
         exit(-45);
   }
   printf ( "%s %s/", sym->sym_ident, ether_ntoa(tlvbuf));
@@ -118,7 +118,7 @@ void decode_md5 (unsigned char *tlvbuf, symbol_type *sym, size_t length)
 {
   int j=0;
   if (length != 16 ) {
-        printf("md5digest length mismatch!");
+        printf("md5digest length mismatch!\n");
         exit(-45);
   }
 
@@ -413,7 +413,9 @@ int
 hexadecimal_to_binary (const char *str, unsigned char * bufp)
 {
   int len, itmp;
+#ifdef DEBUG
   printf ("Hex string rx'd: %s\n", str);
+#endif
   if (!bufp)
     return -1;
   if (*str && *str == '0' && (*(str + 1) == 'x' || *(str + 1) == 'X'))

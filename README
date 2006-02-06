@@ -29,11 +29,7 @@ binary configuration files, as specified by the DOCSIS Radio Frequency Interface
 It supports most DOCSIS 2.0 Configuration Settings. Not supported (currently):
 
 	* Telephony Settings
-	* Modem Capabilities
 	* Vendor ID (Partial support provided)
-	* TFTP server timestamp
-	* TFTP server provisioned modem address
-	* SNMPv3 settings (partial support provided)
 
 Refer to Appendix C of the Radio Frequency Interface Specification  for a
 description of these settings.

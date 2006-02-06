@@ -1,7 +1,7 @@
 /* 
  *  DOCSIS configuration file encoder. 
  *  Copyright (c) 2001 Cornel Ciocirlan, ctrl@users.sourceforge.net.
- *  Copyright (c) 2002 Evvolve Media SRL,office@evvolve.com
+ *  Copyright (c) 2002,2003,2004,2005 Evvolve Media SRL,office@evvolve.com
  *  
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@
 
 
 #ifndef NUM_IDENTIFIERS
-#define NUM_IDENTIFIERS 172 
+#define NUM_IDENTIFIERS 175 
 #endif /*  NUM_IDENTIFIERS, needed in docsis_symtable.h  */
 
 #define MAXINT 2000000000 
@@ -61,11 +61,9 @@ struct tlv {
 	unsigned short docs_code;
 	unsigned short tlv_len;
 	unsigned char tlv_value[TLV_VSIZE];
-};
-
-struct tlv_list {
- 	int tlv_count;	/* How many TLVs we have in this list */ 
-	struct tlv **tlvlist;
+	struct tlv *parent; 
+	struct tlv *next_sibling; 
+	struct tlv *first_child;
 };
 
 union t_val {           /* union for returning token values */

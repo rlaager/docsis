@@ -1,7 +1,7 @@
 /* 
  *  DOCSIS configuration file encoder. 
  *  Copyright (c) 2001 Cornel Ciocirlan, ctrl@users.sourceforge.net.
- *  Copyright (c) 2002,2003,2004 Evvolve Media SRL,office@evvolve.com
+ *  Copyright (c) 2002,2003,2004,2005 Evvolve Media SRL,office@evvolve.com
  *  
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -44,11 +44,17 @@
 
 extern unsigned int line;	/* defined in docsis_lex.l */
 
+void setup_mib_flags();
+
 unsigned int
 add_cm_mic (unsigned char *tlvbuf, unsigned int tlvbuflen)
 {
-  MD5_CTX mdContext;
   unsigned char digest[16];
+  MD5_CTX mdContext;
+
+  if (tlvbuf == NULL || tlvbuflen == 0) 
+	return 0;
+
   MD5Init (&mdContext);
   MD5Update (&mdContext, tlvbuf, tlvbuflen);
   MD5Final (digest, &mdContext);
@@ -62,6 +68,10 @@ unsigned int
 add_eod_and_pad (unsigned char *tlvbuf, unsigned int tlvbuflen)
 {
   int nr_pads;
+
+  if (tlvbuf == NULL || tlvbuflen == 0) 
+	return 0;
+
   tlvbuf[tlvbuflen] = 255;
   tlvbuflen = tlvbuflen + 1;
   nr_pads =
@@ -79,18 +89,23 @@ unsigned int
 add_cmts_mic (unsigned char *tlvbuf, unsigned int tlvbuflen,
 	      unsigned char *key, int keylen)
 {
+
   int i;
   register unsigned char *cp, *dp;
-
-/* Only these configuration TLVs must be used to calculate the CMTS MIC */
-#define NR_TLVS 21
-  unsigned char digest_order[NR_TLVS] =
-    { 1, 2, 3, 4, 17, 43, 6, 18, 19, 20, 22, 23, 24, 25, 28, 29, 26, 35, 36, 37, 40 };
   unsigned char *cmts_tlvs;
   unsigned char digest[17];
-  cmts_tlvs = (unsigned char *) malloc (tlvbuflen + 1);
+
+/* Only these configuration TLVs must be used to calculate the CMTS MIC */
+#define NR_CMTS_MIC_TLVS 21
+  unsigned char digest_order[NR_CMTS_MIC_TLVS] =
+    { 1, 2, 3, 4, 17, 43, 6, 18, 19, 20, 22, 23, 24, 25, 28, 29, 26, 35, 36, 37, 40 };
+
+  if (tlvbuf == NULL || tlvbuflen == 0 ) 
+	return 0;
+
+  cmts_tlvs = (unsigned char *) malloc (tlvbuflen + 1); /* Plenty of space */
   dp = cmts_tlvs;
-  for (i = 0; i < NR_TLVS; i++)
+  for (i = 0; i < NR_CMTS_MIC_TLVS; i++)
     {
       cp = tlvbuf;
       while ((unsigned int) (cp - tlvbuf) < tlvbuflen)
@@ -102,8 +117,13 @@ add_cmts_mic (unsigned char *tlvbuf, unsigned int tlvbuflen,
 	      cp = cp + cp[1] + 2;
 	    }
 	  else
-	    {
-	      cp = cp + cp[1] + 2;
+	    { 
+	      if ( cp[0] == 64 ) { 
+		printf("%s: warning: TLV64 (length > 255) not allowed in DOCSIS config files\n", prog_name);
+		cp = cp + (size_t) ntohs(*((unsigned short *)(cp+1))) + 3;
+	      } else {
+	      	cp = cp + cp[1] + 2;
+	      }
 	    }
 	}
     }
@@ -126,18 +146,24 @@ usage (char *prog_name)
   printf
     ("Copyright (c) 1999,2000,2001 Cornel Ciocirlan, ctrl@users.sourceforge.net\n");
   printf
-    ("Copyright (c) 2002,2003,2004 Evvolve Media SRL, docsis@evvolve.com \n\n");
+    ("Copyright (c) 2002,2003,2004,2005 Evvolve Media SRL, docsis@evvolve.com \n\n");
 
   printf
     ("To encode a cable modem configuration file: \n\t %s -e <modem_cfg_file> <key_file> <output_file>\n",
      prog_name);
   printf
+    ("To encode multiple cable modem configuration files: \n\t %s -m <modem_cfg_file1> ...  <key_file> <new_extension>\n",
+     prog_name);
+  printf
     ("To encode a MTA configuration file: \n\t %s -p <mta_cfg_file> <output_file>\n",
+     prog_name);
+  printf
+    ("To encode multiple MTA configuration files: \n\t %s -m -p <mta_file1> ...  <new_extension>\n",
      prog_name);
   printf ("To decode a CM or MTA config file: \n\t %s -d <binary_file>\n",
 	  prog_name);
   printf
-    ("\nWhere:\n<cfg_file>\t\t= name of text (human readable) cable modem or MTA \n\t\t\t  configuration file\n<key_file>\t\t= text file containing the authentication key \n\t\t\t  (shared secret) to be used for the CMTS MIC\n<output_file> \t\t= name of output file where you want the binary data\n\t\t\t  to be written to (if it doesn't exist it is created).\n\t\t\t  This file can be TFTP-downloaded by DOCSIS-compliant\n\t\t\t  cable modems\n<binary_file>\t\t= name of binary file you want to be decoded\n");
+    ("\nWhere:\n<cfg_file>\t\t= name of text (human readable) cable modem or MTA \n\t\t\t  configuration file\n<key_file>\t\t= text file containing the authentication key \n\t\t\t  (shared secret) to be used for the CMTS MIC\n<output_file> \t\t= name of output file where the binary data will\n\t\t\t  be written to (if it does not exist it is created).\n<binary_file>\t\t= name of binary file to be decoded\n<new_extension>\t\t= new extension to be used when encoding multiple files\n");
   printf ("\nSee examples/*.cfg for configuration file format.\n");
   printf
     ("\nPlease send bugs or questions to docsis-users@lists.sourceforge.net\n\n");
@@ -149,59 +175,65 @@ int
 main (int argc, char *argv[])
 {
   unsigned char key[65];
-  FILE *kf, *of;
-  char *config_file, *key_file, *output_file;
-  unsigned char *buffer;
-  unsigned int buflen = 0, keylen = 0;
-  unsigned int encode_mta = FALSE, encode_docsis = FALSE, decode_bin = FALSE;
-  int i=0, parse_result=0;
+  FILE *kf;
+  char *config_file=NULL, *key_file=NULL, *output_file=NULL, *extension_string=NULL;
+  unsigned int keylen = 0;
+  unsigned int encode_docsis = FALSE, decode_bin = FALSE;
+  int i;
+
   memset (prog_name, 0, 255);
   strncpy (prog_name, argv[0], 254);
-  switch (argc)
 
-    {
-    case 3:
-      if (strcmp (argv[1], "-d"))
-	usage (prog_name);
-      decode_bin = TRUE;
-      config_file = argv[2];
-      key_file = NULL;
-      output_file = NULL;
-      break;
-      ;;
-    case 4:
-      if (strcmp (argv[1], "-p"))
-	usage (prog_name);
-      encode_mta = TRUE;
-      config_file = argv[2];
-      key_file = NULL;
-      output_file = argv[3];
-      break;
-      ;;
-    case 5:
-      encode_docsis = TRUE;
-      if (strcmp (argv[1], "-e"))
-	usage (prog_name);
-      config_file = argv[2];
-      key_file = argv[3];
-      output_file = argv[4];
-      break;
-      ;;
-    default:
-      usage (prog_name);
-      exit (10);
-    }
-  if (encode_docsis || encode_mta)
-    {
-      if (!strcmp (config_file, output_file))
+  if (argc < 2 ) { 
+	usage(prog_name);
+	exit (10); 
+  }
 
-	{
-	  printf ("%s: Error: source file is the same as destination file\n", prog_name);
-	  exit (-100);
+  if (!strcmp (argv[1], "-m") ){ /* variable number of args, encoding multiple files */ 
+	if (argc < 5 ) { 
+		usage(prog_name);
+		exit (10); 
 	}
+    	extension_string = argv[argc-1]; 
+        if (!strcmp ( argv[2], "-p")) { 
+		key_file = NULL; 
+	} else { 
+		key_file = argv[argc-2];
+		encode_docsis = TRUE;
+	}
+  } else { 
+  	switch (argc)
+    	{
+    	case 3:
+      		if (strcmp (argv[1], "-d"))
+			usage (prog_name);
+      		decode_bin = TRUE;
+      		config_file = argv[2];
+      		break;
+      		;;
+    	case 4:
+      		if (strcmp (argv[1], "-p"))
+			usage (prog_name);
+      		config_file = argv[2];
+      		output_file = argv[3];
+      		break;
+      		;;
+    	case 5:
+      		if (strcmp (argv[1], "-e"))
+			usage (prog_name);
+      		encode_docsis = TRUE;
+      		config_file = argv[2];
+      		key_file = argv[3];
+      		output_file = argv[4];
+      		break;
+      		;;
+    	default:
+      		usage (prog_name);
+      		exit (10);
     }
-  if (encode_docsis)
+  }
 
+  if (encode_docsis)
     {
       if ((kf = fopen (key_file, "r")) == NULL)
 	{
@@ -221,6 +253,155 @@ main (int argc, char *argv[])
     }
 
   init_global_symtable ();
+  setup_mib_flags(); 
+
+  if (decode_bin)
+  {
+      decode_file (config_file);
+      exit(0); // TODO: clean shutdown 
+  }
+
+  if (extension_string) { /* encoding multiple files */
+	if (encode_docsis) { 
+		/* encode argv[argc-3] to argv[2] */
+		for (i=2; i<argc-2; i++)  { 
+			if ( (output_file = get_output_name (argv[i], extension_string)) == NULL ) { 
+				printf("Cannot process input file %s, extension too short ?\n",argv[i] ); 
+				continue; 
+			}
+			
+			printf ("Processing input file %s: output to  %s\n",argv[i], output_file); 
+/*			fprintf (stderr,"Processing input file %s: output to  %s\n",argv[i], output_file);  */
+			encode_one_file (argv[i], output_file, key, keylen, encode_docsis); 
+			free (output_file); 
+			output_file = NULL;
+		}
+	} else { 
+		/* encode argv[argc-2] to argv[3] */
+		for (i=3; i<argc-1; i++)  { 
+			if ( (output_file = get_output_name (argv[i], extension_string)) == NULL ) { 
+				printf("Cannot process input file %s, extension too short ?\n",argv[i] ); 
+				continue; 
+			}
+			printf ("Processing input file %s: output to  %s\n",argv[i], output_file); 
+			encode_one_file (argv[i], output_file, key, keylen, encode_docsis); 
+			free (output_file); 
+			output_file = NULL;
+		}
+	}
+  } else { 
+	encode_one_file (config_file, output_file, key, keylen, encode_docsis);
+	/* encode argv[1] */
+  }
+  free(global_symtable);
+  shutdown_mib();
+  return 0;
+}
+
+int encode_one_file ( char *input_file, char *output_file, 
+	 		unsigned char *key, unsigned int keylen, int encode_docsis )
+{
+  int parse_result=0;
+  unsigned int buflen; 
+  unsigned char *buffer; 
+  FILE *of;
+
+  if (!strcmp (input_file, output_file))
+  {
+	printf ("%s: Error: source file is the same as destination file\n", prog_name);
+	return -1;
+  }
+
+  parse_result = parse_config_file (input_file, &global_tlvtree_head );
+
+  if (parse_result || global_tlvtree_head == NULL)
+    {
+      printf ("Error parsing config file %s\n", input_file);
+      return -1;
+    }
+/* Check whether we're encoding PacketCable */ 
+
+  if (global_tlvtree_head->docs_code == 254) { 
+	printf("First TLV is MtaConfigDelimiter, forcing PacketCable MTA file.\n"); 
+	encode_docsis=0;
+  } 
+
+/* walk the tree to find out how much memory we need */
+	/* leave some room for CM MIC, CMTS MIC, pad */
+  buflen = tlvtreelen (global_tlvtree_head);
+  buffer = (unsigned char *) malloc ( buflen + 255 ); 
+  buflen = flatten_tlvsubtree(buffer, 0, global_tlvtree_head);
+
+
+#ifdef DEBUG
+  printf ("TLVs found in parsed config file:\n");
+  decode_main_aggregate (buffer, buflen);
+#endif 
+
+  if (encode_docsis)
+    {
+      /* CM config file => add CM MIC, CMTS MIC, End-of-Data and pad */
+      buflen = add_cm_mic (buffer, buflen);
+      buflen = add_cmts_mic (buffer, buflen, key, keylen);
+      buflen = add_eod_and_pad (buffer, buflen);
+    }
+
+  printf ("Final content of config file:\n");
+
+  decode_main_aggregate (buffer, buflen);
+/* fix bug #914121... use "wb" for Windows compatibility */
+  if ((of = fopen (output_file, "wb")) == NULL)
+    {
+      printf ("%s: error: can't open output file %s\n", prog_name, output_file);
+      return -2;
+    }
+  fwrite (buffer, sizeof (unsigned char), buflen, of);
+  free(buffer);
+  return 0;
+
+  /*free(global_tlvlist->tlvlist); free(global_tlvlist); */ /* TODO free tree */
+}
+
+int
+init_global_symtable (void)
+{
+  global_symtable =
+    (symbol_type *) malloc (sizeof (symbol_type) * NUM_IDENTIFIERS);
+  if (global_symtable == NULL)
+    {
+      printf ("Error allocating memory!\n");
+      exit (255);
+    }
+  memcpy (global_symtable, symtable, sizeof (symbol_type) * NUM_IDENTIFIERS);
+  return 1;
+}
+
+void
+decode_file (char *file)
+{
+  int ifd;
+  unsigned char *buffer;
+  unsigned int buflen = 0;
+  int rv = 0;
+  struct stat st;
+  if ((ifd = open (file, O_RDONLY)) == -1)
+    {
+      printf ("Error opening binary file %s: %s\n", file, strerror (errno));
+      exit (-1);
+    }
+  if ((rv = fstat (ifd, &st)))
+    {
+      printf ("Can't stat file %s: %s\n", file, strerror (errno));
+      exit (-1);
+    }
+  buffer = (unsigned char *) malloc (st.st_size * sizeof (unsigned char) + 1);
+  buflen = read (ifd, buffer, st.st_size);
+  decode_main_aggregate (buffer, buflen);
+  free(buffer);
+}
+
+
+void setup_mib_flags() {
 
 #ifdef DEBUG
 /*  snmp_set_mib_warnings (2); */
@@ -257,108 +438,53 @@ main (int argc, char *argv[])
     {
       netsnmp_ds_toggle_boolean (NETSNMP_DS_LIBRARY_ID,
 				 NETSNMP_DS_LIB_RANDOM_ACCESS);
-
-#ifdef DEBUG
-      printf ("/* Random OID access: %d */\n",
-	      netsnmp_ds_get_boolean (NETSNMP_DS_LIBRARY_ID,
-				      NETSNMP_DS_LIB_RANDOM_ACCESS));
-
-#endif /* DEBUG */
     }				/* so we can use sysContact.0 instead of system.sysContact.0  */
-  if (decode_bin)
+  if (!netsnmp_ds_get_boolean
+      (NETSNMP_DS_LIBRARY_ID, NETSNMP_DS_LIB_NUMERIC_TIMETICKS))
     {
-      decode_file (config_file);
-      exit(0); // TODO: clean shutdown 
-    }
-  else
-    {
-      parse_result = parse_config_file (config_file);
-    }
-  if (parse_result || global_tlvlist == NULL)
-    {
-      printf ("Error parsing config file %s\n", config_file);
-      exit (70);
-    }
-/* Check whether we're encoding PacketCable */ 
-  if (global_tlvlist->tlvlist[0]->docs_code == 254) { 
-	printf("First TLV is MtaConfigDelimiter, writing PacketCable MTA file.\n"); 
-	encode_docsis=0;
+      netsnmp_ds_toggle_boolean (NETSNMP_DS_LIBRARY_ID,
+				 NETSNMP_DS_LIB_NUMERIC_TIMETICKS);
+    }				/* so we can use sysContact.0 instead of system.sysContact.0  */
+}
+
+
+/* 
+ * Given a string representing a filename path and a new extension_string, 
+ * returns the path with the extension part replaced by the new extension. 
+ * The old filename must have an extension and the new extension cannot be 
+ * longer than the old one.
+ */
+  
+char *get_output_name ( char *input_path, char *extension_string )
+{ 
+  int pathlen=0, i=0, old_ext_len=0;
+  char *new_path; 
+
+  if (input_path == NULL || extension_string == NULL) 
+	return NULL; 
+  if ( (new_path = strdup(input_path) ) == NULL ) 
+	return NULL;  /* out of memory */
+
+  pathlen = strlen(input_path);
+
+  /* Identify the length of the old extension */
+  for (i=pathlen; i > 0; i--) {
+  	if ( input_path[i] == '/' || input_path[i] == '\\' ) 
+		break;
+  	if ( input_path[i] == '.' )  {
+		old_ext_len = pathlen - i; 
+		break;
+	}
   }
 
-/* Find out how much memory we need to malloc to hold all TLVs */
+  if (old_ext_len < strlen (extension_string) ) 
+	return NULL; 
 
-  for (i = 0; i < global_tlvlist->tlv_count; i++)
-    {
-      buflen += 2;		/* docs_code and len */
-      buflen += global_tlvlist->tlvlist[i]->tlv_len;
-    }
-  buflen += 255;		/* leave some room for CM MIC, CMTS MIC, pad */
-  buffer = (unsigned char *) malloc (buflen);
-  buflen = flatten_tlvlist (buffer, global_tlvlist);
-#ifdef DEBUG
-  printf ("TLVs found in parsed config file:\n");
-  decode_main_aggregate (buffer, buflen);
-#endif 
+  memset (&new_path[pathlen - old_ext_len], 0, old_ext_len); 
+  strncpy (&new_path[pathlen - old_ext_len], extension_string, strlen(extension_string) );
 
-  if (encode_docsis)
-    {
-      /* CM config file => add CM MIC, CMTS MIC, End-of-Data and pad */
-      buflen = add_cm_mic (buffer, buflen);
-      buflen = add_cmts_mic (buffer, buflen, key, keylen);
-      buflen = add_eod_and_pad (buffer, buflen);
-    }
+  return new_path; 
+  /* !!! caller has to free the new string after using it !!!  */
+} 
 
-  printf ("Final content of config file:\n");
-
-  decode_main_aggregate (buffer, buflen);
-/* fix bug #914121... use "wb" for Windows compatibility */
-  if ((of = fopen (output_file, "wb")) == NULL)
-    {
-      printf ("%s: error: can't open output file %s\n", prog_name, output_file);
-      exit (-5);
-    }
-  fwrite (buffer, sizeof (unsigned char), buflen, of);
-  free(buffer);
-  free(global_tlvlist->tlvlist); free(global_tlvlist); free(global_symtable);
-  shutdown_mib();
-  return 0;
-}
-
-int
-init_global_symtable (void)
-{
-  global_symtable =
-    (symbol_type *) malloc (sizeof (symbol_type) * NUM_IDENTIFIERS);
-  if (global_symtable == NULL)
-
-    {
-      printf ("Error allocating memory!\n");
-      exit (255);
-    }
-  memcpy (global_symtable, symtable, sizeof (symbol_type) * NUM_IDENTIFIERS);
-  return 1;
-}
-
-void
-decode_file (char *file)
-{
-  int ifd;
-  unsigned char *buffer;
-  unsigned int buflen = 0;
-  int rv = 0;
-  struct stat st;
-  if ((ifd = open (file, O_RDONLY)) == -1)
-    {
-      printf ("Error opening binary file %s: %s\n", file, strerror (errno));
-      exit (-1);
-    }
-  if ((rv = fstat (ifd, &st)))
-    {
-      printf ("Can't stat file %s: %s\n", file, strerror (errno));
-      exit (-1);
-    }
-  buffer = (unsigned char *) malloc (st.st_size * sizeof (unsigned char) + 1);
-  buflen = read (ifd, buffer, st.st_size);
-  decode_main_aggregate (buffer, buflen);
-  free(buffer);
-}
+  

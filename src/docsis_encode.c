@@ -1,7 +1,7 @@
 /* 
  *  DOCSIS configuration file encoder. 
  *  Copyright (c) 2001,2005 Cornel Ciocirlan, ctrl@users.sourceforge.net.
- *  Copyright (c) 2002,2003,2004 Evvolve Media SRL,office@evvolve.com
+ *  Copyright (c) 2002,2003,2004,2005 Evvolve Media SRL,office@evvolve.com
  *  
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -308,7 +308,7 @@ int encode_strzero(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr 
 #endif /* DEBUG */
   memset(buf,0,string_size+1);
   memcpy ( buf, helper->strval, string_size);
-  free(helper->strval); 
+ /* No need to free strings because we use a static buffer to parse them */
   return ( string_size+1 );
 }
 
