@@ -16,8 +16,7 @@ if test "x$M4" = "xnotfound"; then
   AC_MSG_ERROR([M4 is required])
 else
   ac_m4_vers=`$M4 --version 2>/dev/null | head -1` ;
-  ac_is_gnu_m4=`echo $ac_m4_vers | cut -d' ' -f1`;
-  if test "x$ac_is_gnu_m4" = "xGNU"; then
+  if echo "$ac_m4_vers" | grep -q GNU; then
 	AC_MSG_RESULT([   found $ac_m4_vers at $M4 ])
   else
 	AC_MSG_ERROR([ GNU M4 is needed	])
