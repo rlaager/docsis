@@ -17,6 +17,7 @@ config.h.in
 config.log
 config.status
 configure
+docsis-*.*.*
 libtool
 ltmain.sh
 mkinstalldirs
