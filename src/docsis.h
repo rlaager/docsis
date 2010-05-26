@@ -1,8 +1,8 @@
-/* 
- *  DOCSIS configuration file encoder. 
+/*
+ *  DOCSIS configuration file encoder.
  *  Copyright (c) 2001 Cornel Ciocirlan, ctrl@users.sourceforge.net.
  *  Copyright (c) 2002,2003,2004,2005 Evvolve Media SRL, office@evvolve.com
- *  
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -41,8 +41,8 @@
 
 int yyerror (char *s);
 
-/* 
- * create a TLV from scratch, return pointer to TLV struct 
+/*
+ * create a TLV from scratch, return pointer to TLV struct
  */
 struct tlv *create_tlv (struct symbol_entry *sym_ptr, union t_val *value);
 struct tlv *create_snmpset_tlv (struct symbol_entry *sym_ptr,
@@ -66,7 +66,7 @@ struct tlv *create_external_file_tlv (struct symbol_entry *sym_ptr,
 			       union t_val *value);
 
 
-/* add a TLV to a list; create the list if NULL, otherwise re-alloc new list, 
+/* add a TLV to a list; create the list if NULL, otherwise re-alloc new list,
    copy new TLV and old list to new one  and free old list  */
 struct tlv *add_tlv_sibling (struct tlv *tlv, struct tlv *newtlv);
 
@@ -92,7 +92,7 @@ unsigned int tlvtreelen  (struct tlv *tlv);
 int parse_config_file (char *file, struct tlv **parse_tree_result);
 int yylex (void);
 void decode_file (char *file);
-int encode_one_file (char *input_file, char *output_file, 
+int encode_one_file (char *input_file, char *output_file,
 		       unsigned char *key, unsigned int keylen, int encode_docsis);
 char *get_output_name (char *input_path, char *new_extension);
 

@@ -201,7 +201,7 @@ docsis_SOURCES = docsis.c ethermac.c md5.c docsis_encode.c docsis_decode.c docsi
 INCLUDES = $(all_includes) $(NETSNMP_CFLAGS)
 
 # the library search path.
-docsis_LDFLAGS = $(all_libraries) $(NETSNMP_LIBS) $(LEXLIB) 
+docsis_LDFLAGS = $(all_libraries) $(NETSNMP_LIBS) $(LEXLIB)
 noinst_HEADERS = ethermac.h md5.h docsis.h docsis_common.h docsis_decode.h docsis_encode.h docsis_symtable.h docsis_snmp.h docsis_globals.h
 EXTRA_DIST = docsis_yy.h
 CLEANFILES = docsis_yy.c docsis_yy.h docsis_yy.output docsis_lex.c
@@ -267,7 +267,7 @@ clean-binPROGRAMS:
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
-docsis$(EXEEXT): $(docsis_OBJECTS) $(docsis_DEPENDENCIES) 
+docsis$(EXEEXT): $(docsis_OBJECTS) $(docsis_DEPENDENCIES)
 	@rm -f docsis$(EXEEXT)
 	$(LINK) $(docsis_LDFLAGS) $(docsis_OBJECTS) $(docsis_LDADD) $(LIBS)
 

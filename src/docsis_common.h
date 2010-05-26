@@ -1,8 +1,8 @@
-/* 
- *  DOCSIS configuration file encoder. 
+/*
+ *  DOCSIS configuration file encoder.
  *  Copyright (c) 2001 Cornel Ciocirlan, ctrl@users.sourceforge.net.
  *  Copyright (c) 2002,2003,2004,2005 Evvolve Media SRL,office@evvolve.com
- *  
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -20,7 +20,7 @@
  *  DOCSIS is a registered trademark of Cablelabs, http://www.cablelabs.com
  */
 
-/* 
+/*
     change history
 	2003-01-10 changed NUM_IDENTIFIERS to match what we have in docsis_symtable.h
 
@@ -31,10 +31,10 @@
 
 
 #ifndef NUM_IDENTIFIERS
-#define NUM_IDENTIFIERS 175 
+#define NUM_IDENTIFIERS 175
 #endif /*  NUM_IDENTIFIERS, needed in docsis_symtable.h  */
 
-#define MAXINT 2000000000 
+#define MAXINT 2000000000
 #define TLV_VSIZE 1024
 #define TRUE 1
 #define FALSE 0
@@ -44,7 +44,7 @@
 #define INDENT_INCREMENT 	102
 #define INDENT_DECREMENT 	103
 
-struct symbol_entry { 
+struct symbol_entry {
 	unsigned int id;
 	char sym_ident[30];
 	unsigned char docsis_code;
@@ -53,16 +53,16 @@ struct symbol_entry {
 	void (*decode_func) (unsigned char *, struct symbol_entry *, size_t length);
 	unsigned int low_limit;
 	unsigned int high_limit;
-}; 
+};
 
 typedef struct symbol_entry symbol_type;
 
-struct tlv { 
+struct tlv {
 	unsigned short docs_code;
 	unsigned short tlv_len;
 	unsigned char tlv_value[TLV_VSIZE];
-	struct tlv *parent; 
-	struct tlv *next_sibling; 
+	struct tlv *parent;
+	struct tlv *next_sibling;
 	struct tlv *first_child;
 };
 

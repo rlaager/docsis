@@ -1,8 +1,8 @@
-/* 
- *  DOCSIS configuration file encoder. 
+/*
+ *  DOCSIS configuration file encoder.
  *  Copyright (c) 2001 Cornel Ciocirlan, ctrl@users.sourceforge.net.
  *  Copyright (c) 2002 Evvolve Media SRL,office@evvolve.com
- *  
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -46,9 +46,9 @@ find_symbol_by_code_and_pid (unsigned char code, unsigned int pid)
 void decode_uint (unsigned char *tlvbuf, struct symbol_entry *sym, size_t length)
 {
   static unsigned int helper;
-  if (length != sizeof(unsigned int) ) { 
-	printf("u_int length mismatch!\n"); 
-	exit(-45); 
+  if (length != sizeof(unsigned int) ) {
+	printf("u_int length mismatch!\n");
+	exit(-45);
   }
   memset( &helper, 0, sizeof(unsigned int));
   memcpy( &helper, tlvbuf, length);
@@ -84,26 +84,26 @@ void decode_ip (unsigned char *tlvbuf, symbol_type *sym, size_t length )
   }
 
   memcpy (&helper, tlvbuf, length );
-  printf ( "%s %s;\n", 
+  printf ( "%s %s;\n",
 	sym->sym_ident, inet_ntoa(helper) );
 }
 
 void decode_ether (unsigned char *tlvbuf, symbol_type *sym, size_t length )
 {
-  
+
  if (length != 6 ) {
         printf("ethermac length mismatch!\n");
         exit(-45);
  }
- printf ( "%s %s;\n", 
+ printf ( "%s %s;\n",
 	sym->sym_ident, ether_ntoa(tlvbuf) );
 }
 
 void decode_ethermask (unsigned char *tlvbuf, symbol_type *sym, size_t length)
 {
-/* the return value of ether_ntoa is a pointer to a static string 
+/* the return value of ether_ntoa is a pointer to a static string
  * in the ether_ntoa function, so we have to print the values in two
- * "passees" to avoid the 2nd call overwriting the 1st. 
+ * "passees" to avoid the 2nd call overwriting the 1st.
  */
   if (length != 12 ) {
         printf("ethermac_and_mask length mismatch!\n");
@@ -133,7 +133,7 @@ void decode_snmp_wd (unsigned char *tlvbuf, symbol_type *sym, size_t length )
   printf ( "%s ", sym->sym_ident);
 
   /* last char in this TLV is not part of OID */
-  decode_snmp_oid (tlvbuf, (unsigned int) length-1 ); 
+  decode_snmp_oid (tlvbuf, (unsigned int) length-1 );
 
   printf(" %d ;\n", (unsigned int) tlvbuf[length-1] );
 }
@@ -150,12 +150,12 @@ void decode_snmp_object (unsigned char *tlvbuf, symbol_type *sym, size_t length 
   printf ( "%s ", sym->sym_ident);
   decode_vbind (tlvbuf, length );
 /*  22-06-03  decode_vbind prints the trailing ';' as well  */
-  printf("\n"); 
+  printf("\n");
 }
 
 void decode_string (unsigned char *tlvbuf, symbol_type *sym, size_t length )
 {
- static char helper[TLV_VSIZE]; 
+ static char helper[TLV_VSIZE];
 
 /* helper = (char *) malloc ( ((unsigned int) tlvbuf[1])+1 );  */
  memset ( helper, 0, length+1);
@@ -177,24 +177,24 @@ void decode_strzero (unsigned char *tlvbuf, symbol_type *sym, size_t length )
 
 void decode_hexstr (unsigned char *tlvbuf, symbol_type *sym, size_t length )
 {
- char *helper; 
+ char *helper;
  unsigned int i;
  unsigned int len;
 
 /* TODO */
  len =  length;
- helper = (char *) malloc ( len+1 ); 
+ helper = (char *) malloc ( len+1 );
  memset ( helper, 0, len+1);
  memcpy ( helper, (char *) tlvbuf, len );
  printf ( "%s 0x", sym->sym_ident);
- for(i=0; i<len; i++) { 
+ for(i=0; i<len; i++) {
 	printf("%02x", (unsigned char) helper[i]);
  }
  printf(";\n");
  free(helper);
 }
 
-void decode_ushort_list (unsigned char *tlvbuf, symbol_type *sym, size_t length) 
+void decode_ushort_list (unsigned char *tlvbuf, symbol_type *sym, size_t length)
 {
  char *helper;
  unsigned int i;
@@ -205,8 +205,8 @@ void decode_ushort_list (unsigned char *tlvbuf, symbol_type *sym, size_t length)
  memset ( helper, 0, len+1);
  memcpy ( helper, (char *) tlvbuf, len );
  printf ( "%s ", sym->sym_ident);
- if ( len < 2*sym->low_limit || len > 2*sym->high_limit ) 
-	printf( "/* -- warning: illegal length of buffer --*/"); 
+ if ( len < 2*sym->low_limit || len > 2*sym->high_limit )
+	printf( "/* -- warning: illegal length of buffer --*/");
 
  for(i=0; i<len; i=i+2) {
         printf("%hu", ntohs( (* (unsigned short *) &helper[i])) );
@@ -222,34 +222,34 @@ void decode_unknown (unsigned char *tlvbuf, symbol_type *sym, size_t length )
   char *cp,*value;
   char hexvalue[514];
 
-  len = length ;  
+  len = length ;
   if (len > 256 ) {
-	printf("/* ** next TLV is truncated** */"); len = 256; 
+	printf("/* ** next TLV is truncated** */"); len = 256;
   }
   memset (hexvalue, 0, 514);
 
-  value = (char *) malloc ( len+1 ); 
+  value = (char *) malloc ( len+1 );
   memset ( value, 0, len+1);
   memcpy ( value, (char *) tlvbuf+2, len );
 
   cp = value;
-  if ( str_isprint(cp, len) && len > 1 ) { 
+  if ( str_isprint(cp, len) && len > 1 ) {
 
-  	printf ("GenericTLV TlvCode %d TlvString ", 
+  	printf ("GenericTLV TlvCode %d TlvString ",
 			(unsigned int) tlvbuf[0]) ;
 	printf ("\"%s\"; /* tlv length = %d */", cp, len);
   } else if ( len > 1 && cp[len-1] == 0 && str_isprint(cp, len-1 ) ) {
 	printf("GenericTLV TlvCode %d TlvStringZero ",
                         (unsigned int) tlvbuf[0] ) ;
 	printf ("\"%s\"; /* tlv length = %d */", cp, len);
-  } else { 
-  	printf ("GenericTLV TlvCode %d TlvLength %d TlvValue ", 
+  } else {
+  	printf ("GenericTLV TlvCode %d TlvLength %d TlvValue ",
 			(unsigned int) tlvbuf[0], len) ;
   	snprint_hexadecimal ( hexvalue, 514, value, len);
 
   	printf("%s;", hexvalue);
   }
-  printf("\n"); 
+  printf("\n");
   free(value);
 }
 
@@ -262,11 +262,11 @@ void decode_aggregate (unsigned char *tlvbuf, symbol_type *sym, size_t length )
 {
   register unsigned char *cp;
   symbol_type *current_symbol;
-  unsigned int tlv_llen = 1; /* length of "Length" encoding of current TLV */ 
+  unsigned int tlv_llen = 1; /* length of "Length" encoding of current TLV */
   size_t tlv_vlen; 	/* length of "Value" encoding of current TLV */
 
   /* cp = tlvbuf+1+tlv_llen; */ /* skip type,len of parent TLV */
-  cp = tlvbuf; 
+  cp = tlvbuf;
 
   printf( "%s\n", sym->sym_ident);
   __docsis_indent(INDENT_NOOP, TRUE);
@@ -276,13 +276,13 @@ void decode_aggregate (unsigned char *tlvbuf, symbol_type *sym, size_t length )
 
 /*  while ( (unsigned int) (cp - tlvbuf +(sizeof(unsigned char))) < (unsigned int) tlvbuf[1] ) { */
   while ( (unsigned int) (cp - tlvbuf) < (unsigned int) length ) {
-  
+
   __docsis_indent(INDENT_NOOP, TRUE);
   current_symbol = find_symbol_by_code_and_pid (cp[0], sym->id);
   tlv_vlen = (size_t) cp[1];
-  if (current_symbol == NULL) { 
-		decode_unknown(cp, NULL, tlv_vlen );	
-  	} else { 
+  if (current_symbol == NULL) {
+		decode_unknown(cp, NULL, tlv_vlen );
+  	} else {
       		current_symbol->decode_func (cp+1+tlv_llen, current_symbol, tlv_vlen);
   	}
  	cp = (unsigned char*) cp + 1 + tlv_llen + tlv_vlen; /* skip type, length value */
@@ -294,8 +294,8 @@ void decode_aggregate (unsigned char *tlvbuf, symbol_type *sym, size_t length )
   printf("}\n");
 }
 
-/* 
-** This is just like decode_aggregate, but it only does symbol lookup 
+/*
+** This is just like decode_aggregate, but it only does symbol lookup
 ** for the VendorIdentifier which is the only 'known' TLV.
 **/
 
@@ -303,11 +303,11 @@ void decode_vspecific (unsigned char *tlvbuf, symbol_type *sym, size_t length )
 {
   register unsigned char *cp;
   symbol_type *first_symbol;
-  unsigned int tlv_llen = 1; /* length of "Length" encoding of current TLV */ 
+  unsigned int tlv_llen = 1; /* length of "Length" encoding of current TLV */
   size_t tlv_vlen; 	/* length of "Value" encoding of current TLV */
 
   /*  cp = tlvbuf+1+tlv_llen; */ /* skip type,len of parent TLV */
-  cp = tlvbuf; 
+  cp = tlvbuf;
 
   printf( "%s\n", sym->sym_ident);
   __docsis_indent(INDENT_NOOP, TRUE);
@@ -315,9 +315,9 @@ void decode_vspecific (unsigned char *tlvbuf, symbol_type *sym, size_t length )
 
   __docsis_indent(INDENT_INCREMENT, FALSE);
 
-  /* First TLV inside VendorSpecific has to be VendorIdentifier... the rest we don't care */ 
-  
-  first_symbol = find_symbol_by_code_and_pid (cp[0], sym->id); 
+  /* First TLV inside VendorSpecific has to be VendorIdentifier... the rest we don't care */
+
+  first_symbol = find_symbol_by_code_and_pid (cp[0], sym->id);
   tlv_vlen = (size_t) cp[1];
   if (first_symbol == NULL) {
   		__docsis_indent(INDENT_NOOP, TRUE);
@@ -325,14 +325,14 @@ void decode_vspecific (unsigned char *tlvbuf, symbol_type *sym, size_t length )
   		__docsis_indent(INDENT_NOOP, TRUE);
                 decode_unknown(cp, NULL, tlv_vlen);
         } else {
-	/* Symbol found ... check if it's the right one */ 
-		if (!strncmp (first_symbol->sym_ident, "VendorIdentifier", 16)) 
-		{ 
+	/* Symbol found ... check if it's the right one */
+		if (!strncmp (first_symbol->sym_ident, "VendorIdentifier", 16))
+		{
   			__docsis_indent(INDENT_NOOP, TRUE);
 	                first_symbol->decode_func(cp+1+tlv_llen, first_symbol, tlv_vlen);
-		} 
-		else 
-		{ 
+		}
+		else
+		{
   			__docsis_indent(INDENT_NOOP, TRUE);
 			printf ("/* Invalid VendorSpecific option - 1st element is NOT VendorIdentifier */");
   			__docsis_indent(INDENT_NOOP, TRUE);
@@ -345,7 +345,7 @@ void decode_vspecific (unsigned char *tlvbuf, symbol_type *sym, size_t length )
   while ( (unsigned int) (cp - tlvbuf) < (unsigned int) length ) {
 
   __docsis_indent(INDENT_NOOP, TRUE);
- 
+
  	tlv_vlen = (size_t) cp[1];
         decode_unknown(cp, NULL, tlv_vlen );
         cp = (unsigned char*) cp + 1 + tlv_llen + tlv_vlen; /* skip type, length, value */
@@ -357,14 +357,14 @@ void decode_vspecific (unsigned char *tlvbuf, symbol_type *sym, size_t length )
   printf("}\n");
 }
 
-/* 
- * This function is needed because we don't have a symbol to call it. 
- * We can't put a "Main" symbol in the symtable because docsis_code is 
- * unsigned char (in struct symbol_entry) and we reserve the values for 
- * DOCSIS use. 
- * It's also a bit different from docsis_aggregate in that docsis_aggregate 
- * takes an aggregate tlvbuf as argument that INCLUDES the "parent" code and 
- * length. On the main aggregate we don't have a code / length. 
+/*
+ * This function is needed because we don't have a symbol to call it.
+ * We can't put a "Main" symbol in the symtable because docsis_code is
+ * unsigned char (in struct symbol_entry) and we reserve the values for
+ * DOCSIS use.
+ * It's also a bit different from docsis_aggregate in that docsis_aggregate
+ * takes an aggregate tlvbuf as argument that INCLUDES the "parent" code and
+ * length. On the main aggregate we don't have a code / length.
  */
 
 void decode_main_aggregate (unsigned char *tlvbuf, size_t buflen)
@@ -372,13 +372,13 @@ void decode_main_aggregate (unsigned char *tlvbuf, size_t buflen)
 #define TLV_LEN_SIZE 1
   register unsigned char *cp = NULL;
   symbol_type *current_symbol;
-  unsigned int tlv_llen = 1; /* length of "Length" encoding of current TLV */ 
+  unsigned int tlv_llen = 1; /* length of "Length" encoding of current TLV */
   size_t tlv_vlen; 	/* length of "Value" encoding of current TLV */
-  
-  cp = tlvbuf; 
+
+  cp = tlvbuf;
 
   __docsis_indent(INDENT_CLEAR, FALSE);
-	  
+
   printf( "Main \n{\n");
   __docsis_indent(INDENT_INCREMENT, FALSE);
 
@@ -387,16 +387,16 @@ void decode_main_aggregate (unsigned char *tlvbuf, size_t buflen)
   __docsis_indent(INDENT_NOOP, TRUE);
 
   current_symbol = find_symbol_by_code_and_pid (cp[0],0);
-  if (cp[0] == 64) { 
-	tlv_llen = 2; 
+  if (cp[0] == 64) {
+	tlv_llen = 2;
 	tlv_vlen = (size_t) ntohs(*((unsigned short *)(cp+1)));
   } else  {
-	tlv_llen = 1; 
-	tlv_vlen = (size_t) cp[1]; 
+	tlv_llen = 1;
+	tlv_vlen = (size_t) cp[1];
   }
-  if (current_symbol == NULL) { 
-		decode_unknown(cp, NULL, (size_t) cp[1] );	
-  	} else { 
+  if (current_symbol == NULL) {
+		decode_unknown(cp, NULL, (size_t) cp[1] );
+  	} else {
       		current_symbol->decode_func (cp+1+tlv_llen, current_symbol, tlv_vlen );
   	}
 #ifdef DEBUG
@@ -436,30 +436,30 @@ hexadecimal_to_binary (const char *str, unsigned char * bufp)
   return len;
 }
 
-int 
-str_isalpha (const char *str, size_t str_len) 
+int
+str_isalpha (const char *str, size_t str_len)
 {
   unsigned int i;
 
-  for (i=0; i<str_len; i++) 
-		if (!(isalnum((int) str[i]) && isprint((int) str[i]) && isascii((int) str[i])) ) return FALSE; 
+  for (i=0; i<str_len; i++)
+		if (!(isalnum((int) str[i]) && isprint((int) str[i]) && isascii((int) str[i])) ) return FALSE;
 
   return TRUE;
 }
 
-int 
-str_isprint (const char *str, size_t str_len) 
+int
+str_isprint (const char *str, size_t str_len)
 {
   unsigned int i;
 
-  for (i=0; i<str_len; i++) 
-		if (!(isprint((int) str[i]))) return FALSE; 
+  for (i=0; i<str_len; i++)
+		if (!(isprint((int) str[i]))) return FALSE;
 
   return TRUE;
 }
 
-/* 
- * Print a string in hex format output ... for strings that are not alphanumeric, i.e. 
+/*
+ * Print a string in hex format output ... for strings that are not alphanumeric, i.e.
  * HexString, BitString etc
  * str is the original string
  * str_len is the length of the original string
@@ -468,7 +468,7 @@ str_isprint (const char *str, size_t str_len)
 
 
 void
-snprint_hexadecimal ( unsigned char *outbuf, size_t outsize, const char *str, size_t str_len ) 
+snprint_hexadecimal ( unsigned char *outbuf, size_t outsize, const char *str, size_t str_len )
 {
   unsigned int i;
   unsigned char *cp;
@@ -479,7 +479,7 @@ snprint_hexadecimal ( unsigned char *outbuf, size_t outsize, const char *str, si
   sprintf(cp, "0x");
   cp = cp +2*sizeof(char);
 
-  for (i=0; i<str_len && (unsigned int) (cp-outbuf) < outsize; i++) { 
+  for (i=0; i<str_len && (unsigned int) (cp-outbuf) < outsize; i++) {
 	sprintf(cp, "%02x", (unsigned char) str[i]);
 	cp = cp +2*sizeof(char);
   }
@@ -488,30 +488,30 @@ snprint_hexadecimal ( unsigned char *outbuf, size_t outsize, const char *str, si
 
 /* Simple indent handler ... */
 
-void __docsis_indent(int opCode, int doPrint ) 
-{ 
+void __docsis_indent(int opCode, int doPrint )
+{
 	static int numtabs;
 	int i;
 
-	switch (opCode)  
+	switch (opCode)
 	{
-		case INDENT_INCREMENT: 
+		case INDENT_INCREMENT:
 			numtabs++;
 			break;
 			;;
-		case INDENT_DECREMENT: 
+		case INDENT_DECREMENT:
 			numtabs--;
-			break; 
+			break;
 			;;
-		case INDENT_CLEAR: 
+		case INDENT_CLEAR:
 			numtabs=0;
 			break;
 			;;
 	}
 
-	if ( doPrint )  
+	if ( doPrint )
 	{
-		for (i=0; i<numtabs; i++) printf ("\t"); 
+		for (i=0; i<numtabs; i++) printf ("\t");
 	}
 }
 

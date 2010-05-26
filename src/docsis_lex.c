@@ -924,11 +924,11 @@ static char *yy_last_accepting_cpos;
 char *yytext;
 #line 1 "docsis_lex.l"
 #define INITIAL 0
-/* 
- *  DOCSIS configuration file encoder. 
+/*
+ *  DOCSIS configuration file encoder.
  *  Copyright (c) 2001,2005 Cornel Ciocirlan, ctrl@users.sourceforge.net.
  *  Copyright (c) 2002,2003,2004,2005 Evvolve Media SRL, office@evvolve.com
- *  
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -1382,41 +1382,41 @@ YY_RULE_SETUP
 case 37:
 YY_RULE_SETUP
 #line 78 "docsis_lex.l"
-{ 
+{
 				yylval.symptr=find_symbol_by_name(yytext);
-		  	  	if(yydebug) 
-				        printf("yylex:returning T_IDENTIFIER, yylval.symptr->sym_ident=%s\n", 
-					yylval.symptr->sym_ident); 
-			 	return T_IDENTIFIER; 
+		  	  	if(yydebug)
+				        printf("yylex:returning T_IDENTIFIER, yylval.symptr->sym_ident=%s\n",
+					yylval.symptr->sym_ident);
+			 	return T_IDENTIFIER;
 			}
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
 #line 86 "docsis_lex.l"
-{ BEGIN STRING; str=strbuf; memset(strbuf,0,2048); strsize=0; }	
+{ BEGIN STRING; str=strbuf; memset(strbuf,0,2048); strsize=0; }
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
 #line 87 "docsis_lex.l"
-{ 
-			if (strsize<2048)  
+{
+			if (strsize<2048)
 			{
-				*str++ = ' '; 
+				*str++ = ' ';
 				strsize++;
 			} else {
-			  printf("line %d: string too long (max 2048 characters)\n",line); exit(-1);  
+			  printf("line %d: string too long (max 2048 characters)\n",line); exit(-1);
 			}
 		}
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
 #line 96 "docsis_lex.l"
-{ printf("line %d: \\n not allowed in string, unmatched \" ?\n",line); exit(-1); } 
+{ printf("line %d: \\n not allowed in string, unmatched \" ?\n",line); exit(-1); }
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
 #line 97 "docsis_lex.l"
-{ printf("line %d: \\t not allowed in string, unmatched \" ?\n",line); exit(-1); } 
+{ printf("line %d: \\t not allowed in string, unmatched \" ?\n",line); exit(-1); }
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
@@ -1426,13 +1426,13 @@ YY_RULE_SETUP
 case 43:
 YY_RULE_SETUP
 #line 99 "docsis_lex.l"
-{ 
-			if (strsize<2048)  
+{
+			if (strsize<2048)
 			{
-				*str++ = *yytext; 
+				*str++ = *yytext;
 				strsize++;
 			} else {
-			  printf("line %d: string too long (max 2048 characters)\n",line); exit(-1);  
+			  printf("line %d: string too long (max 2048 characters)\n",line); exit(-1);
 			}
 		}
 	YY_BREAK
@@ -2402,8 +2402,8 @@ int main()
 #line 123 "docsis_lex.l"
 
 
-struct symbol_entry 
-*find_symbol_by_name (char *sym_str) 
+struct symbol_entry
+*find_symbol_by_name (char *sym_str)
 {
  int i;
 
@@ -2414,5 +2414,5 @@ struct symbol_entry
  }
  printf ("Unrecognized symbol %s at line %d\n", sym_str, line);
  exit(-1);
-}          
+}
 

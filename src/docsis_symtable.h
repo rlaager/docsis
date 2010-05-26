@@ -1,8 +1,8 @@
-/* 
- *  DOCSIS configuration file encoder. 
+/*
+ *  DOCSIS configuration file encoder.
  *  Copyright (c) 2001 Cornel Ciocirlan, ctrl@users.sourceforge.net.
  *  Copyright (c) 2002,2003,2004,2005 Evvolve Media SRL,office@evvolve.com
- *  
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -20,9 +20,9 @@
  *  DOCSIS is a registered trademark of Cablelabs, http://www.cablelabs.com
  */
 
-/* 
-    change history 
-	2004-07-29 fix bug # 970994 ... SubMgmtControl had wrong docsis code 
+/*
+    change history
+	2004-07-29 fix bug # 970994 ... SubMgmtControl had wrong docsis code
 	2003-01-10 added three new TLV types for BPI+ (courtesy of Adrian Kwong)
 
 */
@@ -35,18 +35,18 @@
 #include "docsis_decode.h"
 #include "docsis_encode.h"
 
-/* 
- * encode_nothing is used for non-trivial settings, where the encoding functions 
+/*
+ * encode_nothing is used for non-trivial settings, where the encoding functions
  * must have prototypes that don't match symbol_type (i.e. generic TLV, SNMP, etc).
  *
- * This is a list and a tree at the same time. The "parent_id" of each entry is a pointer to the 
- * parent row in this table; ClassId for example has "6" as parent ID which is the index 
+ * This is a list and a tree at the same time. The "parent_id" of each entry is a pointer to the
+ * parent row in this table; ClassId for example has "6" as parent ID which is the index
  * in the table of ClassOfService
  */
 
 /*id  "identifier" docsis_code parent_id encode_func decode_func low_limit high_limit */
 
-symbol_type symtable[NUM_IDENTIFIERS] =  { 
+symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 0,   "/* Pad */",            		0,   0,   (encode_nothing),   (decode_special),     0,        0          },
 { 1,   "DownstreamFrequency",  		1,   0,   (encode_uint),      (decode_uint),        88000000, 860000000  },
 { 2,   "UpstreamChannelId",    		2,   0,   (encode_uchar),     (decode_uchar),       0,        255        },
@@ -161,7 +161,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 99,  "ToleratedGrantJitter", 		21,  80,  (encode_uint),      (decode_uint),        0,        0          },
 { 100, "GrantsPerInterval",    		22,  80,  (encode_uchar),     (decode_uchar),       0,        127        },
 { 101, "IpTosOverwrite",       		23,  80,  (encode_hexstr),    (decode_hexstr),      2,        2          },
-	
+
 /* Downstream Service Flow */
 
 { 102, "DsServiceFlow",        		25,  0,   (encode_nothing),   (decode_aggregate),   0,        0          },
@@ -202,12 +202,12 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 
 { 127, "SAMapWaitTimeout",     		8,   18,  (encode_uint),      (decode_uint),        1,        10         },
 { 128, "SAMapMaxRetries",      		9,   18,  (encode_uint),      (decode_uint),        0,        10         },
-	
+
 /* ManufacturerCVC */
 
 { 129, "MfgCVCData",           		32,   0,  (encode_hexstr),    (decode_hexstr),      0,        255        },
 
-/* Vendor Specific */ 
+/* Vendor Specific */
 { 130, "VendorSpecific",       		43,   0,  (encode_nothing),   (decode_vspecific),   0,        0          },
 { 131, "VendorIdentifier",     		8,  130,  (encode_hexstr),    (decode_hexstr),      3,        3          },
 
@@ -260,8 +260,8 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 172, "CoSignerCVC",      		33,   0,  (encode_nothing),    (decode_hexstr),      0,        255    },
 
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/
-{ 998, "GenericTLV",           		0, 0,     (encode_nothing),   (decode_special),  1,        255        }, 
-{ 999, "/*EndOfDataMkr*/",     		255, 0,   (encode_nothing),   (decode_special),  0,        0          } 
+{ 998, "GenericTLV",           		0, 0,     (encode_nothing),   (decode_special),  1,        255        },
+{ 999, "/*EndOfDataMkr*/",     		255, 0,   (encode_nothing),   (decode_special),  0,        0          }
 };
 
 #endif /* _DOCSIS_SYMTABLE_H */

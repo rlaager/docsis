@@ -1,8 +1,8 @@
-/* 
- *  DOCSIS configuration file encoder. 
+/*
+ *  DOCSIS configuration file encoder.
  *  Copyright (c) 2001 Cornel Ciocirlan, ctrl@users.sourceforge.net.
  *  Copyright (c) 2002,2003,2004,2005 Evvolve Media SRL,office@evvolve.com
- *  
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -204,7 +204,7 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
 	    }
 	}
       /* If length is more than 127, won't fit into a 1-byte quantity */
-      if (len+name_len+8 < 0x7f ) {  
+      if (len+name_len+8 < 0x7f ) {
      		data_ptr = _docsis_snmp_build_var_op (out_buffer,
                                     var_name,
                                     &name_len,
@@ -216,11 +216,11 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
 				    var_name,
 				    &name_len,
 				    ASN_OCTET_STR,
-				    len, (unsigned char *) buf, 
+				    len, (unsigned char *) buf,
 				    &out_size);
       }
 #ifdef DEBUG
-      fprintf (stderr, "encoded len %ld var_len %d leftover %ud difference %d\n", len, name_len, out_size, (data_ptr - out_buffer) ); 
+      fprintf (stderr, "encoded len %ld var_len %d leftover %ud difference %d\n", len, name_len, out_size, (data_ptr - out_buffer) );
 #endif
       return data_ptr - out_buffer;
       break;
@@ -291,8 +291,8 @@ decode_vbind (unsigned char *data, unsigned int vb_len)
   vp = (struct variable_list *) malloc (sizeof (struct variable_list));
   if (vp == NULL)
     {
-      fprintf (stderr, "Out of memory\n"); 
-      return 0; 
+      fprintf (stderr, "Out of memory\n");
+      return 0;
     }
   memset (vp, 0, sizeof (struct variable_list));
 
@@ -309,7 +309,7 @@ decode_vbind (unsigned char *data, unsigned int vb_len)
     return -1;
 
   len = PACKET_LENGTH;
- 
+
   if (netsnmp_ds_get_boolean
       (NETSNMP_DS_LIBRARY_ID, NETSNMP_DS_LIB_EXTENDED_INDEX))
     {
@@ -332,7 +332,7 @@ decode_vbind (unsigned char *data, unsigned int vb_len)
   netsnmp_ds_set_int (NETSNMP_DS_LIBRARY_ID,
 			      NETSNMP_DS_LIB_OID_OUTPUT_FORMAT,
 			      NETSNMP_OID_OUTPUT_SUFFIX);
- 
+
   snprint_objid (outbuf, 1023, vp->name, vp->name_length);
 
   if (!get_node (outbuf, var_name, &name_len))
@@ -360,7 +360,7 @@ decode_vbind (unsigned char *data, unsigned int vb_len)
 /* save the subtree - we need it later to show enums */
   subtree = get_tree (var_name, name_len, get_tree_head() );
 
-/* This first switch is just for saving the type in the format we actually want 
+/* This first switch is just for saving the type in the format we actually want
    to print. */
 
   switch ((short) vp->type)
@@ -563,10 +563,10 @@ decode_vbind (unsigned char *data, unsigned int vb_len)
   switch ((short) vp->type)
     {
     case ASN_OCTET_STR:
-	if (str_isprint(vp->val.string, vp->val_len)) 
+	if (str_isprint(vp->val.string, vp->val_len))
 		{
 		 	snprintf(outbuf, vp->val_len+5, "\"%s\"", vp->val.string);
-		} else { 
+		} else {
 			snprint_hexadecimal (outbuf, 1023, vp->val.string, vp->val_len);
       			memset (_docsis_snmp_label, 0, 50);
       			sprintf (_docsis_snmp_label, "HexString");
@@ -585,15 +585,15 @@ decode_vbind (unsigned char *data, unsigned int vb_len)
 				NETSNMP_DS_LIB_OID_OUTPUT_FORMAT,
 				NETSNMP_OID_OUTPUT_SUFFIX);
 		break;
- 
-    default: 
+
+    default:
 	snprint_value (outbuf, 1023, vp->name, vp->name_length, vp);
 
     }
 
-    if ( subtree ) 
+    if ( subtree )
     {
-   	enums = subtree->enums;	
+   	enums = subtree->enums;
 	   	for (; enums; enums = enums->next) {
 			if (enums->value == *vp->val.integer) {
 			enum_string = enums->label;
@@ -601,11 +601,11 @@ decode_vbind (unsigned char *data, unsigned int vb_len)
 			}
 		}
     }
-  if (enum_string) 
+  if (enum_string)
 	printf (" %s %s; /* %s */", _docsis_snmp_label, outbuf, enum_string);
   else
 	printf (" %s %s ;", _docsis_snmp_label, outbuf);
-	 
+
 
   snmp_free_var (vp);
 
@@ -665,23 +665,23 @@ decode_snmp_oid (unsigned char *data, unsigned int data_len)
       snprint_objid (outbuf, 1023, this_oid, oid_len);
     }
 /*  printf ("%s %d", outbuf, (int) data[data_len - 1]); */
-  printf ("%s", outbuf); 
+  printf ("%s", outbuf);
   return 1;
 }
 
-/* 
- * The following two functions differ from stock net-snmp functions by not supporting a long 
- * type for the length of the SNMP VarBinds 
+/*
+ * The following two functions differ from stock net-snmp functions by not supporting a long
+ * type for the length of the SNMP VarBinds
  *
  * u_char * docsis_snmp_build_var_op(
  * u_char *data      IN - pointer to the beginning of the output buffer
- * oid *var_name        IN - object id of variable 
- * int *var_name_len    IN - length of object id 
- * u_char var_val_type  IN - type of variable 
- * int    var_val_len   IN - length of variable 
- * u_char *var_val      IN - value of variable 
+ * oid *var_name        IN - object id of variable
+ * int *var_name_len    IN - length of object id
+ * u_char var_val_type  IN - type of variable
+ * int    var_val_len   IN - length of variable
+ * u_char *var_val      IN - value of variable
  * int *listlength      IN/OUT - number of valid bytes left in
- * output buffer 
+ * output buffer
  */
 
 u_char         *
@@ -816,7 +816,7 @@ _docsis_snmp_build_var_op(u_char * data,
  *
  *  Returns a pointer to the first byte of the contents of this object.
  *  Returns NULL on any error.
- 
+
  u_char * asn_build_sequence(
  u_char     *data         IN - pointer to start of object
  int        *datalength   IN/OUT - number of valid bytes left in buffer
@@ -828,18 +828,18 @@ _docsis_asn_build_sequence(u_char * data,
                    size_t * datalength, u_char type, size_t length)
 {
     if (length > 0x7f)  {
-	printf("Warning: string too long, may result in illegal encoding\n"); 
+	printf("Warning: string too long, may result in illegal encoding\n");
     }
-    
+
     if (*datalength <2) {
-        printf(  "SNMP encoding error (build sequence): length %d < 2: PUNT", 
+        printf(  "SNMP encoding error (build sequence): length %d < 2: PUNT",
                 (int) *datalength);
         return NULL;
     }
     *datalength -= 2;
     *data++ = type;
-     if (*datalength >255) { 
-        printf(  "SNMP encoding error (_docsis_build sequence): length %d >255 : PUNT", 
+     if (*datalength >255) {
+        printf(  "SNMP encoding error (_docsis_build sequence): length %d >255 : PUNT",
                 (int) *datalength);
         return NULL;
     }

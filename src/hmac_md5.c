@@ -1,8 +1,8 @@
-/* 
- *  DOCSIS configuration file encoder. 
+/*
+ *  DOCSIS configuration file encoder.
  *  Copyright (c) 2001 Cornel Ciocirlan, ctrl@users.sourceforge.net.
  *  Copyright (c) 2002, 2003 Evvolve Media SRL, office@evvolve.com
- *  
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -25,7 +25,7 @@
 #include "md5.h"
 
 /*
- * debugging function  
+ * debugging function
  * print the MD5 digest found in the arg buffer
  */
 
@@ -34,13 +34,13 @@ void md5_print_digest ( unsigned char *digest )
   int j;
   /* TODO check that the buffer actually contains 16 chars ... */
   printf (" --- MD5 DIGEST: 0x");
-  for (j=0;j<16;j++) 
+  for (j=0;j<16;j++)
 	printf ("%02x", digest[j] );
   printf("\n");
 }
 
 /*
-** Function: hmac_md5 
+** Function: hmac_md5
 ** Mostly cut & paste from RFC 2104
 */
 
@@ -63,7 +63,7 @@ hmac_md5(unsigned char *text, int text_len, unsigned char *key, size_t key_len, 
         unsigned char tk[16];
         int i;
  	unsigned char tmpdigest[16];
-	
+
         /* if key is longer than 64 bytes reset it to key=MD5(key) */
         if (key_len > 64) {
 

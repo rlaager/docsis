@@ -1,8 +1,8 @@
-/* 
- *  DOCSIS configuration file encoder. 
+/*
+ *  DOCSIS configuration file encoder.
  *  Copyright (c) 2001 Cornel Ciocirlan, ctrl@users.sourceforge.net.
  *  Copyright (c) 2002,2003,2004,2005 Evvolve Media SRL,office@evvolve.com
- *  
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -52,7 +52,7 @@ add_cm_mic (unsigned char *tlvbuf, unsigned int tlvbuflen)
   unsigned char digest[16];
   MD5_CTX mdContext;
 
-  if (tlvbuf == NULL || tlvbuflen == 0) 
+  if (tlvbuf == NULL || tlvbuflen == 0)
 	return 0;
 
   MD5Init (&mdContext);
@@ -69,7 +69,7 @@ add_eod_and_pad (unsigned char *tlvbuf, unsigned int tlvbuflen)
 {
   int nr_pads;
 
-  if (tlvbuf == NULL || tlvbuflen == 0) 
+  if (tlvbuf == NULL || tlvbuflen == 0)
 	return 0;
 
   tlvbuf[tlvbuflen] = 255;
@@ -100,7 +100,7 @@ add_cmts_mic (unsigned char *tlvbuf, unsigned int tlvbuflen,
   unsigned char digest_order[NR_CMTS_MIC_TLVS] =
     { 1, 2, 3, 4, 17, 43, 6, 18, 19, 20, 22, 23, 24, 25, 28, 29, 26, 35, 36, 37, 40 };
 
-  if (tlvbuf == NULL || tlvbuflen == 0 ) 
+  if (tlvbuf == NULL || tlvbuflen == 0 )
 	return 0;
 
   cmts_tlvs = (unsigned char *) malloc (tlvbuflen + 1); /* Plenty of space */
@@ -117,8 +117,8 @@ add_cmts_mic (unsigned char *tlvbuf, unsigned int tlvbuflen,
 	      cp = cp + cp[1] + 2;
 	    }
 	  else
-	    { 
-	      if ( cp[0] == 64 ) { 
+	    {
+	      if ( cp[0] == 64 ) {
 		printf("%s: warning: TLV64 (length > 255) not allowed in DOCSIS config files\n", prog_name);
 		cp = cp + (size_t) ntohs(*((unsigned short *)(cp+1))) + 3;
 	      } else {
@@ -168,7 +168,7 @@ usage (char *prog_name)
   printf
     ("\nPlease send bugs or questions to docsis-users@lists.sourceforge.net\n\n");
   exit (-10);
-} 
+}
 
 
 int
@@ -184,24 +184,24 @@ main (int argc, char *argv[])
   memset (prog_name, 0, 255);
   strncpy (prog_name, argv[0], 254);
 
-  if (argc < 2 ) { 
+  if (argc < 2 ) {
 	usage(prog_name);
-	exit (10); 
+	exit (10);
   }
 
-  if (!strcmp (argv[1], "-m") ){ /* variable number of args, encoding multiple files */ 
-	if (argc < 5 ) { 
+  if (!strcmp (argv[1], "-m") ){ /* variable number of args, encoding multiple files */
+	if (argc < 5 ) {
 		usage(prog_name);
-		exit (10); 
+		exit (10);
 	}
-    	extension_string = argv[argc-1]; 
-        if (!strcmp ( argv[2], "-p")) { 
-		key_file = NULL; 
-	} else { 
+    	extension_string = argv[argc-1];
+        if (!strcmp ( argv[2], "-p")) {
+		key_file = NULL;
+	} else {
 		key_file = argv[argc-2];
 		encode_docsis = TRUE;
 	}
-  } else { 
+  } else {
   	switch (argc)
     	{
     	case 3:
@@ -253,43 +253,43 @@ main (int argc, char *argv[])
     }
 
   init_global_symtable ();
-  setup_mib_flags(); 
+  setup_mib_flags();
 
   if (decode_bin)
   {
       decode_file (config_file);
-      exit(0); // TODO: clean shutdown 
+      exit(0); // TODO: clean shutdown
   }
 
   if (extension_string) { /* encoding multiple files */
-	if (encode_docsis) { 
+	if (encode_docsis) {
 		/* encode argv[argc-3] to argv[2] */
-		for (i=2; i<argc-2; i++)  { 
-			if ( (output_file = get_output_name (argv[i], extension_string)) == NULL ) { 
-				printf("Cannot process input file %s, extension too short ?\n",argv[i] ); 
-				continue; 
+		for (i=2; i<argc-2; i++)  {
+			if ( (output_file = get_output_name (argv[i], extension_string)) == NULL ) {
+				printf("Cannot process input file %s, extension too short ?\n",argv[i] );
+				continue;
 			}
-			
-			printf ("Processing input file %s: output to  %s\n",argv[i], output_file); 
+
+			printf ("Processing input file %s: output to  %s\n",argv[i], output_file);
 /*			fprintf (stderr,"Processing input file %s: output to  %s\n",argv[i], output_file);  */
-			encode_one_file (argv[i], output_file, key, keylen, encode_docsis); 
-			free (output_file); 
+			encode_one_file (argv[i], output_file, key, keylen, encode_docsis);
+			free (output_file);
 			output_file = NULL;
 		}
-	} else { 
+	} else {
 		/* encode argv[argc-2] to argv[3] */
-		for (i=3; i<argc-1; i++)  { 
-			if ( (output_file = get_output_name (argv[i], extension_string)) == NULL ) { 
-				printf("Cannot process input file %s, extension too short ?\n",argv[i] ); 
-				continue; 
+		for (i=3; i<argc-1; i++)  {
+			if ( (output_file = get_output_name (argv[i], extension_string)) == NULL ) {
+				printf("Cannot process input file %s, extension too short ?\n",argv[i] );
+				continue;
 			}
-			printf ("Processing input file %s: output to  %s\n",argv[i], output_file); 
-			encode_one_file (argv[i], output_file, key, keylen, encode_docsis); 
-			free (output_file); 
+			printf ("Processing input file %s: output to  %s\n",argv[i], output_file);
+			encode_one_file (argv[i], output_file, key, keylen, encode_docsis);
+			free (output_file);
 			output_file = NULL;
 		}
 	}
-  } else { 
+  } else {
 	encode_one_file (config_file, output_file, key, keylen, encode_docsis);
 	/* encode argv[1] */
   }
@@ -298,12 +298,12 @@ main (int argc, char *argv[])
   return 0;
 }
 
-int encode_one_file ( char *input_file, char *output_file, 
+int encode_one_file ( char *input_file, char *output_file,
 	 		unsigned char *key, unsigned int keylen, int encode_docsis )
 {
   int parse_result=0;
-  unsigned int buflen; 
-  unsigned char *buffer; 
+  unsigned int buflen;
+  unsigned char *buffer;
   FILE *of;
 
   if (!strcmp (input_file, output_file))
@@ -319,24 +319,24 @@ int encode_one_file ( char *input_file, char *output_file,
       printf ("Error parsing config file %s\n", input_file);
       return -1;
     }
-/* Check whether we're encoding PacketCable */ 
+/* Check whether we're encoding PacketCable */
 
-  if (global_tlvtree_head->docs_code == 254) { 
-	printf("First TLV is MtaConfigDelimiter, forcing PacketCable MTA file.\n"); 
+  if (global_tlvtree_head->docs_code == 254) {
+	printf("First TLV is MtaConfigDelimiter, forcing PacketCable MTA file.\n");
 	encode_docsis=0;
-  } 
+  }
 
 /* walk the tree to find out how much memory we need */
 	/* leave some room for CM MIC, CMTS MIC, pad */
   buflen = tlvtreelen (global_tlvtree_head);
-  buffer = (unsigned char *) malloc ( buflen + 255 ); 
+  buffer = (unsigned char *) malloc ( buflen + 255 );
   buflen = flatten_tlvsubtree(buffer, 0, global_tlvtree_head);
 
 
 #ifdef DEBUG
   printf ("TLVs found in parsed config file:\n");
   decode_main_aggregate (buffer, buflen);
-#endif 
+#endif
 
   if (encode_docsis)
     {
@@ -448,43 +448,43 @@ void setup_mib_flags() {
 }
 
 
-/* 
- * Given a string representing a filename path and a new extension_string, 
- * returns the path with the extension part replaced by the new extension. 
- * The old filename must have an extension and the new extension cannot be 
+/*
+ * Given a string representing a filename path and a new extension_string,
+ * returns the path with the extension part replaced by the new extension.
+ * The old filename must have an extension and the new extension cannot be
  * longer than the old one.
  */
-  
-char *get_output_name ( char *input_path, char *extension_string )
-{ 
-  int pathlen=0, i=0, old_ext_len=0;
-  char *new_path; 
 
-  if (input_path == NULL || extension_string == NULL) 
-	return NULL; 
-  if ( (new_path = strdup(input_path) ) == NULL ) 
+char *get_output_name ( char *input_path, char *extension_string )
+{
+  int pathlen=0, i=0, old_ext_len=0;
+  char *new_path;
+
+  if (input_path == NULL || extension_string == NULL)
+	return NULL;
+  if ( (new_path = strdup(input_path) ) == NULL )
 	return NULL;  /* out of memory */
 
   pathlen = strlen(input_path);
 
   /* Identify the length of the old extension */
   for (i=pathlen; i > 0; i--) {
-  	if ( input_path[i] == '/' || input_path[i] == '\\' ) 
+  	if ( input_path[i] == '/' || input_path[i] == '\\' )
 		break;
   	if ( input_path[i] == '.' )  {
-		old_ext_len = pathlen - i; 
+		old_ext_len = pathlen - i;
 		break;
 	}
   }
 
-  if (old_ext_len < strlen (extension_string) ) 
-	return NULL; 
+  if (old_ext_len < strlen (extension_string) )
+	return NULL;
 
-  memset (&new_path[pathlen - old_ext_len], 0, old_ext_len); 
+  memset (&new_path[pathlen - old_ext_len], 0, old_ext_len);
   strncpy (&new_path[pathlen - old_ext_len], extension_string, strlen(extension_string) );
 
-  return new_path; 
+  return new_path;
   /* !!! caller has to free the new string after using it !!!  */
-} 
+}
 
-  
+

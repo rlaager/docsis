@@ -1,8 +1,8 @@
-/* 
- *  DOCSIS configuration file encoder. 
+/*
+ *  DOCSIS configuration file encoder.
  *  Copyright (c) 2001,2005 Cornel Ciocirlan, ctrl@users.sourceforge.net.
  *  Copyright (c) 2002,2003,2004 Evvolve Media SRL,office@evvolve.com
- *  
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -39,9 +39,9 @@ extern symbol_type *global_symtable;
 extern FILE *yyin;
 extern char prog_name[255];
 
-struct tlv *_my_tlvtree_head; 
- 
-%}                  
+struct tlv *_my_tlvtree_head;
+
+%}
 
 %union { 	/* Token types */
 	int intval;			/* For integers */
@@ -76,17 +76,17 @@ struct tlv *_my_tlvtree_head;
 %token <uintval>  T_ASNTYPE_UINT
 %token <uintval>  T_ASNTYPE_GAUGE
 %token <uintval>  T_ASNTYPE_COUNTER
-%token <uintval>  T_ASNTYPE_TIMETICKS 
-%token <uintval>  T_ASNTYPE_IP 
-%token <uintval>  T_ASNTYPE_OBJID 
-%token <uintval>  T_ASNTYPE_STRING 
-%token <uintval>  T_ASNTYPE_HEXSTR 
-%token <uintval>  T_ASNTYPE_DECSTR 
-%token <uintval>  T_ASNTYPE_BITSTR 
-%token <uintval>  T_ASNTYPE_BIGINT 
-%token <uintval>  T_ASNTYPE_UBIGINT 
-%token <uintval>  T_ASNTYPE_FLOAT 
-%token <uintval>  T_ASNTYPE_DOUBLE     
+%token <uintval>  T_ASNTYPE_TIMETICKS
+%token <uintval>  T_ASNTYPE_IP
+%token <uintval>  T_ASNTYPE_OBJID
+%token <uintval>  T_ASNTYPE_STRING
+%token <uintval>  T_ASNTYPE_HEXSTR
+%token <uintval>  T_ASNTYPE_DECSTR
+%token <uintval>  T_ASNTYPE_BITSTR
+%token <uintval>  T_ASNTYPE_BIGINT
+%token <uintval>  T_ASNTYPE_UBIGINT
+%token <uintval>  T_ASNTYPE_FLOAT
+%token <uintval>  T_ASNTYPE_DOUBLE
 %token <uintval>  T_TLV_CODE
 %token <uintval>  T_TLV_LENGTH
 %token <uintval>  T_TLV_VALUE
@@ -100,72 +100,72 @@ struct tlv *_my_tlvtree_head;
 
 %%
 
-/* 
+/*
 
-How does this work ? 
+How does this work ?
 
-When we recognize an assignment statement (for example "MaxCPE 13;") we create 
-a "struct tlv" which contains the type associated with this configuration 
+When we recognize an assignment statement (for example "MaxCPE 13;") we create
+a "struct tlv" which contains the type associated with this configuration
 setting, the length of this configuration setting and the value. The type and
-lenth are in docsis_symtable.h. Consecutive assignment_stmts are reduced  
-to an assignment_list, creating a "tlvlist" which is essentially a list of 
-pointers to stuct tlv's. 
+lenth are in docsis_symtable.h. Consecutive assignment_stmts are reduced
+to an assignment_list, creating a "tlvlist" which is essentially a list of
+pointers to stuct tlv's.
 
-"Special" cases like ClassOfService (configuration settings which have 
+"Special" cases like ClassOfService (configuration settings which have
 sub-types) are treated a bit different.
 
-For example, within the ClassOfService statement we have a list of 
-assignment_stmts which are reduced to an assignment_list, and then to a 
-subsettings_stmt. When we flatten and reduce the subsettings_stmt to an assignment_list we 
-merge the subsettings_stmt tlvlist with the tlvlist corresponding to the 
-assignment_list (may be empty if a subsettings_stmt appears first in 
-the config file) so we have a single tlvlist. 
+For example, within the ClassOfService statement we have a list of
+assignment_stmts which are reduced to an assignment_list, and then to a
+subsettings_stmt. When we flatten and reduce the subsettings_stmt to an assignment_list we
+merge the subsettings_stmt tlvlist with the tlvlist corresponding to the
+assignment_list (may be empty if a subsettings_stmt appears first in
+the config file) so we have a single tlvlist.
 
-The idea is that, when we finish parsing, we end up with a "global_tlvlist" 
-which contains pointers to all the top-level struct tlv's that we assembled while 
-parsing the configuration file. At this point, we "flatten" this list into a 
-tlvbuf, add CM MIC and CMTS MIC and pad and that's it. 
+The idea is that, when we finish parsing, we end up with a "global_tlvlist"
+which contains pointers to all the top-level struct tlv's that we assembled while
+parsing the configuration file. At this point, we "flatten" this list into a
+tlvbuf, add CM MIC and CMTS MIC and pad and that's it.
 
 */
 
 /* Definitions of bison/yacc grammar */
 
 main_stmt: 	T_MAIN '{' assignment_list '}' {
-			_my_tlvtree_head = $3; 
+			_my_tlvtree_head = $3;
 			_my_tlvtree_head->parent = NULL; }
 		;
 
-assignment_list: assignment_list assignment_stmt { $$ = add_tlv_sibling ($1,$2); } 
-		| assignment_stmt {  $$=add_tlv_sibling(NULL,$1); } 
-		| assignment_list subsettings_stmt { 
+assignment_list: assignment_list assignment_stmt { $$ = add_tlv_sibling ($1,$2); }
+		| assignment_stmt {  $$=add_tlv_sibling(NULL,$1); }
+		| assignment_list subsettings_stmt {
 			$$ = merge_tlvlist($1,$2);  }
-		| subsettings_stmt { 
+		| subsettings_stmt {
 			$$ = merge_tlvlist (NULL, $1); }
-		; 
+		;
 
-subsettings_stmt:  	T_IDENTIFIER '{' assignment_list  '}'	{ 
+subsettings_stmt:  	T_IDENTIFIER '{' assignment_list  '}'	{
 			$$ = assemble_tlv_in_parent ( $1, $3 ); }
 		;
 
-assignment_stmt:  T_IDENTIFIER T_INTEGER ';' { 
-			$$ = create_tlv ($1, (union t_val *)&$2);} 
+assignment_stmt:  T_IDENTIFIER T_INTEGER ';' {
+			$$ = create_tlv ($1, (union t_val *)&$2);}
 		| T_IDENTIFIER T_STRING ';'  {
-			$$ = create_tlv ($1, (union t_val *)&$2);}	
+			$$ = create_tlv ($1, (union t_val *)&$2);}
 		| T_IDENTIFIER T_HEX_STRING ';'  {
-			$$ = create_tlv ($1, (union t_val *)&$2);}	
+			$$ = create_tlv ($1, (union t_val *)&$2);}
 		| T_IDENTIFIER T_SUBMGT_FILTERS ';' {
-			$$ = create_tlv ($1, (union t_val *)&$2);}	
+			$$ = create_tlv ($1, (union t_val *)&$2);}
 		| T_IDENTIFIER T_IP ';' {
-			$$ = create_tlv ($1, (union t_val *)&$2);}	
+			$$ = create_tlv ($1, (union t_val *)&$2);}
 		| T_IDENTIFIER T_MAC ';' {
-			$$ = create_tlv ($1, (union t_val *)&$2);}	
+			$$ = create_tlv ($1, (union t_val *)&$2);}
 		| T_IDENTIFIER T_ETHERMASK ';' {
-			$$ = create_tlv ($1, (union t_val *)&$2);}	
+			$$ = create_tlv ($1, (union t_val *)&$2);}
 		| T_IDENTIFIER T_LABEL_OID ';' {
-			$$ = create_tlv ($1, (union t_val *)&$2);}	
+			$$ = create_tlv ($1, (union t_val *)&$2);}
 		| T_IDENT_CVC T_STRING ';'  {
-			$$ = create_external_file_tlv ($1, (union t_val *)&$2);}	
-		| T_IDENT_SNMPW T_LABEL_OID T_INTEGER ';' {    
+			$$ = create_external_file_tlv ($1, (union t_val *)&$2);}
+		| T_IDENT_SNMPW T_LABEL_OID T_INTEGER ';' {
 			$$ = create_snmpw_tlv ( $1, $2, (union t_val *) &$3 ); }
 		| T_IDENT_SNMPSET T_LABEL_OID T_ASNTYPE_INT T_INTEGER ';' {
 			$$ = create_snmpset_tlv($1,$2,'i',(union t_val *)&$4); }
@@ -191,76 +191,76 @@ assignment_stmt:  T_IDENTIFIER T_INTEGER ';' {
 			$$ = create_generic_str_tlv($1,$3, (union t_val *)&$5); }
 		| T_IDENT_GENERIC T_TLV_CODE T_INTEGER T_TLV_STRZERO_VALUE T_STRING ';' {
 			$$ = create_generic_strzero_tlv($1,$3, (union t_val *)&$5); }
-                ;                                        
+                ;
 %%
 
 int yyerror(char *s) {
-	fprintf(stderr, "%d:%s token %s\n",line,s,yytext ); 
+	fprintf(stderr, "%d:%s token %s\n",line,s,yytext );
 	return 0;
 }
 
 #define TLVINIT(p) if(p) p->first_child=NULL; p->next_sibling=NULL; p->parent=NULL
 
-/* 
- * Given a symbol identifier, AND a buffer containing the raw "value", 
- * returns a pointer to a tlv structure containing TLV buffer and the 
- * length of the buffer, including docsis code and value length fields. 
- * The length is relevant when we "assemble" two tlv_lists from an  
+/*
+ * Given a symbol identifier, AND a buffer containing the raw "value",
+ * returns a pointer to a tlv structure containing TLV buffer and the
+ * length of the buffer, including docsis code and value length fields.
+ * The length is relevant when we "assemble" two tlv_lists from an
  * an assignment_list + assignment_stmt
- */ 
+ */
 
 struct tlv *
-create_tlv(struct symbol_entry *sym_ptr, union t_val *value) 
+create_tlv(struct symbol_entry *sym_ptr, union t_val *value)
 {
   struct tlv *tlvbuf=NULL;
 
-  tlvbuf = (struct tlv *) malloc (sizeof(struct tlv) ) ;	
+  tlvbuf = (struct tlv *) malloc (sizeof(struct tlv) ) ;
   TLVINIT(tlvbuf);
   tlvbuf->docs_code = sym_ptr->docsis_code;
   tlvbuf->tlv_len = sym_ptr->encode_func(tlvbuf->tlv_value,value,sym_ptr);
-		if (tlvbuf->tlv_len <= 0 ) { 
+		if (tlvbuf->tlv_len <= 0 ) {
 			printf ("Got 0-length value while scanning for %s at line %d\n",sym_ptr->sym_ident,line );
 			exit (-1);
    		}
   return tlvbuf;
 }
 
-/* Given a symbol identifier ( always SnmpMibObject ), a string 
-** containing an OID name, a string which sets the value of the OID and a t_val 
-** which contains the raw value (of type oid_asntype), creates a TLV with the 
+/* Given a symbol identifier ( always SnmpMibObject ), a string
+** containing an OID name, a string which sets the value of the OID and a t_val
+** which contains the raw value (of type oid_asntype), creates a TLV with the
 ** corresponding variable binding.
 */
 
 struct tlv *
 create_snmpset_tlv ( struct symbol_entry *sym_ptr,
 				char *oid_string,
-				char oid_asntype, 
-				union t_val *value ) 
+				char oid_asntype,
+				union t_val *value )
 {
   struct tlv *tlvbuf=NULL;
 
-  tlvbuf = (struct tlv *) malloc (sizeof(struct tlv));	
+  tlvbuf = (struct tlv *) malloc (sizeof(struct tlv));
   TLVINIT(tlvbuf);
   tlvbuf->docs_code = sym_ptr->docsis_code;
   tlvbuf->tlv_len = encode_vbind (oid_string, oid_asntype, value,
 			            tlvbuf->tlv_value,TLV_VSIZE );
-				    
-		if (tlvbuf->tlv_len <= 0 ) { 
+
+		if (tlvbuf->tlv_len <= 0 ) {
 			printf ("got len 0 value while scanning for %s\n at line %d\n",sym_ptr->sym_ident,line );
 			exit (-1);
    		}
-  free(oid_string);  
+  free(oid_string);
 /* We only free non-string values since we parse strings into a static buffer in docsis_lex.l */
-  if (	oid_asntype == 'x' || oid_asntype == 'a' || 
+  if (	oid_asntype == 'x' || oid_asntype == 'a' ||
 	oid_asntype == 'd' || oid_asntype == 'o' )  {
-	 	free(value->strval);  
+	 	free(value->strval);
   }
   return tlvbuf;
 }
 
 
 /* Given a symbol identifier ( always SnmpWrite ), a string
-** containing an OID, and an integer, creates a TLV containing the  
+** containing an OID, and an integer, creates a TLV containing the
 ** OID ASN encoding + 1 control byte to permit/deny SNMP Write operations on a
 ** MIB variable which has the OID as prefix.
 */
@@ -276,7 +276,7 @@ create_snmpw_tlv ( struct symbol_entry *sym_ptr,
   TLVINIT(tlvbuf);
   tlvbuf->docs_code = sym_ptr->docsis_code;
   tlvbuf->tlv_len = encode_snmp_oid ( oid_string, tlvbuf->tlv_value, TLV_VSIZE );
-                                    
+
                 if (tlvbuf->tlv_len <= 0 ) {
                         printf ("got len 0 value while scanning for %s\n at line %d\n",sym_ptr->sym_ident,line );
                         exit (-1);
@@ -285,11 +285,11 @@ create_snmpw_tlv ( struct symbol_entry *sym_ptr,
   tlvbuf->tlv_len++;
   free(oid_string);
   return tlvbuf;
-}         
+}
 
-/* Given a code, length and raw value (encoded as a hex string), 
-** creates a TLV encoding. This can be used for e.g. VendorSpecific 
-** Information or unsupported (future?) configuration settings. 
+/* Given a code, length and raw value (encoded as a hex string),
+** creates a TLV encoding. This can be used for e.g. VendorSpecific
+** Information or unsupported (future?) configuration settings.
 */
 struct tlv *
 create_generic_tlv ( struct symbol_entry *sym_ptr,
@@ -317,8 +317,8 @@ line );
   return tlvbuf;
 }
 
-/* 
-** Same as above, except the value is encoded as a string.  
+/*
+** Same as above, except the value is encoded as a string.
 */
 
 struct tlv *
@@ -370,17 +370,17 @@ line );
                 if (tlvbuf->tlv_len > 254 ) {
                         printf ("Warning: total string length %d longer than 255, line %d\n",tlvbuf->tlv_len, line );
 
-                } else { 
+                } else {
 			tlvbuf->tlv_len = tlvbuf->tlv_len + 1; /* add terminating 0 */
 		}
-  tlvbuf->tlv_value[tlvbuf->tlv_len]=0; 
+  tlvbuf->tlv_value[tlvbuf->tlv_len]=0;
   return tlvbuf;
 }
 
-/* Given symbol name and a strings that represents a filename 
-** creates a TLV encoding from the raw data in the file. 
-** If the file is longer than 255, it is split into "parts" of 
-** 255 octets max. 
+/* Given symbol name and a strings that represents a filename
+** creates a TLV encoding from the raw data in the file.
+** If the file is longer than 255, it is split into "parts" of
+** 255 octets max.
 */
 struct tlv *
 create_external_file_tlv ( struct symbol_entry *sym_ptr,
@@ -388,61 +388,61 @@ create_external_file_tlv ( struct symbol_entry *sym_ptr,
 {
   struct tlv *new_tlvbuf=NULL, *first_tlvbuf = NULL, *old_tlvbuf = NULL;
   size_t read_len;
-  unsigned char read_buffer[255]; 
-  FILE *ext_file; 
- 
+  unsigned char read_buffer[255];
+  FILE *ext_file;
+
   if ((ext_file = fopen (value->strval, "rb")) == NULL) {
   	printf ("Error: can't open external file %s at line %d\n", value->strval, line);
 	exit (-5);
   }
- 
+
   while ( !feof(ext_file) ) {
- 	if (! (read_len = fread (read_buffer, 1, 254, ext_file)) ) { 
-	  fprintf (stderr, "Error reading data from %s\n", value->strval) ; 
-  	  fclose (ext_file); 
-	  exit(-5); 
+ 	if (! (read_len = fread (read_buffer, 1, 254, ext_file)) ) {
+	  fprintf (stderr, "Error reading data from %s\n", value->strval) ;
+  	  fclose (ext_file);
+	  exit(-5);
   	}
 
 	new_tlvbuf = (struct tlv *) malloc (sizeof(struct tlv));
   	TLVINIT(new_tlvbuf);
-	if (first_tlvbuf == NULL) first_tlvbuf = new_tlvbuf; 
+	if (first_tlvbuf == NULL) first_tlvbuf = new_tlvbuf;
 
   	new_tlvbuf->docs_code = sym_ptr->docsis_code;
-  	new_tlvbuf->tlv_len = read_len; 
+  	new_tlvbuf->tlv_len = read_len;
 
-	memcpy (new_tlvbuf->tlv_value, read_buffer, read_len); 
-	if(old_tlvbuf) old_tlvbuf->next_sibling = new_tlvbuf; 
-	old_tlvbuf = new_tlvbuf; 
+	memcpy (new_tlvbuf->tlv_value, read_buffer, read_len);
+	if(old_tlvbuf) old_tlvbuf->next_sibling = new_tlvbuf;
+	old_tlvbuf = new_tlvbuf;
   }
-  fclose (ext_file); 
+  fclose (ext_file);
   return first_tlvbuf;
 }
 
 
-/* 
- * Adds a TLV to the current tlv "list". If the tlv pointer we are called with is NULL, 
- * we assume this is the "first" tlv and just return the initialized newtlv. 
- */ 
+/*
+ * Adds a TLV to the current tlv "list". If the tlv pointer we are called with is NULL,
+ * we assume this is the "first" tlv and just return the initialized newtlv.
+ */
 
-struct tlv *add_tlv_sibling (struct tlv *tlv, struct tlv *newtlv) 
+struct tlv *add_tlv_sibling (struct tlv *tlv, struct tlv *newtlv)
 {
   struct tlv *tlvptr, *last_sibling;
 
-  if (newtlv == NULL ) { 
-	printf("Error: add_tlv_sibling called with NULL tlv sibling ! \n " ) ; 
-	exit(-23); 
+  if (newtlv == NULL ) {
+	printf("Error: add_tlv_sibling called with NULL tlv sibling ! \n " ) ;
+	exit(-23);
   }
 
-  if (tlv != NULL ) { 
+  if (tlv != NULL ) {
 /*  	tlv->parent=NULL;  */
-	/* find "last" sibling in this assignment list */ 
+	/* find "last" sibling in this assignment list */
 
 	for (tlvptr=tlv; tlvptr; tlvptr=tlvptr->next_sibling)
 		last_sibling=tlvptr;
 	/* Add the new TLV at the end of the list */
-	last_sibling->next_sibling = newtlv; 
+	last_sibling->next_sibling = newtlv;
 	return tlv;
-  } else  { 
+  } else  {
 	return newtlv;
   }
 }
@@ -454,98 +454,98 @@ merge_tlvlist(struct tlv *tlv1, struct tlv *tlv2)
 {
   struct tlv *tlvptr, *last_sibling;
   if ( tlv2 == NULL ) {
-	printf ("merge_tlvlist called with NULL tlv2 !\n"); 
+	printf ("merge_tlvlist called with NULL tlv2 !\n");
 	exit(-2);
   }
-  
+
   if ( tlv1 == NULL ) {
 	/* subsettings_stmt can be empty; in that case its value is NULL */
 	return tlv2;
-  } 
-  /* find "last" sibling in this assignment list */ 
+  }
+  /* find "last" sibling in this assignment list */
 
   for (tlvptr=tlv1; tlvptr; tlvptr=tlvptr->next_sibling)
 	last_sibling=tlvptr;
-  last_sibling->next_sibling = tlv2; 
-  return tlv1; 
-  
+  last_sibling->next_sibling = tlv2;
+  return tlv1;
+
 }
 
-/* 
- * Creates the "parent" tlv that holds the "subtree" (e.g. the parent TLV's first_child will point to the 
+/*
+ * Creates the "parent" tlv that holds the "subtree" (e.g. the parent TLV's first_child will point to the
  * first element of this subtree.
  */
 
 struct tlv *
-assemble_tlv_in_parent (struct symbol_entry *sym_ptr, struct tlv *child_tlv) 
+assemble_tlv_in_parent (struct symbol_entry *sym_ptr, struct tlv *child_tlv)
 {
   struct tlv *parent_tlv;
 
   parent_tlv = (struct tlv *) malloc ( sizeof ( struct tlv) );
   memset(parent_tlv, 0, sizeof(struct tlv));
-  
+
   parent_tlv->docs_code = sym_ptr->docsis_code;
-  parent_tlv->tlv_len = 0; 
-  parent_tlv->first_child = child_tlv; 
-  child_tlv->parent = parent_tlv; 
+  parent_tlv->tlv_len = 0;
+  parent_tlv->first_child = child_tlv;
+  child_tlv->parent = parent_tlv;
   /* TODO: make al children's "parent" point back to parent_tlv */
   return parent_tlv;
 }
 
-/* 
- * Creates a buffer filled with the TLV bytes sequentially, as they should be 
- * found in the final configuration file. 
- * The function walkts the tree recursively in "depth-last" mode and aggregates 
- * the parsed values into an output "binary". 
+/*
+ * Creates a buffer filled with the TLV bytes sequentially, as they should be
+ * found in the final configuration file.
+ * The function walkts the tree recursively in "depth-last" mode and aggregates
+ * the parsed values into an output "binary".
  */
 
-unsigned int flatten_tlvsubtree ( unsigned char *buf, unsigned int used_size, struct tlv *tlv) 
-{ 
+unsigned int flatten_tlvsubtree ( unsigned char *buf, unsigned int used_size, struct tlv *tlv)
+{
   struct tlv *tlvptr;
   unsigned int rsize;
   unsigned short netshort;
-  register unsigned char *cp; 
-  
-  if ( buf == NULL ) { 
+  register unsigned char *cp;
+
+  if ( buf == NULL ) {
 	printf( "Error: can't flatten tlvlist in a NULL destination  buffer!\n" );
 	exit (-2);
   }
 
-  cp = buf + used_size; 
+  cp = buf + used_size;
 
-  for (tlvptr=tlv; tlvptr; tlvptr=tlvptr->next_sibling ) { 
+  for (tlvptr=tlv; tlvptr; tlvptr=tlvptr->next_sibling ) {
 	if (tlvptr->first_child )  { /* Sub-Settings */
 		/* we don't know the size yet, so we delay writing type & length */
-		rsize = flatten_tlvsubtree(buf, (cp-buf)+2, tlvptr->first_child); 
-		if (rsize > 255) { 
-			printf("Warning: at line %d: aggregate size of settings block larger than 255, skipping\n", line); 
-			continue; 
+		rsize = flatten_tlvsubtree(buf, (cp-buf)+2, tlvptr->first_child);
+		if (rsize > 255) {
+			printf("Warning: at line %d: aggregate size of settings block larger than 255, skipping\n", line);
+			continue;
 		}
 		*cp = (unsigned char) tlvptr->docs_code; cp++;
 		*cp = (unsigned char) rsize; cp++;
-		cp = cp + rsize;		
-  	} else if (tlvptr->tlv_len <= 255 ) { 	
-	
+		cp = cp + rsize;
+  	} else if (tlvptr->tlv_len <= 255 ) {
+
 			*cp = (unsigned char) tlvptr->docs_code; cp++;
 			*cp = (unsigned char) tlvptr->tlv_len; cp++;
-			if (tlvptr->tlv_len > 0) 
-				memcpy ( cp, tlvptr->tlv_value, tlvptr->tlv_len ); 
+			if (tlvptr->tlv_len > 0)
+				memcpy ( cp, tlvptr->tlv_value, tlvptr->tlv_len );
   	     		cp = cp + tlvptr->tlv_len;
-		} else { 
+		} else {
 			/* convert TLV11 to TLV64 */
 			if (tlvptr->docs_code == 11) {
 				*cp = 64; cp++;
-			        netshort = htons(tlvptr->tlv_len); 
+			        netshort = htons(tlvptr->tlv_len);
 				memcpy ( cp, &netshort, sizeof(unsigned short)); cp=cp+2;
        				memcpy ( cp, tlvptr->tlv_value, tlvptr->tlv_len );
-             			cp = cp + tlvptr->tlv_len; 
-			} else { 
+             			cp = cp + tlvptr->tlv_len;
+			} else {
 				printf("Warning at line %d: Non-SnmpMibObject TLV larger than 255... skipping.\n", line);
 				continue;
 			}
 		}
 	}
-  return (unsigned int) (cp - buf - used_size); /* return the number of bytes encoded this time  */	
+  return (unsigned int) (cp - buf - used_size); /* return the number of bytes encoded this time  */
 }
 
 /*
@@ -564,23 +564,23 @@ unsigned int tlvtreelen (struct tlv *tlv)
    return current_size;
 }
 
-int parse_config_file ( char *file, struct tlv **parse_tree_result ) 
-{ 
+int parse_config_file ( char *file, struct tlv **parse_tree_result )
+{
   FILE *cf;
   int rval;
 
-  if ( (cf = fopen ( file, "r" ))== NULL ) 
+  if ( (cf = fopen ( file, "r" ))== NULL )
   {
 	printf ("%s: Can't open input file %s\n", prog_name, file );
 	return -1;
   }
 
-  yyin = cf ; 
+  yyin = cf ;
 #ifdef DEBUG
   yydebug = 1;
 #endif
   rval = yyparse();
-  if (!rval) *parse_tree_result = _my_tlvtree_head; 
+  if (!rval) *parse_tree_result = _my_tlvtree_head;
   fclose(cf);
   return rval;
 }

@@ -1,8 +1,8 @@
-/* 
- *  DOCSIS configuration file encoder. 
+/*
+ *  DOCSIS configuration file encoder.
  *  Copyright (c) 2001 Cornel Ciocirlan, ctrl@users.sourceforge.net.
  *  Copyright (c) 2002 Evvolve Media SRL,office@evvolve.com
- *  
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -20,7 +20,7 @@
  *  DOCSIS is a registered trademark of Cablelabs, http://www.cablelabs.com
  */
 
-/* 
+/*
     change history
 	2002-10-10 fixed overflow causing last two bytes of the MAC address to not be converted
 		   correctly when the format was "xx:xx:xx:xx:xx:x"
@@ -28,7 +28,7 @@
 
 #include "ethermac.h"
 
-int ether_aton ( const char *macstr, unsigned char *outbuf ) 
+int ether_aton ( const char *macstr, unsigned char *outbuf )
 {
 
 int fragval;
@@ -41,16 +41,16 @@ ptr=macstr;
 
 p = strchr ( ptr, (int) ':' );
 
-  while (p && i<5) { 
-	if ( p-ptr > 2 || p == NULL ) { 
+  while (p && i<5) {
+	if ( p-ptr > 2 || p == NULL ) {
 	    printf ("\nInvalid MAC Address %s\n", macstr);
 	    return 0;
  	}
 
-	memset(fragptr,0,3); 
+	memset(fragptr,0,3);
 	memcpy ( fragptr, ptr, (size_t)(p-ptr) );
 
-	if ( (rval= sscanf ( fragptr, "%x", &fragval)) == 0 ) { 
+	if ( (rval= sscanf ( fragptr, "%x", &fragval)) == 0 ) {
 		printf("\nInvalid MAC Address %s\n", macstr );
 		return 0;
 	}
@@ -58,22 +58,22 @@ p = strchr ( ptr, (int) ':' );
 		printf("\nInvalid MAC Address %s\n", macstr );
 		return 0;
 	}
-		
+
 	themac[i]=(unsigned char) fragval;
-	ptr=++p; 
+	ptr=++p;
 	p = strchr ( ptr, (int) ':' );
-	i++; 
+	i++;
   }
 
-  if ( i != 5 || strlen(ptr) > 2 ) { 
+  if ( i != 5 || strlen(ptr) > 2 ) {
     printf ("Invalid MAC Address %s\n", macstr);
     return 0;
   }
 
-  memset(fragptr,0,3); 
+  memset(fragptr,0,3);
   memcpy ( fragptr, ptr, strlen(ptr) );
 
-  if ( (rval=sscanf ( fragptr, "%x", &fragval)) == 0 ) { 
+  if ( (rval=sscanf ( fragptr, "%x", &fragval)) == 0 ) {
 	printf("\nInvalid MAC Address %s\n", macstr );
 	return 0;
   }
@@ -86,18 +86,18 @@ p = strchr ( ptr, (int) ':' );
   return 6;
 }
 
-/* 
- * Tranforms the binary-form Ethernet MAC address received as argument into 
- * string-form human readable Ethernet MAC address 
- * themac is a static char which WILL be overwritten by subsequent calls 
- * to this function 
+/*
+ * Tranforms the binary-form Ethernet MAC address received as argument into
+ * string-form human readable Ethernet MAC address
+ * themac is a static char which WILL be overwritten by subsequent calls
+ * to this function
  */
 char *ether_ntoa ( const unsigned char *mac)
-{ 
+{
 
   int i;
-  static char themac[18]; 
-  
+  static char themac[18];
+
   memset (themac, 0, 18);
   for (i=0;i<5;i++) sprintf ( themac+(3*i), "%02x:", mac[i]);
   sprintf ( themac+(3*i), "%02x", mac[i]);

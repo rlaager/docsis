@@ -1,8 +1,8 @@
-/* 
- *  DOCSIS configuration file encoder. 
+/*
+ *  DOCSIS configuration file encoder.
  *  Copyright (c) 2001 Cornel Ciocirlan, ctrl@users.sourceforge.net.
  *  Copyright (c) 2002 Evvolve Media SRL, office@evvolve.com
- *  
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -36,7 +36,7 @@ unsigned int encode_vbind ( char *oid_string, char oid_asntype, union t_val *val
                         unsigned char *out_buffer, unsigned int out_size );
 int decode_vbind ( unsigned char *, unsigned int);
 unsigned int encode_snmp_oid ( char *oid_string, unsigned char *out_buffer, unsigned int out_size );
-unsigned int decode_snmp_oid ( unsigned char *data, unsigned int data_len); 
+unsigned int decode_snmp_oid ( unsigned char *data, unsigned int data_len);
 
 unsigned char *_docsis_snmp_build_var_op(unsigned char * data,
                   oid * var_name,

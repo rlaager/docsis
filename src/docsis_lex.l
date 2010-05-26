@@ -1,8 +1,8 @@
-/* 
- *  DOCSIS configuration file encoder. 
+/*
+ *  DOCSIS configuration file encoder.
  *  Copyright (c) 2001,2005 Cornel Ciocirlan, ctrl@users.sourceforge.net.
  *  Copyright (c) 2002,2003,2004,2005 Evvolve Media SRL, office@evvolve.com
- *  
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -20,7 +20,7 @@
  *  DOCSIS is a registered trademark of Cablelabs, http://www.cablelabs.com
  */
 
-%{ 
+%{
 #include "docsis.h"
 #include "docsis_yy.h"
 
@@ -75,39 +75,39 @@ TlvLength 		{ return T_TLV_LENGTH; 	}
 TlvValue		{ return T_TLV_VALUE; 	}
 TlvString		{ return T_TLV_STR_VALUE; 	}
 TlvStringZero		{ return T_TLV_STRZERO_VALUE; 	}
-[A-Za-z]+[A-Za-z0-9]*	{ 
+[A-Za-z]+[A-Za-z0-9]*	{
 				yylval.symptr=find_symbol_by_name(yytext);
-		  	  	if(yydebug) 
-				        printf("yylex:returning T_IDENTIFIER, yylval.symptr->sym_ident=%s\n", 
-					yylval.symptr->sym_ident); 
-			 	return T_IDENTIFIER; 
+		  	  	if(yydebug)
+				        printf("yylex:returning T_IDENTIFIER, yylval.symptr->sym_ident=%s\n",
+					yylval.symptr->sym_ident);
+			 	return T_IDENTIFIER;
 			}
 
-\"		{ BEGIN STRING; str=strbuf; memset(strbuf,0,2048); strsize=0; }	
-<STRING>\\ 	{ 
-			if (strsize<2048)  
+\"		{ BEGIN STRING; str=strbuf; memset(strbuf,0,2048); strsize=0; }
+<STRING>\\ 	{
+			if (strsize<2048)
 			{
-				*str++ = ' '; 
+				*str++ = ' ';
 				strsize++;
 			} else {
-			  printf("line %d: string too long (max 2048 characters)\n",line); exit(-1);  
+			  printf("line %d: string too long (max 2048 characters)\n",line); exit(-1);
 			}
 		}
-<STRING>\n	{ printf("line %d: \\n not allowed in string, unmatched \" ?\n",line); exit(-1); } 
-<STRING>\t	{ printf("line %d: \\t not allowed in string, unmatched \" ?\n",line); exit(-1); } 
+<STRING>\n	{ printf("line %d: \\n not allowed in string, unmatched \" ?\n",line); exit(-1); }
+<STRING>\t	{ printf("line %d: \\t not allowed in string, unmatched \" ?\n",line); exit(-1); }
 <STRING>\"	{ *str=0; BEGIN 0; yylval.strval=strbuf; return T_STRING; }
-<STRING>.	{ 
-			if (strsize<2048)  
+<STRING>.	{
+			if (strsize<2048)
 			{
-				*str++ = *yytext; 
+				*str++ = *yytext;
 				strsize++;
 			} else {
-			  printf("line %d: string too long (max 2048 characters)\n",line); exit(-1);  
+			  printf("line %d: string too long (max 2048 characters)\n",line); exit(-1);
 			}
 		}
 \/[*]+		{ BEGIN COMMENT; }
 <COMMENT>\n	{ line ++; }
-<COMMENT>.	
+<COMMENT>.
 <COMMENT>\/[*]+	{ printf ("line %d: comment-in-comment not supported", line) ; }
 <COMMENT>[*]+\/	{ BEGIN 0; }
 
@@ -122,8 +122,8 @@ TlvStringZero		{ return T_TLV_STRZERO_VALUE; 	}
 .	 { printf("Unrecognized char \"%c\" at line %d\n",*yytext,line); exit(-1); }
 %%
 
-struct symbol_entry 
-*find_symbol_by_name (char *sym_str) 
+struct symbol_entry
+*find_symbol_by_name (char *sym_str)
 {
  int i;
 
@@ -134,5 +134,5 @@ struct symbol_entry
  }
  printf ("Unrecognized symbol %s at line %d\n", sym_str, line);
  exit(-1);
-}          
+}
 
