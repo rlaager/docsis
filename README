@@ -9,23 +9,29 @@ See doc/index.html for more information.
 General Information
 ======================
 
-This software is 	Copyright (c) 1999,2000,2001,2002 Cornel Ciocirlan
-			Copyright (c) 2002,2003 Evvolve Media SRL
+Visit http://docsis.sourceforge.net for the latest news on this program.
 
+General questions about this software can be sent to docsis-users@sourceforge.net. 
+
+Copyright (c) 1999,2000,2001,2002 Cornel Ciocirlan
+Copyright (c) 2002,2003 Evvolve Media SRL
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along
+with this program; if not, write to the Free Software Foundation, Inc.,
+51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+DOCSIS is a registered trademark of Cablelabs, http://www.cablelabs.com
 Portions of this program are derived from the RSA Data Security, Inc. MD5 Message-Digest Algorithm.
-
-To contact the current maintainers and developers, send an E-mail to: docsis@evvolve.com.
-To contact the original author, send an E-mail to: ctrl@users.sourceforge.net.
-
-General questions about this software can be  sent to docsis-users@sourceforge.net.
-
-Visit http://docsis.sourceforge.net and http://sourceforge.net/projects/docsis
-for the latest news on this program.
-
-PLEASE READ THE FILE COPYING
-
-Caution: This is Unsupported software that may crash your computer, damage all your data
-or otherwise drive you nuts. You'd better know what you're doing.
 
 Description
 ==============
