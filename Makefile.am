@@ -3,7 +3,7 @@
 AUTOMAKE_OPTIONS = foreign 1.4
 
 SUBDIRS = src doc examples mibs
-EXTRA_DIST = README.txt License.txt build_setup_template.nsi
+EXTRA_DIST = build_setup_template.nsi
 if CYGWIN_BUILD
 if CYGWIN_BUILD_SETUP_EXE
 bin_SCRIPTS=docsis_setup.exe
