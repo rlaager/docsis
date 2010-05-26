@@ -17,7 +17,7 @@ IMPORTS
             FROM SNMP-FRAMEWORK-MIB
       clabProjPacketCable
             FROM CLAB-DEF-MIB
-      ifIndex 
+      ifIndex
             FROM IF-MIB;
 
 pktcSigMib  MODULE-IDENTITY
@@ -33,8 +33,8 @@ pktcSigMib  MODULE-IDENTITY
             Fax:    +1 303-661-9199
             E-mail: mibs@cablelabs.com"
     DESCRIPTION
-            "This MIB module supplies the basic management 
-            object for the PacketCable Signaling 
+            "This MIB module supplies the basic management
+            object for the PacketCable Signaling
             protocols. This version of the MIB includes
             common signaling and Network Call Signaling
             (NCS) related signaling objects.
@@ -57,29 +57,29 @@ pktcSigMib  MODULE-IDENTITY
 
 PktcCodecType     ::= TEXTUAL-CONVENTION
       STATUS       current
-      DESCRIPTION 
-            "Textual Convention defines various types of 
-            CODECs that MAY be supported.   The list of CODECs 
+      DESCRIPTION
+            "Textual Convention defines various types of
+            CODECs that MAY be supported.   The list of CODECs
             MUST be consistent with the Codec RTP MAP Parameters
-            Table in the PacketCable CODEC specification.  In-line 
-            embedded comments below contain the Literal Codec Name  
-            for each CODEC. The Literal Codec Name corresponds to 
-            the second column of the Codec RTP MAP Parameters Table. 
-            The Literal Codec Name Column contains the CODEC name 
-            that is used in the LCD of the NCS messages CRCX/MDCX, 
-            and is also used to identify the CODEC in the CMS 
-            Provisioning Specification. The RTP Map Parameter 
+            Table in the PacketCable CODEC specification.  In-line
+            embedded comments below contain the Literal Codec Name
+            for each CODEC. The Literal Codec Name corresponds to
+            the second column of the Codec RTP MAP Parameters Table.
+            The Literal Codec Name Column contains the CODEC name
+            that is used in the LCD of the NCS messages CRCX/MDCX,
+            and is also used to identify the CODEC in the CMS
+            Provisioning Specification. The RTP Map Parameter
             Column of the Codec RTP MAP Parameters Table contains
-            the string used in the media attribute line ('a=') of the 
+            the string used in the media attribute line ('a=') of the
             SDP parameters in NCS messages."
-      REFERENCE 
+      REFERENCE
             "PacketCable CODEC Specification"
       SYNTAX INTEGER {
             other    (1),
             unknown  (2),
             g729     (3),  -- G729
             reserved (4),  -- reserved for future use
-            g729E    (5),  -- G729E 
+            g729E    (5),  -- G729E
             pcmu     (6),  -- PCMU
             g726at32 (7),  -- G726-32
             g728     (8),  -- G728
@@ -92,18 +92,18 @@ PktcCodecType     ::= TEXTUAL-CONVENTION
 
 PktcRingCadence    ::= TEXTUAL-CONVENTION
       STATUS        current
-      DESCRIPTION   
-            "This object represents a ring cadence in bit string 
-            format. The ring cadence representation starts with the 
-            first 1 in the pattern (the leading 0s in the MSB are 
-            padding and are to be ignored).  Each bit 
+      DESCRIPTION
+            "This object represents a ring cadence in bit string
+            format. The ring cadence representation starts with the
+            first 1 in the pattern (the leading 0s in the MSB are
+            padding and are to be ignored).  Each bit
             represents 100ms of tone; 1 is tone, 0 is no tone. 64
             bits MUST be used for cadence representation, LSB 4 bits
-            are used for representing repeatable characteristics. 
-            0000 means repeatable, and 1000 means non repeatable. 
-            During SNMP SET operations 64 bits MUST be used, 
-            otherwise MTA MUST reject the value. As an example, the 
-            hex representation of a ring cadence of 0.5 secs on; 4 
+            are used for representing repeatable characteristics.
+            0000 means repeatable, and 1000 means non repeatable.
+            During SNMP SET operations 64 bits MUST be used,
+            otherwise MTA MUST reject the value. As an example, the
+            hex representation of a ring cadence of 0.5 secs on; 4
             secs off; repeatable would be:0x0001F00000000000."
       SYNTAX  BITS {
             interval1 (0),
@@ -175,9 +175,9 @@ PktcRingCadence    ::= TEXTUAL-CONVENTION
 
 PktcSigType     ::= TEXTUAL-CONVENTION
       STATUS       current
-      DESCRIPTION  
-            "These are the various types of signaling that 
-            may be supported. 
+      DESCRIPTION
+            "These are the various types of signaling that
+            may be supported.
             ncs - network call signaling a derivation of MGCP
             (Media Gateway Control Protocol) version 1.0
             dcs - distributed call signaling a derivation
@@ -189,24 +189,24 @@ PktcSigType     ::= TEXTUAL-CONVENTION
             dcs(4)
     }
 
-pktcSigMibObjects            OBJECT IDENTIFIER 
+pktcSigMibObjects            OBJECT IDENTIFIER
                                             ::= { pktcSigMib 1 }
-pktcSigDevConfigObjects      OBJECT IDENTIFIER 
+pktcSigDevConfigObjects      OBJECT IDENTIFIER
                                             ::= { pktcSigMibObjects 1 }
-pktcNcsEndPntConfigObjects   OBJECT IDENTIFIER 
+pktcNcsEndPntConfigObjects   OBJECT IDENTIFIER
                                             ::= { pktcSigMibObjects 2 }
-pktcSigEndPntConfigObjects  OBJECT IDENTIFIER 
+pktcSigEndPntConfigObjects  OBJECT IDENTIFIER
                                             ::= { pktcSigMibObjects 3 }
-pktcDcsEndPntConfigObjects  OBJECT IDENTIFIER 
+pktcDcsEndPntConfigObjects  OBJECT IDENTIFIER
                                             ::= { pktcSigMibObjects 4 }
 
 --
 --      The pktcSigDevCodecTable defines the codecs supported by this
---      Media Terminal Adapter (MTA).  There is one entry for each 
+--      Media Terminal Adapter (MTA).  There is one entry for each
 --      codecs supported.
 --
 
-pktcSigDevCodecTable    OBJECT-TYPE 
+pktcSigDevCodecTable    OBJECT-TYPE
       SYNTAX      SEQUENCE OF PktcSigDevCodecEntry
       MAX-ACCESS  not-accessible
       STATUS      current
@@ -252,13 +252,13 @@ pktcSigDevCodecMax  OBJECT-TYPE
       MAX-ACCESS  read-only
       STATUS   current
       DESCRIPTION
-            "The maximum number of simultaneous sessions of the 
+            "The maximum number of simultaneous sessions of the
             specific codec that the MTA can support"
     ::= { pktcSigDevCodecEntry 3 }
 
 
 --
---    These are the common signaling related definitions that affect 
+--    These are the common signaling related definitions that affect
 --    the entire MTA device.
 --
 
@@ -268,7 +268,7 @@ pktcSigDevEchoCancellation  OBJECT-TYPE
       MAX-ACCESS       read-only
       STATUS         current
       DESCRIPTION
-            "This object specifies if the device is capable 
+            "This object specifies if the device is capable
             of echo cancellation."
     ::= { pktcSigDevConfigObjects 2 }
 
@@ -277,20 +277,20 @@ pktcSigDevSilenceSuppression  OBJECT-TYPE
       MAX-ACCESS       read-only
       STATUS       current
       DESCRIPTION
-            "This object specifies if the device is capable of 
+            "This object specifies if the device is capable of
              silence suppression (Voice Activity Detection)."
     ::= { pktcSigDevConfigObjects 3 }
 
 pktcSigDevConnectionMode     OBJECT-TYPE
       SYNTAX BITS {
-            voice(0), 
-            fax(1), 
+            voice(0),
+            fax(1),
             modem(2)
     }
       MAX-ACCESS   read-only
       STATUS       current
       DESCRIPTION
-            "This object specifies the connection modes that the 
+            "This object specifies the connection modes that the
              MTA device can support."
     ::= { pktcSigDevConfigObjects 4 }
 
@@ -305,14 +305,14 @@ pktcSigDevR0Cadence     OBJECT-TYPE
       MAX-ACCESS       read-write
       STATUS       current
       DESCRIPTION
-            "This object specifies ring cadence 0 (a user defined 
-            field) where each bit (least significant bit) 
-            represents a duration of 200 milliseconds (6 seconds 
+            "This object specifies ring cadence 0 (a user defined
+            field) where each bit (least significant bit)
+            represents a duration of 200 milliseconds (6 seconds
             total)."
       DEFVAL {{ interval1, interval2, interval3, interval4, interval5,
-      interval6, interval7, interval8,  interval9, interval10, 
-      interval11, interval12, interval13, interval14, interval15, 
-      interval16, interval17, interval18, interval19, interval20}} 
+      interval6, interval7, interval8,  interval9, interval10,
+      interval11, interval12, interval13, interval14, interval15,
+      interval16, interval17, interval18, interval19, interval20}}
       -- '11111111111111111111000000000000000000000000000000000000000
       -- 00000'
       ::= { pktcSigDevConfigObjects 5 }
@@ -323,14 +323,14 @@ pktcSigDevR6Cadence     OBJECT-TYPE
       MAX-ACCESS       read-write
       STATUS       current
       DESCRIPTION
-            "This object specifies ring cadence 6 (a user defined 
-            field) where each bit (least significant bit) 
-            represents a duration of 200 milliseconds (6 seconds 
+            "This object specifies ring cadence 6 (a user defined
+            field) where each bit (least significant bit)
+            represents a duration of 200 milliseconds (6 seconds
             total)."
-      DEFVAL { { interval1, interval2, interval3, interval4, 
-      interval5, interval6, interval7, interval8, interval9, 
-      interval10, interval11, interval12, interval13, interval14, 
-      interval15, interval16, interval17, interval18, interval19, 
+      DEFVAL { { interval1, interval2, interval3, interval4,
+      interval5, interval6, interval7, interval8, interval9,
+      interval10, interval11, interval12, interval13, interval14,
+      interval15, interval16, interval17, interval18, interval19,
       interval20 } }
       -- '11111111111111111111000000000000000000000000000000000000000
       -- 00000'
@@ -341,15 +341,15 @@ pktcSigDevR7Cadence     OBJECT-TYPE
       MAX-ACCESS       read-write
       STATUS       current
       DESCRIPTION
-            "This object specifies ring cadence 7 (a user defined 
-            field) where each bit (least significant bit) 
-            represents a duration of 200 milliseconds (6 seconds 
+            "This object specifies ring cadence 7 (a user defined
+            field) where each bit (least significant bit)
+            represents a duration of 200 milliseconds (6 seconds
             total)."
- 
-      DEFVAL { { interval1, interval2, interval3, interval4, 
-      interval5, interval6, interval7, interval8, interval9, 
-      interval10, interval11, interval12, interval13, interval14, 
-      interval15, interval16, interval17, interval18, interval19, 
+
+      DEFVAL { { interval1, interval2, interval3, interval4,
+      interval5, interval6, interval7, interval8, interval9,
+      interval10, interval11, interval12, interval13, interval14,
+      interval15, interval16, interval17, interval18, interval19,
       interval20 } }
       -- '11111111111111111111000000000000000000000000000000000000000
       -- 00000'
@@ -357,11 +357,11 @@ pktcSigDevR7Cadence     OBJECT-TYPE
 
 
 pktcSigDefCallSigTos  OBJECT-TYPE
-      SYNTAX      Integer32 (0..63)    
-      MAX-ACCESS    read-write    
-      STATUS    current    
+      SYNTAX      Integer32 (0..63)
+      MAX-ACCESS    read-write
+      STATUS    current
       DESCRIPTION
-            "The default value used in the IP header for setting the 
+            "The default value used in the IP header for setting the
             Type of Service (TOS) value for call signalling."
       REFERENCE
             "Refer to NCS specification"    DEFVAL { 0 }
@@ -372,7 +372,7 @@ pktcSigDefMediaStreamTos  OBJECT-TYPE
       MAX-ACCESS    read-write
       STATUS    current
       DESCRIPTION
-            "The default value used in the IP header for setting 
+            "The default value used in the IP header for setting
             the Type of Service (TOS) value for media stream packets."
       REFERENCE
             "Refer to NCS specification"
@@ -380,14 +380,14 @@ pktcSigDefMediaStreamTos  OBJECT-TYPE
       ::= { pktcSigDevConfigObjects 9 }
 
 pktcSigTosFormatSelector  OBJECT-TYPE
-      SYNTAX      INTEGER { 
+      SYNTAX      INTEGER {
             ipv4TOSOctet(1),
             dscpCodepoint(2)
-      }          
+      }
       MAX-ACCESS    read-write
       STATUS    current
       DESCRIPTION
-            "The format of the default signaling and media 
+            "The format of the default signaling and media
             Type of Service (TOS) values."
       DEFVAL { ipv4TOSOctet }
       ::= { pktcSigDevConfigObjects 10 }
@@ -401,20 +401,20 @@ pktcSigCapabilityTable    OBJECT-TYPE
       SYNTAX        SEQUENCE OF PktcSigCapabilityEntry
       MAX-ACCESS    not-accessible
       STATUS        current
-      DESCRIPTION   
+      DESCRIPTION
             "This table describes the signaling types by this MTA."
       ::= { pktcSigDevConfigObjects 11 }
 
 pktcSigCapabilityEntry    OBJECT-TYPE
-      SYNTAX        PktcSigCapabilityEntry   
+      SYNTAX        PktcSigCapabilityEntry
       MAX-ACCESS    not-accessible
       STATUS        current
-      DESCRIPTION   
-            "Entries in pktcMtaDevSigCapabilityTable - List of 
-            supported signaling types, versions and vendor extensions 
-            for this MTA. Each entry in the list provides for one 
-            signaling type and version combination. If the device 
-            supports multiple versions of the same signaling type - 
+      DESCRIPTION
+            "Entries in pktcMtaDevSigCapabilityTable - List of
+            supported signaling types, versions and vendor extensions
+            for this MTA. Each entry in the list provides for one
+            signaling type and version combination. If the device
+            supports multiple versions of the same signaling type -
             it will require multiple entries."
       INDEX { pktcSignalingIndex }
       ::= { pktcSigCapabilityTable 1 }
@@ -430,19 +430,19 @@ pktcSignalingIndex       OBJECT-TYPE
       SYNTAX        Integer32 (1..16383)
       MAX-ACCESS    not-accessible
       STATUS        current
-      DESCRIPTION   
-            "The index value which uniquely identifies 
-            an entry in the pktcSigCapabilityTable." 
+      DESCRIPTION
+            "The index value which uniquely identifies
+            an entry in the pktcSigCapabilityTable."
       ::= { pktcSigCapabilityEntry 1 }
 
 pktcSignalingType      OBJECT-TYPE
       SYNTAX        PktcSigType
       MAX-ACCESS    read-only
       STATUS        current
-      DESCRIPTION   
-            "The Type identifies the type of signaling 
+      DESCRIPTION
+            "The Type identifies the type of signaling
             used, this can be NCS, DCS, etc. This value
-            has to be associated with a single signaling 
+            has to be associated with a single signaling
             version - reference pktcMtaDevSignalingVersion."
     ::= { pktcSigCapabilityEntry 2 }
 
@@ -450,7 +450,7 @@ pktcSignalingVersion      OBJECT-TYPE
       SYNTAX        SnmpAdminString
       MAX-ACCESS    read-only
       STATUS        current
-      DESCRIPTION   
+      DESCRIPTION
             "Provides the version of the signaling type -
             reference pktcSignalingType. Examples
             would be 1.0 or 2.33 etc."
@@ -460,8 +460,8 @@ pktcSignalingVendorExtension      OBJECT-TYPE
       SYNTAX        SnmpAdminString
       MAX-ACCESS    read-only
       STATUS        current
-      DESCRIPTION  
-            "The vendor extension allows vendors to 
+      DESCRIPTION
+            "The vendor extension allows vendors to
             provide a list of additional capabilities,
             vendors can decide how to encode these
             Extensions, although space separated text is
@@ -474,8 +474,8 @@ pktcSigDefNcsReceiveUdpPort  OBJECT-TYPE
       STATUS    current
       DESCRIPTION
             "This object contains the MTA User Datagram Protocol
-            (UDP) receive port that is being used for NCS call 
-            signaling. This object should only be changed by the 
+            (UDP) receive port that is being used for NCS call
+            signaling. This object should only be changed by the
             configuration file."
       REFERENCE
             "Refer to NCS specification"
@@ -483,51 +483,51 @@ pktcSigDefNcsReceiveUdpPort  OBJECT-TYPE
       ::= { pktcSigDevConfigObjects 12 }
 
 pktcSigServiceClassNameUS   OBJECT-TYPE
-      SYNTAX    SnmpAdminString (SIZE (0..15)) 
+      SYNTAX    SnmpAdminString (SIZE (0..15))
       MAX-ACCESS   read-write
       STATUS       current
       DESCRIPTION
-            "This object contains a string indicating the Service 
-            Class name to create an Upstream Service (US) Flow for 
-            NCS. If the object has an empty string value then the 
-            upstream NCS SF is not created and the best effort 
-            SF is used for upstream NCS data. The creation of the NCS 
-            SF primary occurs before Voice Communication Service is 
-            activated on the device. If this object is set to a 
-            non-empty (non-zero length) string, the MTA MUST create 
-            the NCS SF if it does not currently exist and the 
-            pktcSigServiceClassNameMask object has a non-zero value. 
-            If this object is subsequently set to an empty 
-            (zero-length)string , the MTA MUST delete the NCS SF 
-            if it exists.  Setting this object to a different value 
-            does not cause the Upstream Service Flow to be 
+            "This object contains a string indicating the Service
+            Class name to create an Upstream Service (US) Flow for
+            NCS. If the object has an empty string value then the
+            upstream NCS SF is not created and the best effort
+            SF is used for upstream NCS data. The creation of the NCS
+            SF primary occurs before Voice Communication Service is
+            activated on the device. If this object is set to a
+            non-empty (non-zero length) string, the MTA MUST create
+            the NCS SF if it does not currently exist and the
+            pktcSigServiceClassNameMask object has a non-zero value.
+            If this object is subsequently set to an empty
+            (zero-length)string , the MTA MUST delete the NCS SF
+            if it exists.  Setting this object to a different value
+            does not cause the Upstream Service Flow to be
             re-created. The string MUST contain printable ASCII
-            characters. The length of the string does not include a 
+            characters. The length of the string does not include a
             terminating zero.  The MTA MUST append a terminating zero
-            when the MTA creates the service flow. " 
+            when the MTA creates the service flow. "
       ::= { pktcSigDevConfigObjects 13 }
 
 pktcSigServiceClassNameDS   OBJECT-TYPE
-      SYNTAX     SnmpAdminString (SIZE (0..15)) 
+      SYNTAX     SnmpAdminString (SIZE (0..15))
       MAX-ACCESS   read-write
       STATUS       current
       DESCRIPTION
-            "This object contains a string indicating the Service 
-           Class Name to create a Downstream Service Flow for NCS. 
-            If the object has an empty string value then the 
-            NCS SF is not created and the best effort primary SF is 
-            used for downstream NCS data. The creation of the NCS SF 
-            occurs before Voice Communication Service is activated on 
-            the device. If this object is set to a non-empty (non-zero 
-            length) string, the MTA MUST create the NCS SF if it does 
-            not currently exist and the pktcSigServiceClassNameMask 
-            object has a non-zero value.  If this object is 
-            subsequently set to an empty (zero-length) string, the MTA 
-            MUST delete the NCS SF if it exists.  Setting this object 
-            to a different value does not cause the Downstream Service 
-            Flow to be re-created.  The string MUST contain printable 
-            ASCII characters. The length of the string does not include 
-            a terminating zero.  The MTA MUST append a terminating 
+            "This object contains a string indicating the Service
+           Class Name to create a Downstream Service Flow for NCS.
+            If the object has an empty string value then the
+            NCS SF is not created and the best effort primary SF is
+            used for downstream NCS data. The creation of the NCS SF
+            occurs before Voice Communication Service is activated on
+            the device. If this object is set to a non-empty (non-zero
+            length) string, the MTA MUST create the NCS SF if it does
+            not currently exist and the pktcSigServiceClassNameMask
+            object has a non-zero value.  If this object is
+            subsequently set to an empty (zero-length) string, the MTA
+            MUST delete the NCS SF if it exists.  Setting this object
+            to a different value does not cause the Downstream Service
+            Flow to be re-created.  The string MUST contain printable
+            ASCII characters. The length of the string does not include
+            a terminating zero.  The MTA MUST append a terminating
             zero when the MTA creates the service flow. "
       ::= { pktcSigDevConfigObjects 14 }
 
@@ -536,10 +536,10 @@ pktcSigServiceClassNameMask   OBJECT-TYPE
       MAX-ACCESS read-write
       STATUS     current
       DESCRIPTION
-            "This object contains a value for the Call Signaling 
-            Network Mask. The value is used as the NCS Call Signaling 
-            classifier mask. The object is used to delete the NCS SF 
-            when set to zero. When the object is set to a non-zero 
+            "This object contains a value for the Call Signaling
+            Network Mask. The value is used as the NCS Call Signaling
+            classifier mask. The object is used to delete the NCS SF
+            when set to zero. When the object is set to a non-zero
             value by the SNMP Manager, the NCS SF are to be created."
       DEFVAL { 0 }
       ::= { pktcSigDevConfigObjects 15 }
@@ -553,13 +553,13 @@ pktcSigNcsServiceFlowState  OBJECT-TYPE
       MAX-ACCESS read-only
       STATUS     current
       DESCRIPTION
-            "This object contains a status value of the Call Signaling 
-            Service Flow. 
+            "This object contains a status value of the Call Signaling
+            Service Flow.
             - 'notactive' indicates that the NCS SF is not being used,
-            and has not tried to be created, 
-            - 'active' indicates that the NCS SF is in use, 
-            - 'error' indicates that the NCS SF creation resulted in 
-            an error and the best effort channel is used for NCS 
+            and has not tried to be created,
+            - 'active' indicates that the NCS SF is in use,
+            - 'error' indicates that the NCS SF creation resulted in
+            an error and the best effort channel is used for NCS
             Signaling."
       ::= { pktcSigDevConfigObjects 16 }
 
@@ -568,15 +568,15 @@ pktcSigDevR1Cadence       OBJECT-TYPE
       MAX-ACCESS       read-write
       STATUS       current
       DESCRIPTION
-            "This object specifies ring cadence 1 (a user defined 
-            field) where each bit (least significant bit) 
+            "This object specifies ring cadence 1 (a user defined
+            field) where each bit (least significant bit)
             represents a duration of 100 milliseconds (6 seconds
             total)."
 
-      DEFVAL { { interval1, interval2, interval3, interval4, 
-      interval5, interval6, interval7, interval8, interval9, 
-      interval10, interval11, interval12, interval13, interval14, 
-      interval15, interval16, interval17, interval18, interval19, 
+      DEFVAL { { interval1, interval2, interval3, interval4,
+      interval5, interval6, interval7, interval8, interval9,
+      interval10, interval11, interval12, interval13, interval14,
+      interval15, interval16, interval17, interval18, interval19,
       interval20 } }
       -- '11111111111111111111000000000000000000000000000000000000000
       -- 00000'
@@ -591,10 +591,10 @@ pktcSigDevR2Cadence       OBJECT-TYPE
             defined field) where each bit (least significant
             bit) represents a duration of 100 milliseconds
             (6 seconds total)."
- 
-      DEFVAL { { interval1, interval2, interval3, interval4, 
-      interval5, interval6, interval7, interval8, interval13, 
-      interval14, interval15, interval16, interval17, interval18, 
+
+      DEFVAL { { interval1, interval2, interval3, interval4,
+      interval5, interval6, interval7, interval8, interval13,
+      interval14, interval15, interval16, interval17, interval18,
       interval19, interval20 } }
       -- '11111111000011111111000000000000000000000000000000000000000
       -- 00000'
@@ -609,10 +609,10 @@ pktcSigDevR3Cadence       OBJECT-TYPE
         defined field) where each bit (least significant
         bit) represents a duration of 100 milliseconds
        (6 seconds total)."
- 
-      DEFVAL { { interval1, interval2, interval3, interval4, 
-      interval7, interval8, interval9, interval10, interval13, 
-      interval14, interval15, interval16, interval17, interval18, 
+
+      DEFVAL { { interval1, interval2, interval3, interval4,
+      interval7, interval8, interval9, interval10, interval13,
+      interval14, interval15, interval16, interval17, interval18,
       interval19, interval20 } }
       -- '11110011110011111111000000000000000000000000000000000000000
       -- 00000'
@@ -627,9 +627,9 @@ pktcSigDevR4Cadence        OBJECT-TYPE
             defined field) where each bit (least significant
             bit) represents a duration of 100 milliseconds
             (6 seconds total)."
-      DEFVAL { { interval1, interval2, interval3, interval6, 
-      interval7, interval8, interval9, interval10, interval11, 
-      interval12, interval13, interval14, interval15, interval18, 
+      DEFVAL { { interval1, interval2, interval3, interval6,
+      interval7, interval8, interval9, interval10, interval11,
+      interval12, interval13, interval14, interval15, interval18,
       interval19, interval20 } }
       -- '11100111111111100111000000000000000000000000000000000000000
       -- 00000'
@@ -643,7 +643,7 @@ pktcSigDevR5Cadence       OBJECT-TYPE
             "This object specifies ring cadence 5 (a user
             defined field) where each bit (least significant
             bit) represents a duration of 100 milliseconds."
-      DEFVAL { { interval1, interval2, interval3, interval4, 
+      DEFVAL { { interval1, interval2, interval3, interval4,
       interval5, interval61 } }
       -- '11111000000000000000000000000000000000000000000000000000000
       -- 01000'
@@ -659,10 +659,10 @@ pktcSigDevRgCadence       OBJECT-TYPE
             bit) represents a duration of 100 milliseconds
            (6 seconds total)."
 
-      DEFVAL { { interval1, interval2, interval3, interval4, 
-      interval5, interval6, interval7, interval8, interval9, 
-      interval10, interval11, interval12, interval13, interval14, 
-      interval15, interval16, interval17, interval18, interval19, 
+      DEFVAL { { interval1, interval2, interval3, interval4,
+      interval5, interval6, interval7, interval8, interval9,
+      interval10, interval11, interval12, interval13, interval14,
+      interval15, interval16, interval17, interval18, interval19,
       interval20 } }
       -- '11111111111111111111000000000000000000000000000000000000000
       -- 00000'
@@ -673,12 +673,12 @@ pktcSigDevRsCadence       OBJECT-TYPE
       MAX-ACCESS   read-write
       STATUS       current
       DESCRIPTION
-            "This object specifies ring cadence rs (a user 
+            "This object specifies ring cadence rs (a user
             defined field) where each bit (least significant bit)
-            represents a duration of 100 milliseconds (6 seconds 
-            total). MTA MUST reject any attempt to make this 
+            represents a duration of 100 milliseconds (6 seconds
+            total). MTA MUST reject any attempt to make this
             object repeatable."
-      DEFVAL { { interval1, interval2, interval3, interval4, 
+      DEFVAL { { interval1, interval2, interval3, interval4,
       interval5, interval61 } }
       -- '11111000000000000000000000000000000000000000000000000000000
       -- 01000'
@@ -693,10 +693,10 @@ pktcSigDevRtCadence       OBJECT-TYPE
             defined field) where each bit (least significant
             bit) represents a duration of 100 milliseconds
            (6 seconds total)."
-      DEFVAL { { interval1, interval2, interval3, interval4, 
-      interval5, interval6, interval7, interval8, interval9, 
-      interval10, interval11, interval12, interval13, interval14, 
-      interval15, interval16, interval17, interval18, interval19, 
+      DEFVAL { { interval1, interval2, interval3, interval4,
+      interval5, interval6, interval7, interval8, interval9,
+      interval10, interval11, interval12, interval13, interval14,
+      interval15, interval16, interval17, interval18, interval19,
       interval20 } }
       -- '11111111111111111111000000000000000000000000000000000000000
       -- 00000'
@@ -713,13 +713,13 @@ pktcSigEndPntConfigTable    OBJECT-TYPE
       SYNTAX        SEQUENCE OF PktcSigEndPntConfigEntry
       MAX-ACCESS    not-accessible
       STATUS        current
-      DESCRIPTION   
+      DESCRIPTION
             "This table describes the PacketCable EndPoint selected
-            signaling type. The number of entries in this table 
+            signaling type. The number of entries in this table
             represents the number of provisioned end points.
-            For each conceptual row of pktcSigEndPntConfigTable 
-            defined, an associated row MUST be defined in one of 
-            the specific signaling tables such as 
+            For each conceptual row of pktcSigEndPntConfigTable
+            defined, an associated row MUST be defined in one of
+            the specific signaling tables such as
             pktcNcsEndPntConfigTable."
      ::=  { pktcSigEndPntConfigObjects 1 }
 
@@ -727,26 +727,26 @@ pktcSigEndPntConfigEntry    OBJECT-TYPE
       SYNTAX        PktcSigEndPntConfigEntry
       MAX-ACCESS    not-accessible
       STATUS        current
-      DESCRIPTION   
-            "Entries in pktcSigEndPntConfigTable - Each entry 
+      DESCRIPTION
+            "Entries in pktcSigEndPntConfigTable - Each entry
             describes what signaling type a particular endpoint uses."
       INDEX { ifIndex }
       ::=  { pktcSigEndPntConfigTable 1 }
 
 PktcSigEndPntConfigEntry  ::= SEQUENCE {
-            pktcSigEndPntCapabilityIndex           Integer32 
+            pktcSigEndPntCapabilityIndex           Integer32
       }
 
 
 pktcSigEndPntCapabilityIndex    OBJECT-TYPE
-      SYNTAX        Integer32 (1..16383)  
+      SYNTAX        Integer32 (1..16383)
       MAX-ACCESS    read-create
       STATUS        current
-      DESCRIPTION   
+      DESCRIPTION
             "The associated index value in the pktcSigCapablityTable."
       ::= { pktcSigEndPntConfigEntry 1 }
 --
---    The NCS End Point Config Table is used to define attributes that 
+--    The NCS End Point Config Table is used to define attributes that
 --    are specific to connection EndPoints.
 --
 --
@@ -755,13 +755,13 @@ pktcNcsEndPntConfigTable  OBJECT-TYPE
       SYNTAX        SEQUENCE OF PktcNcsEndPntConfigEntry
       MAX-ACCESS    not-accessible
       STATUS        current
-      DESCRIPTION   
-            "This table describes the PacketCable EndPoint selected 
-             signaling type. The number of entries in this table 
+      DESCRIPTION
+            "This table describes the PacketCable EndPoint selected
+             signaling type. The number of entries in this table
              represents the number of provisioned end points.
-             For each conceptual row of pktcSigEndPntConfigTable 
-             defined, an associated row MUST be defined in one of 
-             the specific signaling tables such as 
+             For each conceptual row of pktcSigEndPntConfigTable
+             defined, an associated row MUST be defined in one of
+             the specific signaling tables such as
              pktcNcsEndPntConfigTable."
       ::=  { pktcNcsEndPntConfigObjects 1 }
 
@@ -769,8 +769,8 @@ pktcNcsEndPntConfigEntry  OBJECT-TYPE
       SYNTAX        PktcNcsEndPntConfigEntry
       MAX-ACCESS    not-accessible
       STATUS        current
-      DESCRIPTION   
-            "Entries in pktcNcsEndPntConfigTable - Each entry 
+      DESCRIPTION
+            "Entries in pktcNcsEndPntConfigTable - Each entry
             describes what signaling type a particular endpoint uses."
       INDEX { ifIndex }
       ::=  { pktcNcsEndPntConfigTable 1 }
@@ -813,23 +813,23 @@ pktcNcsEndPntConfigCallAgentId     OBJECT-TYPE
       MAX-ACCESS read-create
       STATUS     current
       DESCRIPTION
-            "This object contains a string indicating the call agent 
-            name(ex: ca@abc.def.com). The call agent name 
-            after the character '@' MUST be a fully qualified 
-            domain name and MUST have a corresponding 
-            pktcMtaDevCmsFqdn entry in the pktcMtaDevCmsTable." 
+            "This object contains a string indicating the call agent
+            name(ex: ca@abc.def.com). The call agent name
+            after the character '@' MUST be a fully qualified
+            domain name and MUST have a corresponding
+            pktcMtaDevCmsFqdn entry in the pktcMtaDevCmsTable."
 
     ::= {  pktcNcsEndPntConfigEntry 1 }
 
 pktcNcsEndPntConfigCallAgentUdpPort    OBJECT-TYPE
       SYNTAX    Integer32 (1025..65535)
-      MAX-ACCESS   read-create 
+      MAX-ACCESS   read-create
       STATUS       current
       DESCRIPTION
-            "This object contains the call agent User Datagram 
-            Protocol (UDP) receive port that is being used for 
-            this instance of call signaling, i.e. the default port 
-            on which the call agent will receive NCS signaling from 
+            "This object contains the call agent User Datagram
+            Protocol (UDP) receive port that is being used for
+            this instance of call signaling, i.e. the default port
+            on which the call agent will receive NCS signaling from
             the gateway."
       REFERENCE
             "Refer to NCS specification"
@@ -842,7 +842,7 @@ pktcNcsEndPntConfigPartialDialTO     OBJECT-TYPE
       MAX-ACCESS   read-create
       STATUS       current
       DESCRIPTION
-            "This object contains maximum value of the partial 
+            "This object contains maximum value of the partial
              dial time out."
       REFERENCE
             "Refer to PacketCable NCS specification"
@@ -856,7 +856,7 @@ pktcNcsEndPntConfigCriticalDialTO     OBJECT-TYPE
       MAX-ACCESS    read-create
       STATUS    current
       DESCRIPTION
-            "This object contains the maximum value of the critical 
+            "This object contains the maximum value of the critical
             dial time out."
       REFERENCE
             "Refer NCS specification"
@@ -893,7 +893,7 @@ pktcNcsEndPntConfigMessageWaitingTO     OBJECT-TYPE
       MAX-ACCESS    read-create
       STATUS    current
       DESCRIPTION
-            "This object contains the timeout value for message 
+            "This object contains the timeout value for message
             waiting indicator."
       REFERENCE
             "Refer to NCS specification"
@@ -906,7 +906,7 @@ pktcNcsEndPntConfigOffHookWarnToneTO     OBJECT-TYPE
       MAX-ACCESS   read-create
       STATUS       current
       DESCRIPTION
-            "This object contains the timeout value for 
+            "This object contains the timeout value for
             the off hook Warning tone."
       REFERENCE
             "Refer to NCS specification"
@@ -955,7 +955,7 @@ pktcNcsEndPntConfigStutterDialToneTO     OBJECT-TYPE
       MAX-ACCESS    read-create
       STATUS    current
       DESCRIPTION
-            "This object contains the timeout value for stutter 
+            "This object contains the timeout value for stutter
             dial tone."
       REFERENCE
           "Refer to NCS specification"
@@ -967,7 +967,7 @@ pktcNcsEndPntConfigTSMax     OBJECT-TYPE
       MAX-ACCESS    read-create
       STATUS    current
       DESCRIPTION
-            "This object contains the max time in seconds since the 
+            "This object contains the max time in seconds since the
             sending of the initial datagram."
       REFERENCE
             "Refer to NCS specification"
@@ -979,20 +979,20 @@ pktcNcsEndPntConfigMax1     OBJECT-TYPE
       MAX-ACCESS    read-create
       STATUS    current
       DESCRIPTION
-            "This object contains the suspicious error threshold 
+            "This object contains the suspicious error threshold
             for signaling messages."
       REFERENCE
             "Refer to NCS specification"
       DEFVAL { 5 }
       ::= { pktcNcsEndPntConfigEntry 14 }
 
- 
+
 pktcNcsEndPntConfigMax2     OBJECT-TYPE
       SYNTAX      Integer32
       MAX-ACCESS    read-create
       STATUS    current
       DESCRIPTION
-            "This object contains the disconnect error 
+            "This object contains the disconnect error
             threshold for signaling messages."
       REFERENCE
             "Refer to NCS specification"
@@ -1025,7 +1025,7 @@ pktcNcsEndPntConfigMWD     OBJECT-TYPE
       MAX-ACCESS    read-create
       STATUS    current
       DESCRIPTION
-            "Maximum Waiting Delay (MWD) contains the maximum 
+            "Maximum Waiting Delay (MWD) contains the maximum
             number of seconds a MTA waits after a restart."
       REFERENCE
             "Refer to NCS specification"
@@ -1039,7 +1039,7 @@ pktcNcsEndPntConfigTdinit     OBJECT-TYPE
       MAX-ACCESS    read-create
       STATUS    current
       DESCRIPTION
-            "This object contains the initial number of seconds 
+            "This object contains the initial number of seconds
             a MTA waits after a disconnect."
       REFERENCE
             "Refer to NCS specification"
@@ -1052,7 +1052,7 @@ pktcNcsEndPntConfigTdmin     OBJECT-TYPE
       MAX-ACCESS    read-create
       STATUS    current
       DESCRIPTION
-            "This object contains the minimum number of seconds a 
+            "This object contains the minimum number of seconds a
             MTA waits after a disconnect."
       REFERENCE
             "Refer to NCS specification"
@@ -1065,7 +1065,7 @@ pktcNcsEndPntConfigTdmax     OBJECT-TYPE
       MAX-ACCESS    read-create
       STATUS    current
       DESCRIPTION
-            "This object contains the maximum number of seconds 
+            "This object contains the maximum number of seconds
             a MTA waits after a disconnect."
       REFERENCE
             "Refer to NCS specification"
@@ -1078,7 +1078,7 @@ pktcNcsEndPntConfigRtoMax     OBJECT-TYPE
       MAX-ACCESS    read-create
       STATUS    current
       DESCRIPTION
-            "This object contains the maximum number of seconds 
+            "This object contains the maximum number of seconds
             for the retransmission timer."
       REFERENCE
             "Refer to NCS specification"
@@ -1092,7 +1092,7 @@ pktcNcsEndPntConfigRtoInit     OBJECT-TYPE
       MAX-ACCESS    read-create
       STATUS    current
       DESCRIPTION
-            "This object contains the initial number of seconds 
+            "This object contains the initial number of seconds
             for the retransmission timer."
       REFERENCE
             "Refer to NCS specification"
@@ -1105,7 +1105,7 @@ pktcNcsEndPntConfigLongDurationKeepAlive     OBJECT-TYPE
       MAX-ACCESS    read-create
       STATUS    current
       DESCRIPTION
-            "Specifies a timeout value in minutes for sending 
+            "Specifies a timeout value in minutes for sending
             long duration call notification message."
       REFERENCE
             "Refer to NCS specification"
@@ -1118,7 +1118,7 @@ pktcNcsEndPntConfigThist  OBJECT-TYPE
       MAX-ACCESS    read-create
       STATUS    current
       DESCRIPTION
-            "Timeout period in seconds before no response is 
+            "Timeout period in seconds before no response is
             declared."
       REFERENCE
             "Refer to NCS specification"
@@ -1130,7 +1130,7 @@ pktcNcsEndPntConfigStatus     OBJECT-TYPE
       MAX-ACCESS    read-create
       STATUS    current
       DESCRIPTION
-            "This object contains the Row Status associated with 
+            "This object contains the Row Status associated with
             the pktsNcsEndPntTable."
       ::= { pktcNcsEndPntConfigEntry 26 }
 
@@ -1140,9 +1140,9 @@ pktcNcsEndPntConfigCallWaitingMaxRep     OBJECT-TYPE
       STATUS    current
       DESCRIPTION
             "This object contains the maximum number of repetitions
-            of the call waiting tone that the MTA will play from a 
-            single CMS request.  A value of zero (0) can be used if 
-            the CMS is to control the repetitions of the call 
+            of the call waiting tone that the MTA will play from a
+            single CMS request.  A value of zero (0) can be used if
+            the CMS is to control the repetitions of the call
             waiting tone."
       DEFVAL    { 1 }
       ::= { pktcNcsEndPntConfigEntry 27 }
@@ -1154,53 +1154,53 @@ pktcNcsEndPntConfigCallWaitingDelay     OBJECT-TYPE
       STATUS    current
       DESCRIPTION
             "This object contains the delay between repetitions
-            of the call waiting tone that the MTA will play from 
+            of the call waiting tone that the MTA will play from
             a single CMS request."
       DEFVAL    { 10 }
       ::= { pktcNcsEndPntConfigEntry 28 }
 
-pktcNcsEndPntStatusCallIpAddress  OBJECT-TYPE    
-      SYNTAX IpAddress    
-      MAX-ACCESS read-only    
-      STATUS current    
-      DESCRIPTION    
-            "This object contains the IP address of the CMS 
-            currently being used for this endpoint. This IP 
-            address is used to create the appropriate security 
+pktcNcsEndPntStatusCallIpAddress  OBJECT-TYPE
+      SYNTAX IpAddress
+      MAX-ACCESS read-only
+      STATUS current
+      DESCRIPTION
+            "This object contains the IP address of the CMS
+            currently being used for this endpoint. This IP
+            address is used to create the appropriate security
             association."
       ::= { pktcNcsEndPntConfigEntry 29 }
 
-pktcNcsEndPntStatusError  OBJECT-TYPE    
+pktcNcsEndPntStatusError  OBJECT-TYPE
       SYNTAX INTEGER {
-            operational           (1), 
-            noSecurityAssociation (2), 
-            disconnected          (3) 
+            operational           (1),
+            noSecurityAssociation (2),
+            disconnected          (3)
       }
-      MAX-ACCESS   read-only    
-      STATUS       current    
+      MAX-ACCESS   read-only
+      STATUS       current
       DESCRIPTION
             "This object contains the error status for this interface.
-            The operational state indicates that all operations 
-            necessary to put the line in service have occurred and CMS 
+            The operational state indicates that all operations
+            necessary to put the line in service have occurred and CMS
             has acknowledged the RSIP message successfully.
-            If 'pktcMtaDevCmsIpsecCtrl' is enabled for the associated 
-            Call Agent, the noSecurityAssociation status indicates 
-            that no Security Association (SA) yet exists for this 
+            If 'pktcMtaDevCmsIpsecCtrl' is enabled for the associated
+            Call Agent, the noSecurityAssociation status indicates
+            that no Security Association (SA) yet exists for this
             endpoint. Otherwise, the state is unused.
             The disconnected status indicates one of the following two:
-            1. If 'pktcMtaDevCmsIpsecCtrl' is disabled then no 
-            security association is involved with this endpoint: the 
-            NCS signaling Software is in process of establishing the 
+            1. If 'pktcMtaDevCmsIpsecCtrl' is disabled then no
+            security association is involved with this endpoint: the
+            NCS signaling Software is in process of establishing the
             NCS signaling Link via an RSIP exchange.
-            2. Otherwise, pktcMtaDevCmsIpsecCtrl is enabled, the 
-            security Association has been established and the NCS 
+            2. Otherwise, pktcMtaDevCmsIpsecCtrl is enabled, the
+            security Association has been established and the NCS
             signaling Software is in process of establishing the NCS
             signaling Link via an RSIP exchange."
 
       ::= { pktcNcsEndPntConfigEntry 30 }
 --
 -- notification group is for future extension.
--- 
+--
 pktcSigNotificationPrefix OBJECT IDENTIFIER     ::= { pktcSigMib 2 }
 pktcSigNotification  OBJECT IDENTIFIER     ::= {
  pktcSigNotificationPrefix 0 }
@@ -1216,7 +1216,7 @@ pktcSigBasicCompliance  MODULE-COMPLIANCE
       DESCRIPTION
         "The compliance statement for devices that implement Signaling
         on the MTA."
-       
+
 MODULE  -- pktcSigMib
 
 -- unconditionally mandatory groups
@@ -1225,7 +1225,7 @@ MANDATORY-GROUPS {
       pktcSigGroup
       }
       GROUP pktcNcsGroup
-      DESCRIPTION 
+      DESCRIPTION
             "This group is mandatory for any MTA implementing NCS
             signaling"
       ::={ pktcSigCompliances 1 }
@@ -1238,7 +1238,7 @@ pktcSigGroup  OBJECT-GROUP
       pktcSigDevCodecMax,
       pktcSigDevEchoCancellation,
       pktcSigDevSilenceSuppression,
-      pktcSigDevConnectionMode,    
+      pktcSigDevConnectionMode,
       pktcSigDevR0Cadence,
       pktcSigDevR6Cadence,
       pktcSigDevR7Cadence,
@@ -1267,7 +1267,7 @@ pktcSigGroup  OBJECT-GROUP
       DESCRIPTION
           "Group of objects for the common portion of the
           PacketCable Signaling MIB."
-      ::= { pktcSigGroups 1 } 
+      ::= { pktcSigGroups 1 }
 
 pktcNcsGroup  OBJECT-GROUP
       OBJECTS {
@@ -1307,7 +1307,7 @@ pktcNcsGroup  OBJECT-GROUP
             "Group of objects for the NCS portion of the
             PacketCable Signaling MIB.  This is mandatory for
             NCS signaling."
-      ::= { pktcSigGroups 2 } 
+      ::= { pktcSigGroups 2 }
 
 END
 

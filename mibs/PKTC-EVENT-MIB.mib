@@ -2,7 +2,7 @@ PKTC-EVENT-MIB DEFINITIONS ::= BEGIN
 
 IMPORTS
     MODULE-IDENTITY,
-    OBJECT-TYPE,  
+    OBJECT-TYPE,
     Integer32,
     Unsigned32,
     NOTIFICATION-TYPE
@@ -31,9 +31,9 @@ pktcEventMib MODULE-IDENTITY
             Fax:    +1 303-661-9199
             E-mail: m.osman@cablelabs.com"
     DESCRIPTION
-            "This MIB module supplies the basic management objects 
+            "This MIB module supplies the basic management objects
             for event reporting
-            
+
             Acknowledgements:
             Rick Vetter		-	Motorola
      Eugene Nechamkin	-	Broadcom"
@@ -64,15 +64,15 @@ pktcDevEvControl OBJECT-TYPE
     MAX-ACCESS  read-write
     STATUS      current
     DESCRIPTION
-             "This object defines actions related to the event log configuration. 
+             "This object defines actions related to the event log configuration.
              Setting this object to resetLog(1) empties the event log.
              All event log data is deleted. Setting it to setDefault(2)
              restores all event priorities to their factory-default
-             reporting parameters. Setting it to useConfigured(3) reloads 
+             reporting parameters. Setting it to useConfigured(3) reloads
              previously configured parameters."
-    ::= { pktcDevEventControl 1 }   
-    
-    pktcDevEvControlState OBJECT-TYPE  
+    ::= { pktcDevEventControl 1 }
+
+    pktcDevEvControlState OBJECT-TYPE
         SYNTAX INTEGER {
             logReset(1),
             defaultsSet(2),
@@ -82,11 +82,11 @@ pktcDevEvControl OBJECT-TYPE
     MAX-ACCESS  read-only
     STATUS      current
     DESCRIPTION
-            "This object reflects the state of the device as modified in 
+            "This object reflects the state of the device as modified in
              pktcDevEvControl. Processing indicates that a state change
              is underway. This object reflects the state of the device."
-    ::= { pktcDevEventControl 2 }   
-    
+    ::= { pktcDevEventControl 2 }
+
 pktcDevEvSyslogAddressType OBJECT-TYPE
     SYNTAX      InetAddressType
     MAX-ACCESS  read-write
@@ -101,8 +101,8 @@ pktcDevEvSyslogAddress OBJECT-TYPE
     MAX-ACCESS  read-write
     STATUS      current
     DESCRIPTION
-            "The IP address of the Syslog server. If 0.0.0.0, 
-             syslog transmission is inhibited. The use of FQDNs is 
+            "The IP address of the Syslog server. If 0.0.0.0,
+             syslog transmission is inhibited. The use of FQDNs is
              syntactically allowed but it is discouraged for syslog
              servers since not resolving them in a timely manner
              may leave the device without access to the Syslog
@@ -178,7 +178,7 @@ pktcDevEvThrottleThreshold OBJECT-TYPE
              to be transmitted before throttling.
 
              A single event is always treated as a single event for
-             Threshold counting. That is, an event causing both a 
+             Threshold counting. That is, an event causing both a
 trap/inform and a syslog message is still treated as a
 single event.
 
@@ -258,27 +258,27 @@ pktcDevEvProgrammableLevel OBJECT-TYPE
             minor(3),
             warning(4),
             information(5)
-   
+
     }
     MAX-ACCESS  read-write
     STATUS      current
     DESCRIPTION
-            "The priority level that is controlled by this entry. These 
-            are ordered from most (critical) to least (information) critical. 
-            Each event has a particular priority level associated with it (as 
+            "The priority level that is controlled by this entry. These
+            are ordered from most (critical) to least (information) critical.
+            Each event has a particular priority level associated with it (as
             defined by the vendor). The levels are described as:
 
-            critical(1) – A service-affecting condition that requires immediate 
+            critical(1) – A service-affecting condition that requires immediate
                           corrective action.
-            major(2) –    A service-affecting condition that requires urgent 
+            major(2) –    A service-affecting condition that requires urgent
                           corrective action.
-            minor(3) –    A non-service-affecting fault condition which warrants 
+            minor(3) –    A non-service-affecting fault condition which warrants
                           corrective action in order to avoid a more serious fault.
-            warning(4) –  A potential or impending condition which can lead to a 
+            warning(4) –  A potential or impending condition which can lead to a
                           fault;  diagnostic action is suggested.
             information(5) – Normal event meant to convey information."
    ::= { pktcDevEvProgrammableEntry 3 }
- 
+
 pktcDevEvProgrammableReporting OBJECT-TYPE
         SYNTAX BITS {
             local(0),
@@ -298,7 +298,7 @@ pktcDevEvProgrammableReporting OBJECT-TYPE
              traps(1) bit is set, then generate a trap, if the
              syslog(2) bit is set, then send a syslog message
              (assuming the syslog address is set)
-		   inform(3) bit is set, then generate an inform, if the 
+		   inform(3) bit is set, then generate an inform, if the
 		   none(4) bit is set, then this event is not generated."
 --      DEFVAL { local }
         ::= { pktcDevEvProgrammableEntry 4 }
@@ -358,8 +358,8 @@ pktcDevEvFixedEnterprise	OBJECT-TYPE
     MAX-ACCESS  read-only
     STATUS      current
     DESCRIPTION
-         "Provides the IANA enterprise number of the device manufacturer for 
-		proprietary events, and the CableLabs IANA enterprise number for 
+         "Provides the IANA enterprise number of the device manufacturer for
+		proprietary events, and the CableLabs IANA enterprise number for
 		PacketCable specified events."
     ::= { pktcDevEvFixedEntry 2 }
 
@@ -370,23 +370,23 @@ pktcDevEvFixedLevel OBJECT-TYPE
             minor(3),
             warning(4),
             information(5)
-   
+
     }
     MAX-ACCESS  read-write
     STATUS      current
     DESCRIPTION
-            "The priority level that is controlled by this entry. These 
-            are ordered from most (critical) to least (information) critical. 
-            Each event has a particular priority level associated with it (as 
+            "The priority level that is controlled by this entry. These
+            are ordered from most (critical) to least (information) critical.
+            Each event has a particular priority level associated with it (as
             defined by the vendor). The levels are described as:
 
-            critical(1) –    A service-affecting condition that requires immediate 
+            critical(1) –    A service-affecting condition that requires immediate
                              corrective action.
-            major(2) –       A service-affecting condition that requires urgent 
+            major(2) –       A service-affecting condition that requires urgent
                              corrective action.
-            minor(3) –       A non-service-affecting fault condition which warrants 
+            minor(3) –       A non-service-affecting fault condition which warrants
                              corrective action in order to avoid a more serious fault.
-            warning(4) –     A potential or impending condition which can lead to a 
+            warning(4) –     A potential or impending condition which can lead to a
                              fault; diagnostic action is suggested.
             information(5) – Normal event meant to convey information."
     ::= { pktcDevEvFixedEntry 3 }
@@ -402,19 +402,19 @@ pktcDevEvFixedReporting OBJECT-TYPE
         MAX-ACCESS  read-write
         STATUS      current
         DESCRIPTION
-             "Defines the action to be taken on occurrence of this event 
-              class. Implementations may not necessarily support all options 
-              for all event classes, but at minimum must allow traps and syslogging 
-              to be disabled. If the local(0) bit is set, then log to the internal 
-              log, if the traps(1) bit is set, then generate a trap, if the syslog(2) 
-              bit is set, then send a syslog message (assuming the syslog address is 
-              set) inform(3) bit is set, then generate an inform, if the none(4) bit 
+             "Defines the action to be taken on occurrence of this event
+              class. Implementations may not necessarily support all options
+              for all event classes, but at minimum must allow traps and syslogging
+              to be disabled. If the local(0) bit is set, then log to the internal
+              log, if the traps(1) bit is set, then generate a trap, if the syslog(2)
+              bit is set, then send a syslog message (assuming the syslog address is
+              set) inform(3) bit is set, then generate an inform, if the none(4) bit
               is set, then this event is not generated."
 --	  DEFVAL { local }
         ::= { pktcDevEvFixedEntry 4 }
 
 pktcDevEvFixedText OBJECT-TYPE
-    SYNTAX DisplayString(SIZE (127)) 
+    SYNTAX DisplayString(SIZE (127))
     MAX-ACCESS  read-only
     STATUS      current
     DESCRIPTION
@@ -478,7 +478,7 @@ pktcDevEvTime		OBJECT-TYPE
     MAX-ACCESS  	read-only
     STATUS      	current
     DESCRIPTION
-            "Provides a human-readable description of the 
+            "Provides a human-readable description of the
 time at which the event occurred."
     ::= { pktcDevEventEntry 2 }
 
@@ -489,7 +489,7 @@ pktcDevEvLevel OBJECT-TYPE
             minor(3),
             warning(4),
             information(5)
-  
+
     }
     MAX-ACCESS  read-only
     STATUS      current
@@ -504,8 +504,8 @@ pktcDevEvLevel OBJECT-TYPE
     MAX-ACCESS  read-only
     STATUS      current
     DESCRIPTION
-         "Provides the IANA enterprise number of the device manufacturer for 
-		proprietary events, and the CableLabs IANA enterprise number for 
+         "Provides the IANA enterprise number of the device manufacturer for
+		proprietary events, and the CableLabs IANA enterprise number for
 		PacketCable specified events."
     ::= { pktcDevEventEntry 4 }
 
@@ -514,8 +514,8 @@ pktcDevEvId OBJECT-TYPE
     MAX-ACCESS  read-only
     STATUS      current
     DESCRIPTION
-          "ID for a specific event to which the priority and display string are 
-           matched. These Event Ids are vendor specific or in the case of 
+          "ID for a specific event to which the priority and display string are
+           matched. These Event Ids are vendor specific or in the case of
            PacketCable events defined in pkt-tr-memevent-id-v01-001128."
     ::= { pktcDevEventEntry 5 }
 
@@ -565,7 +565,7 @@ pktcDevEvText OBJECT-TYPE
     MAX-ACCESS  read-only
     STATUS      current
     DESCRIPTION
-            "Provides a human-readable description of the time at 
+            "Provides a human-readable description of the time at
 			which the event occurred."
     ::= { pktcDevEventNotify 2 }
 
@@ -590,9 +590,9 @@ pktcDevEvText OBJECT-TYPE
     MAX-ACCESS  read-only
     STATUS      current
     DESCRIPTION
-            "Provides the IANA enterprise number of the device 
+            "Provides the IANA enterprise number of the device
           	manufacturer for proprietary events, and the CableLabs
-          	IANA enterprise number for 
+          	IANA enterprise number for
 		PacketCable specified events."
     ::= { pktcDevEventNotify 4 }
 
@@ -601,8 +601,8 @@ pktcDevEvText OBJECT-TYPE
     MAX-ACCESS  read-only
     STATUS      current
     DESCRIPTION
-         "ID for a specific event to which the priority and display string 
-          are matched. These Event Ids are vendor specific or in the case of 
+         "ID for a specific event to which the priority and display string
+          are matched. These Event Ids are vendor specific or in the case of
           PacketCable events defined in pkt-tr-memevent-id-v01-001128."
     ::= { pktcDevEventNotify 5 }
 
@@ -629,9 +629,9 @@ pktcDevEvText OBJECT-TYPE
     MAX-ACCESS  read-only
     STATUS      current
     DESCRIPTION
-          "This is the endpoint identifier followed by the FQDN/IP Address of the 
-           device. in the case of the , this is in the form - AALN/X:FQDN/IP 
-           Address. If the event is not specific to an endpoint, then the contents 
+          "This is the endpoint identifier followed by the FQDN/IP Address of the
+           device. in the case of the , this is in the form - AALN/X:FQDN/IP
+           Address. If the event is not specific to an endpoint, then the contents
            is just the FQDN/IP address"
     ::= { pktcDevEventNotify 8 }
 
@@ -641,7 +641,7 @@ pktcDevEvText OBJECT-TYPE
 	    pktcDevEvReportMacAddress,pktcDevEvReportEndpointName }
 	STATUS      current
         DESCRIPTION
-		"Inform for event reporting " 
+		"Inform for event reporting "
 	::= { pktcDevEvNotification 1 }
 
    pktcDevEvTrap NOTIFICATION-TYPE
@@ -652,17 +652,17 @@ pktcDevEvText OBJECT-TYPE
         DESCRIPTION
 		" Trap for event reporting "
 	::= { pktcDevEvNotification 2 }
-         
+
 pktcEventConformance  OBJECT IDENTIFIER ::= { pktcEventMib 7 }
 pktcEventCompliances  OBJECT IDENTIFIER ::= { pktcEventConformance 1 }
 pktcEventGroups       OBJECT IDENTIFIER ::= { pktcEventConformance 2 }
-        
+
 -- compliance statements
 
 pktcEventBasicCompliance MODULE-COMPLIANCE
     STATUS     current
     DESCRIPTION
-            "The compliance statement for devices that implement 
+            "The compliance statement for devices that implement
              Event reporting feature."
     MODULE   --pktcEventMib
 
@@ -694,7 +694,7 @@ pktcEventGroup OBJECT-GROUP
     		pktcDevEvFixedEnterprise,
     		pktcDevEvFixedLevel,
     		pktcDevEvFixedReporting,
-    		pktcDevEvFixedText,	  
+    		pktcDevEvFixedText,
           	pktcDevEvIndex,
 	     	pktcDevEvTime,
         	pktcDevEvLevel,
@@ -703,19 +703,19 @@ pktcEventGroup OBJECT-GROUP
         	pktcDevEvText,
 	    	pktcDevEvMacAddress,
 	    	pktcDevEvEndpointName,
-		pktcDevEvReportIndex,    
+		pktcDevEvReportIndex,
 		pktcDevEvReportTime,
- 		pktcDevEvReportLevel,    
+ 		pktcDevEvReportLevel,
 		pktcDevEvReportEnterprise,
 		pktcDevEvReportId,
     		pktcDevEvReportText,
     		pktcDevEvReportMacAddress,
-    		pktcDevEvReportEndpointName 
+    		pktcDevEvReportEndpointName
     }
     STATUS    current
     DESCRIPTION
         "Group of objects for PacketCable Event MIB."
-    ::= { pktcEventGroups 1 } 
+    ::= { pktcEventGroups 1 }
 
 -- Notification Group Added
 
@@ -723,7 +723,7 @@ pktcEventNotificationGroup		NOTIFICATION-GROUP
 	NOTIFICATIONS { pktcDevEvInform, pktcDevEvTrap }
 	STATUS	current
 	DESCRIPTION
-		"These notifications deal with change in status of 
+		"These notifications deal with change in status of
 		MTA Device."
 	::= { pktcEventGroups 2 }
 

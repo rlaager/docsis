@@ -78,8 +78,8 @@ docsDevTrapMIB MODULE-IDENTITY
                  docsIfCmtsCmStatusEntry (defined in DOCS-IF-MIB)
                  corresponding to a conneced CM. The docsIfDocsisCapability
                  indicates the CMTS DOCSIS capability.
-                 The ifPhysAddress value is the CMTS MAC address (if there 
-                 is a cable card/interface in the CMTS, then it is actually 
+                 The ifPhysAddress value is the CMTS MAC address (if there
+                 is a cable card/interface in the CMTS, then it is actually
                  the MAC address of the cable interface which connected to the CM).
     "
         ::= { docsDev 10 }
@@ -116,7 +116,7 @@ docsDevCmtsTrapControl     OBJECT-TYPE
                   the trap is disabled.
                  "
          ::= { docsDevTrapControl 2 }
-   
+
 docsDevCmtsInitRegReqFailTrap    NOTIFICATION-TYPE
              OBJECTS { docsDevEvLevel,
                        docsDevEvId,
@@ -136,11 +136,11 @@ docsDevCmtsInitRegReqFailTrap    NOTIFICATION-TYPE
                      in the docsDevEventTable. DocsIfCmtsCmStatusDocsisMode
                      and docsIfCmtsCmStatusMacAddress indicate the docsis
                      version and the MAC address of the requesting CM.
-                     docsIfDocsisCapability and ifPhysAddress indicate 
-                     the docsis version of the CMTS and the MAC address 
-                     of the CMTS (if there is a cable card/interface in the 
+                     docsIfDocsisCapability and ifPhysAddress indicate
+                     the docsis version of the CMTS and the MAC address
+                     of the CMTS (if there is a cable card/interface in the
                      CMTS, then it is actually the MAC address of the cable
-                     interface which connected to the CM)cable card connected 
+                     interface which connected to the CM)cable card connected
                      to the CM.
 
                      This part of information is uniformed across all CMTS traps.
@@ -162,7 +162,7 @@ docsDevCmtsInitRegRspFailTrap    NOTIFICATION-TYPE
                      process and detected in the CMTS side.
                     "
          ::= { docsDevCmtsTraps 2 }
-  
+
 docsDevCmtsInitRegAckFailTrap    NOTIFICATION-TYPE
              OBJECTS { docsDevEvLevel,
                        docsDevEvId,
