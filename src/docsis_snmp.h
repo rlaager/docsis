@@ -33,10 +33,10 @@
 #include "docsis.h"
 
 unsigned int encode_vbind ( char *oid_string, char oid_asntype, union t_val *value,
-                        unsigned char *out_buffer, unsigned int out_size );
+                        unsigned char *out_buffer, size_t out_size );
 int decode_vbind ( unsigned char *, unsigned int);
-unsigned int encode_snmp_oid ( char *oid_string, unsigned char *out_buffer, unsigned int out_size );
-unsigned int decode_snmp_oid ( unsigned char *data, unsigned int data_len);
+unsigned int encode_snmp_oid ( char *oid_string, unsigned char *out_buffer, size_t out_size );
+unsigned int decode_snmp_oid ( unsigned char *data, size_t data_len);
 
 unsigned char *_docsis_snmp_build_var_op(unsigned char * data,
                   oid * var_name,

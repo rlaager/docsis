@@ -29,7 +29,7 @@ extern unsigned int line;	/* from a.l */
 
 unsigned int
 encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
-	      unsigned char *out_buffer, unsigned int out_size)
+	      unsigned char *out_buffer, size_t out_size)
 {
   oid var_name[MAX_OID_LEN];
   size_t name_len = MAX_OID_LEN;
@@ -277,7 +277,7 @@ decode_vbind (unsigned char *data, unsigned int vb_len)
   oid var_name[MAX_OID_LEN];	/* To test the objid */
   size_t name_len = MAX_OID_LEN;	/* To test the objid */
   int badtype=0;
-  unsigned int len;
+  size_t len;
   struct variable_list *vp;
   oid objid[MAX_OID_LEN];
   char _docsis_snmp_label[50];	/* To hold the 'name' of the type, i.e. Integer etc */
@@ -614,7 +614,7 @@ decode_vbind (unsigned char *data, unsigned int vb_len)
 
 unsigned int
 encode_snmp_oid (char *oid_string, unsigned char *out_buffer,
-	    unsigned int out_size)
+	    size_t out_size)
 {
   oid var_name[MAX_OID_LEN];
   size_t name_len = MAX_OID_LEN;
@@ -638,13 +638,13 @@ encode_snmp_oid (char *oid_string, unsigned char *out_buffer,
 }
 
 unsigned int
-decode_snmp_oid (unsigned char *data, unsigned int data_len)
+decode_snmp_oid (unsigned char *data, size_t data_len)
 {
   oid this_oid[MAX_OID_LEN];
   size_t oid_len = MAX_OID_LEN;
   unsigned char type;
   void *retval;			/* generic pointer, will only use to check return value */
-  int len;
+  size_t len;
   static char outbuf[1024];
 
   memset (outbuf, 0, 1024);
