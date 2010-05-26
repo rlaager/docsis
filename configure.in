@@ -55,6 +55,12 @@ if test -n "$NETSNMP_CONFIG"; then
   then
      NETSNMP_LIBS="`$NETSNMP_CONFIG --libs`"
      NETSNMP_PREFIX="`$NETSNMP_CONFIG --prefix`"
+     # Hack to allow distcheck to succeed.
+     if echo "$NETSNMP_PREFIX" | grep -q "^$prefix"; then
+         NETSNMP_MIBPATH="$NETSNMP_PREFIX/share/snmp/mibs"
+     else
+         NETSNMP_MIBPATH="${prefix}${NETSNMP_PREFIX}/share/snmp/mibs"
+     fi
      NETSNMP_RPATH=
      for args in $NETSNMP_LIBS; do
           case $args in
