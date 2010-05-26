@@ -1,7 +1,7 @@
-#!/bin/sh 
+#!/bin/sh
 
-# This script generates an HTML file which contains an overview of all configuration settings supported by DOCSIS, 
-# as defined in ../src/docsis_symtable.h. 
+# This script generates an HTML file which contains an overview of all configuration settings supported by DOCSIS,
+# as defined in ../src/docsis_symtable.h.
 # Tried to make it as portable as possible. We still need sh, sed & awk.
 if test $# -ne 2; then
 echo "Usage: $0 <output_file> <package_version>"
@@ -9,21 +9,21 @@ exit 1;
 fi
 
 
-cat > $1 << EOF 
-<html>	
-	<head>	
+cat > $1 << EOF
+<html>
+	<head>
 		<title>DOCSIS Configuration Settings</title>
 	</head>
-	<body bgcolor=#ffffff>	
+	<body bgcolor=#ffffff>
 	<h3> DOCSIS Configuration Settings</h3>
-	<p> In the table below you can find a list of all Configuration Settings understood by this program. The name should be self-descriptive; if not you can refer to the DOCSIS RFI specification - Appendix C, for detailed explanations of what each of these mean. 
+	<p> In the table below you can find a list of all Configuration Settings understood by this program. The name should be self-descriptive; if not you can refer to the DOCSIS RFI specification - Appendix C, for detailed explanations of what each of these mean.
 	<p> For String and Hexadecimal strings, the "Range" field means the minimum and maximum length of the string. For "List" types, it represents the number of elements in the list.
 	<p> This list was generated for docsis version $2.
-		<table cellpadding=5 bgcolor=#000000>	
+		<table cellpadding=5 bgcolor=#000000>
 		<tr bgcolor=#ffffff><td><b>Configuration Setting</b></td><td><b>Type</b></td><td><b>Range of values allowed</b></td></tr>
 EOF
 
-	
+
 grep -e "^{" ../src/docsis_symtable.h\
  | grep -v "*"\
  | grep -v "decode_md5"\
