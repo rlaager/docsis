@@ -6,23 +6,23 @@ This software is 	Copyright (c) 1999,2000,2001,2002 Cornel Ciocirlan
 
 Portions of this program are derived from the RSA Data Security, Inc. MD5 Message-Digest Algorithm.
 
-To contact the current maintainers and developers, send an E-mail to: docsis@evvolve.com. 
+To contact the current maintainers and developers, send an E-mail to: docsis@evvolve.com.
 To contact the original author, send an E-mail to: ctrl@users.sourceforge.net.
 
-General questions about this software can be  sent to docsis-users@sourceforge.net. 
+General questions about this software can be  sent to docsis-users@sourceforge.net.
 
-Visit http://docsis.sourceforge.net and http://sourceforge.net/projects/docsis 
+Visit http://docsis.sourceforge.net and http://sourceforge.net/projects/docsis
 for the latest news on this program.
 
 PLEASE READ THE FILE License.txt.
 
 Caution: This is Unsupported software that may crash your computer, damage all your data
-or otherwise drive you nuts. You'd better know what you're doing. 
+or otherwise drive you nuts. You'd better know what you're doing.
 
 2. Description
 ==============
 
-This program encodes text configuration files which contain Configuration File Settings into 
+This program encodes text configuration files which contain Configuration File Settings into
 binary configuration files, as specified by the DOCSIS Radio Frequency Interface
  Specification, Appendix C.
 
@@ -34,21 +34,21 @@ It supports most DOCSIS 2.0 Configuration Settings. Not supported (currently):
 Refer to Appendix C of the Radio Frequency Interface Specification  for a
 description of these settings.
 
-DOCSIS 1.0 considerations 
+DOCSIS 1.0 considerations
 =========================
 
-More than one (up to 16) ClassOfService statements can appear in the 
-configuration file. Only one BaselinePrivacy (BPI) statement can appear. 
-The program does not check for the number of ClassOfService statements that 
-appear, you have to make sure not to include more than 16 or unexpected results 
+More than one (up to 16) ClassOfService statements can appear in the
+configuration file. Only one BaselinePrivacy (BPI) statement can appear.
+The program does not check for the number of ClassOfService statements that
+appear, you have to make sure not to include more than 16 or unexpected results
 will occur  (modems / CMTSes may reset).
 
-DOCSIS BPI Specification clearly states that the BPI settings MUST NOT be 
-present if Privacy is not enabled in [at least one of] the ClassOfService 
+DOCSIS BPI Specification clearly states that the BPI settings MUST NOT be
+present if Privacy is not enabled in [at least one of] the ClassOfService
 parameters (for example if PrivacyEnable is 0 for all classes of service, BPI
-statement should not appear). 
+statement should not appear).
 
-The program is not yet as "intelligent" as to detect these problems 
+The program is not yet as "intelligent" as to detect these problems
 automatically (quite trivial).
 
 3. Usage
@@ -62,48 +62,48 @@ a). Encoding CM configuration files
 
     unix $ docsis -e cm_config_file.cfg my_key_file cm_config_file.bin
 
-    The format of the text configuration file, although simple, is not 
-    described anywhere but the source code (see the grammar in docsis_yy.y 
-    and lexical analyzer in docsis_lex.l). As sometimes an example is more 
-    useful than a truckload of documentation, we've included a few 
+    The format of the text configuration file, although simple, is not
+    described anywhere but the source code (see the grammar in docsis_yy.y
+    and lexical analyzer in docsis_lex.l). As sometimes an example is more
+    useful than a truckload of documentation, we've included a few
     configuration files (see examples/cm/*.cfg).
 
-    In this mode of operation (triggered by the "-e" switch), the program will 
-    need a keyfile; it will calculate the CM MIC and use the string in the 
-    keyfile to calculate a CMTS MIC; and it will add the DOCSIS End of Data 
-    marker as well as pad at the end. 
+    In this mode of operation (triggered by the "-e" switch), the program will
+    need a keyfile; it will calculate the CM MIC and use the string in the
+    keyfile to calculate a CMTS MIC; and it will add the DOCSIS End of Data
+    marker as well as pad at the end.
 
-    An example key is provided in file testkey.key. The key is only a string of 
-    characters. Any trailing newline (\n) or carriage return (\r) characters 
-    are chopped to avoid confusion. 
+    An example key is provided in file testkey.key. The key is only a string of
+    characters. Any trailing newline (\n) or carriage return (\r) characters
+    are chopped to avoid confusion.
 
 b). Encoding PacketCable MTA configuration files
 
-    MTA Configuration file support has been added in version 0.8.1. 
+    MTA Configuration file support has been added in version 0.8.1.
 
     To encode a CM configuration file, make sure "docsis" is in your PATH and do:
 
     unix $ docsis -p mta_config_file.cfg mta_config_file.bin
 
-    PacketCable MTA config files MUST start with the "MtaConfigDelimiter 1" 
-    configuration setting and MUST end with "MtaConfigDelimiter 255". All 
-    other configuration settings must be either SnmpMibObject or 
-    VendorSpecific. The program does not enforce this policy so you must make 
+    PacketCable MTA config files MUST start with the "MtaConfigDelimiter 1"
+    configuration setting and MUST end with "MtaConfigDelimiter 255". All
+    other configuration settings must be either SnmpMibObject or
+    VendorSpecific. The program does not enforce this policy so you must make
     sure you abide by it or the MTA will reject the file.
-   
-c). Decoding CM or MTA binary configuration files 
+
+c). Decoding CM or MTA binary configuration files
 
     To decode a binary file, do:
 
     unix $ ./docsis -d my_binary_file.bin
 
-    The decoded output is not always "compatible" with itself, eg cannot be 
-    directly encoded back into a binary file. 
+    The decoded output is not always "compatible" with itself, eg cannot be
+    directly encoded back into a binary file.
 
-    This is mostly due to the usage of ucd-snmp library functions to print the 
+    This is mostly due to the usage of ucd-snmp library functions to print the
     SnmpMibObjects, which print out a different syntax than what we need.
 
-    As of version 8.0, you can directly encode the decoded output. E.g. 
+    As of version 8.0, you can directly encode the decoded output. E.g.
 
     unix $ docsis -d cm_test.bin > cm_test.cfg
     unix $ docsis -e cm_test.cfg testkey.key cm_test.bin
@@ -115,11 +115,11 @@ c). Decoding CM or MTA binary configuration files
 4. Adding new configuration settings
 ====================================
 
-To add new configuration settings, in most cases the only thing you need to 
-do is add them to the docsis_symtable.h (make sure you select the correct 
-type-functions for encoding and decoding). 
+To add new configuration settings, in most cases the only thing you need to
+do is add them to the docsis_symtable.h (make sure you select the correct
+type-functions for encoding and decoding).
 
 Because of the way the encoder works, the symbol_name must
-determine all other values in the table with the exception of id and parent. 
-Thus if two symbols share the same name they MUST share the same docsis_code, 
+determine all other values in the table with the exception of id and parent.
+Thus if two symbols share the same name they MUST share the same docsis_code,
 type-functions, limits etc. Only the id and parent can be different.
