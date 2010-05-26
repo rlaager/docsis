@@ -6,4 +6,4 @@ EXTRA_DIST=generate-settings.sh index.html config-format.html
 CLEANFILES=config-settings.html
 
 config-settings.html: ../src/docsis_symtable.h
-	/bin/sh generate-settings.sh config-settings.html $(VERSION)
+	/bin/sh $(srcdir)/generate-settings.sh config-settings.html $(VERSION)
