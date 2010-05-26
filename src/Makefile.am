@@ -1,5 +1,6 @@
 bin_PROGRAMS = docsis
 docsis_SOURCES = docsis.c ethermac.c md5.c docsis_encode.c docsis_decode.c docsis_snmp.c docsis_yy.y docsis_lex.l hmac_md5.c
+docsis_LDADD = -lm
 
 # set the include path found by configure
 INCLUDES = $(all_includes) $(NETSNMP_CFLAGS)
