@@ -1,4 +1,12 @@
-1. General Information
+Quick, how do I use this ?
+=============================
+
+This program can only be used from a command line. Open a command prompt, type "docsis"
+and you will get the default help message.
+
+See doc/index.html for more information.
+
+General Information
 ======================
 
 This software is 	Copyright (c) 1999,2000,2001,2002 Cornel Ciocirlan
@@ -19,7 +27,7 @@ PLEASE READ THE FILE License.txt.
 Caution: This is Unsupported software that may crash your computer, damage all your data
 or otherwise drive you nuts. You'd better know what you're doing.
 
-2. Description
+Description
 ==============
 
 This program encodes text configuration files which contain Configuration File Settings into
@@ -51,12 +59,12 @@ statement should not appear).
 The program is not yet as "intelligent" as to detect these problems
 automatically (quite trivial).
 
-3. Usage
+Usage
 ========
 
 There are three modes of operation:
 
-a). Encoding CM configuration files
+ a) Encoding CM configuration files
 
     To encode a CM configuration file, make sure "docsis" is in your PATH and do:
 
@@ -77,7 +85,7 @@ a). Encoding CM configuration files
     characters. Any trailing newline (\n) or carriage return (\r) characters
     are chopped to avoid confusion.
 
-b). Encoding PacketCable MTA configuration files
+ b) Encoding PacketCable MTA configuration files
 
     MTA Configuration file support has been added in version 0.8.1.
 
@@ -91,7 +99,7 @@ b). Encoding PacketCable MTA configuration files
     VendorSpecific. The program does not enforce this policy so you must make
     sure you abide by it or the MTA will reject the file.
 
-c). Decoding CM or MTA binary configuration files
+ c) Decoding CM or MTA binary configuration files
 
     To decode a binary file, do:
 
@@ -112,7 +120,7 @@ c). Decoding CM or MTA binary configuration files
 
     should work, save for still remaining bugs.
 
-4. Adding new configuration settings
+Adding new configuration settings
 ====================================
 
 To add new configuration settings, in most cases the only thing you need to
