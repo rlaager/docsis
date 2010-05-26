@@ -17,7 +17,7 @@
 
 !insertmacro MUI_UNPAGE_INSTFILES
 
-!define MUI_FINISHPAGE_SHOWREADME "$INSTDIR\README.txt"
+!define MUI_FINISHPAGE_SHOWREADME "$INSTDIR\README"
 !define MUI_ABORTWARNING
 !define MUI_ICON "${NSISDIR}\Contrib\Icons\Setup.ico"
 !define MUI_UNICON "${NSISDIR}\Contrib\Icons\normal-uninstall.ico"
@@ -39,7 +39,7 @@ Section "Base DOCSIS kit" SEC01
   File "@@buildroot@@\License.txt"
   File "C:\cygwin\bin\cygcrypto-0.9.7.dll"
   File "C:\cygwin\bin\cygwin1.dll"
-  File "@@buildroot@@\README.txt"
+  File "@@buildroot@@\README"
 
 ; In order to allow docsis to be run from everywhere, we create a batch file
 ; and copy that to the Windows system directory.
@@ -64,7 +64,7 @@ SectionEnd
 Section "Example files" SEC02
   SetOutPath "$INSTDIR\examples"
   File "@@buildroot@@\examples\testkey.key"
-  File "@@buildroot@@\examples\README.txt"
+  File "@@buildroot@@\examples\README"
   File "@@buildroot@@\examples\packetcable_mta.cfg"
   File "@@buildroot@@\examples\keyfile"
   File "@@buildroot@@\examples\docsis20_stresstest.cfg"
@@ -206,7 +206,7 @@ Section Uninstall
   Delete "$INSTDIR\License.txt"
   Delete "$INSTDIR\cygcrypto-0.9.7.dll"
   Delete "$INSTDIR\cygwin1.dll"
-  Delete "$INSTDIR\README.txt"
+  Delete "$INSTDIR\README"
   Delete "$INSTDIR\docsis.bat"
   Delete "$SYSDIR\docsis.bat"
   Delete "$INSTDIR\doc\index.html"
