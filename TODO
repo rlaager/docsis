@@ -1,10 +1,7 @@
 - move the symbol table into an XML configuration file. This would make it 
   very easy to add new symbols without recompiling. It would also enable 
   people to distribute Vendor Specific-enabled configuration files  
-- autoconf & automake -- DONE
-- test framework (i.e. a bunch of reference config files etc)  -- DONE
 - use getopt() to get command line arguments. Probably will need to change args 
   and thus break compatibility ... -- ON HOLD (keep it simple, stupid). 
-- rewrite everything using an XML file format (really?!)
 - Make loading of SNMP modules configurable (using "-m" switch instead of loading 
   everything under the sun) 
