@@ -116,7 +116,7 @@ void decode_ethermask (unsigned char *tlvbuf, symbol_type *sym, size_t length)
 
 void decode_md5 (unsigned char *tlvbuf, symbol_type *sym, size_t length)
 {
-  int j=0;
+  size_t j=0;
   if (length != 16 ) {
         printf("md5digest length mismatch!\n");
         exit(-45);

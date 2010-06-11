@@ -456,7 +456,7 @@ setup_mib_flags() {
 
 char *get_output_name ( char *input_path, char *extension_string )
 {
-  int pathlen=0, i=0, old_ext_len=0;
+  size_t pathlen=0, i=0, old_ext_len=0;
   char *new_path;
 
   if (input_path == NULL || extension_string == NULL)
