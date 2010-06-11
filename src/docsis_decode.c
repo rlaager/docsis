@@ -237,13 +237,13 @@ void decode_unknown (unsigned char *tlvbuf, symbol_type *sym, size_t length )
 
   	printf ("GenericTLV TlvCode %d TlvString ",
 			(unsigned int) tlvbuf[0]) ;
-	printf ("\"%s\"; /* tlv length = %d */", cp, len);
+	printf ("\"%s\"; /* tlv length = %zd */", cp, len);
   } else if ( len > 1 && cp[len-1] == 0 && str_isprint(cp, len-1 ) ) {
 	printf("GenericTLV TlvCode %d TlvStringZero ",
                         (unsigned int) tlvbuf[0] ) ;
-	printf ("\"%s\"; /* tlv length = %d */", cp, len);
+	printf ("\"%s\"; /* tlv length = %zd */", cp, len);
   } else {
-  	printf ("GenericTLV TlvCode %d TlvLength %d TlvValue ",
+	printf ("GenericTLV TlvCode %d TlvLength %zd TlvValue ",
 			(unsigned int) tlvbuf[0], len) ;
   	snprint_hexadecimal ( hexvalue, 514, value, len);
 
