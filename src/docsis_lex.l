@@ -84,6 +84,15 @@ TlvStringZero		{ return T_TLV_STRZERO_VALUE; 	}
 			}
 
 \"		{ BEGIN STRING; str=strbuf; memset(strbuf,0,2048); strsize=0; }
+<STRING>\\\"	{
+			if (strsize<2048)
+			{
+				*str++ = '"';
+				strsize++;
+			} else {
+			  printf("line %d: string too long (max 2048 characters)\n",line); exit(-1);
+			}
+		}
 <STRING>\\ 	{
 			if (strsize<2048)
 			{
