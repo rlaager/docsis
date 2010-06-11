@@ -50,7 +50,7 @@ void decode_vspecific(unsigned char *tlvbuf, symbol_type *sym, size_t length);
 int hexadecimal_to_binary(const char *string, unsigned char *out_buf);
 int str_isalpha (const char *str, size_t str_len);
 int str_isprint (const char *str, size_t str_len);
-void snprint_hexadecimal ( unsigned char *outbuf, size_t outsize, const char *str, size_t str_len );
+void snprint_hexadecimal ( char *outbuf, size_t outsize, const char *str, size_t str_len );
 
 void __docsis_indent ( int opCode, int doPrint );
 

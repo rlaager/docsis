@@ -468,10 +468,10 @@ str_isprint (const char *str, size_t str_len)
 
 
 void
-snprint_hexadecimal ( unsigned char *outbuf, size_t outsize, const char *str, size_t str_len )
+snprint_hexadecimal ( char *outbuf, size_t outsize, const char *str, size_t str_len )
 {
   unsigned int i;
-  unsigned char *cp;
+  char *cp;
 
   cp=outbuf;
 

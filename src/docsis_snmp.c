@@ -245,7 +245,7 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
 	strncpy ((char *) buf, value->strval, SPRINT_MAX_LEN);
 	len = strlen ((char *) buf);
 
-	if (!read_objid (buf, oid_value, &oid_value_len))
+	if (!read_objid ((char *) buf, oid_value, &oid_value_len))
 	  {
 		printf ("Can't find oid %s at line %d\n", buf, line);
 		return 0;
@@ -563,18 +563,18 @@ decode_vbind (unsigned char *data, unsigned int vb_len)
   switch ((short) vp->type)
     {
     case ASN_OCTET_STR:
-	if (str_isprint(vp->val.string, vp->val_len))
+	if (str_isprint((char *) vp->val.string, vp->val_len))
 		{
 		 	snprintf(outbuf, vp->val_len+5, "\"%s\"", vp->val.string);
 		} else {
-			snprint_hexadecimal (outbuf, 1023, vp->val.string, vp->val_len);
+			snprint_hexadecimal (outbuf, 1023, (char *) vp->val.string, vp->val_len);
       			memset (_docsis_snmp_label, 0, 50);
       			sprintf (_docsis_snmp_label, "HexString");
 		}
 	break;
 
     case ASN_BIT_STR:
-		snprint_hexadecimal (outbuf, 1023, vp->val.bitstring, vp->val_len);
+		snprint_hexadecimal (outbuf, 1023, (char *) vp->val.bitstring, vp->val_len);
 		break;
     case ASN_OBJECT_ID:
       		netsnmp_ds_set_int (NETSNMP_DS_LIBRARY_ID,
