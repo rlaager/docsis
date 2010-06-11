@@ -334,7 +334,7 @@ int encode_hexstr (unsigned char *buf, void *tval, struct symbol_entry *sym_ptr)
   helper = (union t_val *) tval;
   string_size = strlen ( helper->strval );
 
-  if ( string_size != 2*floor(string_size/2) ) {
+  if ( string_size % 2 != 0 ) {
         printf ("encode_hexstr: invalid hex string !\n");
         exit (-1);
   }
