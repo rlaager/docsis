@@ -22,6 +22,7 @@
 
 #include <string.h>
 #include <stdio.h>
+#include "docsis.h"
 #include "md5.h"
 
 /*
