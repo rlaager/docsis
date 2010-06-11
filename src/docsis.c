@@ -44,9 +44,9 @@
 
 extern unsigned int line;	/* defined in docsis_lex.l */
 
-void setup_mib_flags();
+static void setup_mib_flags(void);
 
-unsigned int
+static unsigned int
 add_cm_mic (unsigned char *tlvbuf, unsigned int tlvbuflen)
 {
   unsigned char digest[16];
@@ -64,7 +64,7 @@ add_cm_mic (unsigned char *tlvbuf, unsigned int tlvbuflen)
   return (tlvbuflen + 18);	/* we added the CM Message Integrity Check  */
 }
 
-unsigned int
+static unsigned int
 add_eod_and_pad (unsigned char *tlvbuf, unsigned int tlvbuflen)
 {
   int nr_pads;
@@ -79,7 +79,7 @@ add_eod_and_pad (unsigned char *tlvbuf, unsigned int tlvbuflen)
   return (tlvbuflen + nr_pads);
 }
 
-unsigned int
+static unsigned int
 add_cmts_mic (unsigned char *tlvbuf, unsigned int tlvbuflen,
 	      unsigned char *key, int keylen)
 {
@@ -133,7 +133,7 @@ add_cmts_mic (unsigned char *tlvbuf, unsigned int tlvbuflen,
   return (tlvbuflen + 18);
 }
 
-void
+static void
 usage (char *prog_name)
 {
   printf ("DOCSIS Configuration File creator, version %s\n", VERSION);
@@ -395,7 +395,8 @@ decode_file (char *file)
 }
 
 
-void setup_mib_flags() {
+static void
+setup_mib_flags() {
 
 #ifdef DEBUG
 /*  snmp_set_mib_warnings (2); */
