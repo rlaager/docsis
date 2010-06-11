@@ -244,7 +244,7 @@ main (int argc, char *argv[])
 	  printf ("%s: error: key must be at least 1 char long\n", prog_name );
 	  exit (-101);
 	}
-      while (key[keylen - 1] == 10 || key[keylen - 1] == 13)
+      while (keylen > 0 && (key[keylen - 1] == 10 || key[keylen - 1] == 13))
 	{
 	  keylen--;		/* eliminate trailing \n or \r */
 	}
