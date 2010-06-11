@@ -133,6 +133,10 @@ add_cmts_mic (unsigned char *tlvbuf, unsigned int tlvbuflen,
   return (tlvbuflen + 18);
 }
 
+#ifdef __GNUC__
+static void usage (char *prog_name) __attribute__((__noreturn__));
+#endif
+
 static void
 usage (char *prog_name)
 {
