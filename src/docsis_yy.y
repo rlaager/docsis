@@ -559,7 +559,10 @@ unsigned int tlvtreelen (struct tlv *tlv)
    if (tlv == NULL) return 0;
 
    for (tlvptr=tlv; tlvptr; tlvptr=tlvptr->next_sibling)  {
-        current_size += tlvptr->first_child ? 2+tlvtreelen(tlvptr->first_child) : 2+tlvptr->tlv_len;
+        if (tlvptr->first_child)
+            current_size += 2+tlvtreelen(tlvptr->first_child);
+        else
+            current_size += 2+tlvptr->tlv_len;
    }
    return current_size;
 }
