@@ -342,7 +342,6 @@ int encode_one_file ( char *input_file, char *output_file,
   printf ("Final content of config file:\n");
 
   decode_main_aggregate (buffer, buflen);
-/* fix bug #914121... use "wb" for Windows compatibility */
   if ((of = fopen (output_file, "wb")) == NULL)
     {
       printf ("%s: error: can't open output file %s\n", prog_name, output_file);
