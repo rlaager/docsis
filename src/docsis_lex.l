@@ -45,7 +45,7 @@ char *tsave;
 ([0-9A-Fa-f][0-9A-Fa-f]:){5}[0-9A-Fa-f][0-9A-Fa-f]  { TSAVE(yytext);yylval.strval=tsave; return T_MAC; 			       }
 
 (\.{1})*([A-Za-z0-9_-]+\.)+[A-Za-z0-9]+	{ TSAVE(yytext);yylval.strval=tsave; return T_LABEL_OID; }
-(\.{1})*([A-Za-z0-9_-]+\.)+'[\[A-Za-z0-9,:_\-\.\]]+'	{ TSAVE(yytext);yylval.strval=tsave; return T_LABEL_OID; }
+(\.{1})*([A-Za-z0-9_-]+\.)+'[\[A-Za-z0-9@,:_\-\.\]]+'	{ TSAVE(yytext);yylval.strval=tsave; return T_LABEL_OID; }
 (\.{1})*([A-Za-z0-9_-]+\.)+((\"{1})*[A-Za-z0-9,:_\-\.]+(\"{1})*)+	{ TSAVE(yytext);yylval.strval=tsave; return T_LABEL_OID; }
 ([0-9]+:){3}[0-9]+\.[0-9]+	{ TSAVE(yytext);yylval.strval=tsave; return T_TIMETICKS; }
 [Mm][Aa][Ii][Nn]        { yylval.strval=yytext;return T_MAIN; }
