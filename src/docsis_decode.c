@@ -218,7 +218,7 @@ void decode_ushort_list (unsigned char *tlvbuf, symbol_type *sym, size_t length)
 
 void decode_unknown (unsigned char *tlvbuf, symbol_type *sym, size_t length )
 {
-  int len=0;
+  size_t len=0;
   char *cp,*value;
   char hexvalue[514];
 
