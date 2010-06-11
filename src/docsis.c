@@ -74,13 +74,7 @@ add_eod_and_pad (unsigned char *tlvbuf, unsigned int tlvbuflen)
 
   tlvbuf[tlvbuflen] = 255;
   tlvbuflen = tlvbuflen + 1;
-  nr_pads =
-    4 - (tlvbuflen - 4 * ((unsigned int) floor ((double) (tlvbuflen / 4))));
-  if (nr_pads < 0)
-    {
-      printf ("Illegal number of pads\n");
-      exit (-1);
-    }
+  nr_pads = (4 - (tlvbuflen % 4)) % 4;
   memset (&tlvbuf[tlvbuflen], 0, nr_pads);
   return (tlvbuflen + nr_pads);
 }
