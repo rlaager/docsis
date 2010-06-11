@@ -115,4 +115,69 @@ AM_CONDITIONAL(CYGWIN_BUILD_SETUP_EXE, test "x$host_os" = "xcygwin" -a "x$MAKENS
 
 dnl end check for NSIS
 
+if test "x$GCC" = "xyes"; then
+	dnl We enable -Wall later.
+	dnl If it's set after the warning CFLAGS in the compiler invocation, it counteracts the -Wno... flags.
+	dnl This leads to warnings we don't want.
+	CFLAGS=`echo $CFLAGS |$sedpath 's/-Wall//'`
+
+	dnl ENABLE WARNINGS SUPPORTED BY THE VERSION OF GCC IN USE
+	for newflag in \
+			"-Waggregate-return" \
+			"-Wbad-function-cast" \
+			"-Wcast-align" \
+			"-Wdeclaration-after-statement" \
+			"-Wendif-labels" \
+			"-Werror-implicit-function-declaration" \
+			"-Wextra -Wno-unused-parameter" \
+			"-Wfloat-equal" \
+			"-Wformat-security" \
+			"-Werror=format-security" \
+			"-Winit-self" \
+			"-Wmissing-declarations" \
+			"-Wmissing-noreturn" \
+			"-Wmissing-prototypes" \
+			"-Wpointer-arith" \
+			"-Wundef" \
+	; do
+		orig_CFLAGS="$CFLAGS"
+		CFLAGS="$CFLAGS $newflag"
+		AC_MSG_CHECKING(for $newflag option to gcc)
+		AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]], [[
+			int main() {return 0;}
+		]])], [
+			AC_MSG_RESULT(yes)
+			CFLAGS="$orig_CFLAGS"
+			DEBUG_CFLAGS="$DEBUG_CFLAGS $newflag"
+		], [
+			AC_MSG_RESULT(no)
+			CFLAGS="$orig_CFLAGS"
+		])
+	done
+
+	if test "x$enable_fortify" = "xyes"; then
+		AC_MSG_CHECKING(for FORTIFY_SOURCE support)
+		AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <features.h>]], [[
+			int main() {
+			#if !(__GNUC_PREREQ (4, 1) \
+				|| (defined __GNUC_RH_RELEASE__ && __GNUC_PREREQ (4, 0)) \
+				|| (defined __GNUC_RH_RELEASE__ && __GNUC_PREREQ (3, 4) \
+					&& __GNUC_MINOR__ == 4 \
+					&& (__GNUC_PATCHLEVEL__ > 2 \
+						|| (__GNUC_PATCHLEVEL__ == 2 && __GNUC_RH_RELEASE__ >= 8))))
+			#error No FORTIFY_SOURCE support
+			#endif
+				return 0;
+			}
+		]])], [
+			AC_MSG_RESULT(yes)
+			DEBUG_CFLAGS="$DEBUG_CFLAGS -Wp,-D_FORTIFY_SOURCE=2"
+		], [
+			AC_MSG_RESULT(no)
+		])
+	fi
+
+	CFLAGS="-Wall $DEBUG_CFLAGS -g $CFLAGS"
+fi
+
 AC_OUTPUT(Makefile src/Makefile doc/Makefile examples/Makefile mibs/Makefile)
