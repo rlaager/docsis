@@ -536,7 +536,8 @@ unsigned int flatten_tlvsubtree ( unsigned char *buf, unsigned int used_size, st
 			if (tlvptr->docs_code == 11) {
 				*cp = 64; cp++;
 			        netshort = htons(tlvptr->tlv_len);
-				memcpy ( cp, &netshort, sizeof(unsigned short)); cp=cp+2;
+				memcpy ( cp, &netshort, sizeof(unsigned short));
+				cp=cp+sizeof(unsigned short);
        				memcpy ( cp, tlvptr->tlv_value, tlvptr->tlv_len );
              			cp = cp + tlvptr->tlv_len;
 			} else {
