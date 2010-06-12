@@ -115,6 +115,7 @@ AM_CONDITIONAL(CYGWIN_BUILD_SETUP_EXE, test "x$host_os" = "xcygwin" -a "x$MAKENS
 
 dnl end check for NSIS
 
+AC_PATH_PROG(sedpath, sed)
 if test "x$GCC" = "xyes"; then
 	dnl We enable -Wall later.
 	dnl If it's set after the warning CFLAGS in the compiler invocation, it counteracts the -Wno... flags.
