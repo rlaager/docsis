@@ -1,0 +1,15 @@
+Main 
+{
+	NetworkAccess 1;
+	MaxCPE 3;
+	ClassOfService
+	{
+		ClassID 1;
+		MaxRateDown 20000000;
+		MaxRateUp 10000000;
+		PrivacyEnable 0;
+	}
+	/* CmMic 817865a1f6e47e81a7364ff607a24648; */
+	/* CmtsMic f90e368f5d979a2d5093bbaba37f1497; */
+	/*EndOfDataMkr*/
+}

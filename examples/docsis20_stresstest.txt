@@ -1,0 +1,251 @@
+Main 
+{
+	DsPacketClass
+	{
+		ClassifierRef 255;
+		ClassifierId 65535;
+		ServiceFlowRef 65535;
+		ServiceFlowId 2147483647;
+		RulePriority 255;
+		ActivationState 1;
+		IpPacketClassifier
+		{
+			IpTos 0x00ffff;
+			IpProto 234;
+			IpSrcAddr 10.1.2.3;
+			IpSrcMask 255.255.0.0;
+			IpDstAddr 10.5.2.5;
+			IpDstMask 255.255.0.0;
+			SrcPortStart 80;
+			SrcPortEnd 81;
+			DstPortStart 500;
+			DstPortEnd 501;
+		}
+	}
+	UsPacketClass
+	{
+		ClassifierRef 253;
+		ClassifierId 65533;
+		ServiceFlowRef 65533;
+		ServiceFlowId 2147483645;
+		RulePriority 255;
+		ActivationState 1;
+		LLCPacketClassifier
+		{
+			DstMacAddress 00:00:de:ad:be:ef/00:00:ff:ff:ff:ff;
+			SrcMacAddress 00:a0:a0:a0:a0:a0;
+			EtherType 0x030303;
+		}
+	}
+	DsServiceFlow
+	{
+		DsServiceFlowRef 65535;
+		DsServiceFlowId 2147483647;
+		TrafficPriority 6;
+		MaxRateSustained 3421234;
+		MaxTrafficBurst 564343;
+		MaxDsLatency 7856345;
+	}
+	UsServiceFlow
+	{
+		UsServiceFlowRef 65533;
+		UsServiceFlowId 2147483645;
+		TrafficPriority 6;
+		MaxRateSustained 3421234;
+		MaxTrafficBurst 564343;
+		SchedulingType 3;
+		MaxConcatenatedBurst 34534;
+		ToleratedGrantJitter 4653512;
+	}
+	NetworkAccess 1;
+	DownstreamFrequency 123000000;
+	UpstreamChannelId 1;
+	ClassOfService
+	{
+		ClassID 1;
+		MaxRateDown 512000;
+		MaxRateUp 64000;
+		PriorityUp 3;
+		GuaranteedUp 32000;
+		MaxBurstUp 254;
+	}
+	BaselinePrivacy
+	{
+		AuthTimeout 10;
+		ReAuthTimeout 10;
+		AuthGraceTime 600;
+		OperTimeout 10;
+		ReKeyTimeout 10;
+		TEKGraceTime 600;
+		AuthRejectTimeout 9;
+		SAMapWaitTimeout 1;
+		SAMapMaxRetries 4;
+	}
+	ModemCapabilities
+	{
+		ConcatenationSupport 1;
+		ModemDocsisVersion 1;
+		FragmentationSupport 1;
+		PHSSupport 1;
+		IGMPSupport 1;
+		BaselinePrivacySupport 1;
+		DownstreamSAIDSupport 15;
+		UpstreamSIDSupport 10;
+		DCCSupport 1;
+	}
+	DocsisTwoEnable 1;
+	GenericTLV TlvCode 16 TlvLength 4 TlvValue 0xc0a8fe43;
+	SnmpV3Kickstart
+	{
+		SnmpV3SecurityName "2adfla6";
+	}
+	SnmpV3TrapReceiver
+	{
+		SnmpV3TrapRxIP 10.0.1.253;
+		SnmpV3TrapRxPort 56790;
+		SnmpV3TrapRxType 2;
+		SnmpV3TrapRxTimeout 500;
+		SnmpV3TrapRxRetries 3;
+		SnmpV3TrapRxSecurityName "2adfla6";
+		SnmpV3TrapRxFilterOID .1.3.6.1;
+	}
+	SnmpWriteControl .1.3.6.1 1 ;
+	SnmpMibObject sysContact.0 String "evvolve@users.sourceforge.net" ;
+	SnmpMibObject sysName.0 String "DCM105 test" ;
+	SnmpMibObject docsDevFilterIpDefault.0 Integer 1; /* discard */
+	SnmpMibObject docsDevFilterIpStatus.1 Integer 6; /* destroy */
+	SnmpMibObject docsDevFilterIpControl.1 Integer 2; /* accept */
+	SnmpMibObject docsDevFilterIpIfIndex.1 Integer 0 ;
+	SnmpMibObject docsDevFilterIpDirection.1 Integer 3; /* both */
+	SnmpMibObject docsDevFilterIpBroadcast.1 Integer 2; /* false */
+	SnmpMibObject docsDevFilterIpSaddr.1 IPAddress 0.0.0.0 ;
+	SnmpMibObject docsDevFilterIpSmask.1 IPAddress 0.0.0.0 ;
+	SnmpMibObject docsDevFilterIpDaddr.1 IPAddress 0.0.0.0 ;
+	SnmpMibObject docsDevFilterIpDmask.1 IPAddress 0.0.0.0 ;
+	SnmpMibObject docsDevFilterIpProtocol.1 Integer 1 ;
+	SnmpMibObject docsDevFilterIpStatus.1 Integer 4; /* createAndGo */
+	SnmpMibObject docsDevFilterIpStatus.2 Integer 6; /* destroy */
+	SnmpMibObject docsDevFilterIpControl.2 Integer 2; /* accept */
+	SnmpMibObject docsDevFilterIpIfIndex.2 Integer 0 ;
+	SnmpMibObject docsDevFilterIpDirection.2 Integer 3; /* both */
+	SnmpMibObject docsDevFilterIpBroadcast.2 Integer 2; /* false */
+	SnmpMibObject docsDevFilterIpSaddr.2 IPAddress 0.0.0.0 ;
+	SnmpMibObject docsDevFilterIpSmask.2 IPAddress 0.0.0.0 ;
+	SnmpMibObject docsDevFilterIpDaddr.2 IPAddress 10.1.1.1 ;
+	SnmpMibObject docsDevFilterIpDmask.2 IPAddress 255.255.255.255 ;
+	SnmpMibObject docsDevFilterIpProtocol.2 Integer 6 ;
+	SnmpMibObject docsDevFilterIpStatus.2 Integer 4; /* createAndGo */
+	SnmpMibObject docsDevFilterIpStatus.3 Integer 6; /* destroy */
+	SnmpMibObject docsDevFilterIpControl.3 Integer 2; /* accept */
+	SnmpMibObject docsDevFilterIpIfIndex.3 Integer 0 ;
+	SnmpMibObject docsDevFilterIpDirection.3 Integer 3; /* both */
+	SnmpMibObject docsDevFilterIpBroadcast.3 Integer 2; /* false */
+	SnmpMibObject docsDevFilterIpSaddr.3 IPAddress 10.1.1.1 ;
+	SnmpMibObject docsDevFilterIpSmask.3 IPAddress 255.255.255.255 ;
+	SnmpMibObject docsDevFilterIpDaddr.3 IPAddress 0.0.0.0 ;
+	SnmpMibObject docsDevFilterIpDmask.3 IPAddress 0.0.0.0 ;
+	SnmpMibObject docsDevFilterIpProtocol.3 Integer 6 ;
+	SnmpMibObject docsDevFilterIpStatus.3 Integer 4; /* createAndGo */
+	SnmpMibObject docsDevFilterIpStatus.4 Integer 6; /* destroy */
+	SnmpMibObject docsDevFilterIpControl.4 Integer 2; /* accept */
+	SnmpMibObject docsDevFilterIpIfIndex.4 Integer 0 ;
+	SnmpMibObject docsDevFilterIpDirection.4 Integer 3; /* both */
+	SnmpMibObject docsDevFilterIpBroadcast.4 Integer 1; /* true */
+	SnmpMibObject docsDevFilterIpSaddr.4 IPAddress 0.0.0.0 ;
+	SnmpMibObject docsDevFilterIpSmask.4 IPAddress 0.0.0.0 ;
+	SnmpMibObject docsDevFilterIpDaddr.4 IPAddress 0.0.0.0 ;
+	SnmpMibObject docsDevFilterIpDmask.4 IPAddress 0.0.0.0 ;
+	SnmpMibObject docsDevFilterIpProtocol.4 Integer 17 ;
+	SnmpMibObject docsDevFilterIpStatus.4 Integer 4; /* createAndGo */
+	SnmpMibObject docsDevFilterIpStatus.5 Integer 6; /* destroy */
+	SnmpMibObject docsDevFilterIpControl.5 Integer 2; /* accept */
+	SnmpMibObject docsDevFilterIpIfIndex.5 Integer 0 ;
+	SnmpMibObject docsDevFilterIpDirection.5 Integer 3; /* both */
+	SnmpMibObject docsDevFilterIpBroadcast.5 Integer 2; /* false */
+	SnmpMibObject docsDevFilterIpSaddr.5 IPAddress 0.0.0.0 ;
+	SnmpMibObject docsDevFilterIpSmask.5 IPAddress 0.0.0.0 ;
+	SnmpMibObject docsDevFilterIpDaddr.5 IPAddress 0.0.0.0 ;
+	SnmpMibObject docsDevFilterIpDmask.5 IPAddress 0.0.0.0 ;
+	SnmpMibObject docsDevFilterIpProtocol.5 Integer 17 ;
+	SnmpMibObject docsDevFilterIpStatus.5 Integer 4; /* createAndGo */
+	SnmpMibObject docsDevFilterIpStatus.6 Integer 6; /* destroy */
+	SnmpMibObject docsDevFilterIpControl.6 Integer 2; /* accept */
+	SnmpMibObject docsDevFilterIpIfIndex.6 Integer 0 ;
+	SnmpMibObject docsDevFilterIpDirection.6 Integer 3; /* both */
+	SnmpMibObject docsDevFilterIpBroadcast.6 Integer 2; /* false */
+	SnmpMibObject docsDevFilterIpSaddr.6 IPAddress 0.0.0.0 ;
+	SnmpMibObject docsDevFilterIpSmask.6 IPAddress 0.0.0.0 ;
+	SnmpMibObject docsDevFilterIpDaddr.6 IPAddress 0.0.0.0 ;
+	SnmpMibObject docsDevFilterIpDmask.6 IPAddress 0.0.0.0 ;
+	SnmpMibObject docsDevFilterIpProtocol.6 Integer 6 ;
+	SnmpMibObject docsDevFilterIpSourcePortLow.6 Integer 53 ;
+	SnmpMibObject docsDevFilterIpSourcePortHigh.6 Integer 53 ;
+	SnmpMibObject docsDevFilterIpDestPortLow.6 Integer 53 ;
+	SnmpMibObject docsDevFilterIpDestPortHigh.6 Integer 53 ;
+	SnmpMibObject docsDevFilterIpStatus.6 Integer 4; /* createAndGo */
+	SnmpMibObject ifSpeed.1 Gauge32 50000 ;
+	SnmpMibObject docsIfUpChannelSlotSize.1 Gauge32 1234166 ;
+	SnmpMibObject docsIfCmStatusResets.1 Counter32 120431235 ;
+	SnmpMibObject enterprises.19.20.21.22.23.24 Integer -3 ;
+	SnmpMibObject enterprises.19.20.21.22.23.24 Integer -1 ;
+	SnmpMibObject enterprises.19.30.31.32.33.34 HexString 0x98ffc00ffc00fffff000000000000000 ;
+	SnmpMibObject enterprises.19.30.1.1.25.1.3.5 Gauge32 250000000 ;
+	SnmpMibObject enterprises.19.1.2.3.4.5.6.0 TimeTicks 120431235 ;
+	SwUpgradeFilename "example.bin";
+	SwUpgradeServer 10.1.1.1;
+	SubMgmtControl 0xff0000;
+	SubMgmtFilters 100,200,500,1024;
+	CpeMacAddress 00:00:de:ad:be:ef;
+	TftpModemAddress 10.11.12.13;
+	TftpTimestamp 2000000000;
+	DsChannelList
+	{
+		SingleDsChannel
+		{
+			SingleDsTimeout 200;
+			SingleDsFrequency 456000000;
+		}
+		DsFreqRange
+		{
+			DsFreqRangeTimeout 23456;
+			DsFreqRangeStart 326000000;
+			DsFreqRangeEnd 678000000;
+			DsFreqRangeStepSize 345000;
+		}
+		DefaultScanTimeout 1800;
+	}
+	SnmpMibObject enterprises.1.2.3.4 String "aaaaaaaaabbbaaaaaaaaaaaaaabcdefghijklmnoprstuvwzabcdefghijklmnoprstuvwyzabcdefghijklmnoprstxxxxxxxaaxaxaxaxaxaxaxaxaxaxaxaxaxaxaxaxaxaxaxaxaxaxaxaxaxaxaxaxaxaxaxaxaxaxaxaxaxaxaxaxaxaxaxaxaxaxaxaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" ;
+	SnmpMibObject enterprises.1.2.3.0 String "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabcdefg" ;
+	SnmpMibObject pktcMtaDevEnabled.0 Integer 1; /* true */
+	SnmpMibObject pktcMtaDevRealmOrgName.'CABLE' String "CABLE" ;
+	VendorSpecific
+	{
+		VendorIdentifier 0x00b0d0;
+		GenericTLV TlvCode 69 TlvStringZero "alskjfaslkdjfaslkjaslkfjasfjq[woieqrupworiqupworiqijalkjsalfkjaslkjfasjfaslkfjasfjasjajsflkjaslkjfalskjfoiqjoilashgkfashgkajshgfakshgfkashgfakjsafkjsafkhgfkajgsdfkajsfkasgfkajsgdfkajsgfkajsfkajsfkajsgakfsgfakjshdgfaksjgafqowiuqyoiwuryqoiwuohlafbds"; /* tlv length = 248 */
+	}
+	VendorSpecific
+	{
+		VendorIdentifier 0x00b0d0;
+		GenericTLV TlvCode 69 TlvStringZero "abcdw3452627"; /* tlv length = 13 */
+	}
+	VendorSpecific
+	{
+		VendorIdentifier 0x00b0d0;
+		GenericTLV TlvCode 69 TlvString "alskjfaslkdjfaslkjaslkfjasfjq[woieqrupworiqupworiqijalkjsalfkjaslkjfasjfaslkfjasfjasjajsflkjaslkjfalskjfoiqjoilashgkfashgkajshgfakshgfkashgfakjsafkjsafkhgfkajgsdfkajsfkasgfkajsgdfkajsgfkajsfkajsfkajsgakfsgfakjshdgfaksjgafqowiuqyoiwuryqoiwuohlafbds"; /* tlv length = 247 */
+	}
+	VendorSpecific
+	{
+		VendorIdentifier 0x00b0d0;
+		GenericTLV TlvCode 69 TlvString "abcdw3452627"; /* tlv length = 12 */
+	}
+	MfgCVCData 0xc937c5502cbfd5f7cc3b40b2fdef3238b0d369802e336c48df9968377c16e8930e90c163ce850d48f505516867e8322f6d863043ad8cc8792396dcae1486c02501073bc6b236de550b27ebed857d3fc8838059db9e52e7fcc2096cd266bf0f67022833fe7c9453fc8adb2ba29c008351eb70f996435ae63ebe69ebca49fc6c119ddda38adcfd0b325fb78aafd1d438b0abea2ea03857ffb9b3487f0f63c5dfa2d1eb404195a56c196200f4ebb4aa15f8667ffa884b8daebd154f0dd86322d208462b4aa4b3c35cc6b8f3145a24ed3b4cb909d98bfd1d19e077642268a8577ca32095e0e3e3a243edab8ddbd834ac13354b2de724d941b51a123095e19d62;
+	MfgCVCData 0x50adfc65b60d4fd38d67fd6f8c97a7f5df792e511641e6d3c12c0b31c1453fb967c993d656164f16b1094c22cab38ac711179c5f49e1232a192f18b3ee4c9c63ef7b4a43d3440f093da52017436bd337198d08f8ed3091a9144cdcfe97134787a7e1141171d21827f56688f8a15c2eb680bd4949eb3842569c81684cb47f995712a326700aba3bbc3c18a81c7c448afd54ddfb786a642f5d29a78962f26cb637e89006848fd53a83f82b591efce30d2c06745c2b16da4038d58250d2a400677a9fa9a9fa5504e016ef5ca13ca3cdba3ec3be647b9915811562a0a17cfc4f8c5a17343770147fc5b40c315447b0ec9f2f986b5815cec6d9e7b0f517cff3a8;
+	MfgCVCData 0x26d9e1eb;
+	CoSignerCVCData 0x72f78ea14e755b47ede4c6b6cd69182eae79c9a3e240e3b65f77e95999cbb0ee8d00ec3a9b2c2d014d9c0289ee12cace6b5684be330263693cc32017713bb93792fe22b4fcdd5a2e03f52f3d87180e3c481bbc2758d82e54ed14b69c43e6e8bc472447562ecc57f41c25a4347beea8bb4718f77f37e346d267277662ec1abe1e580320d77492f165d6551a32523a3eb75c385d556f88900bfca29dc2434de625f1ff0e89f5ccdcab420e7574fdd1113796a4e6341078e54b69cdb6d237115bb70e35b598206f86243e976cab79019e9589456424b17518e8726909a3444430c0dd2c0d00f7cb7b4df58ef9e1225543d72582a8f985e5069149cc2a6d0928;
+	CoSignerCVCData 0x6da401ce3d55964c188dba201b2726ad5963e9af336790a03e7bc5b3bf33de57c44afdc4c6ef4d800463d7fc1e6b8c31d63d1d9a18750c8ae6c34ec3ac41280098bcb6c7a71f050a0153cc21d781f35a92f8dcad900c95015f66b4fb337408b5cc02de90450fb7d34a4c717430e0170b87356c641a42448297e9ccb76d5b7bbd601ba2fa7703ce3dd4ae038a4f67a5b733d8f1226a452d46950309e0e5a3a70a79ee593858d4d09b8437ab4577149afdccbab17d54a6a84cef9dd57be0c21e5664c2c3bc53836a2f84358cfae1f753a71c6263fc5609458b27728e317e406d6bcae820613d2ec5134b85a4e6ee10b34ec72f2b08663538d4c5cb17cf87e3;
+	CoSignerCVCData 0x1d994def;
+	MaxCPE 127;
+	/* CmMic 8cc4938f0c9f11f71a5b7fc51573a45f; */
+	/* CmtsMic e76d51560b82faf1ff9726418e9e53d7; */
+	/*EndOfDataMkr*/
+}

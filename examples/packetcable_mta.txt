@@ -1,0 +1,19 @@
+Main 
+{
+	MtaConfigDelimiter 1;
+	SnmpMibObject pktcSigDefCallSigTos.0 Integer 26 ;
+	SnmpMibObject pktcSigDefMediaStreamTos.0 Integer 46 ;
+	SnmpMibObject pktcSigTosFormatSelector.0 Integer 2; /* dscpCodepoint */
+	SnmpMibObject pktcNcsEndPntConfigCallAgentId.9 String "[192.168.28.40]" ;
+	SnmpMibObject pktcNcsEndPntConfigCallAgentId.10 String "[192.168.28.40]" ;
+	SnmpMibObject pktcMtaDevCmsIpsecCtrl.'[192.168.28.40]' Integer 2; /* false */
+	SnmpMibObject pktcMtaDevEnabled.0 Integer 1; /* true */
+	SnmpMibObject pktcMtaDevCmsKerbRealmName.'[192.168.28.40]' String "REALM.COM" ;
+	SnmpMibObject pktcMtaDevRealmOrgName.'REALM.COM' String "Really Amazing Telephone Company" ;
+	SnmpMibObject pktcNcsEndPntConfigCallAgentUdpPort.9 Integer 2427 ;
+	SnmpMibObject pktcNcsEndPntConfigCallAgentUdpPort.10 Integer 2427 ;
+	SnmpMibObject pktcNcsEndPntConfigMWD.9 Integer 2 ;
+	SnmpMibObject pktcNcsEndPntConfigMWD.10 Integer 2 ;
+	SnmpMibObject pktcSigDevRgCadence.0 HexString 0x003ff00000000000 ;
+	MtaConfigDelimiter 255;
+}

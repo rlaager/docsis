@@ -1,0 +1,28 @@
+Main 
+{
+	NetworkAccess 1;
+	ClassOfService
+	{
+		ClassID 1;
+		MaxRateDown 20000000;
+		MaxRateUp 10000000;
+		PriorityUp 3;
+		GuaranteedUp 56072;
+		MaxBurstUp 1722;
+		PrivacyEnable 1;
+	}
+	BaselinePrivacy
+	{
+		AuthTimeout 10;
+		ReAuthTimeout 10;
+		AuthGraceTime 600;
+		OperTimeout 10;
+		ReKeyTimeout 10;
+		TEKGraceTime 600;
+		AuthRejectTimeout 9;
+	}
+	MaxCPE 3;
+	/* CmMic f18f77aa3574a3d73bdd1592711c0160; */
+	/* CmtsMic 054c9bbbaa0d3f745af2513747554830; */
+	/*EndOfDataMkr*/
+}
