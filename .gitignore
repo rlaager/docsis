@@ -20,6 +20,7 @@ configure
 docsis-*.*.*
 libtool
 ltmain.sh
+mibs/.index
 mkinstalldirs
 stamp-h1
 ylwrap
