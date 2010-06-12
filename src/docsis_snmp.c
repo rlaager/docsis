@@ -42,6 +42,8 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
   struct range_list *rp;
   long len=0;
   int rv;
+  long longval;
+  unsigned long ulongval;
 
   memset (buf, 0, SPRINT_MAX_LEN);
   if (!get_node (oid_string, var_name, &name_len))
@@ -98,56 +100,61 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
   switch (oid_asntype)
     {
     case 'i':
+      longval = value->intval;
       data_ptr = _docsis_snmp_build_var_op (out_buffer,
 				    var_name,
 				    &name_len,
 				    ASN_INTEGER,
-				    sizeof (int),
-				    (unsigned char *) &value->intval,
+				    sizeof (long),
+				    (unsigned char *) &longval,
 				    &out_size);
       return data_ptr - out_buffer;
       break;
       ;;
     case 'g':
+      ulongval = value->intval;
       data_ptr = _docsis_snmp_build_var_op (out_buffer,
 				    var_name,
 				    &name_len,
 				    ASN_GAUGE,
-				    sizeof (int),
-				    (unsigned char *) &value->intval,
+				    sizeof (unsigned long),
+				    (unsigned char *) &ulongval,
 				    &out_size);
       return data_ptr - out_buffer;
       break;
       ;;
     case 'c':
+      ulongval = value->intval;
       data_ptr = _docsis_snmp_build_var_op (out_buffer,
 				    var_name,
 				    &name_len,
 				    ASN_COUNTER,
-				    sizeof (int),
-				    (unsigned char *) &value->intval,
+				    sizeof (unsigned long),
+				    (unsigned char *) &ulongval,
 				    &out_size);
       return data_ptr - out_buffer;
       break;
       ;;
     case 'u':
+      ulongval = value->intval;
       data_ptr = _docsis_snmp_build_var_op (out_buffer,
 				    var_name,
 				    &name_len,
 				    ASN_GAUGE,
-				    sizeof (int),
-				    (unsigned char *) &value->intval,
+				    sizeof (unsigned long),
+				    (unsigned char *) &ulongval,
 				    &out_size);
       return data_ptr - out_buffer;
       break;
       ;;
     case 't':
+      ulongval = value->intval;
       data_ptr = _docsis_snmp_build_var_op (out_buffer,
                                     var_name,
                                     &name_len,
                                     ASN_TIMETICKS,
-                                    sizeof (int),
-                                    (unsigned char *) &value->intval,
+                                    sizeof (unsigned long),
+                                    (unsigned char *) &ulongval,
                                     &out_size);
       return data_ptr - out_buffer;
       break;
@@ -235,7 +242,7 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
 				    var_name,
 				    &name_len,
 				    ASN_IPADDRESS,
-				    sizeof (int),
+				    sizeof (struct in_addr),
 				    (unsigned char *) &ltmp, &out_size);
       return data_ptr - out_buffer;
       break;
