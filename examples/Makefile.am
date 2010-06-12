@@ -36,28 +36,37 @@ EXTRA_DIST = $(examples_DATA)
 
 ../src/docsis:
 	(cd ../src ; $(MAKE) docsis)
-.cfg.bin: ../src/docsis keyfile Makefile
-	export MIBDIRS="`net-snmp-config --default-mibdirs`:../mibs" ; \
-		../src/docsis -e $< keyfile $@ | \
-		sed "1,/^Final content/d" > $<.1.txt ; \
-		../src/docsis -d $@ > $<.2.txt ; \
-		if cmp $<.1.txt $<.2.txt && cmp $(<:.cfg=.txt) $<.2.txt ; then \
-			rm -f $<.1.txt $<.2.txt ; \
+.cfg.bin: ../src/docsis $(srcdir)/keyfile Makefile
+	export MIBDIRS="`net-snmp-config --default-mibdirs`:$(top_srcdir)/mibs" ; \
+		../src/docsis -e $< $(srcdir)/keyfile $@ | \
+		sed "1,/^Final content/d" > $@.1.txt ; \
+		../src/docsis -d $@ > $@.2.txt ; \
+		if cmp $@.1.txt $@.2.txt && cmp $(<:.cfg=.txt) $@.2.txt ; then \
+			rm -f $@.1.txt $@.2.txt ; \
 			true ; \
 		else \
-			rm -f $@ $<.1.txt $<.2.txt ; \
+			rm -f $@ $@.1.txt $@.2.txt ; \
 			false ; \
 		fi
 # First, the TESTS are built, then they're run.
 # The .sh doesn't really depend on the .cfg, but this type of pattern rule is
 # portable, where %-style rules (e.g. %.sh) are a GNU make extension.
 .cfg.sh: Makefile
-	(echo '#!/bin/sh' ; echo make -s $(@:.sh=.bin)) > $@
+# This test is a hack to avoid encoding docsis20_stresstest.cfg, which will
+# fail because it references external CVC files and the docsis program looks
+# for them relative to the CWD instead of the directory containing the input
+# configuration file.
+	if [ "`basename $@`" = "docsis20_stresstest.sh" ] && \
+	   [ "$(srcdir)" != "$(builddir)" ] ; then \
+		echo '#!/bin/sh' > $@ ; \
+	else \
+		(echo '#!/bin/sh' ; echo make -s $(@:.sh=.bin)) > $@ ; \
+	fi
 	chmod +x $@
 TESTS = $(CONFIGS_SCRIPT)
 
 clean-local:
 	-rm -f $(CONFIGS_BINARY)
 	-rm -f $(CONFIGS_SCRIPT)
-	-rm -f $(CONFIGS_IN:.cfg=.cfg.1.txt)
-	-rm -f $(CONFIGS_IN:.cfg=.cfg.2.txt)
+	-rm -f $(CONFIGS_IN:.cfg=.bin.1.txt)
+	-rm -f $(CONFIGS_IN:.cfg=.bin.2.txt)
