@@ -180,8 +180,8 @@ Section -Post
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\docsis" "UninstallString" "$INSTDIR\uninst.exe"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\docsis" "DisplayIcon" "$INSTDIR\docsis.exe"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\docsis" "DisplayVersion" "${MUI_VERSION}"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\docsis" "URLInfoAbout" "http://www.evvolve.com/docsis.html"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\docsis" "Publisher" "Evvolve Media SRL"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\docsis" "URLInfoAbout" "http://docsis.sourceforge.net"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\docsis" "Publisher" "docsis"
 SectionEnd
 
 !insertmacro MUI_FUNCTIONS_DESCRIPTION_BEGIN
