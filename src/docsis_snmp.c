@@ -674,23 +674,23 @@ decode_snmp_oid (unsigned char *data, size_t data_len)
  * type for the length of the SNMP VarBinds
  *
  * u_char * docsis_snmp_build_var_op(
- * u_char *data      IN - pointer to the beginning of the output buffer
+ * u_char *data         IN - pointer to the beginning of the output buffer
  * oid *var_name        IN - object id of variable
- * int *var_name_len    IN - length of object id
+ * size_t *var_name_len IN - length of object id
  * u_char var_val_type  IN - type of variable
- * int    var_val_len   IN - length of variable
+ * size_t var_val_len   IN - length of variable
  * u_char *var_val      IN - value of variable
- * int *listlength      IN/OUT - number of valid bytes left in
- * output buffer
+ * int *listlength      IN/OUT - number of valid bytes left in the output buffer
  */
 
 u_char         *
 _docsis_snmp_build_var_op(u_char * data,
-                  oid * var_name,
-                  size_t * var_name_len,
-                  u_char var_val_type,
-                  size_t var_val_len,
-                  u_char * var_val, size_t * listlength)
+                          oid * var_name,
+                          size_t * var_name_len,
+                          u_char var_val_type,
+                          size_t var_val_len,
+                          u_char * var_val,
+                          size_t * listlength)
 {
     size_t          dummyLen, headerLen;
     u_char	 *tmpDataPtr;
