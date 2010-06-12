@@ -1,8 +1,8 @@
 Quick, how do I use this ?
 =============================
 
-This program can only be used from a command line. Open a command prompt, type "docsis"
-and you will get the default help message.
+This program can only be used from a command line. Open a command prompt, type
+"docsis" and you will get the default help message.
 
 See doc/index.html for more information.
 
@@ -11,7 +11,8 @@ General Information
 
 Visit http://docsis.sourceforge.net for the latest news on this program.
 
-General questions about this software can be sent to docsis-users@sourceforge.net. 
+General questions about this software can be sent to
+docsis-users@sourceforge.net.
 
 Copyright (c) 1999,2000,2001,2002 Cornel Ciocirlan
 Copyright (c) 2002,2003 Evvolve Media SRL
@@ -30,22 +31,23 @@ You should have received a copy of the GNU General Public License along
 with this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-DOCSIS is a registered trademark of Cablelabs, http://www.cablelabs.com
-Portions of this program are derived from the RSA Data Security, Inc. MD5 Message-Digest Algorithm.
+DOCSIS is a registered trademark of CableLabs, http://www.cablelabs.com
+Portions of this program are derived from the RSA Data Security, Inc. MD5
+Message-Digest Algorithm.
 
 Description
 ==============
 
-This program encodes text configuration files which contain Configuration File Settings into
-binary configuration files, as specified by the DOCSIS Radio Frequency Interface
- Specification, Appendix C.
+This program encodes text configuration files which contain Configuration File
+Settings into binary configuration files, as specified by the DOCSIS Radio
+Frequency Interface Specification, Appendix C.
 
 It supports most DOCSIS 2.0 Configuration Settings. Not supported (currently):
 
 	* Telephony Settings
 	* Vendor ID (Partial support provided)
 
-Refer to Appendix C of the Radio Frequency Interface Specification  for a
+Refer to Appendix C of the Radio Frequency Interface Specification for a
 description of these settings.
 
 DOCSIS 1.0 considerations
@@ -72,9 +74,9 @@ There are three modes of operation:
 
  a) Encoding CM configuration files
 
-    To encode a CM configuration file, make sure "docsis" is in your PATH and do:
+    To encode a CM configuration file, run:
 
-    unix $ docsis -e cm_config_file.cfg my_key_file cm_config_file.bin
+      $ docsis -e cm_config_file.cfg my_key_file cm_config_file.bin
 
     The format of the text configuration file, although simple, is not
     described anywhere but the source code (see the grammar in docsis_yy.y
@@ -95,9 +97,9 @@ There are three modes of operation:
 
     MTA Configuration file support has been added in version 0.8.1.
 
-    To encode a CM configuration file, make sure "docsis" is in your PATH and do:
+    To encode a CM configuration file, run:
 
-    unix $ docsis -p mta_config_file.cfg mta_config_file.bin
+      $ docsis -p mta_config_file.cfg mta_config_file.bin
 
     PacketCable MTA config files MUST start with the "MtaConfigDelimiter 1"
     configuration setting and MUST end with "MtaConfigDelimiter 255". All
@@ -107,24 +109,10 @@ There are three modes of operation:
 
  c) Decoding CM or MTA binary configuration files
 
-    To decode a binary file, do:
+    To decode a binary file, run:
 
-    unix $ ./docsis -d my_binary_file.bin
+      $ ./docsis -d my_binary_file.bin
 
-    The decoded output is not always "compatible" with itself, eg cannot be
-    directly encoded back into a binary file.
-
-    This is mostly due to the usage of ucd-snmp library functions to print the
-    SnmpMibObjects, which print out a different syntax than what we need.
-
-    As of version 8.0, you can directly encode the decoded output. E.g.
-
-    unix $ docsis -d cm_test.bin > cm_test.cfg
-    unix $ docsis -e cm_test.cfg testkey.key cm_test.bin
-    unix $ docsis -d mta_test.bin > mta_test.cfg
-    unix $ docsis -p mta_test.cfg mta_test.bin
-
-    should work, save for still remaining bugs.
 
 Adding new configuration settings
 ====================================
