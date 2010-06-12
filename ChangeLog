@@ -1,3 +1,12 @@
+version 0.9.6 (06/12/2010):
+	* Fix compiling on systems where -lm is required (Oliver Hitz)
+	* Support newer versions of GNU m4
+	* Avoid padding already aligned files (reported by David Tang)
+	* Allow \" in string values ("reticent")
+	* Allow @ in OID labels
+	* Update MIBs & add MIBs
+	* Work properly on 64-bit systems (Oliver Hitz, James Flemer)
+
 0.9.5			- allow semi-colon characters in strings 
 ctrl			- add support for TimeTicks SNMP encoding. 
 			- simplify and improve parser (it now returns a 
