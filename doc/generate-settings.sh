@@ -13,17 +13,20 @@ fi
 
 
 cat > $1 << EOF
-<html>
-	<head>
-		<title>DOCSIS Configuration Settings</title>
-	</head>
-	<body bgcolor=#ffffff>
-	<h3> DOCSIS Configuration Settings</h3>
-	<p> In the table below you can find a list of all Configuration Settings understood by this program. The name should be self-descriptive; if not you can refer to the DOCSIS RFI specification - Appendix C, for detailed explanations of what each of these mean.
-	<p> For String and Hexadecimal strings, the "Range" field means the minimum and maximum length of the string. For "List" types, it represents the number of elements in the list.
-	<p> This list was generated for docsis version $2.
-		<table cellpadding=5 bgcolor=#000000>
-		<tr bgcolor=#ffffff><td><b>Configuration Setting</b></td><td><b>Type</b></td><td><b>Range of values allowed</b></td></tr>
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>DOCSIS Configuration Settings</title>
+</head>
+<body>
+<h1>DOCSIS Configuration Settings</h1>
+<p>In the table below you can find a list of all configuration settings understood by this program. The name should be self-descriptive; if not you can refer to the Appendix C of the DOCSIS RFI Specification for detailed explanations of what each of these mean.</p>
+<p>For String and Hexadecimal Strings, the "Range" is the minimum and maximum length of the string. For "List" types, it represents the number of elements in the list.</p>
+<p>This list was generated for docsis version $2.</p>
+<table cellpadding="5">
+<tr><td><b>Configuration Setting</b></td><td><b>Type</b></td><td><b>Range of values allowed</b></td></tr>
 EOF
 
 grep -e "^{" ../src/docsis_symtable.h \
@@ -35,7 +38,7 @@ grep -e "^{" ../src/docsis_symtable.h \
 	| sed 's/^[0-9]*,_/\&nbsp\;\&nbsp\;\&nbsp\;\&nbsp\;/g' \
 	| sed 's/\decode_//g' \
 	| sed 's/\ //g' | tr -s "\(\)" "%%" \
-	| sed 's/^/<tr\ bgcolor=#ffffff><td><b>/g' \
+	| sed 's/^/<tr><td><b>/g' \
 	| sed 's/,\%/<\/b><\/td><td>/g' \
 	| sed 's/%,/<\/td><td>/g' \
 	| sed 's/,/-/g' \
