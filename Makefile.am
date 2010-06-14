@@ -7,6 +7,7 @@ README: doc/index.html
 
 SUBDIRS = src doc examples mibs
 EXTRA_DIST = build_setup.nsi.in README
+MAINTAINERCLEANFILES = README
 if CYGWIN_BUILD
 if CYGWIN_BUILD_SETUP_EXE
 bin_SCRIPTS=docsis_setup.exe
