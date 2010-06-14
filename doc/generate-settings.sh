@@ -2,7 +2,6 @@
 
 # This script generates an HTML file which contains an overview of all configuration settings supported by DOCSIS,
 # as defined in ../src/docsis_symtable.h.
-# Tried to make it as portable as possible. We still need sh, sed & awk.
 if test $# -ne 2; then
 echo "Usage: $0 <output_file> <package_version>"
 exit 1;
