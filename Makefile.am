@@ -42,14 +42,11 @@ upload:
 	else \
 		$(MAKE) release && \
 		mkdir $(PACKAGE)-$(VERSION) && \
-		mv $(PACKAGE)-$(VERSION).tar.gz \
-			$(PACKAGE)-$(VERSION) && \
-		mv $(PACKAGE)-$(VERSION).tar.gz.asc \
-			$(PACKAGE)-$(VERSION) && \
-		mv $(PACKAGE)-$(VERSION).tar.bz2 \
-			$(PACKAGE)-$(VERSION) && \
-		mv $(PACKAGE)-$(VERSION).tar.bz2.asc \
-			$(PACKAGE)-$(VERSION) && \
+		mv $(PACKAGE)-$(VERSION).tar.gz      $(PACKAGE)-$(VERSION) && \
+		mv $(PACKAGE)-$(VERSION).tar.gz.asc  $(PACKAGE)-$(VERSION) && \
+		mv $(PACKAGE)-$(VERSION).tar.bz2     $(PACKAGE)-$(VERSION) && \
+		mv $(PACKAGE)-$(VERSION).tar.bz2.asc $(PACKAGE)-$(VERSION) && \
+		cp ChangeLog                         $(PACKAGE)-$(VERSION) && \
 		$(MAKE) upload ; \
 	fi
 
