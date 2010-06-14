@@ -27,19 +27,19 @@
 OutFile "docsis-setup-dist.exe"
 InstallDir "$PROGRAMFILES\DOCSIS Configurator"
 InstallDirRegKey  HKLM "Software\Microsoft\Windows\CurrentVersion\App Paths\docsis.exe" ""
-LicenseData "@@buildroot@@\License.txt"
+LicenseData "@CYGWIN_BUILDROOT@\COPYING"
 ShowInstDetails show
 ShowUnInstDetails show
 
 Section "Base DOCSIS kit" SEC01
   SetOutPath "$INSTDIR"
   SetOverwrite ifnewer
-  File "@@buildroot@@\src\docsis.exe"
+  File "@CYGWIN_BUILDROOT@\src\docsis.exe"
   CreateShortCut "$DESKTOP\docsis.lnk" "$INSTDIR\docsis.exe"
-  File "@@buildroot@@\License.txt"
+  File "@CYGWIN_BUILDROOT@\License.txt"
   File "C:\cygwin\bin\cygcrypto-0.9.7.dll"
   File "C:\cygwin\bin\cygwin1.dll"
-  File "@@buildroot@@\README"
+  File "@CYGWIN_BUILDROOT@\README"
 
 ; In order to allow docsis to be run from everywhere, we create a batch file
 ; and copy that to the Windows system directory.
@@ -56,103 +56,108 @@ Section "Base DOCSIS kit" SEC01
   CopyFiles $INSTDIR\docsis.bat $SYSDIR
 ; Documentation
   SetOutPath "$INSTDIR\doc"
-  File "@@buildroot@@\doc\index.html"
-  File "@@buildroot@@\doc\config-format.html"
-  File "@@buildroot@@\doc\config-settings.html"
+  File "@CYGWIN_BUILDROOT@\doc\index.html"
+  File "@CYGWIN_BUILDROOT@\doc\config-format.html"
+  File "@CYGWIN_BUILDROOT@\doc\config-settings.html"
 SectionEnd
 
 Section "Example files" SEC02
   SetOutPath "$INSTDIR\examples"
-  File "@@buildroot@@\examples\testkey.key"
-  File "@@buildroot@@\examples\README"
-  File "@@buildroot@@\examples\packetcable_mta.cfg"
-  File "@@buildroot@@\examples\keyfile"
-  File "@@buildroot@@\examples\docsis20_stresstest.cfg"
-  File "@@buildroot@@\examples\docsis20_no_snmp.cfg"
-  File "@@buildroot@@\examples\docsis20.cfg"
-  File "@@buildroot@@\examples\docsis1.1_stress_test.cfg"
-  File "@@buildroot@@\examples\docsis1.1_simple.cfg"
-  File "@@buildroot@@\examples\docsis1.1_oss_v3coex.cfg"
-  File "@@buildroot@@\examples\docsis1.1_classifiers2.cfg"
-  File "@@buildroot@@\examples\docsis1.1_classifiers.cfg"
-  File "@@buildroot@@\examples\docsis1.0_filters2_oidtext.cfg"
-  File "@@buildroot@@\examples\docsis1.0_filters2_oidnum.cfg"
-  File "@@buildroot@@\examples\docsis1.0_filters_oidtext.cfg"
-  File "@@buildroot@@\examples\docsis1.0_filters_oidnum.cfg"
-  File "@@buildroot@@\examples\docsis1.0_filters_NmAccess.cfg"
-  File "@@buildroot@@\examples\docsis1.0_example.cfg"
-  File "@@buildroot@@\examples\docsis1.0_basic_upgrade.cfg"
-  File "@@buildroot@@\examples\docsis1.0_basic_bpi.cfg"
-  File "@@buildroot@@\examples\docsis1.0_basic.cfg"
-  File "@@buildroot@@\examples\docsis1.0_2class_rfc2669.cfg"
-  File "@@buildroot@@\examples\docsis1.0_2class_non-rfc2669.cfg"
+  File "@CYGWIN_BUILDROOT@\examples\README"
+  File "@CYGWIN_BUILDROOT@\examples\packetcable_mta.cfg"
+  File "@CYGWIN_BUILDROOT@\examples\keyfile"
+  File "@CYGWIN_BUILDROOT@\examples\docsis20_stresstest.cfg"
+  File "@CYGWIN_BUILDROOT@\examples\docsis20_no_snmp.cfg"
+  File "@CYGWIN_BUILDROOT@\examples\docsis20.cfg"
+  File "@CYGWIN_BUILDROOT@\examples\docsis1.1_stress_test.cfg"
+  File "@CYGWIN_BUILDROOT@\examples\docsis1.1_simple.cfg"
+  File "@CYGWIN_BUILDROOT@\examples\docsis1.1_oss_v3coex.cfg"
+  File "@CYGWIN_BUILDROOT@\examples\docsis1.1_classifiers2.cfg"
+  File "@CYGWIN_BUILDROOT@\examples\docsis1.1_classifiers.cfg"
+  File "@CYGWIN_BUILDROOT@\examples\docsis1.0_filters2_oidtext.cfg"
+  File "@CYGWIN_BUILDROOT@\examples\docsis1.0_filters2_oidnum.cfg"
+  File "@CYGWIN_BUILDROOT@\examples\docsis1.0_filters_oidtext.cfg"
+  File "@CYGWIN_BUILDROOT@\examples\docsis1.0_filters_oidnum.cfg"
+  File "@CYGWIN_BUILDROOT@\examples\docsis1.0_filters_NmAccess.cfg"
+  File "@CYGWIN_BUILDROOT@\examples\docsis1.0_example.cfg"
+  File "@CYGWIN_BUILDROOT@\examples\docsis1.0_basic_upgrade.cfg"
+  File "@CYGWIN_BUILDROOT@\examples\docsis1.0_basic_bpi.cfg"
+  File "@CYGWIN_BUILDROOT@\examples\docsis1.0_basic.cfg"
+  File "@CYGWIN_BUILDROOT@\examples\docsis1.0_2class_rfc2669.cfg"
+  File "@CYGWIN_BUILDROOT@\examples\docsis1.0_2class_non-rfc2669.cfg"
 SectionEnd
 
 Section "SNMP MIBs" SEC03
   SetOutPath "$INSTDIR\snmp\mibs"
-  File "@@netsnmproot@@\UDP-MIB.txt"
-  File "@@netsnmproot@@\UCD-SNMP-MIB.txt"
-  File "@@netsnmproot@@\UCD-IPFWACC-MIB.txt"
-  File "@@netsnmproot@@\UCD-DLMOD-MIB.txt"
-  File "@@netsnmproot@@\UCD-DISKIO-MIB.txt"
-  File "@@netsnmproot@@\UCD-DEMO-MIB.txt"
-  File "@@netsnmproot@@\TCP-MIB.txt"
-  File "@@netsnmproot@@\SNMP-VIEW-BASED-ACM-MIB.txt"
-  File "@@netsnmproot@@\SNMPv2-TM.txt"
-  File "@@netsnmproot@@\SNMPv2-TC.txt"
-  File "@@netsnmproot@@\SNMPv2-SMI.txt"
-  File "@@netsnmproot@@\SNMPv2-MIB.txt"
-  File "@@netsnmproot@@\SNMPv2-CONF.txt"
-  File "@@netsnmproot@@\SNMP-USER-BASED-SM-MIB.txt"
-  File "@@netsnmproot@@\SNMP-TARGET-MIB.txt"
-  File "@@netsnmproot@@\SNMP-PROXY-MIB.txt"
-  File "@@netsnmproot@@\SNMP-NOTIFICATION-MIB.txt"
-  File "@@netsnmproot@@\SNMP-MPD-MIB.txt"
-  File "@@netsnmproot@@\SNMP-FRAMEWORK-MIB.txt"
-  File "@@netsnmproot@@\SNMP-COMMUNITY-MIB.txt"
-  File "@@netsnmproot@@\SMUX-MIB.txt"
-  File "@@netsnmproot@@\RMON-MIB.txt"
-  File "@@netsnmproot@@\RFC-1215.txt"
-  File "@@netsnmproot@@\RFC1213-MIB.txt"
-  File "@@netsnmproot@@\RFC1155-SMI.txt"
-  File "@@netsnmproot@@\NOTIFICATION-LOG-MIB.txt"
-  File "@@netsnmproot@@\NET-SNMP-TC.txt"
-  File "@@netsnmproot@@\NET-SNMP-MIB.txt"
-  File "@@netsnmproot@@\NET-SNMP-EXAMPLES-MIB.txt"
-  File "@@netsnmproot@@\NET-SNMP-AGENT-MIB.txt"
-  File "@@netsnmproot@@\IPV6-UDP-MIB.txt"
-  File "@@netsnmproot@@\IPV6-TCP-MIB.txt"
-  File "@@netsnmproot@@\IPV6-TC.txt"
-  File "@@netsnmproot@@\IPV6-MIB.txt"
-  File "@@netsnmproot@@\IPV6-ICMP-MIB.txt"
-  File "@@netsnmproot@@\IP-MIB.txt"
-  File "@@netsnmproot@@\IP-FORWARD-MIB.txt"
-  File "@@netsnmproot@@\INET-ADDRESS-MIB.txt"
-  File "@@netsnmproot@@\IF-MIB.txt"
-  File "@@netsnmproot@@\IF-INVERTED-STACK-MIB.txt"
-  File "@@netsnmproot@@\IANA-LANGUAGE-MIB.txt"
-  File "@@netsnmproot@@\IANAifType-MIB.txt"
-  File "@@netsnmproot@@\IANA-ADDRESS-FAMILY-NUMBERS-MIB.txt"
-  File "@@netsnmproot@@\HOST-RESOURCES-TYPES.txt"
-  File "@@netsnmproot@@\HOST-RESOURCES-MIB.txt"
-  File "@@netsnmproot@@\HCNUM-TC.txt"
-  File "@@netsnmproot@@\EtherLike-MIB.txt"
-  File "@@netsnmproot@@\AGENTX-MIB.txt"
-  File "@@netsnmproot@@\DISMAN-SCRIPT-MIB.txt"
-  File "@@netsnmproot@@\DISMAN-SCHEDULE-MIB.txt"
-  File "@@buildroot@@\mibs\IGMP-STD-MIB.mib"
-  File "@@buildroot@@\mibs\DOCS-SUBMGT-MIB.mib"
-  File "@@buildroot@@\mibs\DOCS-QOS-MIB.mib"
-  File "@@buildroot@@\mibs\DOCS-IF-MIB.mib"
-  File "@@buildroot@@\mibs\DOCS-IF-EXT-MIB.mib"
-  File "@@buildroot@@\mibs\DOCS-CABLE-DEVICE-TRAP-MIB.mib"
-  File "@@buildroot@@\mibs\DOCS-CABLE-DEVICE-MIB.mib"
-  File "@@buildroot@@\mibs\DOCS-BPI-MIB.mib"
-  File "@@buildroot@@\mibs\DOCS-BPI2-MIB.mib"
-  File "@@buildroot@@\mibs\CLAB-DEF-MIB.txt"
-  File "@@buildroot@@\mibs\PKTC-SIG-MIB.mib"
-  File "@@buildroot@@\mibs\PKTC-MTA-MIB.mib"
-  File "@@buildroot@@\mibs\PKTC-EVENT-MIB.mib"
+  File "@NETSNMP_MIBPATH@\UDP-MIB.txt"
+  File "@NETSNMP_MIBPATH@\UCD-SNMP-MIB.txt"
+  File "@NETSNMP_MIBPATH@\UCD-IPFWACC-MIB.txt"
+  File "@NETSNMP_MIBPATH@\UCD-DLMOD-MIB.txt"
+  File "@NETSNMP_MIBPATH@\UCD-DISKIO-MIB.txt"
+  File "@NETSNMP_MIBPATH@\UCD-DEMO-MIB.txt"
+  File "@NETSNMP_MIBPATH@\TCP-MIB.txt"
+  File "@NETSNMP_MIBPATH@\SNMP-VIEW-BASED-ACM-MIB.txt"
+  File "@NETSNMP_MIBPATH@\SNMPv2-TM.txt"
+  File "@NETSNMP_MIBPATH@\SNMPv2-TC.txt"
+  File "@NETSNMP_MIBPATH@\SNMPv2-SMI.txt"
+  File "@NETSNMP_MIBPATH@\SNMPv2-MIB.txt"
+  File "@NETSNMP_MIBPATH@\SNMPv2-CONF.txt"
+  File "@NETSNMP_MIBPATH@\SNMP-USER-BASED-SM-MIB.txt"
+  File "@NETSNMP_MIBPATH@\SNMP-TARGET-MIB.txt"
+  File "@NETSNMP_MIBPATH@\SNMP-PROXY-MIB.txt"
+  File "@NETSNMP_MIBPATH@\SNMP-NOTIFICATION-MIB.txt"
+  File "@NETSNMP_MIBPATH@\SNMP-MPD-MIB.txt"
+  File "@NETSNMP_MIBPATH@\SNMP-FRAMEWORK-MIB.txt"
+  File "@NETSNMP_MIBPATH@\SNMP-COMMUNITY-MIB.txt"
+  File "@NETSNMP_MIBPATH@\SMUX-MIB.txt"
+  File "@NETSNMP_MIBPATH@\RMON-MIB.txt"
+  File "@NETSNMP_MIBPATH@\RFC-1215.txt"
+  File "@NETSNMP_MIBPATH@\RFC1213-MIB.txt"
+  File "@NETSNMP_MIBPATH@\RFC1155-SMI.txt"
+  File "@NETSNMP_MIBPATH@\NOTIFICATION-LOG-MIB.txt"
+  File "@NETSNMP_MIBPATH@\NET-SNMP-TC.txt"
+  File "@NETSNMP_MIBPATH@\NET-SNMP-MIB.txt"
+  File "@NETSNMP_MIBPATH@\NET-SNMP-EXAMPLES-MIB.txt"
+  File "@NETSNMP_MIBPATH@\NET-SNMP-AGENT-MIB.txt"
+  File "@NETSNMP_MIBPATH@\IPV6-UDP-MIB.txt"
+  File "@NETSNMP_MIBPATH@\IPV6-TCP-MIB.txt"
+  File "@NETSNMP_MIBPATH@\IPV6-TC.txt"
+  File "@NETSNMP_MIBPATH@\IPV6-MIB.txt"
+  File "@NETSNMP_MIBPATH@\IPV6-ICMP-MIB.txt"
+  File "@NETSNMP_MIBPATH@\IP-MIB.txt"
+  File "@NETSNMP_MIBPATH@\IP-FORWARD-MIB.txt"
+  File "@NETSNMP_MIBPATH@\INET-ADDRESS-MIB.txt"
+  File "@NETSNMP_MIBPATH@\IF-MIB.txt"
+  File "@NETSNMP_MIBPATH@\IF-INVERTED-STACK-MIB.txt"
+  File "@NETSNMP_MIBPATH@\IANA-LANGUAGE-MIB.txt"
+  File "@NETSNMP_MIBPATH@\IANAifType-MIB.txt"
+  File "@NETSNMP_MIBPATH@\IANA-ADDRESS-FAMILY-NUMBERS-MIB.txt"
+  File "@NETSNMP_MIBPATH@\HOST-RESOURCES-TYPES.txt"
+  File "@NETSNMP_MIBPATH@\HOST-RESOURCES-MIB.txt"
+  File "@NETSNMP_MIBPATH@\HCNUM-TC.txt"
+  File "@NETSNMP_MIBPATH@\EtherLike-MIB.txt"
+  File "@NETSNMP_MIBPATH@\AGENTX-MIB.txt"
+  File "@NETSNMP_MIBPATH@\DISMAN-SCRIPT-MIB.txt"
+  File "@NETSNMP_MIBPATH@\DISMAN-SCHEDULE-MIB.txt"
+  File "@CYGWIN_BUILDROOT@\mibs\CLAB-DEF-MIB
+  File "@CYGWIN_BUILDROOT@\mibs\DIFFSERV-DSCP-TC
+  File "@CYGWIN_BUILDROOT@\mibs\DIFFSERV-MIB
+  File "@CYGWIN_BUILDROOT@\mibs\DOCS-BPI2-MIB
+  File "@CYGWIN_BUILDROOT@\mibs\DOCS-BPI-MIB
+  File "@CYGWIN_BUILDROOT@\mibs\DOCS-CABLE-DEVICE-MIB
+  File "@CYGWIN_BUILDROOT@\mibs\DOCS-CABLE-DEVICE-TRAP-MIB
+  File "@CYGWIN_BUILDROOT@\mibs\DOCS-IF-EXT-MIB
+  File "@CYGWIN_BUILDROOT@\mibs\DOCS-IF-MIB
+  File "@CYGWIN_BUILDROOT@\mibs\DOCS-QOS-MIB
+  File "@CYGWIN_BUILDROOT@\mibs\DOCS-SUBMGT-MIB
+  File "@CYGWIN_BUILDROOT@\mibs\IGMP-STD-MIB
+  File "@CYGWIN_BUILDROOT@\mibs\INTEGRATED-SERVICES-MIB
+  File "@CYGWIN_BUILDROOT@\mibs\PKTC-EVENT-MIB
+  File "@CYGWIN_BUILDROOT@\mibs\PKTC-IETF-SIG-MIB
+  File "@CYGWIN_BUILDROOT@\mibs\PKTC-MTA-MIB
+  File "@CYGWIN_BUILDROOT@\mibs\PKTC-SIG-MIB
+  File "@CYGWIN_BUILDROOT@\mibs\RMON2-MIB
+  File "@CYGWIN_BUILDROOT@\mibs\TOKEN-RING-RMON-MIB
 ; We need to tell the NET-SNMP library [statically linked into docsis]
 ; where to find the MIB files. 
 
@@ -186,7 +191,7 @@ SectionEnd
 
 !insertmacro MUI_FUNCTIONS_DESCRIPTION_BEGIN
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC01} "These are the base programs needed by DOCSIS. The Cygwin libraries are included here for convenience. If you already have Cygwin installed, you would be better off compiling from source."
-  !insertmacro MUI_DESCRIPTION_TEXT ${SEC02} "These are example configuration file (in text format). These are just examples, some of them are not useable in a real network. Make sure you understand what's in there before using them."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SEC02} "These are example configuration file (in text format). These are just examples, some of them are not usable in a real network. Make sure you understand what's in there before using them."
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC03} "These are the SNMP MIBs.  DOCSIS-specific MIBs are included. These files are used by docsis to decode SnmpMibObject settings in a human-readable format."
 !insertmacro MUI_FUNCTIONS_DESCRIPTION_END
 
@@ -212,7 +217,6 @@ Section Uninstall
   Delete "$INSTDIR\doc\index.html"
   Delete "$INSTDIR\doc\config-format.html"
   Delete "$INSTDIR\doc\config-settings.html"
-  Delete "$INSTDIR\examples\testkey.key"
   Delete "$INSTDIR\examples\README.txt"
   Delete "$INSTDIR\examples\packetcable_mta.cfg"
   Delete "$INSTDIR\examples\keyfile"
@@ -260,9 +264,6 @@ Section Uninstall
   Delete "$INSTDIR\snmp\mibs\RFC-1215.txt"
   Delete "$INSTDIR\snmp\mibs\RFC1213-MIB.txt"
   Delete "$INSTDIR\snmp\mibs\RFC1155-SMI.txt"
-  Delete "$INSTDIR\snmp\mibs\PKTC-SIG-MIB.mib"
-  Delete "$INSTDIR\snmp\mibs\PKTC-MTA-MIB.mib"
-  Delete "$INSTDIR\snmp\mibs\PKTC-EVENT-MIB.mib"
   Delete "$INSTDIR\snmp\mibs\NOTIFICATION-LOG-MIB.txt"
   Delete "$INSTDIR\snmp\mibs\NET-SNMP-TC.txt"
   Delete "$INSTDIR\snmp\mibs\NET-SNMP-MIB.txt"
@@ -276,7 +277,6 @@ Section Uninstall
   Delete "$INSTDIR\snmp\mibs\IP-MIB.txt"
   Delete "$INSTDIR\snmp\mibs\IP-FORWARD-MIB.txt"
   Delete "$INSTDIR\snmp\mibs\INET-ADDRESS-MIB.txt"
-  Delete "$INSTDIR\snmp\mibs\IGMP-STD-MIB.mib"
   Delete "$INSTDIR\snmp\mibs\IF-MIB.txt"
   Delete "$INSTDIR\snmp\mibs\IF-INVERTED-STACK-MIB.txt"
   Delete "$INSTDIR\snmp\mibs\IANA-LANGUAGE-MIB.txt"
@@ -286,23 +286,31 @@ Section Uninstall
   Delete "$INSTDIR\snmp\mibs\HOST-RESOURCES-MIB.txt"
   Delete "$INSTDIR\snmp\mibs\HCNUM-TC.txt"
   Delete "$INSTDIR\snmp\mibs\EtherLike-MIB.txt"
-  Delete "$INSTDIR\snmp\mibs\DOCS-SUBMGT-MIB.mib"
-  Delete "$INSTDIR\snmp\mibs\DOCS-QOS-MIB.mib"
-  Delete "$INSTDIR\snmp\mibs\DOCS-IF-MIB.mib"
-  Delete "$INSTDIR\snmp\mibs\DOCS-IF-EXT-MIB.mib"
-  Delete "$INSTDIR\snmp\mibs\DOCS-CABLE-DEVICE-TRAP-MIB.mib"
-  Delete "$INSTDIR\snmp\mibs\DOCS-CABLE-DEVICE-MIB.mib"
-  Delete "$INSTDIR\snmp\mibs\DOCS-BPI-MIB.mib"
-  Delete "$INSTDIR\snmp\mibs\DOCS-BPI2-MIB.mib"
+  Delete "$INSTDIR\snmp\mibs\AGENTX-MIB.txt"
   Delete "$INSTDIR\snmp\mibs\DISMAN-SCRIPT-MIB.txt"
   Delete "$INSTDIR\snmp\mibs\DISMAN-SCHEDULE-MIB.txt"
-  Delete "$INSTDIR\snmp\mibs\CLAB-DEF-MIB.txt"
-  Delete "$INSTDIR\snmp\mibs\AGENTX-MIB.txt"
+  Delete "$INSTDIR\snmp\mibs\CLAB-DEF-MIB
+  Delete "$INSTDIR\snmp\mibs\DIFFSERV-DSCP-TC
+  Delete "$INSTDIR\snmp\mibs\DIFFSERV-MIB
+  Delete "$INSTDIR\snmp\mibs\DOCS-BPI2-MIB
+  Delete "$INSTDIR\snmp\mibs\DOCS-BPI-MIB
+  Delete "$INSTDIR\snmp\mibs\DOCS-CABLE-DEVICE-MIB
+  Delete "$INSTDIR\snmp\mibs\DOCS-CABLE-DEVICE-TRAP-MIB
+  Delete "$INSTDIR\snmp\mibs\DOCS-IF-EXT-MIB
+  Delete "$INSTDIR\snmp\mibs\DOCS-IF-MIB
+  Delete "$INSTDIR\snmp\mibs\DOCS-QOS-MIB
+  Delete "$INSTDIR\snmp\mibs\DOCS-SUBMGT-MIB
+  Delete "$INSTDIR\snmp\mibs\IGMP-STD-MIB
+  Delete "$INSTDIR\snmp\mibs\INTEGRATED-SERVICES-MIB
+  Delete "$INSTDIR\snmp\mibs\PKTC-EVENT-MIB
+  Delete "$INSTDIR\snmp\mibs\PKTC-IETF-SIG-MIB
+  Delete "$INSTDIR\snmp\mibs\PKTC-MTA-MIB
+  Delete "$INSTDIR\snmp\mibs\PKTC-SIG-MIB
+  Delete "$INSTDIR\snmp\mibs\RMON2-MIB
+  Delete "$INSTDIR\snmp\mibs\TOKEN-RING-RMON-MIB
   Delete "$INSTDIR\uninst.exe"
   Delete "$INSTDIR\docsis.url"
   Delete "$INSTDIR\cablelabs.url"
-
-
 
   Delete "$DESKTOP\docsis.lnk"
   Delete "$SMPROGRAMS\DOCSIS Configurator\Documentation.lnk"
