@@ -11,23 +11,47 @@ MAINTAINERCLEANFILES = README
 
 version-check:
 # We don't want to release development versions.
-	test x`echo $(PACKAGE_VERSION) | grep dev` = x
+	test x`echo $(VERSION) | grep dev` = x
 
 # For all releases, check the ChangeLogs.
-	head ChangeLog | grep "^version $(PACKAGE_VERSION) (`date +%m/%d/%Y`):$$" >/dev/null
+	head ChangeLog | grep "^version $(VERSION) (`date +%m/%d/%Y`):$$" >/dev/null
 
 # Ensure we're working from a tag...
 	HEAD=`git rev-parse --verify HEAD` && test `git tag -l v$(VERSION) --contains $$HEAD | wc -l` -gt 0
 # ... and have no changes in the working copy.
 	git status | grep -q "working directory clean"
 
+packages:
+	gpg -ab $(PACKAGE)-$(VERSION).tar.gz
+	gpg -ab $(PACKAGE)-$(VERSION).tar.bz2
+	gpg --verify $(PACKAGE)-$(VERSION).tar.gz.asc \
+		$(PACKAGE)-$(VERSION).tar.gz
+	gpg --verify $(PACKAGE)-$(VERSION).tar.bz2.asc \
+		$(PACKAGE)-$(VERSION).tar.bz2
+
 release: version-check distcheck packages
 
-packages:
-	gpg -ab $(PACKAGE)-$(PACKAGE_VERSION).tar.gz
-	gpg -ab $(PACKAGE)-$(PACKAGE_VERSION).tar.bz2
-	gpg --verify $(PACKAGE)-$(PACKAGE_VERSION).tar.gz.asc $(PACKAGE)-$(PACKAGE_VERSION).tar.gz
-	gpg --verify $(PACKAGE)-$(PACKAGE_VERSION).tar.bz2.asc $(PACKAGE)-$(PACKAGE_VERSION).tar.bz2
+ONE=$(shell echo $(PACKAGE) | cut -c1)
+TWO=$(shell echo $(PACKAGE) | cut -c-2)
+FRS=/home/frs/project/$(ONE)/$(TWO)/$(PACKAGE)/$(PACKAGE)/
+upload:
+	if test -e $(PACKAGE)-$(VERSION)/$(PACKAGE)-$(VERSION).tar.bz2.asc ; \
+	then \
+		rsync -e ssh -av $(PACKAGE)-$(VERSION) \
+			$(USER),$(PACKAGE)@frs.sourceforge.net:$(FRS) ; \
+	else \
+		$(MAKE) release && \
+		mkdir $(PACKAGE)-$(VERSION) && \
+		mv $(PACKAGE)-$(VERSION).tar.gz \
+			$(PACKAGE)-$(VERSION) && \
+		mv $(PACKAGE)-$(VERSION).tar.gz.asc \
+			$(PACKAGE)-$(VERSION) && \
+		mv $(PACKAGE)-$(VERSION).tar.bz2 \
+			$(PACKAGE)-$(VERSION) && \
+		mv $(PACKAGE)-$(VERSION).tar.bz2.asc \
+			$(PACKAGE)-$(VERSION) && \
+		$(MAKE) upload ; \
+	fi
 
 if CYGWIN_BUILD
 if CYGWIN_BUILD_SETUP_EXE
