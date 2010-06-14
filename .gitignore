@@ -12,6 +12,7 @@ Makefile.in
 README
 aclocal.m4
 autom4te.cache
+build_setup.nsi
 config.cache
 config.h
 config.h.in
