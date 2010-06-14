@@ -6,6 +6,7 @@ version 0.9.6 (06/14/2010):
 	* Allow @ in OID labels
 	* Update MIBs & add MIBs
 	* Work properly on 64-bit systems (Oliver Hitz, James Flemer)
+	* Various cleanups to the code, documentation, and build setup
 
 0.9.5			- allow semi-colon characters in strings 
 ctrl			- add support for TimeTicks SNMP encoding. 
