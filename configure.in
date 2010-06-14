@@ -1,7 +1,6 @@
-AC_INIT(configure.in)
-
-AM_CONFIG_HEADER(config.h)
-AM_INIT_AUTOMAKE(docsis, 0.9.6)
+AC_INIT([docsis], [0.9.6])
+AC_CONFIG_SRCDIR([src/docsis.c])
+AC_CONFIG_HEADERS([config.h])
 
 AC_LANG_C
 AM_PROG_LIBTOOL
