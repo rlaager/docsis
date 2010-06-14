@@ -17,7 +17,7 @@ version-check:
 	head ChangeLog | grep "^version $(PACKAGE_VERSION) (`date +%m/%d/%Y`):$$" >/dev/null
 
 # Ensure we're working from a tag...
-	HEAD=`git rev-parse --verify HEAD` && test `git tag -l --contains $$HEAD | wc -l` -gt 0
+	HEAD=`git rev-parse --verify HEAD` && test `git tag -l v$(VERSION) --contains $$HEAD | wc -l` -gt 0
 # ... and have no changes in the working copy.
 	git status | grep -q "working directory clean"
 
