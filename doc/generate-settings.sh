@@ -1,7 +1,10 @@
 #!/bin/sh
 
-# This script generates an HTML file which contains an overview of all configuration settings supported by DOCSIS,
-# as defined in ../src/docsis_symtable.h.
+# This script generates an HTML file which contains an overview of all
+# configuration settings supported by DOCSIS, as defined in
+# ../src/docsis_symtable.h.
+
+
 if test $# -ne 2; then
 echo "Usage: $0 <output_file> <package_version>"
 exit 1;
@@ -22,14 +25,13 @@ cat > $1 << EOF
 		<tr bgcolor=#ffffff><td><b>Configuration Setting</b></td><td><b>Type</b></td><td><b>Range of values allowed</b></td></tr>
 EOF
 
-
-grep -e "^{" ../src/docsis_symtable.h\
- | grep -v "*"\
- | grep -v "decode_md5"\
- | awk '{print $5 "_" $3 " " $7 " " $8 " " $9}' \
+grep -e "^{" ../src/docsis_symtable.h \
+	| grep -v "*" \
+	| grep -v "decode_md5" \
+	| awk '{print $5 "_" $3 " " $7 " " $8 " " $9}' \
 	| sed 's/\"//g' \
 	| sed 's/^0,_//g' \
-	| sed 's/^[0-9]*,_/\&nbsp\;\&nbsp\;\&nbsp\;\&nbsp\;/g'\
+	| sed 's/^[0-9]*,_/\&nbsp\;\&nbsp\;\&nbsp\;\&nbsp\;/g' \
 	| sed 's/\decode_//g' \
 	| sed 's/\ //g' | tr -s "\(\)" "%%" \
 	| sed 's/^/<tr\ bgcolor=#ffffff><td><b>/g' \
