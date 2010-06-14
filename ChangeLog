@@ -1,4 +1,4 @@
-version 0.9.6 (06/12/2010):
+version 0.9.6 (06/14/2010):
 	* Fix compiling on systems where -lm is required (Oliver Hitz)
 	* Support newer versions of GNU m4
 	* Avoid padding already aligned files (reported by David Tang)
