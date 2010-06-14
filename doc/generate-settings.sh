@@ -1,4 +1,5 @@
 #!/bin/sh -e
+# vim: ai ts=4 sts=4 et sw=4
 
 # This script generates an HTML file which contains an overview of all
 # configuration settings supported by DOCSIS, as defined in
