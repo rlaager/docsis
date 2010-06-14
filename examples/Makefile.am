@@ -30,7 +30,7 @@ examples_DATA = \
 	$(CONFIGS_IN) \
 	$(CONFIGS_TEXT) \
 	keyfile \
-	readme.txt
+	README.txt
 
 EXTRA_DIST = $(examples_DATA)
 
