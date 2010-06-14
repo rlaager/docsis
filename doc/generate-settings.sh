@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -e
 
 # This script generates an HTML file which contains an overview of all
 # configuration settings supported by DOCSIS, as defined in
