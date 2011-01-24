@@ -219,7 +219,7 @@ create_tlv(struct symbol_entry *sym_ptr, union t_val *value)
   tlvbuf->docs_code = sym_ptr->docsis_code;
   tlvbuf->tlv_len = sym_ptr->encode_func(tlvbuf->tlv_value,value,sym_ptr);
 		if (tlvbuf->tlv_len <= 0 ) {
-			printf ("Got 0-length value while scanning for %s at line %d\n",sym_ptr->sym_ident,line );
+			fprintf(stderr,"Got 0-length value while scanning for %s at line %d\n",sym_ptr->sym_ident,line );
 			exit (-1);
    		}
   return tlvbuf;
@@ -246,7 +246,7 @@ create_snmpset_tlv ( struct symbol_entry *sym_ptr,
 			            tlvbuf->tlv_value,TLV_VSIZE );
 
 		if (tlvbuf->tlv_len <= 0 ) {
-			printf ("got len 0 value while scanning for %s\n at line %d\n",sym_ptr->sym_ident,line );
+			fprintf(stderr,"got len 0 value while scanning for %s\n at line %d\n",sym_ptr->sym_ident,line );
 			exit (-1);
    		}
   free(oid_string);
@@ -278,7 +278,7 @@ create_snmpw_tlv ( struct symbol_entry *sym_ptr,
   tlvbuf->tlv_len = encode_snmp_oid ( oid_string, tlvbuf->tlv_value, TLV_VSIZE );
 
                 if (tlvbuf->tlv_len <= 0 ) {
-                        printf ("got len 0 value while scanning for %s\n at line %d\n",sym_ptr->sym_ident,line );
+                        fprintf(stderr,"got len 0 value while scanning for %s\n at line %d\n",sym_ptr->sym_ident,line );
                         exit (-1);
                 }
   tlvbuf->tlv_value[tlvbuf->tlv_len] = (unsigned char) value->intval ;
@@ -305,12 +305,12 @@ create_generic_tlv ( struct symbol_entry *sym_ptr,
   tlvbuf->tlv_len = encode_hexstr ( tlvbuf->tlv_value, value, sym_ptr );
 
                 if (tlvbuf->tlv_len <= 0 ) {
-                        printf ("got len 0 value while scanning for %s\n at line %d\n",sym_ptr->sym_ident,
+                        fprintf(stderr,"got len 0 value while scanning for %s\n at line %d\n",sym_ptr->sym_ident,
 line );
                         exit (-1);
                 }
                 if (tlvbuf->tlv_len != tlv_length ) {
-                        printf ("Length mismatch while encoding GenericTLV: given length %d, value length %d at line %d\n", tlvbuf->tlv_len, tlv_length, line );
+                        fprintf(stderr,"Length mismatch while encoding GenericTLV: given length %d, value length %d at line %d\n", tlvbuf->tlv_len, tlv_length, line );
 
                         exit (-1);
 		}
@@ -334,12 +334,12 @@ create_generic_str_tlv ( struct symbol_entry *sym_ptr,
   tlvbuf->tlv_len = encode_string ( tlvbuf->tlv_value, value, sym_ptr );
 
                 if (tlvbuf->tlv_len <= 0 ) {
-                        printf ("got len 0 value while scanning for %s\n at line %d\n",sym_ptr->sym_ident,
+                        fprintf(stderr,"got len 0 value while scanning for %s\n at line %d\n",sym_ptr->sym_ident,
 line );
                         exit (-1);
                 }
                 if (tlvbuf->tlv_len > 255 ) {
-                        printf ("Warning: string length %d longer than 255, line %d\n",tlvbuf->tlv_len, line );
+                        fprintf(stderr,"Warning: string length %d longer than 255, line %d\n",tlvbuf->tlv_len, line );
 
                 }
   /* don't free strings - we use a static buffer to parse them */
@@ -363,12 +363,12 @@ create_generic_strzero_tlv ( struct symbol_entry *sym_ptr,
   tlvbuf->tlv_len = encode_string ( tlvbuf->tlv_value, value, sym_ptr );
 
                 if (tlvbuf->tlv_len <= 0 ) {
-                        printf ("got 0-length value while scanning for %s\n at line %d\n",sym_ptr->sym_ident,
+                        fprintf(stderr,"got 0-length value while scanning for %s\n at line %d\n",sym_ptr->sym_ident,
 line );
                         exit (-1);
                 }
                 if (tlvbuf->tlv_len > 254 ) {
-                        printf ("Warning: total string length %d longer than 255, line %d\n",tlvbuf->tlv_len, line );
+                        fprintf(stderr,"Warning: total string length %d longer than 255, line %d\n",tlvbuf->tlv_len, line );
 
                 } else {
 			tlvbuf->tlv_len = tlvbuf->tlv_len + 1; /* add terminating 0 */
@@ -392,7 +392,7 @@ create_external_file_tlv ( struct symbol_entry *sym_ptr,
   FILE *ext_file;
 
   if ((ext_file = fopen (value->strval, "rb")) == NULL) {
-  	printf ("Error: can't open external file %s at line %d\n", value->strval, line);
+  	fprintf(stderr,"Error: can't open external file %s at line %d\n", value->strval, line);
 	exit (-5);
   }
 
@@ -429,7 +429,7 @@ struct tlv *add_tlv_sibling (struct tlv *tlv, struct tlv *newtlv)
   struct tlv *tlvptr, *last_sibling;
 
   if (newtlv == NULL ) {
-	printf("Error: add_tlv_sibling called with NULL tlv sibling ! \n " ) ;
+	fprintf(stderr,"Error: add_tlv_sibling called with NULL tlv sibling ! \n " ) ;
 	exit(-23);
   }
 
@@ -454,7 +454,7 @@ merge_tlvlist(struct tlv *tlv1, struct tlv *tlv2)
 {
   struct tlv *tlvptr, *last_sibling;
   if ( tlv2 == NULL ) {
-	printf ("merge_tlvlist called with NULL tlv2 !\n");
+	fprintf(stderr,"merge_tlvlist called with NULL tlv2 !\n");
 	exit(-2);
   }
 
@@ -507,7 +507,7 @@ unsigned int flatten_tlvsubtree ( unsigned char *buf, unsigned int used_size, st
   register unsigned char *cp;
 
   if ( buf == NULL ) {
-	printf( "Error: can't flatten tlvlist in a NULL destination  buffer!\n" );
+	fprintf(stderr, "Error: can't flatten tlvlist in a NULL destination  buffer!\n" );
 	exit (-2);
   }
 
@@ -518,7 +518,7 @@ unsigned int flatten_tlvsubtree ( unsigned char *buf, unsigned int used_size, st
 		/* we don't know the size yet, so we delay writing type & length */
 		rsize = flatten_tlvsubtree(buf, (cp-buf)+2, tlvptr->first_child);
 		if (rsize > 255) {
-			printf("Warning: at line %d: aggregate size of settings block larger than 255, skipping\n", line);
+			fprintf(stderr,"Warning: at line %d: aggregate size of settings block larger than 255, skipping\n", line);
 			continue;
 		}
 		*cp = (unsigned char) tlvptr->docs_code; cp++;
@@ -541,7 +541,7 @@ unsigned int flatten_tlvsubtree ( unsigned char *buf, unsigned int used_size, st
        				memcpy ( cp, tlvptr->tlv_value, tlvptr->tlv_len );
              			cp = cp + tlvptr->tlv_len;
 			} else {
-				printf("Warning at line %d: Non-SnmpMibObject TLV larger than 255... skipping.\n", line);
+				fprintf(stderr,"Warning at line %d: Non-SnmpMibObject TLV larger than 255... skipping.\n", line);
 				continue;
 			}
 		}
@@ -573,9 +573,12 @@ int parse_config_file ( char *file, struct tlv **parse_tree_result )
   FILE *cf;
   int rval;
 
-  if ( (cf = fopen ( file, "r" ))== NULL )
+  if (file==NULL) {
+    cf = stdin;
+  }
+  else if ( (cf = fopen ( file, "r" ))== NULL )
   {
-	printf ("%s: Can't open input file %s\n", prog_name, file );
+	fprintf(stderr,"%s: Can't open input file %s\n", prog_name, file );
 	return -1;
   }
 
