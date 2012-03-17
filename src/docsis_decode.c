@@ -54,44 +54,44 @@ void decode_uint (unsigned char *tlvbuf, struct symbol_entry *sym, size_t length
 {
   static unsigned int helper;
   if (length != sizeof(unsigned int) ) {
-	printf("u_int length mismatch!\n");
+	fprintf(stderr, "u_int length mismatch!\n");
 	exit(-45);
   }
   memset( &helper, 0, sizeof(unsigned int));
   memcpy( &helper, tlvbuf, length);
 
-  printf ( "%s %u;\n", sym->sym_ident, ntohl(helper));
+  fprintf(stderr, "%s %u;\n", sym->sym_ident, ntohl(helper));
 }
 
 void decode_ushort (unsigned char *tlvbuf, symbol_type *sym, size_t length)
 {
   static unsigned short helper;
   if (length != sizeof(unsigned short) ) {
-        printf("u_short length mismatch!\n");
+        fprintf(stderr, "u_short length mismatch!\n");
         exit(-45);
   }
 
   memset( &helper, 0, length);
   memcpy( &helper, tlvbuf, length );
 
-  printf ( "%s %hu;\n", sym->sym_ident, ntohs(helper));
+  fprintf(stderr, "%s %hu;\n", sym->sym_ident, ntohs(helper));
 }
 
 void decode_uchar (unsigned char *tlvbuf, symbol_type *sym, size_t length )
 {
-  printf ( "%s %hhu;\n", sym->sym_ident, (unsigned char) *tlvbuf );
+  fprintf(stderr, "%s %hhu;\n", sym->sym_ident, (unsigned char) *tlvbuf );
 }
 
 void decode_ip (unsigned char *tlvbuf, symbol_type *sym, size_t length )
 {
   static struct in_addr helper;
   if (length != sizeof(struct in_addr) ) {
-        printf("ip address length mismatch!\n");
+        fprintf(stderr, "ip address length mismatch!\n");
         exit(-45);
   }
 
   memcpy (&helper, tlvbuf, length );
-  printf ( "%s %s;\n",
+  fprintf(stderr, "%s %s;\n",
 	sym->sym_ident, inet_ntoa(helper) );
 }
 
@@ -100,12 +100,12 @@ void decode_ip6 (unsigned char *tlvbuf, symbol_type *sym, size_t length )
   static struct in6_addr helper;
   char ipstr[INET6_ADDRSTRLEN];
   if (length != sizeof(struct in6_addr) ) {
-        printf("ip address length mismatch!\n");
+        fprintf(stderr, "ip address length mismatch!\n");
         exit(-45);
   }
 
   memcpy (&helper, tlvbuf, length );
-  printf ( "%s %s;\n",
+  fprintf (stderr, "%s %s;\n",
 	sym->sym_ident, inet_ntop(AF_INET6,tlvbuf,ipstr,sizeof ipstr) );
 }
 
@@ -113,10 +113,10 @@ void decode_ether (unsigned char *tlvbuf, symbol_type *sym, size_t length )
 {
 
  if (length != 6 ) {
-        printf("ethermac length mismatch!\n");
+        fprintf(stderr, "ethermac length mismatch!\n");
         exit(-45);
  }
- printf ( "%s %s;\n",
+ fprintf(stderr, "%s %s;\n",
 	sym->sym_ident, ether_ntoa(tlvbuf) );
 }
 
@@ -127,51 +127,51 @@ void decode_ethermask (unsigned char *tlvbuf, symbol_type *sym, size_t length)
  * "passees" to avoid the 2nd call overwriting the 1st.
  */
   if (length != 12 ) {
-        printf("ethermac_and_mask length mismatch!\n");
+        fprintf(stderr, "ethermac_and_mask length mismatch!\n");
         exit(-45);
   }
-  printf ( "%s %s/", sym->sym_ident, ether_ntoa(tlvbuf));
+  fprintf(stderr, "%s %s/", sym->sym_ident, ether_ntoa(tlvbuf));
 
-  printf( "%s;\n", ether_ntoa(tlvbuf+6));
+  fprintf(stderr, "%s;\n", ether_ntoa(tlvbuf+6));
 }
 
 void decode_md5 (unsigned char *tlvbuf, symbol_type *sym, size_t length)
 {
   size_t j=0;
   if (length != 16 ) {
-        printf("md5digest length mismatch!\n");
+        fprintf(stderr, "md5digest length mismatch!\n");
         exit(-45);
   }
 
-  printf ("/* %s ", sym->sym_ident);
-  for (j=0;j<length;j++)	printf ("%02x", tlvbuf[j]);
+  fprintf(stderr, "/* %s ", sym->sym_ident);
+  for (j=0;j<length;j++)	fprintf(stderr, "%02x", tlvbuf[j]);
 
-  printf("; */\n");
+  fprintf(stderr, "; */\n");
 }
 
 void decode_snmp_wd (unsigned char *tlvbuf, symbol_type *sym, size_t length )
 {
-  printf ( "%s ", sym->sym_ident);
+  fprintf(stderr, "%s ", sym->sym_ident);
 
   /* last char in this TLV is not part of OID */
   decode_snmp_oid (tlvbuf, (unsigned int) length-1 );
 
-  printf(" %d ;\n", (unsigned int) tlvbuf[length-1] );
+  fprintf(stderr, " %d ;\n", (unsigned int) tlvbuf[length-1] );
 }
 
 void decode_oid (unsigned char *tlvbuf, symbol_type *sym, size_t length )
 {
-  printf ( "%s ", sym->sym_ident);
+  fprintf(stderr, "%s ", sym->sym_ident);
   decode_snmp_oid (tlvbuf,(unsigned int) length );
-  printf(";\n");
+  fprintf(stderr, ";\n");
 }
 
 void decode_snmp_object (unsigned char *tlvbuf, symbol_type *sym, size_t length )
 {
-  printf ( "%s ", sym->sym_ident);
+  fprintf(stderr, "%s ", sym->sym_ident);
   decode_vbind (tlvbuf, length );
 /*  22-06-03  decode_vbind prints the trailing ';' as well  */
-  printf("\n");
+  fprintf(stderr, "\n");
 }
 
 void decode_string (unsigned char *tlvbuf, symbol_type *sym, size_t length )
@@ -181,7 +181,7 @@ void decode_string (unsigned char *tlvbuf, symbol_type *sym, size_t length )
 /* helper = (char *) malloc ( ((unsigned int) tlvbuf[1])+1 );  */
  memset ( helper, 0, length+1);
  strncpy ( helper, (char *) tlvbuf, length );
- printf ( "%s \"%s\";\n", sym->sym_ident, helper );
+ fprintf(stderr, "%s \"%s\";\n", sym->sym_ident, helper );
 }
 
 void decode_strzero (unsigned char *tlvbuf, symbol_type *sym, size_t length )
@@ -191,7 +191,7 @@ void decode_strzero (unsigned char *tlvbuf, symbol_type *sym, size_t length )
  helper = (char *) malloc ( length +1 );
  memset ( helper, 0, length+1);
  strncpy ( helper, (char *) tlvbuf, length );
- printf ( "%s \"%s\";\n", sym->sym_ident, helper );
+ fprintf(stderr, "%s \"%s\";\n", sym->sym_ident, helper );
  free(helper);
 }
 
@@ -207,11 +207,11 @@ void decode_hexstr (unsigned char *tlvbuf, symbol_type *sym, size_t length )
  helper = (char *) malloc ( len+1 );
  memset ( helper, 0, len+1);
  memcpy ( helper, (char *) tlvbuf, len );
- printf ( "%s 0x", sym->sym_ident);
+ fprintf(stderr, "%s 0x", sym->sym_ident);
  for(i=0; i<len; i++) {
-	printf("%02x", (unsigned char) helper[i]);
+	fprintf(stderr, "%02x", (unsigned char) helper[i]);
  }
- printf(";\n");
+ fprintf(stderr, ";\n");
  free(helper);
 }
 
@@ -225,15 +225,15 @@ void decode_ushort_list (unsigned char *tlvbuf, symbol_type *sym, size_t length)
  helper = (char *) malloc ( len+1 );
  memset ( helper, 0, len+1);
  memcpy ( helper, (char *) tlvbuf, len );
- printf ( "%s ", sym->sym_ident);
+ fprintf(stderr, "%s ", sym->sym_ident);
  if ( len < 2*sym->low_limit || len > 2*sym->high_limit )
-	printf( "/* -- warning: illegal length of buffer --*/");
+	fprintf(stderr, "/* -- warning: illegal length of buffer --*/");
 
  for(i=0; i<len; i=i+2) {
-        printf("%hu", ntohs( (* (unsigned short *) &helper[i])) );
-	if (i< len-2) printf (",");
+        fprintf(stderr, "%hu", ntohs( (* (unsigned short *) &helper[i])) );
+	if (i< len-2) fprintf(stderr, ",");
  }
- printf(";\n");
+ fprintf(stderr, ";\n");
  free(helper);
 }
 
@@ -245,7 +245,7 @@ void decode_unknown (unsigned char *tlvbuf, symbol_type *sym, size_t length )
 
   len = length ;
   if (len > 256 ) {
-	printf("/* ** next TLV is truncated** */"); len = 256;
+	fprintf(stderr, "/* ** next TLV is truncated** */"); len = 256;
   }
   memset (hexvalue, 0, 514);
 
@@ -256,27 +256,27 @@ void decode_unknown (unsigned char *tlvbuf, symbol_type *sym, size_t length )
   cp = value;
   if ( str_isprint(cp, len) && len > 1 ) {
 
-  	printf ("GenericTLV TlvCode %d TlvString ",
+	fprintf(stderr, "GenericTLV TlvCode %d TlvString ",
 			(unsigned int) tlvbuf[0]) ;
-	printf ("\"%s\"; /* tlv length = %zd */", cp, len);
+	fprintf(stderr, "\"%s\"; /* tlv length = %zd */", cp, len);
   } else if ( len > 1 && cp[len-1] == 0 && str_isprint(cp, len-1 ) ) {
-	printf("GenericTLV TlvCode %d TlvStringZero ",
+	fprintf(stderr, "GenericTLV TlvCode %d TlvStringZero ",
                         (unsigned int) tlvbuf[0] ) ;
-	printf ("\"%s\"; /* tlv length = %zd */", cp, len);
+	fprintf(stderr, "\"%s\"; /* tlv length = %zd */", cp, len);
   } else {
-	printf ("GenericTLV TlvCode %d TlvLength %zd TlvValue ",
+	fprintf(stderr, "GenericTLV TlvCode %d TlvLength %zd TlvValue ",
 			(unsigned int) tlvbuf[0], len) ;
   	snprint_hexadecimal ( hexvalue, 514, value, len);
 
-  	printf("%s;", hexvalue);
+	fprintf(stderr, "%s;", hexvalue);
   }
-  printf("\n");
+  fprintf(stderr, "\n");
   free(value);
 }
 
 void decode_special (unsigned char *tlvbuf, symbol_type *sym, size_t length )
 {
-  printf ( "%s\n", sym->sym_ident);
+  fprintf(stderr, "%s\n", sym->sym_ident);
 }
 
 void decode_aggregate (unsigned char *tlvbuf, symbol_type *sym, size_t length )
@@ -289,9 +289,9 @@ void decode_aggregate (unsigned char *tlvbuf, symbol_type *sym, size_t length )
   /* cp = tlvbuf+1+tlv_llen; */ /* skip type,len of parent TLV */
   cp = tlvbuf;
 
-  printf( "%s\n", sym->sym_ident);
+  fprintf(stderr, "%s\n", sym->sym_ident);
   __docsis_indent(INDENT_NOOP, TRUE);
-  printf( "{\n");
+  fprintf(stderr, "{\n");
 
   __docsis_indent(INDENT_INCREMENT, FALSE);
 
@@ -312,7 +312,7 @@ void decode_aggregate (unsigned char *tlvbuf, symbol_type *sym, size_t length )
   __docsis_indent(INDENT_DECREMENT, FALSE);
 
   __docsis_indent(INDENT_NOOP, TRUE);
-  printf("}\n");
+  fprintf(stderr, "}\n");
 }
 
 /*
@@ -330,9 +330,9 @@ void decode_vspecific (unsigned char *tlvbuf, symbol_type *sym, size_t length )
   /*  cp = tlvbuf+1+tlv_llen; */ /* skip type,len of parent TLV */
   cp = tlvbuf;
 
-  printf( "%s\n", sym->sym_ident);
+  fprintf(stderr, "%s\n", sym->sym_ident);
   __docsis_indent(INDENT_NOOP, TRUE);
-  printf( "{\n");
+  fprintf(stderr, "{\n");
 
   __docsis_indent(INDENT_INCREMENT, FALSE);
 
@@ -342,7 +342,7 @@ void decode_vspecific (unsigned char *tlvbuf, symbol_type *sym, size_t length )
   tlv_vlen = (size_t) cp[1];
   if (first_symbol == NULL) {
   		__docsis_indent(INDENT_NOOP, TRUE);
-		printf ("/* WARNING: Invalid VendorSpecific option - 1st element is NOT VendorIdentifier */\n");
+		fprintf(stderr, "/* WARNING: Invalid VendorSpecific option - 1st element is NOT VendorIdentifier */\n");
   		__docsis_indent(INDENT_NOOP, TRUE);
                 decode_unknown(cp, NULL, tlv_vlen);
         } else {
@@ -355,7 +355,7 @@ void decode_vspecific (unsigned char *tlvbuf, symbol_type *sym, size_t length )
 		else
 		{
   			__docsis_indent(INDENT_NOOP, TRUE);
-			printf ("/* Invalid VendorSpecific option - 1st element is NOT VendorIdentifier */");
+			fprintf(stderr, "/* Invalid VendorSpecific option - 1st element is NOT VendorIdentifier */");
   			__docsis_indent(INDENT_NOOP, TRUE);
 			decode_unknown(cp, NULL, tlv_vlen );
 		}
@@ -375,7 +375,7 @@ void decode_vspecific (unsigned char *tlvbuf, symbol_type *sym, size_t length )
   __docsis_indent(INDENT_DECREMENT, FALSE);
 
   __docsis_indent(INDENT_NOOP, TRUE);
-  printf("}\n");
+  fprintf(stderr, "}\n");
 }
 
 /*
@@ -400,7 +400,7 @@ void decode_main_aggregate (unsigned char *tlvbuf, size_t buflen)
 
   __docsis_indent(INDENT_CLEAR, FALSE);
 
-  printf( "Main \n{\n");
+  fprintf(stderr, "Main \n{\n");
   __docsis_indent(INDENT_INCREMENT, FALSE);
 
   while ( (unsigned int) (cp - tlvbuf) < buflen ) {
@@ -422,12 +422,12 @@ void decode_main_aggregate (unsigned char *tlvbuf, size_t buflen)
   	}
 #ifdef DEBUG
 	if (cp[0] == 64 )   /* TLV 64 has length encoded as a short */
-	   printf ("/* TLV 64, size %hu */ \n", ntohs(*((unsigned short *)(cp+1))) );
+	   fprintf(stderr, "/* TLV 64, size %hu */ \n", ntohs(*((unsigned short *)(cp+1))) );
 #endif
     cp = (unsigned char*) cp + 1 + tlv_llen + tlv_vlen ; /* type, length, value   */
   }
   __docsis_indent(INDENT_DECREMENT, FALSE);
-  printf("}\n");
+  fprintf(stderr, "}\n");
 }
 
 int
@@ -435,7 +435,7 @@ hexadecimal_to_binary (const char *str, unsigned char * bufp)
 {
   int len, itmp;
 #ifdef DEBUG
-  printf ("Hex string rx'd: %s\n", str);
+  fprintf(stderr, "Hex string rx'd: %s\n", str);
 #endif
   if (!bufp)
     return -1;
@@ -532,7 +532,7 @@ void __docsis_indent(int opCode, int doPrint )
 
 	if ( doPrint )
 	{
-		for (i=0; i<numtabs; i++) printf ("\t");
+		for (i=0; i<numtabs; i++) fprintf(stderr, "\t");
 	}
 }
 

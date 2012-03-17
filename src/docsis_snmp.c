@@ -87,7 +87,7 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
 		  if (!get_wild_node (oid_string, var_name, &name_len))
 		    {
 		      /* Ran out of ideas. */
-		      printf ("/* Error: Can't find oid %s at line %d */\n",
+		      fprintf(stderr, "/* Error: Can't find oid %s at line %d */\n",
 			      oid_string, line);
 		      snmp_perror ("encode_vbind");
 		      return 0;
@@ -177,7 +177,7 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
 	{
 	  if ((rv = hexadecimal_to_binary (value->strval, buf)) == -1)
 	    {
-	      printf ("Invalid hexadecimal string at line %d\n", line);
+	      fprintf(stderr, "Invalid hexadecimal string at line %d\n", line);
 	      return 0;
 	    }
 	  ltmp = (unsigned int) rv;
@@ -186,7 +186,7 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
 
       if (len < 0 || len > SPRINT_MAX_LEN - 1)
 	{
-	  printf ("String too long at line %d, max allowed %d\n", line,
+	  fprintf(stderr, "String too long at line %d, max allowed %d\n", line,
 		  SPRINT_MAX_LEN);
 	  return 0;
 	  break;
@@ -205,7 +205,7 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
 	    }
 	  if (!rp)
 	    {
-	      printf ("Value too long at line %d\n", line);
+	      fprintf(stderr, "Value too long at line %d\n", line);
 	      return 0;
 	      break;
 	    }
@@ -235,7 +235,7 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
     case 'a':
       if (!inet_aton (value->strval, (struct in_addr *) &ltmp))
 	{
-	  printf ("Invalid IP address %s at line %d\n", value->strval, line);
+	  fprintf(stderr, "Invalid IP address %s at line %d\n", value->strval, line);
 	  return 0;
 	}
       data_ptr = _docsis_snmp_build_var_op (out_buffer,
@@ -254,7 +254,7 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
 
 	if (!read_objid ((char *) buf, oid_value, &oid_value_len))
 	  {
-		printf ("Can't find oid %s at line %d\n", buf, line);
+		fprintf(stderr, "Can't find oid %s at line %d\n", buf, line);
 		return 0;
     	  }
 
@@ -269,7 +269,7 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
 	;;
 
     default:
-      printf ("Variable type %s not supported yet\n", &oid_asntype);
+      fprintf(stderr, "Variable type %s not supported yet\n", &oid_asntype);
       return 0;
       ;;
     }
@@ -362,7 +362,7 @@ decode_vbind (unsigned char *data, unsigned int vb_len)
 	}
     }
 
-  printf ("%s", outbuf);
+  fprintf(stderr, "%s", outbuf);
 
 /* save the subtree - we need it later to show enums */
   subtree = get_tree (var_name, name_len, get_tree_head() );
@@ -535,7 +535,7 @@ decode_vbind (unsigned char *data, unsigned int vb_len)
 			   vp->val.bitstring, &vp->val_len);
       break;
     default:
-      printf ("Error: bad type returned (%x)\n", vp->type);
+      fprintf(stderr, "Error: bad type returned (%x)\n", vp->type);
       badtype = 1;
       break;
     }
@@ -609,9 +609,9 @@ decode_vbind (unsigned char *data, unsigned int vb_len)
 		}
     }
   if (enum_string)
-	printf (" %s %s; /* %s */", _docsis_snmp_label, outbuf, enum_string);
+	fprintf(stderr, " %s %s; /* %s */", _docsis_snmp_label, outbuf, enum_string);
   else
-	printf (" %s %s ;", _docsis_snmp_label, outbuf);
+	fprintf(stderr, " %s %s ;", _docsis_snmp_label, outbuf);
 
 
   snmp_free_var (vp);
@@ -631,7 +631,7 @@ encode_snmp_oid (char *oid_string, unsigned char *out_buffer,
     {
       if (!get_node (oid_string, var_name, &name_len))
 	{
-	  printf ("Can't find oid %s at line %d\n", oid_string, line);
+	  fprintf(stderr, "Can't find oid %s at line %d\n", oid_string, line);
 	  return 0;
 	}
 
@@ -661,7 +661,7 @@ decode_snmp_oid (unsigned char *data, size_t data_len)
   if ((retval =
        asn_parse_objid (data, &len, &type, this_oid, &oid_len)) == NULL)
     {
-      printf ("OID.parse.error");
+      fprintf(stderr, "OID.parse.error");
       return 0;
     }
   else
@@ -671,8 +671,8 @@ decode_snmp_oid (unsigned char *data, size_t data_len)
 			  NETSNMP_OID_OUTPUT_NUMERIC);
       snprint_objid (outbuf, 1023, this_oid, oid_len);
     }
-/*  printf ("%s %d", outbuf, (int) data[data_len - 1]); */
-  printf ("%s", outbuf);
+/*  fprintf(stderr, "%s %d", outbuf, (int) data[data_len - 1]); */
+  fprintf(stderr, "%s", outbuf);
   return 1;
 }
 
@@ -835,18 +835,18 @@ _docsis_asn_build_sequence(u_char * data,
                    size_t * datalength, u_char type, size_t length)
 {
     if (length > 0x7f)  {
-	printf("Warning: string too long, may result in illegal encoding\n");
+	fprintf(stderr, "Warning: string too long, may result in illegal encoding\n");
     }
 
     if (*datalength <2) {
-        printf(  "SNMP encoding error (build sequence): length %d < 2: PUNT",
+        fprintf(stderr,  "SNMP encoding error (build sequence): length %d < 2: PUNT",
                 (int) *datalength);
         return NULL;
     }
     *datalength -= 2;
     *data++ = type;
      if (*datalength >255) {
-        printf(  "SNMP encoding error (_docsis_build sequence): length %d >255 : PUNT",
+        fprintf(stderr,  "SNMP encoding error (_docsis_build sequence): length %d >255 : PUNT",
                 (int) *datalength);
         return NULL;
     }

@@ -43,7 +43,7 @@ p = strchr ( ptr, (int) ':' );
 
   while (p && i<5) {
 	if ( p-ptr > 2 || p == NULL ) {
-	    printf ("\nInvalid MAC Address %s\n", macstr);
+	    fprintf(stderr, "\nInvalid MAC Address %s\n", macstr);
 	    return 0;
  	}
 
@@ -51,11 +51,11 @@ p = strchr ( ptr, (int) ':' );
 	memcpy ( fragptr, ptr, (size_t)(p-ptr) );
 
 	if ( (rval= sscanf ( fragptr, "%x", &fragval)) == 0 ) {
-		printf("\nInvalid MAC Address %s\n", macstr );
+		fprintf(stderr, "\nInvalid MAC Address %s\n", macstr );
 		return 0;
 	}
         if ( (unsigned int) fragval > 255 ) {
-		printf("\nInvalid MAC Address %s\n", macstr );
+		fprintf(stderr, "\nInvalid MAC Address %s\n", macstr );
 		return 0;
 	}
 
@@ -66,7 +66,7 @@ p = strchr ( ptr, (int) ':' );
   }
 
   if ( i != 5 || strlen(ptr) > 2 ) {
-    printf ("Invalid MAC Address %s\n", macstr);
+    fprintf(stderr, "Invalid MAC Address %s\n", macstr);
     return 0;
   }
 
@@ -74,11 +74,11 @@ p = strchr ( ptr, (int) ':' );
   memcpy ( fragptr, ptr, strlen(ptr) );
 
   if ( (rval=sscanf ( fragptr, "%x", &fragval)) == 0 ) {
-	printf("\nInvalid MAC Address %s\n", macstr );
+	fprintf(stderr, "\nInvalid MAC Address %s\n", macstr );
 	return 0;
   }
   if ( (unsigned int) fragval > 255 ) {
-	printf("\nInvalid MAC Address %s\n", macstr );
+	fprintf(stderr, "\nInvalid MAC Address %s\n", macstr );
 	return 0;
   }
   themac[i] = (unsigned char) fragval;

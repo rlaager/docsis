@@ -114,7 +114,7 @@ add_cmts_mic (unsigned char *tlvbuf, unsigned int tlvbuflen,
 	  else
 	    {
 	      if ( cp[0] == 64 ) {
-		printf("docsis: warning: TLV64 (length > 255) not allowed in DOCSIS config files\n");
+		fprintf(stderr, "docsis: warning: TLV64 (length > 255) not allowed in DOCSIS config files\n");
 		cp = cp + (size_t) ntohs(*((unsigned short *)(cp+1))) + 3;
 	      } else {
 	      	cp = cp + cp[1] + 2;
@@ -122,9 +122,9 @@ add_cmts_mic (unsigned char *tlvbuf, unsigned int tlvbuflen,
 	    }
 	}
     }
-  printf ("##### Calculating CMTS MIC using TLVs:\n");
+  fprintf (stderr, "##### Calculating CMTS MIC using TLVs:\n");
   decode_main_aggregate (cmts_tlvs, dp - cmts_tlvs);
-  printf ("##### End of CMTS MIC TLVs\n");
+  fprintf (stderr, "##### End of CMTS MIC TLVs\n");
   hmac_md5 (cmts_tlvs, dp - cmts_tlvs, key, keylen, digest);
   md5_print_digest (digest);
   tlvbuf[tlvbuflen] = 7;	/* CMTS MIC */
@@ -141,26 +141,18 @@ static void usage () __attribute__((__noreturn__));
 static void
 usage ()
 {
-  printf ("DOCSIS Configuration File creator, version %s\n", VERSION);
-  printf
-    ("Copyright (c) 1999,2000,2001 Cornel Ciocirlan, ctrl@users.sourceforge.net\n");
-  printf
-    ("Copyright (c) 2002,2003,2004,2005 Evvolve Media SRL, docsis@evvolve.com \n\n");
+  fprintf(stderr, "DOCSIS Configuration File creator, version %s\n", VERSION);
+  fprintf(stderr, "Copyright (c) 1999,2000,2001 Cornel Ciocirlan, ctrl@users.sourceforge.net\n");
+  fprintf(stderr, "Copyright (c) 2002,2003,2004,2005 Evvolve Media SRL, docsis@evvolve.com \n\n");
 
-  printf
-    ("To encode a cable modem configuration file: \n\t docsis -e <modem_cfg_file> <key_file> <output_file>\n");
-  printf
-    ("To encode multiple cable modem configuration files: \n\t docsis -m <modem_cfg_file1> ...  <key_file> <new_extension>\n");
-  printf
-    ("To encode a MTA configuration file: \n\t docsis -p <mta_cfg_file> <output_file>\n");
-  printf
-    ("To encode multiple MTA configuration files: \n\t docsis -m -p <mta_file1> ...  <new_extension>\n");
-  printf ("To decode a CM or MTA config file: \n\t docsis -d <binary_file>\n");
-  printf
-    ("\nWhere:\n<cfg_file>\t\t= name of text (human readable) cable modem or MTA \n\t\t\t  configuration file\n<key_file>\t\t= text file containing the authentication key \n\t\t\t  (shared secret) to be used for the CMTS MIC\n<output_file> \t\t= name of output file where the binary data will\n\t\t\t  be written to (if it does not exist it is created).\n<binary_file>\t\t= name of binary file to be decoded\n<new_extension>\t\t= new extension to be used when encoding multiple files\n");
-  printf ("\nSee examples/*.cfg for configuration file format.\n");
-  printf
-    ("\nPlease send bugs or questions to docsis-users@lists.sourceforge.net\n\n");
+  fprintf(stderr, "To encode a cable modem configuration file: \n\t docsis -e <modem_cfg_file> <key_file> <output_file>\n");
+  fprintf(stderr, "To encode multiple cable modem configuration files: \n\t docsis -m <modem_cfg_file1> ...  <key_file> <new_extension>\n");
+  fprintf(stderr, "To encode a MTA configuration file: \n\t docsis -p <mta_cfg_file> <output_file>\n");
+  fprintf(stderr, "To encode multiple MTA configuration files: \n\t docsis -m -p <mta_file1> ...  <new_extension>\n");
+  fprintf(stderr, "To decode a CM or MTA config file: \n\t docsis -d <binary_file>\n");
+  fprintf(stderr, "\nWhere:\n<cfg_file>\t\t= name of text (human readable) cable modem or MTA \n\t\t\t  configuration file\n<key_file>\t\t= text file containing the authentication key \n\t\t\t  (shared secret) to be used for the CMTS MIC\n<output_file> \t\t= name of output file where the binary data will\n\t\t\t  be written to (if it does not exist it is created).\n<binary_file>\t\t= name of binary file to be decoded\n<new_extension>\t\t= new extension to be used when encoding multiple files\n");
+  fprintf(stderr, "\nSee examples/*.cfg for configuration file format.\n");
+  fprintf(stderr, "\nPlease send bugs or questions to docsis-users@lists.sourceforge.net\n\n");
   exit (-10);
 }
 
@@ -225,7 +217,7 @@ main (int argc, char *argv[])
     {
       if ((kf = fopen (key_file, "r")) == NULL)
 	{
-	  printf ("docsis: error: can't open keyfile %s\n", key_file);
+	  fprintf (stderr, "docsis: error: can't open keyfile %s\n", key_file);
 	  exit (-5);
 	}
       keylen = fread (key, sizeof (unsigned char), 64, kf);
@@ -249,12 +241,11 @@ main (int argc, char *argv[])
 		/* encode argv[argc-3] to argv[2] */
 		for (i=2; i<argc-2; i++)  {
 			if ( (output_file = get_output_name (argv[i], extension_string)) == NULL ) {
-				printf("Cannot process input file %s, extension too short ?\n",argv[i] );
+				fprintf(stderr, "Cannot process input file %s, extension too short ?\n",argv[i] );
 				continue;
 			}
 
-			printf ("Processing input file %s: output to  %s\n",argv[i], output_file);
-/*			fprintf (stderr,"Processing input file %s: output to  %s\n",argv[i], output_file);  */
+			fprintf(stderr, "Processing input file %s: output to  %s\n",argv[i], output_file);
 			if (encode_one_file (argv[i], output_file, key, keylen, encode_docsis)) {
 				exit(2);
 			}
@@ -265,10 +256,10 @@ main (int argc, char *argv[])
 		/* encode argv[argc-2] to argv[3] */
 		for (i=3; i<argc-1; i++)  {
 			if ( (output_file = get_output_name (argv[i], extension_string)) == NULL ) {
-				printf("Cannot process input file %s, extension too short ?\n",argv[i] );
+				fprintf(stderr, "Cannot process input file %s, extension too short ?\n",argv[i] );
 				continue;
 			}
-			printf ("Processing input file %s: output to  %s\n",argv[i], output_file);
+			fprintf (stderr, "Processing input file %s: output to  %s\n",argv[i], output_file);
 			if (encode_one_file (argv[i], output_file, key, keylen, encode_docsis)) {
 				exit(2);
 			}
@@ -297,7 +288,7 @@ int encode_one_file ( char *input_file, char *output_file,
 
   if (!strcmp (input_file, output_file))
   {
-	printf ("docsis: Error: source file is the same as destination file\n");
+	fprintf(stderr, "docsis: Error: source file is the same as destination file\n");
 	return -1;
   }
 
@@ -305,13 +296,13 @@ int encode_one_file ( char *input_file, char *output_file,
 
   if (parse_result || global_tlvtree_head == NULL)
     {
-      printf ("Error parsing config file %s\n", input_file);
+      fprintf(stderr, "Error parsing config file %s\n", input_file);
       return -1;
     }
 /* Check whether we're encoding PacketCable */
 
   if (global_tlvtree_head->docs_code == 254) {
-	printf("First TLV is MtaConfigDelimiter, forcing PacketCable MTA file.\n");
+	fprintf(stderr, "First TLV is MtaConfigDelimiter, forcing PacketCable MTA file.\n");
 	encode_docsis=0;
   }
 
@@ -323,7 +314,7 @@ int encode_one_file ( char *input_file, char *output_file,
 
 
 #ifdef DEBUG
-  printf ("TLVs found in parsed config file:\n");
+  fprintf(stderr, "TLVs found in parsed config file:\n");
   decode_main_aggregate (buffer, buflen);
 #endif
 
@@ -335,12 +326,12 @@ int encode_one_file ( char *input_file, char *output_file,
       buflen = add_eod_and_pad (buffer, buflen);
     }
 
-  printf ("Final content of config file:\n");
+  fprintf (stderr, "Final content of config file:\n");
 
   decode_main_aggregate (buffer, buflen);
   if ((of = fopen (output_file, "wb")) == NULL)
     {
-      printf ("docsis: error: can't open output file %s\n", output_file);
+      fprintf (stderr, "docsis: error: can't open output file %s\n", output_file);
       return -2;
     }
   fwrite (buffer, sizeof (unsigned char), buflen, of);
@@ -357,7 +348,7 @@ init_global_symtable (void)
     (symbol_type *) malloc (sizeof (symbol_type) * NUM_IDENTIFIERS);
   if (global_symtable == NULL)
     {
-      printf ("Error allocating memory!\n");
+      fprintf(stderr, "Error allocating memory!\n");
       exit (255);
     }
   memcpy (global_symtable, symtable, sizeof (symbol_type) * NUM_IDENTIFIERS);
@@ -374,12 +365,12 @@ decode_file (char *file)
   struct stat st;
   if ((ifd = open (file, O_RDONLY)) == -1)
     {
-      printf ("Error opening binary file %s: %s\n", file, strerror (errno));
+      fprintf(stderr, "Error opening binary file %s: %s\n", file, strerror (errno));
       exit (-1);
     }
   if ((rv = fstat (ifd, &st)))
     {
-      printf ("Can't stat file %s: %s\n", file, strerror (errno));
+      fprintf(stderr, "Can't stat file %s: %s\n", file, strerror (errno));
       exit (-1);
     }
   buffer = (unsigned char *) malloc (st.st_size * sizeof (unsigned char) + 1);
