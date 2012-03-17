@@ -27,7 +27,6 @@
 #include <netinet/in.h>
 #include <netdb.h>
 
-
 #include <math.h>
 #include <ctype.h>
 
@@ -37,9 +36,6 @@
 #include "docsis_snmp.h"
 #include "ethermac.h"
 
-
-#include <sys/types.h>
-#include <sys/socket.h>
 
 struct symbol_entry *
 find_symbol_by_code_and_pid (unsigned char code, unsigned int pid)

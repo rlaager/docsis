@@ -21,6 +21,7 @@ CONFIGS_IN = \
 	docsis20.cfg \
 	docsis20_no_snmp.cfg \
 	docsis20_stresstest.cfg \
+	docsis_ipv6.cfg \
 	packetcable_mta.cfg
 CONFIGS_TEXT   = $(CONFIGS_IN:.cfg=.txt)
 CONFIGS_BINARY = $(CONFIGS_IN:.cfg=.bin)

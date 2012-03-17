@@ -20,8 +20,6 @@
  *  DOCSIS is a registered trademark of Cablelabs, http://www.cablelabs.com
  */
 
-/*IPv6-Function inspired by http://beej.us/guide/bgnet/output/html/singlepage/bgnet.html */ 
-
 #ifndef _DOCSIS_DECODE_H
 #define _DOCSIS_DECODE_H
 

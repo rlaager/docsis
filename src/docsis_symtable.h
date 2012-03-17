@@ -259,8 +259,8 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 171, "CoSignerCVCData",      		33,   0,  (encode_hexstr),    (decode_hexstr),      0,        255    },
 { 172, "CoSignerCVC",      		33,   0,  (encode_nothing),    (decode_hexstr),      0,        255    },
 
-/*IPv6-Tests ... */
-{ 173,  "SwUpgradeServer6",    	58,  0,   (encode_ip6),        (decode_ip6),          0,        0          },
+/* IPv6 */
+{ 173, "SwUpgradeServer6",    	58,  0,   (encode_ip6),        (decode_ip6),          0,        0          },
 { 174, "SubMgmtControl6", 		63,  0,	  (encode_hexstr),    (decode_hexstr), 		2,	2 	},
 
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/

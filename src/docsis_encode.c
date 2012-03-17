@@ -22,8 +22,6 @@
 
 #include <netdb.h>
 
-
-
 #include <errno.h>
 #include <string.h>
 #include <stdlib.h>
@@ -135,7 +133,6 @@ int encode_uchar ( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr 
 }
 
 
-
 int encode_ip( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
 {
   struct in_addr in;
@@ -167,9 +164,8 @@ int encode_ip( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
 
 int encode_ip6( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
 {
-struct in6_addr in;
-int retval; 	     /* return value of inet_aton */
-union t_val *helper; /* We only use this to cast the void* we receive to what we think it should be */
+  struct in6_addr in;
+  union t_val *helper; /* We only use this to cast the void* we receive to what we think it should be */
 
   if ( buf == NULL ) {
         printf ("encode_ip called w/NULL buffer!\n");
@@ -183,7 +179,7 @@ union t_val *helper; /* We only use this to cast the void* we receive to what we
 
   helper = (union t_val *) tval;
 
-  if (!(retval = inet_pton(AF_INET6, helper->strval, &in)) ) {
+  if ( !inet_pton(AF_INET6, helper->strval, &in) ) {
 	printf ( "Invalid IP address %s at line %d", helper->strval, line );
 	exit (-1);
   }
