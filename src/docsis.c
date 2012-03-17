@@ -176,13 +176,11 @@ main (int argc, char *argv[])
 
   if (argc < 2 ) {
 	usage();
-	exit (10);
   }
 
   if (!strcmp (argv[1], "-m") ){ /* variable number of args, encoding multiple files */
 	if (argc < 5 ) {
 		usage();
-		exit (10);
 	}
     	extension_string = argv[argc-1];
         if (!strcmp ( argv[2], "-p")) {
@@ -219,7 +217,6 @@ main (int argc, char *argv[])
       		;;
     	default:
 		usage ();
-      		exit (10);
     }
   }
 
