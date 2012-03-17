@@ -78,7 +78,7 @@ TlvStringZero		{ return T_TLV_STRZERO_VALUE; 	}
 [A-Za-z]+[A-Za-z0-9]*	{
 				yylval.symptr=find_symbol_by_name(yytext);
 		  	  	if(yydebug)
-				        printf("yylex:returning T_IDENTIFIER, yylval.symptr->sym_ident=%s\n",
+				        fprintf(stderr,"yylex:returning T_IDENTIFIER, yylval.symptr->sym_ident=%s\n",
 					yylval.symptr->sym_ident);
 			 	return T_IDENTIFIER;
 			}
@@ -90,7 +90,7 @@ TlvStringZero		{ return T_TLV_STRZERO_VALUE; 	}
 				*str++ = '"';
 				strsize++;
 			} else {
-			  printf("line %d: string too long (max 2048 characters)\n",line); exit(-1);
+			  fprintf(stderr,"line %d: string too long (max 2048 characters)\n",line); exit(-1);
 			}
 		}
 <STRING>\\ 	{
@@ -99,11 +99,11 @@ TlvStringZero		{ return T_TLV_STRZERO_VALUE; 	}
 				*str++ = ' ';
 				strsize++;
 			} else {
-			  printf("line %d: string too long (max 2048 characters)\n",line); exit(-1);
+			  fprintf(stderr,"line %d: string too long (max 2048 characters)\n",line); exit(-1);
 			}
 		}
-<STRING>\n	{ printf("line %d: \\n not allowed in string, unmatched \" ?\n",line); exit(-1); }
-<STRING>\t	{ printf("line %d: \\t not allowed in string, unmatched \" ?\n",line); exit(-1); }
+<STRING>\n	{ fprintf(stderr,"line %d: \\n not allowed in string, unmatched \" ?\n",line); exit(-1); }
+<STRING>\t	{ fprintf(stderr,"line %d: \\t not allowed in string, unmatched \" ?\n",line); exit(-1); }
 <STRING>\"	{ *str=0; BEGIN 0; yylval.strval=strbuf; return T_STRING; }
 <STRING>.	{
 			if (strsize<2048)
@@ -111,13 +111,13 @@ TlvStringZero		{ return T_TLV_STRZERO_VALUE; 	}
 				*str++ = *yytext;
 				strsize++;
 			} else {
-			  printf("line %d: string too long (max 2048 characters)\n",line); exit(-1);
+			  fprintf(stderr,"line %d: string too long (max 2048 characters)\n",line); exit(-1);
 			}
 		}
 \/[*]+		{ BEGIN COMMENT; }
 <COMMENT>\n	{ line ++; }
 <COMMENT>.
-<COMMENT>\/[*]+	{ printf ("line %d: comment-in-comment not supported", line) ; }
+<COMMENT>\/[*]+	{ fprintf(stderr,"line %d: comment-in-comment not supported", line) ; }
 <COMMENT>[*]+\/	{ BEGIN 0; }
 
 [0-9]+	 { yylval.intval=atoi(yytext);return T_INTEGER; }
@@ -128,7 +128,7 @@ TlvStringZero		{ return T_TLV_STRZERO_VALUE; 	}
 \{ 	 { yylval.strval=yytext;return '{'; }
 \}	 { yylval.strval=yytext;return '}'; }
 ;	 { yylval.strval=yytext;return ';'; }
-.	 { printf("Unrecognized char \"%c\" at line %d\n",*yytext,line); exit(-1); }
+.	 { fprintf(stderr,"Unrecognized char \"%c\" at line %d\n",*yytext,line); exit(-1); }
 %%
 
 struct symbol_entry
@@ -141,7 +141,7 @@ struct symbol_entry
                 return &global_symtable[i];
         }
  }
- printf ("Unrecognized symbol %s at line %d\n", sym_str, line);
+ fprintf(stderr,"Unrecognized symbol %s at line %d\n", sym_str, line);
  exit(-1);
 }
 

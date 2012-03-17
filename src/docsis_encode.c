@@ -46,24 +46,24 @@ int encode_uint ( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
   unsigned int int_value;
   union t_val *helper; /* We only use this to cast the void* we receive to what we think it should be */
   if ( buf == NULL ) {
-	printf ("encode_uint called w/NULL buffer!\n");
+	fprintf(stderr,"encode_uint called w/NULL buffer!\n");
 	exit (-1);
   }
 
   if ( tval == NULL  ) {
-	printf ("encode_uint called w/NULL value struct !\n");
+	fprintf(stderr,"encode_uint called w/NULL value struct !\n");
 	exit (-1);
   }
   helper = (union t_val *) tval;
   if ( sym_ptr->low_limit || sym_ptr->high_limit ) {
 	if ( helper->uintval < sym_ptr->low_limit || helper->uintval > sym_ptr->high_limit ) {
-		printf ("%s: at line %d, %s value %d out of range %hd-%hd\n ", prog_name,line,sym_ptr->sym_ident,helper->uintval,sym_ptr->low_limit, sym_ptr->high_limit);
+		fprintf(stderr,"%s: at line %d, %s value %d out of range %hd-%hd\n ", prog_name,line,sym_ptr->sym_ident,helper->uintval,sym_ptr->low_limit, sym_ptr->high_limit);
 		exit(-15);
 	}
   }
   int_value  = htonl( helper->uintval );
 #ifdef DEBUG
-  printf ("encode_uint: found %s value %d\n",sym_ptr->sym_ident, helper->uintval);
+  fprintf(stderr,"encode_uint: found %s value %d\n",sym_ptr->sym_ident, helper->uintval);
 #endif /* DEBUG */
   memcpy ( buf,&int_value, sizeof(unsigned int));
   return ( sizeof(unsigned int));
@@ -75,24 +75,24 @@ int encode_ushort ( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr
   unsigned short sint;
   union t_val *helper; /* We only use this to cast the void* we receive to what we think it should be */
   if ( buf == NULL ) {
-        printf ("encode_ushort called w/NULL buffer!\n");
+        fprintf(stderr,"encode_ushort called w/NULL buffer!\n");
         exit (-1);
   }
 
   if ( tval == NULL  ) {
-        printf ("encode_ushort called w/NULL value struct !\n");
+        fprintf(stderr,"encode_ushort called w/NULL value struct !\n");
         exit (-1);
   }
   helper = (union t_val *) tval;
   if ( sym_ptr->low_limit || sym_ptr->high_limit ) {
 	if ( helper->uintval < sym_ptr->low_limit || helper->uintval > sym_ptr->high_limit ) {
-		printf ("%s: at line %d, %s value %d out of range %hd-%hd\n ", prog_name,line,sym_ptr->sym_ident,helper->uintval,sym_ptr->low_limit, sym_ptr->high_limit);
+		fprintf(stderr,"%s: at line %d, %s value %d out of range %hd-%hd\n ", prog_name,line,sym_ptr->sym_ident,helper->uintval,sym_ptr->low_limit, sym_ptr->high_limit);
 		exit(-15);
 	}
   }
   sint = htons( (unsigned short) helper->uintval );
 #ifdef DEBUG
-  printf ("encode_ushort: found %s value %hd\n",sym_ptr->sym_ident, helper->uintval);
+  fprintf(stderr,"encode_ushort: found %s value %hd\n",sym_ptr->sym_ident, helper->uintval);
 #endif /* DEBUG */
   memcpy ( buf,&sint,sizeof(unsigned short));
   return ( sizeof(unsigned short));
@@ -104,12 +104,12 @@ int encode_uchar ( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr 
   char *cp;
   union t_val *helper; /* We only use this to cast the void* we receive to what we think it should be */
   if ( buf == NULL ) {
-        printf ("encode_uchar called w/NULL buffer!\n");
+        fprintf(stderr,"encode_uchar called w/NULL buffer!\n");
         exit (-1);
   }
 
   if ( tval == NULL  ) {
-        printf ("encode_uchar called w/NULL value struct !\n");
+        fprintf(stderr,"encode_uchar called w/NULL value struct !\n");
         exit (-1);
   }
 
@@ -118,14 +118,14 @@ int encode_uchar ( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr 
 
   if ( sym_ptr->low_limit || sym_ptr->high_limit ) {
 	if ( helper->uintval < sym_ptr->low_limit || helper->uintval > sym_ptr->high_limit ) {
-		printf ("%s: at line %d, %s value %d out of range %hd-%hd\n ", prog_name,line,sym_ptr->sym_ident,helper->uintval,sym_ptr->low_limit, sym_ptr->high_limit);
+		fprintf(stderr,"%s: at line %d, %s value %d out of range %hd-%hd\n ", prog_name,line,sym_ptr->sym_ident,helper->uintval,sym_ptr->low_limit, sym_ptr->high_limit);
 		exit(-15);
 	}
   }
   cp = (char *)&int_value;
   buf[0]=(unsigned char)cp[3];
 #ifdef DEBUG
-  printf ("encode_uchar: found %s value %hd\n",sym_ptr->sym_ident, helper->uintval);
+  fprintf(stderr,"encode_uchar: found %s value %hd\n",sym_ptr->sym_ident, helper->uintval);
 #endif
 
   return ( sizeof(unsigned char));
@@ -138,23 +138,23 @@ int retval; 	     /* return value of inet_aton */
 union t_val *helper; /* We only use this to cast the void* we receive to what we think it should be */
 
   if ( buf == NULL ) {
-        printf ("encode_ip called w/NULL buffer!\n");
+        fprintf(stderr,"encode_ip called w/NULL buffer!\n");
         exit (-1);
   }
 
   if ( tval == NULL  ) {
-        printf ("encode_ip called w/NULL value struct !\n");
+        fprintf(stderr,"encode_ip called w/NULL value struct !\n");
         exit (-1);
   }
 
   helper = (union t_val *) tval;
 
   if (!(retval = inet_aton ( helper->strval, &in)) ) {
-	printf ( "Invalid IP address %s at line %d", helper->strval, line );
+	fprintf(stderr, "Invalid IP address %s at line %d", helper->strval, line );
 	exit (-1);
   }
 #ifdef DEBUG
-  printf ("encode_ip: found %s at line %d\n",inet_ntoa(in), line);
+  fprintf(stderr,"encode_ip: found %s at line %d\n",inet_ntoa(in), line);
 #endif /* DEBUG */
   memcpy ( buf, &in, sizeof(struct in_addr));
   free(helper->strval);
@@ -168,23 +168,23 @@ int retval; 	     /* return value of inet_aton */
 union t_val *helper; /* We only use this to cast the void* we receive to what we think it should be */
 
   if ( buf == NULL ) {
-        printf ("encode_ether called w/NULL buffer!\n");
+        fprintf(stderr,"encode_ether called w/NULL buffer!\n");
         exit (-1);
   }
 
   if ( tval == NULL  ) {
-        printf ("encode_ether called w/NULL value struct !\n");
+        fprintf(stderr,"encode_ether called w/NULL value struct !\n");
         exit (-1);
   }
 
   helper = (union t_val *) tval;
 
   if (!(retval = ether_aton ( helper->strval, buf)) ) {
-	printf ( "Invalid MAC address %s at line %d", helper->strval, line );
+	fprintf(stderr, "Invalid MAC address %s at line %d", helper->strval, line );
 	exit (-1);
   }
 #ifdef DEBUG
-  printf ("encode_ether: found %s at line %d\n", ether_ntoa(buf), line);
+  fprintf(stderr,"encode_ether: found %s at line %d\n", ether_ntoa(buf), line);
 #endif  /* DEBUG */
   free(helper->strval);
   return retval;  /* hopefully this equals 6 :) */
@@ -197,12 +197,12 @@ char *ether,*mask;
 union t_val *helper; /* We only use this to cast the void* we receive to what we think it should be */
 
   if ( buf == NULL ) {
-        printf ("encode_ethermask called w/NULL buffer!\n");
+        fprintf(stderr,"encode_ethermask called w/NULL buffer!\n");
         exit (-1);
   }
 
   if ( tval == NULL  ) {
-        printf ("encode_ethermask called w/NULL value struct !\n");
+        fprintf(stderr,"encode_ethermask called w/NULL value struct !\n");
         exit (-1);
   }
 
@@ -211,22 +211,22 @@ union t_val *helper; /* We only use this to cast the void* we receive to what we
 
   mask = strchr ( ether, (int) '/');
   if (mask == NULL) {
-	printf ("encode_ethermask: at line %d, format should be <mac_address>/<mac_mask>\n", line);
+	fprintf(stderr,"encode_ethermask: at line %d, format should be <mac_address>/<mac_mask>\n", line);
  	exit (-1);
   }
   mask[0]=0x0; mask++; /* cut the string in two */
 
   if (!(reta = ether_aton ( ether, buf)) ) {
-	printf ( "Invalid MAC address %s at line %d\n", ether, line );
+	fprintf(stderr, "Invalid MAC address %s at line %d\n", ether, line );
 	exit (-1);
   }
   if (!(retb = ether_aton ( mask, buf+reta*(sizeof(char))) ) ) {
-	printf ( "Invalid MAC address %s at line %d\n", mask, line );
+	fprintf(stderr, "Invalid MAC address %s at line %d\n", mask, line );
 	exit (-1);
   }
 
 #ifdef DEBUG
-  printf ("encode_ethermask: found %s/%s at line %d\n", ether_ntoa(buf), ether_ntoa(buf+reta*sizeof(char)), line);
+  fprintf(stderr,"encode_ethermask: found %s/%s at line %d\n", ether_ntoa(buf), ether_ntoa(buf+reta*sizeof(char)), line);
 #endif  /* DEBUG */
   free(helper->strval);
   return (reta+retb);  /* hopefully this equals 12 :) */
@@ -239,31 +239,31 @@ int encode_string(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
   union t_val *helper;
 
   if ( buf == NULL ) {
-        printf ("encode_string called w/NULL buffer!\n");
+        fprintf(stderr,"encode_string called w/NULL buffer!\n");
         exit (-1);
   }
 
   if ( tval == NULL  ) {
-        printf ("encode_string called w/NULL value struct !\n");
+        fprintf(stderr,"encode_string called w/NULL value struct !\n");
         exit (-1);
   }
   helper = (union t_val *) tval;
   string_size = strlen ( helper->strval );
   if (sym_ptr->low_limit || sym_ptr->high_limit) {
 	if ( string_size < sym_ptr->low_limit ) {
-		printf("encode_string: String too short, must be min %d chars\n",
+		fprintf(stderr,"encode_string: String too short, must be min %d chars\n",
 							sym_ptr->low_limit);
 		exit(-1);
 	}
 	if ( sym_ptr->high_limit < string_size ) {
-		printf("encode_string: String too long (%d chars), must be max %d chars\n",
+		fprintf(stderr,"encode_string: String too long (%d chars), must be max %d chars\n",
 							string_size, sym_ptr->high_limit);
 		exit(-1);
 	}
   }
 
 #ifdef DEBUG
-  printf ("encode_string: found '%s' on line %d\n", helper->strval, line );
+  fprintf(stderr,"encode_string: found '%s' on line %d\n", helper->strval, line );
 #endif /* DEBUG */
   memset(buf,0,string_size+1);
   memcpy ( buf, helper->strval, string_size);
@@ -280,31 +280,31 @@ int encode_strzero(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr 
   union t_val *helper;
 
   if ( buf == NULL ) {
-        printf ("encode_string called w/NULL buffer!\n");
+        fprintf(stderr,"encode_string called w/NULL buffer!\n");
         exit (-1);
   }
 
   if ( tval == NULL  ) {
-        printf ("encode_string called w/NULL value struct !\n");
+        fprintf(stderr,"encode_string called w/NULL value struct !\n");
         exit (-1);
   }
   helper = (union t_val *) tval;
   string_size = strlen ( helper->strval );
   if (sym_ptr->low_limit || sym_ptr->high_limit) {
         if ( string_size < sym_ptr->low_limit ) {
-                printf("encode_string: String too short, must be min %d chars\n",
+                fprintf(stderr,"encode_string: String too short, must be min %d chars\n",
                                                         sym_ptr->low_limit);
                 exit(-1);
         }
         if ( sym_ptr->high_limit < string_size ) {
-                printf("encode_string: String too long, must be max %d chars\n",
+                fprintf(stderr,"encode_string: String too long, must be max %d chars\n",
                                                         sym_ptr->high_limit);
                 exit(-1);
         }
   }
 
 #ifdef DEBUG
-  printf ("encode_string: found '%s' on line %d\n", helper->strval, line );
+  fprintf(stderr,"encode_string: found '%s' on line %d\n", helper->strval, line );
 #endif /* DEBUG */
   memset(buf,0,string_size+1);
   memcpy ( buf, helper->strval, string_size);
@@ -323,26 +323,26 @@ int encode_hexstr (unsigned char *buf, void *tval, struct symbol_entry *sym_ptr)
   union t_val *helper;
 
   if ( buf == NULL ) {
-        printf ("encode_hexstr called w/NULL buffer!\n");
+        fprintf(stderr,"encode_hexstr called w/NULL buffer!\n");
         exit (-1);
   }
 
   if ( tval == NULL  ) {
-        printf ("encode_hexstr called w/NULL value struct !\n");
+        fprintf(stderr,"encode_hexstr called w/NULL value struct !\n");
         exit (-1);
   }
   helper = (union t_val *) tval;
   string_size = strlen ( helper->strval );
 
   if ( string_size % 2 != 0 ) {
-        printf ("encode_hexstr: invalid hex string !\n");
+        fprintf(stderr,"encode_hexstr: invalid hex string !\n");
         exit (-1);
   }
 
   p = helper->strval;
 
   if (p[0] != '0' || ( p[1] != 'x' && p[1] != 'X' )) {
-	printf("encode_hexstr: invalid hex string %s\n", p);
+	fprintf(stderr,"encode_hexstr: invalid hex string %s\n", p);
 	exit (-1);
   }
 
@@ -352,7 +352,7 @@ int encode_hexstr (unsigned char *buf, void *tval, struct symbol_entry *sym_ptr)
 
   while (*p) {
 	if ( (rval=sscanf(p, "%02x", &fragval)) == 0) {
-		printf ("Invalid Hex Value %s\n", helper->strval);
+		fprintf(stderr,"Invalid Hex Value %s\n", helper->strval);
 		exit (-1);
 	}
  	buf[i] = (char) fragval; i++;
@@ -361,18 +361,18 @@ int encode_hexstr (unsigned char *buf, void *tval, struct symbol_entry *sym_ptr)
 
   if (sym_ptr->low_limit || sym_ptr->high_limit) {
 	if (  i < sym_ptr->low_limit ) {
-		printf("encode_hexstr: Hex value too short, must be min %d octets\n",
+		fprintf(stderr,"encode_hexstr: Hex value too short, must be min %d octets\n",
 							sym_ptr->low_limit);
 		exit(-1);
 	}
 	if ( sym_ptr->high_limit < i ) {
-		printf("encode_hexstr: Hex value too long, must be max %d octets\n",
+		fprintf(stderr,"encode_hexstr: Hex value too long, must be max %d octets\n",
 							sym_ptr->high_limit);
 		exit(-1);
 	}
   }
 #ifdef DEBUG
-  printf ("encode_hexstr: found '%s' on line %d\n", helper->strval, line );
+  fprintf(stderr,"encode_hexstr: found '%s' on line %d\n", helper->strval, line );
 #endif /* DEBUG */
   free(helper->strval);
   return ( i );
@@ -387,12 +387,12 @@ int encode_oid(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
   union t_val *helper;
 
   if ( buf == NULL ) {
-        printf ("encode_oid called w/NULL buffer!\n");
+        fprintf(stderr,"encode_oid called w/NULL buffer!\n");
         exit (-1);
   }
 
   if ( tval == NULL  ) {
-        printf ("encode_oid called w/NULL value struct !\n");
+        fprintf(stderr,"encode_oid called w/NULL value struct !\n");
         exit (-1);
   }
 
@@ -418,12 +418,12 @@ int i;
 union t_val *helper; /* We only use this to cast the void* we receive to what we think it should be */
 
   if ( buf == NULL ) {
-        printf ("encode_ushort_list called w/NULL buffer!\n");
+        fprintf(stderr,"encode_ushort_list called w/NULL buffer!\n");
         exit (-1);
   }
 
   if ( tval == NULL  ) {
-        printf ("encode_ushort_list called w/NULL value struct !\n");
+        fprintf(stderr,"encode_ushort_list called w/NULL value struct !\n");
         exit (-1);
   }
 
@@ -439,11 +439,11 @@ union t_val *helper; /* We only use this to cast the void* we receive to what we
 	if (endptr == NULL)
 
 	if (cp == *endptr) {
-		printf("Parse error at line %d: expecting digits\n",line);
+		fprintf(stderr,"Parse error at line %d: expecting digits\n",line);
 		exit (-11);
 	}
 	if (value_found > 65535) {
-		printf ("Parse error at line %d: value cannot exceed 65535\n",line);
+		fprintf(stderr,"Parse error at line %d: value cannot exceed 65535\n",line);
 		exit (-11);
 	}
 	nr_found++;
@@ -455,22 +455,22 @@ union t_val *helper; /* We only use this to cast the void* we receive to what we
 
   if (sym_ptr->low_limit || sym_ptr->high_limit) {
         if (  nr_found < sym_ptr->low_limit ) {
-                printf("Line %d: Not enough numbers, minimum %d\n", line,
+                fprintf(stderr,"Line %d: Not enough numbers, minimum %d\n", line,
                                                         sym_ptr->low_limit);
                 exit(-1);
         }
         if ( sym_ptr->high_limit < nr_found ) {
-                printf("Line %d: too many numbers, max %d\n", line,
+                fprintf(stderr,"Line %d: too many numbers, max %d\n", line,
                                                         sym_ptr->high_limit);
                 exit(-1);
         }
   }
 
 #ifdef DEBUG
-  printf ("encode_ushort_list: found ");
+  fprintf(stderr,"encode_ushort_list: found ");
   for(i=0; i<nr_found; i++)
-	printf( "%d ", ntohs(numbers[i]) );
-  printf ("\n");
+	fprintf(stderr, "%d ", ntohs(numbers[i]) );
+  fprintf(stderr,"\n");
 
 #endif /* DEBUG */
   memcpy ( buf, numbers, nr_found*sizeof(unsigned short));
