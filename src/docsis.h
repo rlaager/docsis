@@ -57,6 +57,10 @@ struct tlv *create_generic_str_tlv (struct symbol_entry *sym_ptr,
 struct tlv *create_generic_strzero_tlv (struct symbol_entry *sym_ptr,
 				int tlv_code,
 				union t_val *value);
+struct tlv *create_generic_typed_tlv (struct symbol_entry *sym_ptr,
+				int tlv_code,
+				encode_func_t encode_func,
+				union t_val *value);
 struct tlv *create_snmpw_tlv (struct symbol_entry *sym_ptr,
 			      char *oid_string, union t_val *value);
 
@@ -73,9 +77,9 @@ struct tlv *add_tlv_sibling (struct tlv *tlv, struct tlv *newtlv);
 struct tlv *merge_tlvlist (struct tlv *tlv1,
 				struct tlv *tlv2 );
 
-/* create a tlvlist with 1 tlv (parent) from a sym_ptr and a tlvlist */
+/* create a tlvlist with 1 tlv (parent) from a tlvcode and a tlvlist */
 
-struct tlv *assemble_tlv_in_parent (struct symbol_entry *sym_ptr,
+struct tlv *assemble_tlv_in_parent (int tlvcode,
 					  struct tlv *tlv);
 /* flatten a tlvlist to its final binary form */
 unsigned int flatten_tlvlist (unsigned char *buf, struct tlv_list *list);

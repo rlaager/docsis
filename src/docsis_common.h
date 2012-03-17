@@ -44,13 +44,18 @@
 #define INDENT_INCREMENT 	102
 #define INDENT_DECREMENT 	103
 
+struct symbol_entry;
+
+typedef int (*encode_func_t) (unsigned char *, void *, struct symbol_entry *);
+typedef void (*decode_func_t) (unsigned char *, struct symbol_entry *, size_t length);
+
 struct symbol_entry {
 	unsigned int id;
 	char sym_ident[30];
 	unsigned char docsis_code;
 	unsigned int parent_id;
-	int (*encode_func) (unsigned char *, void *, struct symbol_entry *);
-	void (*decode_func) (unsigned char *, struct symbol_entry *, size_t length);
+	encode_func_t encode_func;
+	decode_func_t decode_func;
 	unsigned int low_limit;
 	unsigned int high_limit;
 };

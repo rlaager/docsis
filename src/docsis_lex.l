@@ -55,6 +55,8 @@ ManufacturerCVC		{ yylval.symptr=find_symbol_by_name(yytext);return T_IDENT_CVC;
 CoSignerCVC		{ yylval.symptr=find_symbol_by_name(yytext);return T_IDENT_CVC; }
 Integer			{ return T_ASNTYPE_INT; 	}
 Unsigned32		{ return T_ASNTYPE_UINT; 	}
+Short			{ return T_ASNTYPE_SHORT;       }
+Char			{ return T_ASNTYPE_CHAR;        }
 Gauge			{ return T_ASNTYPE_GAUGE; 	}
 Gauge32			{ return T_ASNTYPE_GAUGE; 	}
 Counter32 		{ return T_ASNTYPE_COUNTER; 	}
@@ -75,6 +77,7 @@ TlvLength 		{ return T_TLV_LENGTH; 	}
 TlvValue		{ return T_TLV_VALUE; 	}
 TlvString		{ return T_TLV_STR_VALUE; 	}
 TlvStringZero		{ return T_TLV_STRZERO_VALUE; 	}
+TlvType			{ return T_TLV_TYPE;		}
 [A-Za-z]+[A-Za-z0-9]*	{
 				yylval.symptr=find_symbol_by_name(yytext);
 		  	  	if(yydebug)

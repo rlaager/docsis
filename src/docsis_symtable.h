@@ -260,7 +260,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 172, "CoSignerCVC",      		33,   0,  (encode_nothing),    (decode_hexstr),      0,        255    },
 
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/
-{ 998, "GenericTLV",           		0, 0,     (encode_nothing),   (decode_special),  1,        255        },
+{ 998, "GenericTLV",           		0, 0,     (encode_nothing),   (decode_special),  0,        0        },
 { 999, "/*EndOfDataMkr*/",     		255, 0,   (encode_nothing),   (decode_special),  0,        0          }
 };
 

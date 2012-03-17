@@ -74,6 +74,8 @@ struct tlv *_my_tlvtree_head;
 
 %token <uintval>  T_ASNTYPE_INT
 %token <uintval>  T_ASNTYPE_UINT
+%token <uintval>  T_ASNTYPE_SHORT
+%token <uintval>  T_ASNTYPE_CHAR
 %token <uintval>  T_ASNTYPE_GAUGE
 %token <uintval>  T_ASNTYPE_COUNTER
 %token <uintval>  T_ASNTYPE_TIMETICKS
@@ -92,10 +94,13 @@ struct tlv *_my_tlvtree_head;
 %token <uintval>  T_TLV_VALUE
 %token <uintval>  T_TLV_STR_VALUE
 %token <uintval>  T_TLV_STRZERO_VALUE
+%token <uintval>  T_TLV_TYPE
 
 
 %type <tlvptr>  assignment_stmt
+%type <tlvptr>  generic_stmt
 %type <tlvptr>  assignment_list
+%type <tlvptr>  generic_assignment_list
 %type <tlvptr>  subsettings_stmt
 
 %%
@@ -143,8 +148,15 @@ assignment_list: assignment_list assignment_stmt { $$ = add_tlv_sibling ($1,$2);
 			$$ = merge_tlvlist (NULL, $1); }
 		;
 
+generic_assignment_list: generic_assignment_list generic_stmt { $$ = add_tlv_sibling ($1,$2); }
+			 | generic_stmt { $$=add_tlv_sibling(NULL,$1); }
+			 ;
+
+
 subsettings_stmt:  	T_IDENTIFIER '{' assignment_list  '}'	{
-			$$ = assemble_tlv_in_parent ( $1, $3 ); }
+			$$ = assemble_tlv_in_parent ( $1->docsis_code, $3 ); }
+		| T_IDENT_GENERIC T_TLV_CODE T_INTEGER '{' generic_assignment_list '}' {
+			$$ = assemble_tlv_in_parent ( $3, $5 ); }
 		;
 
 assignment_stmt:  T_IDENTIFIER T_INTEGER ';' {
@@ -185,12 +197,24 @@ assignment_stmt:  T_IDENTIFIER T_INTEGER ';' {
 			$$ = create_snmpset_tlv($1,$2,'o',(union t_val *)&$4); }
 		| T_IDENT_SNMPSET T_LABEL_OID T_ASNTYPE_TIMETICKS T_INTEGER ';' {
 			$$ = create_snmpset_tlv($1,$2,'t',(union t_val *)&$4); }
-		| T_IDENT_GENERIC T_TLV_CODE T_INTEGER T_TLV_LENGTH T_INTEGER T_TLV_VALUE T_HEX_STRING ';' {
-			$$ = create_generic_tlv($1,$3,$5, (union t_val *)&$7); }
 		| T_IDENT_GENERIC T_TLV_CODE T_INTEGER T_TLV_STR_VALUE T_STRING ';' {
 			$$ = create_generic_str_tlv($1,$3, (union t_val *)&$5); }
 		| T_IDENT_GENERIC T_TLV_CODE T_INTEGER T_TLV_STRZERO_VALUE T_STRING ';' {
 			$$ = create_generic_strzero_tlv($1,$3, (union t_val *)&$5); }
+		| generic_stmt {
+			$$ = $1; }
+		;
+
+generic_stmt:	T_IDENT_GENERIC T_TLV_CODE T_INTEGER T_TLV_LENGTH T_INTEGER T_TLV_VALUE T_HEX_STRING ';' {
+			$$ = create_generic_tlv($1,$3,$5, (union t_val *)&$7); }
+		| T_IDENT_GENERIC T_TLV_CODE T_INTEGER T_TLV_TYPE T_ASNTYPE_INT T_TLV_VALUE T_INTEGER ';' {
+			$$ = create_generic_typed_tlv($1,$3,encode_uint, (union t_val *)&$7); }
+		| T_IDENT_GENERIC T_TLV_CODE T_INTEGER T_TLV_TYPE T_ASNTYPE_SHORT T_TLV_VALUE T_INTEGER ';' {
+			$$ = create_generic_typed_tlv($1,$3,encode_ushort, (union t_val *)&$7); }
+		| T_IDENT_GENERIC T_TLV_CODE T_INTEGER T_TLV_TYPE T_ASNTYPE_CHAR T_TLV_VALUE T_INTEGER ';' {
+			$$ = create_generic_typed_tlv($1,$3,encode_uchar, (union t_val *)&$7); }
+		| T_IDENT_GENERIC T_TLV_CODE T_INTEGER T_TLV_TYPE T_ASNTYPE_IP T_TLV_VALUE T_IP ';' {
+			$$ = create_generic_typed_tlv($1,$3,encode_ip, (union t_val *)&$7); }
                 ;
 %%
 
@@ -418,6 +442,27 @@ create_external_file_tlv ( struct symbol_entry *sym_ptr,
   return first_tlvbuf;
 }
 
+/* Given a code, type, and value, creates a TLV encoding.
+** Expected to be used for VendorSpecific settings
+*/
+struct tlv *
+create_generic_typed_tlv ( struct symbol_entry *sym_ptr,
+				int tlv_code,
+			int (*encode_func) (unsigned char *, void *, struct symbol_entry *),
+				union t_val *value )
+{
+  struct tlv *tlvbuf=NULL;
+
+  tlvbuf = (struct tlv *) malloc (sizeof(struct tlv));
+  tlvbuf->docs_code = tlv_code;
+  tlvbuf->tlv_len = encode_func ( tlvbuf->tlv_value, value, sym_ptr );
+
+  if (tlvbuf->tlv_len <= 0 ) {
+    printf ("got len 0 value while scanning for %s\n at line %d\n",sym_ptr->sym_ident,line );
+    exit (-1);
+  }
+  return tlvbuf;
+}
 
 /*
  * Adds a TLV to the current tlv "list". If the tlv pointer we are called with is NULL,
@@ -477,14 +522,14 @@ merge_tlvlist(struct tlv *tlv1, struct tlv *tlv2)
  */
 
 struct tlv *
-assemble_tlv_in_parent (struct symbol_entry *sym_ptr, struct tlv *child_tlv)
+assemble_tlv_in_parent (int tlvcode, struct tlv *child_tlv)
 {
   struct tlv *parent_tlv;
 
   parent_tlv = (struct tlv *) malloc ( sizeof ( struct tlv) );
   memset(parent_tlv, 0, sizeof(struct tlv));
 
-  parent_tlv->docs_code = sym_ptr->docsis_code;
+  parent_tlv->docs_code = tlvcode;
   parent_tlv->tlv_len = 0;
   parent_tlv->first_child = child_tlv;
   child_tlv->parent = parent_tlv;
