@@ -20,6 +20,8 @@
  *  DOCSIS is a registered trademark of Cablelabs, http://www.cablelabs.com
  */
 
+/* IPv6 RegEx lent from http://www.regexlib.com/REDetails.aspx?regexp_id=2919 Author: mij */
+
 %{
 #include "docsis.h"
 #include "docsis_yy.h"
@@ -132,6 +134,7 @@ TlvType			{ return T_TLV_TYPE;		}
 \}	 { yylval.strval=yytext;return '}'; }
 ;	 { yylval.strval=yytext;return ';'; }
 .	 { printf("Unrecognized char \"%c\" at line %d\n",*yytext,line); exit(-1); }
+(::|(([a-fA-F0-9]{1,4}):){7}(([a-fA-F0-9]{1,4}))|(:(:([a-fA-F0-9]{1,4})){1,6})|((([a-fA-F0-9]{1,4}):){1,6}:)|((([a-fA-F0-9]{1,4}):)(:([a-fA-F0-9]{1,4})){1,6})|((([a-fA-F0-9]{1,4}):){2}(:([a-fA-F0-9]{1,4})){1,5})|((([a-fA-F0-9]{1,4}):){3}(:([a-fA-F0-9]{1,4})){1,4})|((([a-fA-F0-9]{1,4}):){4}(:([a-fA-F0-9]{1,4})){1,3})|((([a-fA-F0-9]{1,4}):){5}(:([a-fA-F0-9]{1,4})){1,2}))		{ TSAVE(yytext);yylval.strval=tsave; return T_IP6;	  }
 %%
 
 struct symbol_entry

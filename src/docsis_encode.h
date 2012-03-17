@@ -29,6 +29,7 @@ int encode_uint   	(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr
 int encode_ushort 	(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );
 int encode_uchar  	(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );
 int encode_ip     	(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );
+int encode_ip6     	(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );
 int encode_ether	(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );
 int encode_ethermask	(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );
 int encode_string 	(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );

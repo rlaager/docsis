@@ -20,6 +20,14 @@
  *  DOCSIS is a registered trademark of Cablelabs, http://www.cablelabs.com
  */
 
+#include <sys/types.h>
+#include <stdio.h>
+#include <string.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netdb.h>
+
+
 #include <math.h>
 #include <ctype.h>
 
@@ -29,6 +37,9 @@
 #include "docsis_snmp.h"
 #include "ethermac.h"
 
+
+#include <sys/types.h>
+#include <sys/socket.h>
 
 struct symbol_entry *
 find_symbol_by_code_and_pid (unsigned char code, unsigned int pid)
@@ -86,6 +97,20 @@ void decode_ip (unsigned char *tlvbuf, symbol_type *sym, size_t length )
   memcpy (&helper, tlvbuf, length );
   printf ( "%s %s;\n",
 	sym->sym_ident, inet_ntoa(helper) );
+}
+
+void decode_ip6 (unsigned char *tlvbuf, symbol_type *sym, size_t length )
+{
+  static struct in6_addr helper;
+  char ipstr[INET6_ADDRSTRLEN];
+  if (length != sizeof(struct in6_addr) ) {
+        printf("ip address length mismatch!\n");
+        exit(-45);
+  }
+
+  memcpy (&helper, tlvbuf, length );
+  printf ( "%s %s;\n",
+	sym->sym_ident, inet_ntop(AF_INET6,tlvbuf,ipstr,sizeof ipstr) );
 }
 
 void decode_ether (unsigned char *tlvbuf, symbol_type *sym, size_t length )

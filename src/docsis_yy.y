@@ -65,6 +65,7 @@ struct tlv *_my_tlvtree_head;
 %token <strval>  T_LABEL_OID
 %token <strval>  T_SUBMGT_FILTERS
 %token <strval>  T_IP
+%token <strval>  T_IP6
 %token <strval>  T_MAC
 %token <strval>  T_MAIN
 %token <strval>  T_STRING
@@ -167,6 +168,8 @@ assignment_stmt:  T_IDENTIFIER T_INTEGER ';' {
 		| T_IDENTIFIER T_SUBMGT_FILTERS ';' {
 			$$ = create_tlv ($1, (union t_val *)&$2);}
 		| T_IDENTIFIER T_IP ';' {
+			$$ = create_tlv ($1, (union t_val *)&$2);}
+		| T_IDENTIFIER T_IP6 ';' {
 			$$ = create_tlv ($1, (union t_val *)&$2);}
 		| T_IDENTIFIER T_MAC ';' {
 			$$ = create_tlv ($1, (union t_val *)&$2);}

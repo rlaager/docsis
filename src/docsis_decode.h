@@ -20,6 +20,8 @@
  *  DOCSIS is a registered trademark of Cablelabs, http://www.cablelabs.com
  */
 
+/*IPv6-Function inspired by http://beej.us/guide/bgnet/output/html/singlepage/bgnet.html */ 
+
 #ifndef _DOCSIS_DECODE_H
 #define _DOCSIS_DECODE_H
 
@@ -33,6 +35,7 @@ void decode_uint (unsigned char *tlvbuf, struct symbol_entry *sym, size_t length
 void decode_ushort (unsigned char *tlvbuf, symbol_type *sym, size_t length );
 void decode_uchar (unsigned char *tlvbuf, symbol_type *sym, size_t length );
 void decode_ip (unsigned char *tlvbuf, symbol_type *sym, size_t length );
+void decode_ip6 (unsigned char *tlvbuf, symbol_type *sym, size_t length );
 void decode_ether (unsigned char *tlvbuf, symbol_type *sym, size_t length );
 void decode_ethermask (unsigned char *tlvbuf, symbol_type *sym, size_t length );
 void decode_md5 (unsigned char *tlvbuf, symbol_type *sym, size_t length);

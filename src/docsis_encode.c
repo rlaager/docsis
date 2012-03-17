@@ -20,6 +20,10 @@
  *  DOCSIS is a registered trademark of Cablelabs, http://www.cablelabs.com
  */
 
+#include <netdb.h>
+
+
+
 #include <errno.h>
 #include <string.h>
 #include <stdlib.h>
@@ -131,6 +135,7 @@ int encode_uchar ( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr 
 }
 
 
+
 int encode_ip( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
 {
   struct in_addr in;
@@ -160,6 +165,35 @@ int encode_ip( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
   return ( sizeof(struct in_addr));
 }
 
+int encode_ip6( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
+{
+struct in6_addr in;
+int retval; 	     /* return value of inet_aton */
+union t_val *helper; /* We only use this to cast the void* we receive to what we think it should be */
+
+  if ( buf == NULL ) {
+        printf ("encode_ip called w/NULL buffer!\n");
+        exit (-1);
+  }
+
+  if ( tval == NULL  ) {
+        printf ("encode_ip called w/NULL value struct !\n");
+        exit (-1);
+  }
+
+  helper = (union t_val *) tval;
+
+  if (!(retval = inet_pton(AF_INET6, helper->strval, &in)) ) {
+	printf ( "Invalid IP address %s at line %d", helper->strval, line );
+	exit (-1);
+  }
+#ifdef DEBUG
+  printf ("encode_ip: found %s at line %d\n",inet_ntoa(in), line);
+#endif /* DEBUG */
+  memcpy ( buf, &in, sizeof(struct in6_addr));
+  free(helper->strval);
+  return ( sizeof(struct in6_addr));
+}
 
 int encode_ether ( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
 {
