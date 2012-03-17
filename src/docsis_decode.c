@@ -25,10 +25,10 @@
 
 /* #include "docsis.h" */
 #include "docsis_decode.h"
+#include "docsis_globals.h"
 #include "docsis_snmp.h"
 #include "ethermac.h"
 
-extern symbol_type *global_symtable;
 
 struct symbol_entry *
 find_symbol_by_code_and_pid (unsigned char code, unsigned int pid)

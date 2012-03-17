@@ -37,12 +37,13 @@
 #include <net-snmp/mib_api.h>
 
 #include "docsis.h"
-#include "docsis_symtable.h"
 #include "docsis_globals.h"
+#include "docsis_symtable.h"
 #include "ethermac.h"
 #include "md5.h"
 
-extern unsigned int line;	/* defined in docsis_lex.l */
+struct tlv *global_tlvtree_head;
+symbol_type *global_symtable;
 
 static void setup_mib_flags(void);
 

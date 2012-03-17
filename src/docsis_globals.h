@@ -23,7 +23,8 @@
 #ifndef _DOCSIS_GLOBALS_H
 #define _DOCSIS_GLOBALS_H
 
-struct tlv *global_tlvtree_head;
-symbol_type *global_symtable;
+extern struct tlv *global_tlvtree_head;
+extern symbol_type *global_symtable;
+extern unsigned int line;	/* defined in docsis_lex.l */
 
 #endif /* _DOCSIS_GLOBALS_H */
