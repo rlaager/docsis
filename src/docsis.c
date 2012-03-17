@@ -286,7 +286,8 @@ int encode_one_file ( char *input_file, char *output_file,
   unsigned char *buffer;
   FILE *of;
 
-  if (!strcmp (input_file, output_file))
+  /* It's not an error to specify the input and output as "-". */
+  if (!strcmp (input_file, output_file) && strcmp (input_file, "-"))
   {
 	fprintf(stderr, "docsis: Error: source file is the same as destination file\n");
 	return -1;
@@ -329,12 +330,17 @@ int encode_one_file ( char *input_file, char *output_file,
   fprintf (stderr, "Final content of config file:\n");
 
   decode_main_aggregate (buffer, buflen);
-  if ((of = fopen (output_file, "wb")) == NULL)
+  if (!strcmp (output_file, "-"))
+    {
+      of = stdout;
+    }
+  else if ((of = fopen (output_file, "wb")) == NULL)
     {
       fprintf (stderr, "docsis: error: can't open output file %s\n", output_file);
       return -2;
     }
   fwrite (buffer, sizeof (unsigned char), buflen, of);
+  fclose (of);
   free(buffer);
   return 0;
 

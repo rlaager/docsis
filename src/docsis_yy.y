@@ -620,7 +620,11 @@ int parse_config_file ( char *file, struct tlv **parse_tree_result )
   FILE *cf;
   int rval;
 
-  if ( (cf = fopen ( file, "r" ))== NULL )
+  if ( !strcmp(file, "-") )
+  {
+	cf = stdin;
+  }
+  else if ( (cf = fopen ( file, "r" )) == NULL )
   {
 	fprintf (stderr, "docsis: Can't open input file %s\n", file );
 	return -1;
