@@ -130,11 +130,11 @@ int encode_uchar ( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr 
   return ( sizeof(unsigned char));
 }
 
+
 int encode_ip( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
 {
-struct in_addr in;
-int retval; 	     /* return value of inet_aton */
-union t_val *helper; /* We only use this to cast the void* we receive to what we think it should be */
+  struct in_addr in;
+  union t_val *helper; /* We only use this to cast the void* we receive to what we think it should be */
 
   if ( buf == NULL ) {
         printf ("encode_ip called w/NULL buffer!\n");
@@ -148,7 +148,7 @@ union t_val *helper; /* We only use this to cast the void* we receive to what we
 
   helper = (union t_val *) tval;
 
-  if (!(retval = inet_aton ( helper->strval, &in)) ) {
+  if ( !inet_aton ( helper->strval, &in) ) {
 	printf ( "Invalid IP address %s at line %d", helper->strval, line );
 	exit (-1);
   }
