@@ -33,7 +33,6 @@
 #include <math.h>
 
 #include "docsis_common.h"
-#include "docsis_globals.h"
 #include "docsis_encode.h"
 #include "docsis_snmp.h"
 #include "ethermac.h"
@@ -57,7 +56,7 @@ int encode_uint ( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
   helper = (union t_val *) tval;
   if ( sym_ptr->low_limit || sym_ptr->high_limit ) {
 	if ( helper->uintval < sym_ptr->low_limit || helper->uintval > sym_ptr->high_limit ) {
-		printf ("%s: at line %d, %s value %d out of range %hd-%hd\n ", prog_name,line,sym_ptr->sym_ident,helper->uintval,sym_ptr->low_limit, sym_ptr->high_limit);
+		printf ("docsis: at line %d, %s value %d out of range %hd-%hd\n ", line,sym_ptr->sym_ident,helper->uintval,sym_ptr->low_limit, sym_ptr->high_limit);
 		exit(-15);
 	}
   }
@@ -86,7 +85,7 @@ int encode_ushort ( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr
   helper = (union t_val *) tval;
   if ( sym_ptr->low_limit || sym_ptr->high_limit ) {
 	if ( helper->uintval < sym_ptr->low_limit || helper->uintval > sym_ptr->high_limit ) {
-		printf ("%s: at line %d, %s value %d out of range %hd-%hd\n ", prog_name,line,sym_ptr->sym_ident,helper->uintval,sym_ptr->low_limit, sym_ptr->high_limit);
+		printf ("docsis: at line %d, %s value %d out of range %hd-%hd\n ", line,sym_ptr->sym_ident,helper->uintval,sym_ptr->low_limit, sym_ptr->high_limit);
 		exit(-15);
 	}
   }
@@ -118,7 +117,7 @@ int encode_uchar ( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr 
 
   if ( sym_ptr->low_limit || sym_ptr->high_limit ) {
 	if ( helper->uintval < sym_ptr->low_limit || helper->uintval > sym_ptr->high_limit ) {
-		printf ("%s: at line %d, %s value %d out of range %hd-%hd\n ", prog_name,line,sym_ptr->sym_ident,helper->uintval,sym_ptr->low_limit, sym_ptr->high_limit);
+		printf ("docsis: at line %d, %s value %d out of range %hd-%hd\n ", line,sym_ptr->sym_ident,helper->uintval,sym_ptr->low_limit, sym_ptr->high_limit);
 		exit(-15);
 	}
   }

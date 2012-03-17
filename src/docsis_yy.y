@@ -37,7 +37,6 @@ extern unsigned int line; 	/* current line number, defined in a.l */
 extern struct tlv *global_tlvtree_head; /* Global list of all config TLVs */
 extern symbol_type *global_symtable;
 extern FILE *yyin;
-extern char prog_name[255];
 
 struct tlv *_my_tlvtree_head;
 
@@ -620,7 +619,7 @@ int parse_config_file ( char *file, struct tlv **parse_tree_result )
 
   if ( (cf = fopen ( file, "r" ))== NULL )
   {
-	printf ("%s: Can't open input file %s\n", prog_name, file );
+	printf ("docsis: Can't open input file %s\n", file );
 	return -1;
   }
 

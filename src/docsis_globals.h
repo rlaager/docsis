@@ -23,7 +23,6 @@
 #ifndef _DOCSIS_GLOBALS_H
 #define _DOCSIS_GLOBALS_H
 
-char prog_name[255];
 struct tlv *global_tlvtree_head;
 symbol_type *global_symtable;
 
