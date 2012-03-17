@@ -265,7 +265,9 @@ main (int argc, char *argv[])
 
 			printf ("Processing input file %s: output to  %s\n",argv[i], output_file);
 /*			fprintf (stderr,"Processing input file %s: output to  %s\n",argv[i], output_file);  */
-			encode_one_file (argv[i], output_file, key, keylen, encode_docsis);
+			if (encode_one_file (argv[i], output_file, key, keylen, encode_docsis)) {
+				exit(2);
+			}
 			free (output_file);
 			output_file = NULL;
 		}
@@ -277,13 +279,17 @@ main (int argc, char *argv[])
 				continue;
 			}
 			printf ("Processing input file %s: output to  %s\n",argv[i], output_file);
-			encode_one_file (argv[i], output_file, key, keylen, encode_docsis);
+			if (encode_one_file (argv[i], output_file, key, keylen, encode_docsis)) {
+				exit(2);
+			}
 			free (output_file);
 			output_file = NULL;
 		}
 	}
   } else {
-	encode_one_file (config_file, output_file, key, keylen, encode_docsis);
+	if (encode_one_file (config_file, output_file, key, keylen, encode_docsis)) {
+		exit(2);
+	}
 	/* encode argv[1] */
   }
   free(global_symtable);
