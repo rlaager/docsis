@@ -397,7 +397,11 @@ setup_mib_flags() {
 #endif /* DEBUG  */
 
   setenv ("MIBS", "ALL", 1);
+#ifdef HAVE_NETSNMP_INIT_MIB
+  netsnmp_init_mib ();
+#else
   init_mib ();
+#endif
   if (!netsnmp_ds_get_boolean
       (NETSNMP_DS_LIBRARY_ID, NETSNMP_DS_LIB_PRINT_NUMERIC_OIDS))
     {
