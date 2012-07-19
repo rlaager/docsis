@@ -362,7 +362,7 @@ decode_vbind (unsigned char *data, unsigned int vb_len)
 	}
     }
 
-  fprintf(stderr, "%s", outbuf);
+  printf("%s", outbuf);
 
 /* save the subtree - we need it later to show enums */
   subtree = get_tree (var_name, name_len, get_tree_head() );
@@ -609,9 +609,9 @@ decode_vbind (unsigned char *data, unsigned int vb_len)
 		}
     }
   if (enum_string)
-	fprintf(stderr, " %s %s; /* %s */", _docsis_snmp_label, outbuf, enum_string);
+	printf(" %s %s; /* %s */", _docsis_snmp_label, outbuf, enum_string);
   else
-	fprintf(stderr, " %s %s ;", _docsis_snmp_label, outbuf);
+	printf(" %s %s ;", _docsis_snmp_label, outbuf);
 
 
   snmp_free_var (vp);
@@ -672,7 +672,7 @@ decode_snmp_oid (unsigned char *data, size_t data_len)
       snprint_objid (outbuf, 1023, this_oid, oid_len);
     }
 /*  fprintf(stderr, "%s %d", outbuf, (int) data[data_len - 1]); */
-  fprintf(stderr, "%s", outbuf);
+  printf("%s", outbuf);
   return 1;
 }
 
