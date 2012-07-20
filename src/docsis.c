@@ -45,7 +45,7 @@
 struct tlv *global_tlvtree_head;
 symbol_type *global_symtable;
 
-static void setup_mib_flags(void);
+static void setup_mib_flags(int resolve_oids);
 
 static unsigned int
 add_cm_mic (unsigned char *tlvbuf, unsigned int tlvbuflen)
@@ -150,6 +150,7 @@ usage ()
   fprintf(stderr, "To encode a MTA configuration file: \n\t docsis -p <mta_cfg_file> <output_file>\n");
   fprintf(stderr, "To encode multiple MTA configuration files: \n\t docsis -m -p <mta_file1> ...  <new_extension>\n");
   fprintf(stderr, "To decode a CM or MTA config file: \n\t docsis -d <binary_file>\n");
+  fprintf(stderr, "To decode a CM or MTA config file with OIDs: \n\t docsis -o -d <binary_file>\n");
   fprintf(stderr, "\nWhere:\n<cfg_file>\t\t= name of text (human readable) cable modem or MTA \n\t\t\t  configuration file\n<key_file>\t\t= text file containing the authentication key \n\t\t\t  (shared secret) to be used for the CMTS MIC\n<output_file> \t\t= name of output file where the binary data will\n\t\t\t  be written to (if it does not exist it is created).\n<binary_file>\t\t= name of binary file to be decoded\n<new_extension>\t\t= new extension to be used when encoding multiple files\n");
   fprintf(stderr, "\nSee examples/*.cfg for configuration file format.\n");
   fprintf(stderr, "\nPlease send bugs or questions to docsis-users@lists.sourceforge.net\n\n");
@@ -166,12 +167,21 @@ main (int argc, char *argv[])
   unsigned int keylen = 0;
   unsigned int encode_docsis = FALSE, decode_bin = FALSE;
   int i;
+  int resolve_oids = 1;
 
   if (argc < 2 ) {
 	usage();
   }
 
-  if (!strcmp (argv[1], "-m") ){ /* variable number of args, encoding multiple files */
+  if (!strcmp (argv[1], "-o") ){
+	resolve_oids = 0;
+	if (!strcmp (argv[2], "-d")) {
+		decode_bin = TRUE;
+		config_file = argv[3];
+	} else {
+		usage();
+	}
+  }else if (!strcmp (argv[1], "-m") ){ /* variable number of args, encoding multiple files */
 	if (argc < 5 ) {
 		usage();
 	}
@@ -228,7 +238,7 @@ main (int argc, char *argv[])
     }
 
   init_global_symtable ();
-  setup_mib_flags();
+  setup_mib_flags(resolve_oids);
 
   if (decode_bin)
   {
@@ -387,18 +397,23 @@ decode_file (char *file)
 
 
 static void
-setup_mib_flags() {
+setup_mib_flags(int resolve_oids) {
 
 #ifdef DEBUG
 /*  snmp_set_mib_warnings (2); */
 #endif /* DEBUG  */
 
-  setenv ("MIBS", "ALL", 1);
+  if (resolve_oids)
+    {
+      setenv ("MIBS", "ALL", 1);
+    }
+
 #ifdef HAVE_NETSNMP_INIT_MIB
   netsnmp_init_mib ();
 #else
   init_mib ();
 #endif
+
   if (!netsnmp_ds_get_boolean
       (NETSNMP_DS_LIBRARY_ID, NETSNMP_DS_LIB_PRINT_NUMERIC_OIDS))
     {
