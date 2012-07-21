@@ -47,12 +47,12 @@ int encode_uint ( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
   unsigned int int_value;
   union t_val *helper; /* We only use this to cast the void* we receive to what we think it should be */
   if ( buf == NULL ) {
-	fprintf(stderr, stderr, "encode_uint called w/NULL buffer!\n");
+	fprintf(stderr, "encode_uint called w/NULL buffer!\n");
 	exit (-1);
   }
 
   if ( tval == NULL  ) {
-	fprintf(stderr, stderr, "encode_uint called w/NULL value struct !\n");
+	fprintf(stderr, "encode_uint called w/NULL value struct !\n");
 	exit (-1);
   }
   helper = (union t_val *) tval;
