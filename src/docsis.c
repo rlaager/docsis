@@ -364,7 +364,7 @@ init_global_symtable (void)
     (symbol_type *) malloc (sizeof (symbol_type) * NUM_IDENTIFIERS);
   if (global_symtable == NULL)
     {
-      fprintf(stderr, "Error allocating memory!\n");
+      fprintf(stderr, "Error allocating memory\n");
       exit (255);
     }
   memcpy (global_symtable, symtable, sizeof (symbol_type) * NUM_IDENTIFIERS);

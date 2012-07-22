@@ -501,7 +501,7 @@ merge_tlvlist(struct tlv *tlv1, struct tlv *tlv2)
 {
   struct tlv *tlvptr, *last_sibling;
   if ( tlv2 == NULL ) {
-	fprintf(stderr, "merge_tlvlist called with NULL tlv2 !\n");
+	fprintf(stderr, "merge_tlvlist called with NULL tlv2\n");
 	exit(-2);
   }
 
@@ -554,7 +554,7 @@ unsigned int flatten_tlvsubtree ( unsigned char *buf, unsigned int used_size, st
   register unsigned char *cp;
 
   if ( buf == NULL ) {
-	fprintf(stderr, "Error: can't flatten tlvlist in a NULL destination  buffer!\n" );
+	fprintf(stderr, "Error: can't flatten tlvlist in a NULL destination buffer\n" );
 	exit (-2);
   }
 

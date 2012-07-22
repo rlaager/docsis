@@ -47,12 +47,12 @@ int encode_uint ( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
   unsigned int int_value;
   union t_val *helper; /* We only use this to cast the void* we receive to what we think it should be */
   if ( buf == NULL ) {
-	fprintf(stderr, "encode_uint called w/NULL buffer!\n");
+	fprintf(stderr, "encode_uint called w/NULL buffer\n");
 	exit (-1);
   }
 
   if ( tval == NULL  ) {
-	fprintf(stderr, "encode_uint called w/NULL value struct !\n");
+	fprintf(stderr, "encode_uint called w/NULL value struct\n");
 	exit (-1);
   }
   helper = (union t_val *) tval;
@@ -76,12 +76,12 @@ int encode_ushort ( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr
   unsigned short sint;
   union t_val *helper; /* We only use this to cast the void* we receive to what we think it should be */
   if ( buf == NULL ) {
-        fprintf(stderr, "encode_ushort called w/NULL buffer!\n");
+        fprintf(stderr, "encode_ushort called w/NULL buffer\n");
         exit (-1);
   }
 
   if ( tval == NULL  ) {
-        fprintf(stderr, "encode_ushort called w/NULL value struct !\n");
+        fprintf(stderr, "encode_ushort called w/NULL value struct\n");
         exit (-1);
   }
   helper = (union t_val *) tval;
@@ -105,12 +105,12 @@ int encode_uchar ( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr 
   char *cp;
   union t_val *helper; /* We only use this to cast the void* we receive to what we think it should be */
   if ( buf == NULL ) {
-        fprintf(stderr, "encode_uchar called w/NULL buffer!\n");
+        fprintf(stderr, "encode_uchar called w/NULL buffer\n");
         exit (-1);
   }
 
   if ( tval == NULL  ) {
-        fprintf(stderr, "encode_uchar called w/NULL value struct !\n");
+        fprintf(stderr, "encode_uchar called w/NULL value struct\n");
         exit (-1);
   }
 
@@ -139,12 +139,12 @@ int encode_ip( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
   union t_val *helper; /* We only use this to cast the void* we receive to what we think it should be */
 
   if ( buf == NULL ) {
-        fprintf(stderr, "encode_ip called w/NULL buffer!\n");
+        fprintf(stderr, "encode_ip called w/NULL buffer\n");
         exit (-1);
   }
 
   if ( tval == NULL  ) {
-        fprintf(stderr, "encode_ip called w/NULL value struct !\n");
+        fprintf(stderr, "encode_ip called w/NULL value struct\n");
         exit (-1);
   }
 
@@ -168,12 +168,12 @@ int encode_ip6( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
   union t_val *helper; /* We only use this to cast the void* we receive to what we think it should be */
 
   if ( buf == NULL ) {
-        fprintf(stderr, "encode_ip called w/NULL buffer!\n");
+        fprintf(stderr, "encode_ip called w/NULL buffer\n");
         exit (-1);
   }
 
   if ( tval == NULL  ) {
-        fprintf(stderr, "encode_ip called w/NULL value struct !\n");
+        fprintf(stderr, "encode_ip called w/NULL value struct\n");
         exit (-1);
   }
 
@@ -197,12 +197,12 @@ int retval; 	     /* return value of inet_aton */
 union t_val *helper; /* We only use this to cast the void* we receive to what we think it should be */
 
   if ( buf == NULL ) {
-        fprintf(stderr, "encode_ether called w/NULL buffer!\n");
+        fprintf(stderr, "encode_ether called w/NULL buffer\n");
         exit (-1);
   }
 
   if ( tval == NULL  ) {
-        fprintf(stderr, "encode_ether called w/NULL value struct !\n");
+        fprintf(stderr, "encode_ether called w/NULL value struct\n");
         exit (-1);
   }
 
@@ -226,12 +226,12 @@ char *ether,*mask;
 union t_val *helper; /* We only use this to cast the void* we receive to what we think it should be */
 
   if ( buf == NULL ) {
-        fprintf(stderr, "encode_ethermask called w/NULL buffer!\n");
+        fprintf(stderr, "encode_ethermask called w/NULL buffer\n");
         exit (-1);
   }
 
   if ( tval == NULL  ) {
-        fprintf(stderr, "encode_ethermask called w/NULL value struct !\n");
+        fprintf(stderr, "encode_ethermask called w/NULL value struct\n");
         exit (-1);
   }
 
@@ -268,12 +268,12 @@ int encode_string(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
   union t_val *helper;
 
   if ( buf == NULL ) {
-        fprintf(stderr, "encode_string called w/NULL buffer!\n");
+        fprintf(stderr, "encode_string called w/NULL buffer\n");
         exit (-1);
   }
 
   if ( tval == NULL  ) {
-        fprintf(stderr, "encode_string called w/NULL value struct !\n");
+        fprintf(stderr, "encode_string called w/NULL value struct\n");
         exit (-1);
   }
   helper = (union t_val *) tval;
@@ -309,12 +309,12 @@ int encode_strzero(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr 
   union t_val *helper;
 
   if ( buf == NULL ) {
-        fprintf(stderr, "encode_string called w/NULL buffer!\n");
+        fprintf(stderr, "encode_string called w/NULL buffer\n");
         exit (-1);
   }
 
   if ( tval == NULL  ) {
-        fprintf(stderr, "encode_string called w/NULL value struct !\n");
+        fprintf(stderr, "encode_string called w/NULL value struct\n");
         exit (-1);
   }
   helper = (union t_val *) tval;
@@ -352,19 +352,19 @@ int encode_hexstr (unsigned char *buf, void *tval, struct symbol_entry *sym_ptr)
   union t_val *helper;
 
   if ( buf == NULL ) {
-        fprintf(stderr, "encode_hexstr called w/NULL buffer!\n");
+        fprintf(stderr, "encode_hexstr called w/NULL buffer\n");
         exit (-1);
   }
 
   if ( tval == NULL  ) {
-        fprintf(stderr, "encode_hexstr called w/NULL value struct !\n");
+        fprintf(stderr, "encode_hexstr called w/NULL value struct\n");
         exit (-1);
   }
   helper = (union t_val *) tval;
   string_size = strlen ( helper->strval );
 
   if ( string_size % 2 != 0 ) {
-        fprintf(stderr, "encode_hexstr: invalid hex string !\n");
+        fprintf(stderr, "encode_hexstr: invalid hex string\n");
         exit (-1);
   }
 
@@ -416,12 +416,12 @@ int encode_oid(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
   union t_val *helper;
 
   if ( buf == NULL ) {
-        fprintf(stderr, "encode_oid called w/NULL buffer!\n");
+        fprintf(stderr, "encode_oid called w/NULL buffer\n");
         exit (-1);
   }
 
   if ( tval == NULL  ) {
-        fprintf(stderr, "encode_oid called w/NULL value struct !\n");
+        fprintf(stderr, "encode_oid called w/NULL value struct\n");
         exit (-1);
   }
 
@@ -447,12 +447,12 @@ int i;
 union t_val *helper; /* We only use this to cast the void* we receive to what we think it should be */
 
   if ( buf == NULL ) {
-        fprintf(stderr, "encode_ushort_list called w/NULL buffer!\n");
+        fprintf(stderr, "encode_ushort_list called w/NULL buffer\n");
         exit (-1);
   }
 
   if ( tval == NULL  ) {
-        fprintf(stderr, "encode_ushort_list called w/NULL value struct !\n");
+        fprintf(stderr, "encode_ushort_list called w/NULL value struct\n");
         exit (-1);
   }
 

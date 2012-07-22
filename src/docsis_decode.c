@@ -54,7 +54,7 @@ void decode_uint (unsigned char *tlvbuf, struct symbol_entry *sym, size_t length
 {
   static unsigned int helper;
   if (length != sizeof(unsigned int) ) {
-	fprintf(stderr, "u_int length mismatch!\n");
+	fprintf(stderr, "u_int length mismatch\n");
 	exit(-45);
   }
   memset( &helper, 0, sizeof(unsigned int));
@@ -67,7 +67,7 @@ void decode_ushort (unsigned char *tlvbuf, symbol_type *sym, size_t length)
 {
   static unsigned short helper;
   if (length != sizeof(unsigned short) ) {
-        fprintf(stderr, "u_short length mismatch!\n");
+        fprintf(stderr, "u_short length mismatch\n");
         exit(-45);
   }
 
@@ -86,7 +86,7 @@ void decode_ip (unsigned char *tlvbuf, symbol_type *sym, size_t length )
 {
   static struct in_addr helper;
   if (length != sizeof(struct in_addr) ) {
-        fprintf(stderr, "ip address length mismatch!\n");
+        fprintf(stderr, "ip address length mismatch\n");
         exit(-45);
   }
 
@@ -100,7 +100,7 @@ void decode_ip6 (unsigned char *tlvbuf, symbol_type *sym, size_t length )
   static struct in6_addr helper;
   char ipstr[INET6_ADDRSTRLEN];
   if (length != sizeof(struct in6_addr) ) {
-        fprintf(stderr, "ip address length mismatch!\n");
+        fprintf(stderr, "ip address length mismatch\n");
         exit(-45);
   }
 
@@ -113,7 +113,7 @@ void decode_ether (unsigned char *tlvbuf, symbol_type *sym, size_t length )
 {
 
  if (length != 6 ) {
-        fprintf(stderr, "ethermac length mismatch!\n");
+        fprintf(stderr, "ethermac length mismatch\n");
         exit(-45);
  }
  printf("%s %s;\n",
@@ -127,7 +127,7 @@ void decode_ethermask (unsigned char *tlvbuf, symbol_type *sym, size_t length)
  * "passees" to avoid the 2nd call overwriting the 1st.
  */
   if (length != 12 ) {
-        fprintf(stderr, "ethermac_and_mask length mismatch!\n");
+        fprintf(stderr, "ethermac_and_mask length mismatch\n");
         exit(-45);
   }
   printf("%s %s/", sym->sym_ident, ether_ntoa(tlvbuf));
@@ -139,7 +139,7 @@ void decode_md5 (unsigned char *tlvbuf, symbol_type *sym, size_t length)
 {
   size_t j=0;
   if (length != 16 ) {
-        fprintf(stderr, "md5digest length mismatch!\n");
+        fprintf(stderr, "md5digest length mismatch\n");
         exit(-45);
   }
 
