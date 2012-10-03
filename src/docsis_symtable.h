@@ -263,6 +263,9 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 173, "SwUpgradeServer6",    	58,  0,   (encode_ip6),        (decode_ip6),          0,        0          },
 { 174, "SubMgmtControl6", 		63,  0,	  (encode_hexstr),    (decode_hexstr), 		2,	2 	},
 
+/* Added SNMP CPE Access Control per Docsis3.0 CM-SP-MULPIv3.0-I19-120809  Annex C C.1.2.15*/
+{ 175,  "SNMPCPEAccessControl",           55,   0,   (encode_uchar),     (decode_uchar),       0,        1          },
+
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/
 { 998, "GenericTLV",           		0, 0,     (encode_nothing),   (decode_special),  0,        0        },
 { 999, "/*EndOfDataMkr*/",     		255, 0,   (encode_nothing),   (decode_special),  0,        0          }
