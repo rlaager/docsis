@@ -1,3 +1,16 @@
+version 0.9.7 (10/18/2012):
+	* Properly check for net-snmp headers (#3388921)
+	* exit(2) on parse failures (Bradley Baetz - #3015411)
+	* Support typed GenericTLVs (Bradley Baetz - #1115132)
+	* Fix compilation issues on MacOS X (#3382125, #3497516)
+	* Support IPv6 (Benedikt Schirrmeister)
+	* Switch to dpkg's md5.c to eliminate the advertising clause
+	  (#3495093)
+	* Write errors to stderr
+	* Allow - as a filename to mean stdin/stdout
+	* Accept -o with -d to disable OID decoding
+	  (Benedikt Schirrmeister - #3310695)
+
 version 0.9.6 (06/14/2010):
 	* Fix compiling on systems where -lm is required (Oliver Hitz)
 	* Support newer versions of GNU m4
