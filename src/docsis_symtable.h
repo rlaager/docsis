@@ -263,6 +263,23 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 173, "SwUpgradeServer6",    	58,  0,   (encode_ip6),        (decode_ip6),          0,        0          },
 { 174, "SubMgmtControl6", 		63,  0,	  (encode_hexstr),    (decode_hexstr), 		2,	2 	},
 
+/* eRouter TLVs */
+{ 175,  "eRouter",                    202,  0,    (encode_nothing),  (decode_aggregate),  0,  0    },
+{ 176,  "InitializationMode",         1,    175,  (encode_uchar),    (decode_uchar),      0,  255  },
+{ 177,  "TR69ManagementServer",       2,    175,  (encode_nothing),  (decode_aggregate),  0,  0    },
+{ 178,  "EnableCWMP",                 1,    177,  (encode_uchar),    (decode_uchar),      0,  1    },
+{ 179,  "URL",                        2,    177,  (encode_string),   (decode_string),     0,  0    },
+{ 180,  "Username",                   3,    177,  (encode_string),   (decode_string),     0,  0    },
+{ 181,  "Password",    		          4,    177,  (encode_string),   (decode_string),     0,  0    },
+{ 182,  "ConnectionRequestUsername",  5,    177,  (encode_string),   (decode_string),     0,  0    },
+{ 183,  "ConnectionRequestPassword",  6,    177,  (encode_string),   (decode_string),     0,  0    },
+{ 184,  "ACSOverride",                7,    177,  (encode_uchar),    (decode_uchar),      0,  1    },
+
+/* Channel Assignment Configuration Settings per Docsis3.1 CM-SP-MULPIv3.1-I01-131029 Annex C C.1.2.15 */
+{ 185,  "ChannelAssignmentConfig",    56,   0,    (encode_nothing),  (decode_aggregate),  0,         0          },
+{ 186,  "CaTransmit",                 1,    185,  (encode_uchar),    (decode_uchar),      0,         255        },
+{ 187,  "CaReceive",                  2,    185,  (encode_uint),     (decode_uint),       88000000,  860000000  },
+
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/
 { 998, "GenericTLV",           		0, 0,     (encode_nothing),   (decode_special),  0,        0        },
 { 999, "/*EndOfDataMkr*/",     		255, 0,   (encode_nothing),   (decode_special),  0,        0          }
