@@ -151,7 +151,7 @@ void decode_md5 (unsigned char *tlvbuf, symbol_type *sym, size_t length)
 
 void decode_snmp_wd (unsigned char *tlvbuf, symbol_type *sym, size_t length )
 {
-  fprintf(stderr, "%s ", sym->sym_ident);
+  printf( "%s ", sym->sym_ident);
 
   /* last char in this TLV is not part of OID */
   decode_snmp_oid (tlvbuf, (unsigned int) length-1 );
