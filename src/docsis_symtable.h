@@ -306,6 +306,8 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 206,  "L2VPNEncoding",               5,    204,  (encode_nothing),  (decode_aggregate),  0,         0          }, /* 23.43.5 */
 { 207,  "VPNIdentifier",               1,    206,  (encode_string),   (decode_string),     4,         255        }, /* 23.43.5.1 */
 
+{ 191,  "NSIEncapsulationDualQTag",    3,    190,  (encode_dual_qtag),   (decode_dual_qtag),  0,         0          },
+
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/
 { 998, "GenericTLV",           		0, 0,     (encode_nothing),   (decode_special),  0,        0        },
 { 999, "/*EndOfDataMkr*/",     		255, 0,   (encode_nothing),   (decode_special),  0,        0          }

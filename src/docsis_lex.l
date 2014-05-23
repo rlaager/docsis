@@ -151,6 +151,7 @@ TlvType			{ return T_TLV_TYPE;		}
 ;	 { yylval.strval=yytext;return ';'; }
 .	 { fprintf(stderr, "Unrecognized char \"%c\" at line %d\n",*yytext,line); exit(-1); }
 (::|(([a-fA-F0-9]{1,4}):){7}(([a-fA-F0-9]{1,4}))|(:(:([a-fA-F0-9]{1,4})){1,6})|((([a-fA-F0-9]{1,4}):){1,6}:)|((([a-fA-F0-9]{1,4}):)(:([a-fA-F0-9]{1,4})){1,6})|((([a-fA-F0-9]{1,4}):){2}(:([a-fA-F0-9]{1,4})){1,5})|((([a-fA-F0-9]{1,4}):){3}(:([a-fA-F0-9]{1,4})){1,4})|((([a-fA-F0-9]{1,4}):){4}(:([a-fA-F0-9]{1,4})){1,3})|((([a-fA-F0-9]{1,4}):){5}(:([a-fA-F0-9]{1,4})){1,2}))		{ TSAVE(yytext);yylval.strval=tsave; return T_IP6;	  }
+[0-9]+,[0-9]+ 				{ TSAVE(yytext);yylval.strval=tsave; return T_DUAL_TAG; }
 %%
 
 struct symbol_entry
