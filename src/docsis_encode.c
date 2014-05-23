@@ -221,10 +221,10 @@ union t_val *helper; /* We only use this to cast the void* we receive to what we
 
 int encode_dual_qtag ( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
 {
-	int i, final;
-	char *token;
-	char *array[2];
-	const char s[2] = ",";
+    int i, final;
+    char *token;
+    char *array[2];
+    const char s[2] = ",";
     union t_val *helper;
     
 #ifdef DEBUG
