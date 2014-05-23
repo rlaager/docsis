@@ -95,7 +95,7 @@ struct tlv *_my_tlvtree_head;
 %token <uintval>  T_TLV_STR_VALUE
 %token <uintval>  T_TLV_STRZERO_VALUE
 %token <uintval>  T_TLV_TYPE
-
+%token <uintval>  T_DUAL_TAG
 
 %type <tlvptr>  assignment_stmt
 %type <tlvptr>  generic_stmt
@@ -170,6 +170,8 @@ assignment_stmt:  T_IDENTIFIER T_INTEGER ';' {
 		| T_IDENTIFIER T_IP ';' {
 			$$ = create_tlv ($1, (union t_val *)&$2);}
 		| T_IDENTIFIER T_IP6 ';' {
+			$$ = create_tlv ($1, (union t_val *)&$2);}
+		| T_IDENTIFIER T_DUAL_TAG ';' {
 			$$ = create_tlv ($1, (union t_val *)&$2);}
 		| T_IDENTIFIER T_MAC ';' {
 			$$ = create_tlv ($1, (union t_val *)&$2);}
