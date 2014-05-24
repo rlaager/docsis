@@ -240,7 +240,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 153, "DCCSupport",			12,  144, (encode_uchar),     (decode_uchar),           0,      1       },
 { 154, "SubMgmtControl", 		35,  0,	  (encode_hexstr),    (decode_hexstr), 		3,	3 	},
 { 155, "SubMgmtFilters", 		37,  0,	  (encode_ushort_list), (decode_ushort_list), 	4,	4 	},
-{ 156, "SnmpMibObject",   		64, 0,    (encode_nothing),     (decode_snmp_object),    1,        2048       },
+/*{ 156, "SnmpMibObject",   		64, 0,    (encode_nothing),     (decode_snmp_object),    1,        2048       },*/
 /* PacketCable MTA Configuration File Delimiter  */
 { 157, "MtaConfigDelimiter",   		254, 0,   (encode_uchar),     (decode_uchar),    1,        255        },
 { 158, "DsChannelList",   		41, 0,    (encode_nothing),     (decode_aggregate),    1,        255        },
@@ -306,7 +306,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 206,  "L2VPNEncoding",               5,    204,  (encode_nothing),  (decode_aggregate),  0,         0          }, /* 23.43.5 */
 { 207,  "VPNIdentifier",               1,    206,  (encode_string),   (decode_string),     4,         255        }, /* 23.43.5.1 */
 
-{ 191,  "NSIEncapsulationDualQTag",    3,    190,  (encode_dual_qtag),   (decode_dual_qtag),  0,         0          },
+{ 191,  "NSIEncapsulationDualQTag",    3,    190,  (encode_dual_qtag),   (decode_dual_qtag),  0,      0          }, /* 43.5.2.3 */
 
 { 208,  "DUTFiltering",                45,   0,    (encode_nothing),  (decode_aggregate),  0,         0          }, /* 45 */
 { 209,  "DUTControl",                  1,    208,  (encode_uchar),    (decode_uchar),      0,         1          }, /* 45.1 */
