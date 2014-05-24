@@ -430,6 +430,7 @@ int encode_hexstr (unsigned char *buf, void *tval, struct symbol_entry *sym_ptr)
   fprintf(stderr, "encode_hexstr: found '%s' on line %d\n", helper->strval, line );
 #endif /* DEBUG */
   free(helper->strval);
+  /* TODO Fix bug added by free(helper->strval) when double quote is used in text config file. */
   return ( i );
 }
 
