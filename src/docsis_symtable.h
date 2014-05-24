@@ -208,7 +208,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 129, "MfgCVCData",           		32,   0,  (encode_hexstr),    (decode_hexstr),      0,        255        },
 
 /* Vendor Specific */
-{ 130, "VendorSpecific",       		43,   0,  (encode_nothing),   (decode_vspecific),   0,        0          },
+{ 130, "VendorSpecific",       		43,   0,  (encode_nothing),   (decode_aggregate),   0,        0          },
 { 131, "VendorIdentifier",     		8,  130,  (encode_hexstr),    (decode_hexstr),      3,        3          },
 
 /* SNMPv3 Kickstart */
@@ -240,7 +240,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 153, "DCCSupport",			12,  144, (encode_uchar),     (decode_uchar),           0,      1       },
 { 154, "SubMgmtControl", 		35,  0,	  (encode_hexstr),    (decode_hexstr), 		3,	3 	},
 { 155, "SubMgmtFilters", 		37,  0,	  (encode_ushort_list), (decode_ushort_list), 	4,	4 	},
-{ 156, "SnmpMibObject",   		64, 0,    (encode_nothing),     (decode_snmp_object),    1,        2048       },
+/*{ 156, "SnmpMibObject",   		64, 0,    (encode_nothing),     (decode_snmp_object),    1,        2048       },*/
 /* PacketCable MTA Configuration File Delimiter  */
 { 157, "MtaConfigDelimiter",   		254, 0,   (encode_uchar),     (decode_uchar),    1,        255        },
 { 158, "DsChannelList",   		41, 0,    (encode_nothing),     (decode_aggregate),    1,        255        },
@@ -262,6 +262,55 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 /* IPv6 */
 { 173, "SwUpgradeServer6",    	58,  0,   (encode_ip6),        (decode_ip6),          0,        0          },
 { 174, "SubMgmtControl6", 		63,  0,	  (encode_hexstr),    (decode_hexstr), 		2,	2 	},
+
+/* eRouter TLVs */
+{ 175,  "eRouter",                    202,  0,    (encode_nothing),  (decode_aggregate),  0,  0    },
+{ 176,  "InitializationMode",         1,    175,  (encode_uchar),    (decode_uchar),      0,  255  },
+{ 177,  "TR69ManagementServer",       2,    175,  (encode_nothing),  (decode_aggregate),  0,  0    },
+{ 178,  "EnableCWMP",                 1,    177,  (encode_uchar),    (decode_uchar),      0,  1    },
+{ 179,  "URL",                        2,    177,  (encode_string),   (decode_string),     0,  0    },
+{ 180,  "Username",                   3,    177,  (encode_string),   (decode_string),     0,  0    },
+{ 181,  "Password",    		          4,    177,  (encode_string),   (decode_string),     0,  0    },
+{ 182,  "ConnectionRequestUsername",  5,    177,  (encode_string),   (decode_string),     0,  0    },
+{ 183,  "ConnectionRequestPassword",  6,    177,  (encode_string),   (decode_string),     0,  0    },
+{ 184,  "ACSOverride",                7,    177,  (encode_uchar),    (decode_uchar),      0,  1    },
+
+/* Channel Assignment Configuration Settings per Docsis3.1 CM-SP-MULPIv3.1-I01-131029 Annex C C.1.2.15 */
+{ 185,  "ChannelAssignmentConfig",    56,   0,    (encode_nothing),  (decode_aggregate),  0,         0          },
+{ 186,  "CaTransmit",                 1,    185,  (encode_uchar),    (decode_uchar),      0,         255        },
+{ 187,  "CaReceive",                  2,    185,  (encode_uint),     (decode_uint),       88000000,  860000000  },
+
+/* L2VPN BSoD support  */
+{ 188,  "L2VPNEncoding",               5,    130,  (encode_nothing),  (decode_aggregate),  0,         0          }, /* 43.5 */
+{ 189,  "VPNIdentifier",               1,    188,  (encode_string),   (decode_string),     4,         255        }, /* 43.5.1 */
+{ 190,  "NSIEncapsulation",            2,    188,  (encode_nothing),  (decode_aggregate),  0,         0          }, /* 43.5.2 */
+{ 191,  "NSIEncapsulationSingleQTag",  2,    190,  (encode_ushort),   (decode_ushort),     1,         4095       }, /* 43.5.2.2 */
+/* TLV 24 Upstream Service Flow */
+{ 192,  "VendorSpecific",              43,   80,   (encode_nothing),  (decode_aggregate),  0,         0          }, /* 24.43 */
+{ 193,  "VendorIdentifier",    		   8,    192,  (encode_hexstr),   (decode_hexstr),     3,         3          }, /* 24.43.8 */
+{ 194,  "L2VPNEncoding",               5,    192,  (encode_nothing),  (decode_aggregate),  0,         0          }, /* 24.43.5 */
+{ 195,  "VPNIdentifier",               1,    194,  (encode_string),   (decode_string),     4,         255        }, /* 24.43.5.1 */
+/* TLV 25 - Downstream Service Flow */
+{ 196,  "VendorSpecific",              43,   102,  (encode_nothing),  (decode_aggregate),  0,         0          }, /* 25.43 */
+{ 197,  "VendorIdentifier",    		   8,    196,  (encode_hexstr),   (decode_hexstr),     3,         3          }, /* 25.43.8 */
+{ 198,  "L2VPNEncoding",               5,    196,  (encode_nothing),  (decode_aggregate),  0,         0          }, /* 25.43.5 */
+{ 199,  "VPNIdentifier",               1,    198,  (encode_string),   (decode_string),     4,         255        }, /* 25.43.5.1 */
+/* TLV 22 - Upstream Packet Classification */
+{ 200,  "VendorSpecific",              43,   28,   (encode_nothing),  (decode_aggregate),  0,         0          }, /* 22.43 */
+{ 201,  "VendorIdentifier",    		   8,    200,  (encode_hexstr),   (decode_hexstr),     3,         3          }, /* 22.43.8 */
+{ 202,  "L2VPNEncoding",               5,    200,  (encode_nothing),  (decode_aggregate),  0,         0          }, /* 22.43.5 */
+{ 203,  "VPNIdentifier",               1,    202,  (encode_string),   (decode_string),     4,         255        }, /* 22.43.5.1 */
+/* TLV 23 - Downstream Packet Classification */
+{ 204,  "VendorSpecific",              43,   54,   (encode_nothing),  (decode_aggregate),  0,         0          }, /* 23.43 */
+{ 205,  "VendorIdentifier",    		   8,    204,  (encode_hexstr),   (decode_hexstr),     3,         3          }, /* 23.43.8 */
+{ 206,  "L2VPNEncoding",               5,    204,  (encode_nothing),  (decode_aggregate),  0,         0          }, /* 23.43.5 */
+{ 207,  "VPNIdentifier",               1,    206,  (encode_string),   (decode_string),     4,         255        }, /* 23.43.5.1 */
+
+{ 191,  "NSIEncapsulationDualQTag",    3,    190,  (encode_dual_qtag),   (decode_dual_qtag),  0,      0          }, /* 43.5.2.3 */
+
+{ 208,  "DUTFiltering",                45,   0,    (encode_nothing),  (decode_aggregate),  0,         0          }, /* 45 */
+{ 209,  "DUTControl",                  1,    208,  (encode_uchar),    (decode_uchar),      0,         1          }, /* 45.1 */
+{ 210,  "DUTCMIM",                     2,    208,  (encode_hexstr),   (decode_hexstr),     0,         0          }, /* 45.2 */
 
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/
 { 998, "GenericTLV",           		0, 0,     (encode_nothing),   (decode_special),  0,        0        },

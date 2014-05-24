@@ -120,6 +120,15 @@ void decode_ether (unsigned char *tlvbuf, symbol_type *sym, size_t length )
 	sym->sym_ident, ether_ntoa(tlvbuf) );
 }
 
+void decode_dual_qtag (unsigned char *tlvbuf, symbol_type *sym, size_t length )
+{
+    if (length != 4 ) {
+        fprintf(stderr, "dual qtag length mismatch\n");
+        exit(-45);
+    }
+    printf("%s %d,%d;\n", sym->sym_ident, tlvbuf[0] * 256 + tlvbuf[1], tlvbuf[2]*256 + tlvbuf[3]);
+}
+
 void decode_ethermask (unsigned char *tlvbuf, symbol_type *sym, size_t length)
 {
 /* the return value of ether_ntoa is a pointer to a static string
@@ -151,7 +160,7 @@ void decode_md5 (unsigned char *tlvbuf, symbol_type *sym, size_t length)
 
 void decode_snmp_wd (unsigned char *tlvbuf, symbol_type *sym, size_t length )
 {
-  fprintf(stderr, "%s ", sym->sym_ident);
+  printf( "%s ", sym->sym_ident);
 
   /* last char in this TLV is not part of OID */
   decode_snmp_oid (tlvbuf, (unsigned int) length-1 );

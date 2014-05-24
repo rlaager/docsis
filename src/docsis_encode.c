@@ -219,6 +219,32 @@ union t_val *helper; /* We only use this to cast the void* we receive to what we
   return retval;  /* hopefully this equals 6 :) */
 }
 
+int encode_dual_qtag ( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
+{
+    int i, final;
+    char *token;
+    char *array[2];
+    const char s[2] = ",";
+    union t_val *helper;
+    
+#ifdef DEBUG
+    fprintf(stderr, "encode_dual_qtag: found '%s' on line %d\n", helper->strval, line );
+#endif /* DEBUG */    
+    
+    helper = (union t_val *) tval;
+    i = 0;
+    token = strtok(helper->strval, s);
+    while (token != NULL) 
+    {
+    	array[i++] = token;
+    	token = strtok (NULL, s);
+    }
+    final = htonl(atoi(array[0]) << 16 | atoi(array[1]));
+    memcpy (buf, &final, sizeof(final));
+    free(helper->strval);
+    return(sizeof(final));
+}
+
 int encode_ethermask ( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
 {
 int reta, retb; 	     /* return value of ether_aton */
@@ -404,6 +430,7 @@ int encode_hexstr (unsigned char *buf, void *tval, struct symbol_entry *sym_ptr)
   fprintf(stderr, "encode_hexstr: found '%s' on line %d\n", helper->strval, line );
 #endif /* DEBUG */
   free(helper->strval);
+  /* TODO Fix bug added by free(helper->strval) when double quote is used in text config file. */
   return ( i );
 }
 
