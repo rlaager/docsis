@@ -312,6 +312,17 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 209,  "DUTControl",                  1,    208,  (encode_uchar),    (decode_uchar),      0,         1          }, /* 45.1 */
 { 210,  "DUTCMIM",                     2,    208,  (encode_hexstr),   (decode_hexstr),     0,         0          }, /* 45.2 */
 
+{ 211,  "PcIPv6PacketClassification",  12,   28,   (encode_nothing),  (decode_aggregate),  0,         0          }, /* 22.12 */
+{ 212,  "PcIPv6TrafficClassRangeAndMask", 1, 211,  (encode_hexstr),   (decode_hexstr),     0,         0          }, /* 22.12.1 */
+{ 213,  "PcIPv6FlowLabel",             2,    211,  (encode_hexstr),   (decode_hexstr),     4,         4          }, /* 22.12.2 */
+{ 214,  "PcIPv6NextHeaderType",        3,    211,  (encode_ushort),   (decode_ushort),     0,         257        }, /* 22.12.3 */
+{ 215,  "PcIPv6SourceAddress",         4,    211,  (encode_ip6),      (decode_ip6),        0,         0          }, /* 22.12.4 */
+{ 216,  "PcIPv6SourcePrefixLength",    5,    211,  (encode_uchar),    (decode_uchar),      0,         128        }, /* 22.12.5 */
+{ 217,  "PcIPv6DestAddress",           6,    211,  (encode_ip6),      (decode_ip6),        0,         0          }, /* 22.12.6 */
+{ 218,  "PcIPv6DestPrefixLength",      7,    211,  (encode_uchar),    (decode_uchar),      0,         128        }, /* 22.12.7 */
+
+{ 219,  "PcCMIMEncoding",              13,   28,   (encode_hexstr),   (decode_hexstr),     0,         0          }, /* 22.13 */
+
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/
 { 998, "GenericTLV",           		0, 0,     (encode_nothing),   (decode_special),  0,        0        },
 { 999, "/*EndOfDataMkr*/",     		255, 0,   (encode_nothing),   (decode_special),  0,        0          }

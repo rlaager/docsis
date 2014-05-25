@@ -31,7 +31,7 @@
 
 
 #ifndef NUM_IDENTIFIERS
-#define NUM_IDENTIFIERS 214
+#define NUM_IDENTIFIERS 222
 #endif /*  NUM_IDENTIFIERS, needed in docsis_symtable.h  */
 
 #define MAXINT 2000000000
@@ -51,7 +51,7 @@ typedef void (*decode_func_t) (unsigned char *, struct symbol_entry *, size_t le
 
 struct symbol_entry {
 	unsigned int id;
-	char sym_ident[30];
+	char sym_ident[40];
 	unsigned char docsis_code;
 	unsigned int parent_id;
 	encode_func_t encode_func;
