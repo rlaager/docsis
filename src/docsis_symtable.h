@@ -58,7 +58,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 8,      "MaxRateDown",                       2,      6,      (encode_uint),           (decode_uint),           0,           1334880000    },
 { 9,      "MaxRateUp",                         3,      6,      (encode_uint),           (decode_uint),           0,           183900000     },
 { 10,     "PriorityUp",                        4,      6,      (encode_uchar),          (decode_uchar),          0,           7             },
-{ 11,     "GuaranteedUp",                      5,      6,      (encode_uint),           (decode_uint),           0,           10000000      },
+{ 11,     "GuaranteedUp",                      5,      6,      (encode_uint),           (decode_uint),           0,           183900000     },
 { 12,     "MaxBurstUp",                        6,      6,      (encode_ushort),         (decode_ushort),         0,           65535         },
 { 13,     "PrivacyEnable",                     7,      6,      (encode_uchar),          (decode_uchar),          0,           1             },
 
