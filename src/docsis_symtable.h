@@ -327,8 +327,13 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 183,    "ConnectionRequestPassword",         6,      177,    (encode_string),         (decode_string),         0,           0             }, /* TLV 202.2.6 eRouter-I12 Annex B.4.3.6 */
 { 184,    "ACSOverride",                       7,      177,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 202.2.7 eRouter-I12 Annex B.4.3.7 */
 { 227,    "InitializationModeOverride",        3,      175,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 202.3 eRouter-I12 Annex B.4.4 */
+{ 228,    "SNMPv1v2cCoexistenceConfig",        53,     175,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 202.53 eRouter-I12 Annex B.4.5 */
+{ 229,    "SNMPv1v2cCommunityName",            1,      228,    (encode_string),         (decode_string),         0,           0             }, /* TLV 202.53.1 eRouter-I12 Annex B.4.5.1 */
+{ 230,    "SNMPv1v2cTransportAddressAccess",   2,      228,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 202.53.2 eRouter-I12 Annex B.4.5.2 */
+{ 231,    "SNMPv1v2cAccessViewType",           3,      228,    (encode_uchar),          (decode_uchar),          1,           2             }, /* TLV 202.53.3 eRouter-I12 Annex B.4.5.3 */
+{ 232,    "SNMPv1v2cAccessViewName",           4,      228,    (encode_string),         (decode_string),         0,           0             }, /* TLV 202.53.4 eRouter-I12 Annex B.4.5.4 */
 
-/* A little more organized -> Start with 228 */
+/* A little more organized -> Start with 233 */
 
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/
 { 998,    "GenericTLV",                        0, 0,           (encode_nothing),        (decode_special),        0,           0             },
