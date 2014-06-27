@@ -316,8 +316,8 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 /*{ 156, "SnmpMibObject",                    64, 0,    (encode_nothing),     (decode_snmp_object),    1,        2048       },*/
 
 /* eRouter TLVs */
-{ 175,    "eRouter",                           202,    0,      (encode_nothing),        (decode_aggregate),      0,           3             }, /* TLV 202 eRouter-I12 */
-{ 176,    "InitializationMode",                1,      175,    (encode_uchar),          (decode_uchar),          0,           255           }, /* TLV 202.1 eRouter-I12 Annex B.4.2 */
+{ 175,    "eRouter",                           202,    0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 202 eRouter-I12 */
+{ 176,    "InitializationMode",                1,      175,    (encode_uchar),          (decode_uchar),          0,           3             }, /* TLV 202.1 eRouter-I12 Annex B.4.2 */
 { 177,    "TR69ManagementServer",              2,      175,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 202.2 eRouter-I12 Annex B.4.3 */
 { 178,    "EnableCWMP",                        1,      177,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 202.2.1 eRouter-I12 Annex B.4.3.1 */
 { 179,    "URL",                               2,      177,    (encode_string),         (decode_string),         0,           0             }, /* TLV 202.2.2 eRouter-I12 Annex B.4.3.2 */
