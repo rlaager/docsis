@@ -326,8 +326,9 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 182,    "ConnectionRequestUsername",         5,      177,    (encode_string),         (decode_string),         0,           0             }, /* TLV 202.2.5 eRouter-I12 Annex B.4.3.5 */
 { 183,    "ConnectionRequestPassword",         6,      177,    (encode_string),         (decode_string),         0,           0             }, /* TLV 202.2.6 eRouter-I12 Annex B.4.3.6 */
 { 184,    "ACSOverride",                       7,      177,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 202.2.7 eRouter-I12 Annex B.4.3.7 */
+{ 227,    "InitializationModeOverride",        3,      175,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 202.3 eRouter-I12 Annex B.4.4 */
 
-/* A little more organized -> Start with 227 */
+/* A little more organized -> Start with 228 */
 
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/
 { 998,    "GenericTLV",                        0, 0,           (encode_nothing),        (decode_special),        0,           0             },
