@@ -327,6 +327,8 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 183,    "ConnectionRequestPassword",         6,      177,    (encode_string),         (decode_string),         0,           0             }, /* TLV 202.2.6 eRouter-I12 Annex B.4.3.6 */
 { 184,    "ACSOverride",                       7,      177,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 202.2.7 eRouter-I12 Annex B.4.3.7 */
 { 227,    "InitializationModeOverride",        3,      175,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 202.3 eRouter-I12 Annex B.4.4 */
+{ 238,    "RATransmissionInterval",            10,     175,    (encode_ushort),         (decode_ushort),         3,           1800          }, /* TLV 202.10 eRouter-I12 Annex B.4.10 */
+{ 239,    "TopologyModeEncoding",              42,     175,    (encode_uchar),          (decode_uchar),          1,           2             }, /* TLV 202.42 eRouter-I12 Annex B.4.9 */
 { 228,    "SNMPv1v2cCoexistenceConfig",        53,     175,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 202.53 eRouter-I12 Annex B.4.5 */
 { 229,    "SNMPv1v2cCommunityName",            1,      228,    (encode_string),         (decode_string),         0,           0             }, /* TLV 202.53.1 eRouter-I12 Annex B.4.5.1 */
 { 230,    "SNMPv1v2cTransportAddressAccess",   2,      228,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 202.53.2 eRouter-I12 Annex B.4.5.2 */
@@ -337,7 +339,6 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 235,    "SNMPv3AccessViewSubtree",           2,      233,    (encode_oid),            (decode_oid),            0,           0             }, /* TLV 202.54.2 eRouter-I12 Annex B.4.6.2 */
 { 236,    "SNMPv3AccessViewMask",              3,      233,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* TLV 202.54.3 eRouter-I12 Annex B.4.6.3 */
 { 237,    "SNMPv3AccessViewType",              4,      233,    (encode_uchar),          (decode_uchar),          1,           2             }, /* TLV 202.54.4 eRouter-I12 Annex B.4.6.4 */
-{ 238,    "RATransmissionInterval",            10,     175,    (encode_ushort),         (decode_ushort),         3,           1800          }, /* TLV 202.10 eRouter-I12 Annex B.4.10 */
 
 /* A little more organized -> Start with 239 */
 
