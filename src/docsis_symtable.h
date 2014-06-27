@@ -48,34 +48,34 @@
 
 symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 0,      "/* Pad */",                         0,      0,      (encode_nothing),        (decode_special),        0,           0             },
-{ 1,      "DownstreamFrequency",               1,      0,      (encode_uint),           (decode_uint),           88000000,    1008000000    }, MULPIv3.0-I24 Annex C.1.1.1
-{ 2,      "UpstreamChannelId",                 2,      0,      (encode_uchar),          (decode_uchar),          0,           255           }, MULPIv3.0-I24 Annex C.1.1.2
-{ 3,      "NetworkAccess",                     3,      0,      (encode_uchar),          (decode_uchar),          0,           1             }, MULPIv3.0-I24 Annex C.1.1.3
+{ 1,      "DownstreamFrequency",               1,      0,      (encode_uint),           (decode_uint),           88000000,    1008000000    }, /* MULPIv3.0-I24 Annex C.1.1.1 */
+{ 2,      "UpstreamChannelId",                 2,      0,      (encode_uchar),          (decode_uchar),          0,           255           }, /* MULPIv3.0-I24 Annex C.1.1.2 */
+{ 3,      "NetworkAccess",                     3,      0,      (encode_uchar),          (decode_uchar),          0,           1             }, /* MULPIv3.0-I24 Annex C.1.1.3 */
 
 /* Class of Service */
-{ 6,      "ClassOfService",                    4,      0,      (encode_nothing),        (decode_aggregate),      0,           0             }, MULPIv3.0-I24 Annex C.1.1.4
-{ 7,      "ClassID",                           1,      6,      (encode_uchar),          (decode_uchar),          1,           16            }, MULPIv3.0-I24 Annex C.1.1.4.1
-{ 8,      "MaxRateDown",                       2,      6,      (encode_uint),           (decode_uint),           0,           1334880000    }, MULPIv3.0-I24 Annex C.1.1.4.2
-{ 9,      "MaxRateUp",                         3,      6,      (encode_uint),           (decode_uint),           0,           183900000     }, MULPIv3.0-I24 Annex C.1.1.4.3
-{ 10,     "PriorityUp",                        4,      6,      (encode_uchar),          (decode_uchar),          0,           7             }, MULPIv3.0-I24 Annex C.1.1.4.4
-{ 11,     "GuaranteedUp",                      5,      6,      (encode_uint),           (decode_uint),           0,           183900000     }, MULPIv3.0-I24 Annex C.1.1.4.5
-{ 12,     "MaxBurstUp",                        6,      6,      (encode_ushort),         (decode_ushort),         0,           65535         }, MULPIv3.0-I24 Annex C.1.1.4.6
-{ 13,     "PrivacyEnable",                     7,      6,      (encode_uchar),          (decode_uchar),          0,           1             }, MULPIv3.0-I24 Annex C.1.1.4.7
+{ 6,      "ClassOfService",                    4,      0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* MULPIv3.0-I24 Annex C.1.1.4 */
+{ 7,      "ClassID",                           1,      6,      (encode_uchar),          (decode_uchar),          1,           16            }, /* MULPIv3.0-I24 Annex C.1.1.4.1 */
+{ 8,      "MaxRateDown",                       2,      6,      (encode_uint),           (decode_uint),           0,           1334880000    }, /* MULPIv3.0-I24 Annex C.1.1.4.2 */
+{ 9,      "MaxRateUp",                         3,      6,      (encode_uint),           (decode_uint),           0,           183900000     }, /* MULPIv3.0-I24 Annex C.1.1.4.3 */
+{ 10,     "PriorityUp",                        4,      6,      (encode_uchar),          (decode_uchar),          0,           7             }, /* MULPIv3.0-I24 Annex C.1.1.4.4 */
+{ 11,     "GuaranteedUp",                      5,      6,      (encode_uint),           (decode_uint),           0,           183900000     }, /* MULPIv3.0-I24 Annex C.1.1.4.5 */
+{ 12,     "MaxBurstUp",                        6,      6,      (encode_ushort),         (decode_ushort),         0,           65535         }, /* MULPIv3.0-I24 Annex C.1.1.4.6 */
+{ 13,     "PrivacyEnable",                     7,      6,      (encode_uchar),          (decode_uchar),          0,           1             }, /* MULPIv3.0-I24 Annex C.1.1.4.7 */
 
 /* Modem Capabilities Encodings */
-{ 144,    "ModemCapabilities",                 5,      0,      (encode_nothing),        (decode_aggregate),      0,           0             }, MULPIv3.0-I24 Annex C.1.3.1
-{ 145,    "ConcatenationSupport",              1,      144,    (encode_uchar),          (decode_uchar),          0,           1             }, MULPIv3.0-I24 Annex C.1.3.1.1
-{ 146,    "ModemDocsisVersion",                2,      144,    (encode_uchar),          (decode_uchar),          0,           3             }, MULPIv3.0-I24 Annex C.1.3.1.2
-{ 147,    "FragmentationSupport",              3,      144,    (encode_uchar),          (decode_uchar),          0,           1             }, MULPIv3.0-I24 Annex C.1.3.1.3
-{ 148,    "PHSSupport",                        4,      144,    (encode_uchar),          (decode_uchar),          0,           1             }, MULPIv3.0-I24 Annex C.1.3.1.4
-{ 149,    "IGMPSupport",                       5,      144,    (encode_uchar),          (decode_uchar),          0,           1             }, MULPIv3.0-I24 Annex C.1.3.1.5
-{ 150,    "BaselinePrivacySupport",            6,      144,    (encode_uchar),          (decode_uchar),          0,           1             }, MULPIv3.0-I24 Annex C.1.3.1.6
-{ 151,    "DownstreamSAIDSupport",             7,      144,    (encode_uchar),          (decode_uchar),          0,           255           }, MULPIv3.0-I24 Annex C.1.3.1.7
-{ 152,    "UpstreamSIDSupport",                8,      144,    (encode_uchar),          (decode_uchar),          0,           255           }, MULPIv3.0-I24 Annex C.1.3.1.8
-{ 153,    "DCCSupport",                        12,     144,    (encode_uchar),          (decode_uchar),          0,           1             }, MULPIv3.0-I24 Annex C.1.3.1.12
+{ 144,    "ModemCapabilities",                 5,      0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* MULPIv3.0-I24 Annex C.1.3.1 */
+{ 145,    "ConcatenationSupport",              1,      144,    (encode_uchar),          (decode_uchar),          0,           1             }, /* MULPIv3.0-I24 Annex C.1.3.1.1 */
+{ 146,    "ModemDocsisVersion",                2,      144,    (encode_uchar),          (decode_uchar),          0,           3             }, /* MULPIv3.0-I24 Annex C.1.3.1.2 */
+{ 147,    "FragmentationSupport",              3,      144,    (encode_uchar),          (decode_uchar),          0,           1             }, /* MULPIv3.0-I24 Annex C.1.3.1.3 */
+{ 148,    "PHSSupport",                        4,      144,    (encode_uchar),          (decode_uchar),          0,           1             }, /* MULPIv3.0-I24 Annex C.1.3.1.4 */
+{ 149,    "IGMPSupport",                       5,      144,    (encode_uchar),          (decode_uchar),          0,           1             }, /* MULPIv3.0-I24 Annex C.1.3.1.5 */
+{ 150,    "BaselinePrivacySupport",            6,      144,    (encode_uchar),          (decode_uchar),          0,           1             }, /* MULPIv3.0-I24 Annex C.1.3.1.6 */
+{ 151,    "DownstreamSAIDSupport",             7,      144,    (encode_uchar),          (decode_uchar),          0,           255           }, /* MULPIv3.0-I24 Annex C.1.3.1.7 */
+{ 152,    "UpstreamSIDSupport",                8,      144,    (encode_uchar),          (decode_uchar),          0,           255           }, /* MULPIv3.0-I24 Annex C.1.3.1.8 */
+{ 153,    "DCCSupport",                        12,     144,    (encode_uchar),          (decode_uchar),          0,           1             }, /* MULPIv3.0-I24 Annex C.1.3.1.12 */
 
-{ 4,      "CmMic",                             6,      0,      (encode_nothing),        (decode_md5),            0,           0             },
-{ 5,      "CmtsMic",                           7,      0,      (encode_nothing),        (decode_md5),            0,           0             },
+{ 4,      "CmMic",                             6,      0,      (encode_nothing),        (decode_md5),            0,           0             }, /* MULPIv3.0-I24 Annex C.1.1.5 */
+{ 5,      "CmtsMic",                           7,      0,      (encode_nothing),        (decode_md5),            0,           0             }, /* MULPIv3.0-I24 Annex C.1.1.6 */
 
 { 14,     "SwUpgradeFilename",                 9,      0,      (encode_string),         (decode_string),         0,           0             },
 { 15,     "SnmpWriteControl",                  10,     0,      (encode_nothing),        (decode_snmp_wd),        0,           0             },
@@ -316,16 +316,16 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 /*{ 156, "SnmpMibObject",                    64, 0,    (encode_nothing),     (decode_snmp_object),    1,        2048       },*/
 
 /* eRouter TLVs */
-{ 175,    "eRouter",                           202,    0,      (encode_nothing),        (decode_aggregate),      0,           0             },
-{ 176,    "InitializationMode",                1,      175,    (encode_uchar),          (decode_uchar),          0,           255           },
-{ 177,    "TR69ManagementServer",              2,      175,    (encode_nothing),        (decode_aggregate),      0,           0             },
-{ 178,    "EnableCWMP",                        1,      177,    (encode_uchar),          (decode_uchar),          0,           1             },
-{ 179,    "URL",                               2,      177,    (encode_string),         (decode_string),         0,           0             },
-{ 180,    "Username",                          3,      177,    (encode_string),         (decode_string),         0,           0             },
-{ 181,    "Password",                          4,      177,    (encode_string),         (decode_string),         0,           0             },
-{ 182,    "ConnectionRequestUsername",         5,      177,    (encode_string),         (decode_string),         0,           0             },
-{ 183,    "ConnectionRequestPassword",         6,      177,    (encode_string),         (decode_string),         0,           0             },
-{ 184,    "ACSOverride",                       7,      177,    (encode_uchar),          (decode_uchar),          0,           1             },
+{ 175,    "eRouter",                           202,    0,      (encode_nothing),        (decode_aggregate),      0,           3             }, /* TLV 202 eRouter-I12 */
+{ 176,    "InitializationMode",                1,      175,    (encode_uchar),          (decode_uchar),          0,           255           }, /* TLV 202.1 eRouter-I12 Annex B.4.2 */
+{ 177,    "TR69ManagementServer",              2,      175,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 202.2 eRouter-I12 Annex B.4.3 */
+{ 178,    "EnableCWMP",                        1,      177,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 202.2.1 eRouter-I12 Annex B.4.3.1 */
+{ 179,    "URL",                               2,      177,    (encode_string),         (decode_string),         0,           0             }, /* TLV 202.2.2 eRouter-I12 Annex B.4.3.2 */
+{ 180,    "Username",                          3,      177,    (encode_string),         (decode_string),         0,           0             }, /* TLV 202.2.3 eRouter-I12 Annex B.4.3.3 */
+{ 181,    "Password",                          4,      177,    (encode_string),         (decode_string),         0,           0             }, /* TLV 202.2.4 eRouter-I12 Annex B.4.3.4 */
+{ 182,    "ConnectionRequestUsername",         5,      177,    (encode_string),         (decode_string),         0,           0             }, /* TLV 202.2.5 eRouter-I12 Annex B.4.3.5 */
+{ 183,    "ConnectionRequestPassword",         6,      177,    (encode_string),         (decode_string),         0,           0             }, /* TLV 202.2.6 eRouter-I12 Annex B.4.3.6 */
+{ 184,    "ACSOverride",                       7,      177,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 202.2.7 eRouter-I12 Annex B.4.3.7 */
 
 /* A little more organized -> Start with 227 */
 
