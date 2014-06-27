@@ -63,16 +63,16 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 13,     "PrivacyEnable",                     7,      6,      (encode_uchar),          (decode_uchar),          0,           1             }, MULPIv3.0-I24 Annex C.1.1.4.7
 
 /* Modem Capabilities Encodings */
-{ 144,    "ModemCapabilities",                 5,      0,      (encode_nothing),        (decode_aggregate),      0,           0             },
-{ 145,    "ConcatenationSupport",              1,      144,    (encode_uchar),          (decode_uchar),          0,           1             },
-{ 146,    "ModemDocsisVersion",                2,      144,    (encode_uchar),          (decode_uchar),          0,           2             },
-{ 147,    "FragmentationSupport",              3,      144,    (encode_uchar),          (decode_uchar),          0,           1             },
-{ 148,    "PHSSupport",                        4,      144,    (encode_uchar),          (decode_uchar),          0,           1             },
-{ 149,    "IGMPSupport",                       5,      144,    (encode_uchar),          (decode_uchar),          0,           1             },
-{ 150,    "BaselinePrivacySupport",            6,      144,    (encode_uchar),          (decode_uchar),          0,           1             },
-{ 151,    "DownstreamSAIDSupport",             7,      144,    (encode_uchar),          (decode_uchar),          0,           255           },
-{ 152,    "UpstreamSIDSupport",                8,      144,    (encode_uchar),          (decode_uchar),          0,           255           },
-{ 153,    "DCCSupport",                        12,     144,    (encode_uchar),          (decode_uchar),          0,           1             },
+{ 144,    "ModemCapabilities",                 5,      0,      (encode_nothing),        (decode_aggregate),      0,           0             }, MULPIv3.0-I24 Annex C.1.3.1
+{ 145,    "ConcatenationSupport",              1,      144,    (encode_uchar),          (decode_uchar),          0,           1             }, MULPIv3.0-I24 Annex C.1.3.1.1
+{ 146,    "ModemDocsisVersion",                2,      144,    (encode_uchar),          (decode_uchar),          0,           3             }, MULPIv3.0-I24 Annex C.1.3.1.2
+{ 147,    "FragmentationSupport",              3,      144,    (encode_uchar),          (decode_uchar),          0,           1             }, MULPIv3.0-I24 Annex C.1.3.1.3
+{ 148,    "PHSSupport",                        4,      144,    (encode_uchar),          (decode_uchar),          0,           1             }, MULPIv3.0-I24 Annex C.1.3.1.4
+{ 149,    "IGMPSupport",                       5,      144,    (encode_uchar),          (decode_uchar),          0,           1             }, MULPIv3.0-I24 Annex C.1.3.1.5
+{ 150,    "BaselinePrivacySupport",            6,      144,    (encode_uchar),          (decode_uchar),          0,           1             }, MULPIv3.0-I24 Annex C.1.3.1.6
+{ 151,    "DownstreamSAIDSupport",             7,      144,    (encode_uchar),          (decode_uchar),          0,           255           }, MULPIv3.0-I24 Annex C.1.3.1.7
+{ 152,    "UpstreamSIDSupport",                8,      144,    (encode_uchar),          (decode_uchar),          0,           255           }, MULPIv3.0-I24 Annex C.1.3.1.8
+{ 153,    "DCCSupport",                        12,     144,    (encode_uchar),          (decode_uchar),          0,           1             }, MULPIv3.0-I24 Annex C.1.3.1.12
 
 { 4,      "CmMic",                             6,      0,      (encode_nothing),        (decode_md5),            0,           0             },
 { 5,      "CmtsMic",                           7,      0,      (encode_nothing),        (decode_md5),            0,           0             },
