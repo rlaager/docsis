@@ -48,7 +48,7 @@
 
 symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 0,      "/* Pad */",                         0,      0,      (encode_nothing),        (decode_special),        0,           0             },
-{ 1,      "DownstreamFrequency",               1,      0,      (encode_uint),           (decode_uint),           88000000,    860000000     },
+{ 1,      "DownstreamFrequency",               1,      0,      (encode_uint),           (decode_uint),           88000000,    1008000000    },
 { 2,      "UpstreamChannelId",                 2,      0,      (encode_uchar),          (decode_uchar),          0,           255           },
 { 3,      "NetworkAccess",                     3,      0,      (encode_uchar),          (decode_uchar),          0,           1             },
 
