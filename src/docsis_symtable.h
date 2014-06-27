@@ -55,7 +55,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 /* Class of Service */
 { 6,      "ClassOfService",                    4,      0,      (encode_nothing),        (decode_aggregate),      0,           0             },
 { 7,      "ClassID",                           1,      6,      (encode_uchar),          (decode_uchar),          1,           16            },
-{ 8,      "MaxRateDown",                       2,      6,      (encode_uint),           (decode_uint),           0,           1248000000    },
+{ 8,      "MaxRateDown",                       2,      6,      (encode_uint),           (decode_uint),           0,           1334880000    },
 { 9,      "MaxRateUp",                         3,      6,      (encode_uint),           (decode_uint),           0,           10000000      },
 { 10,     "PriorityUp",                        4,      6,      (encode_uchar),          (decode_uchar),          0,           7             },
 { 11,     "GuaranteedUp",                      5,      6,      (encode_uint),           (decode_uint),           0,           10000000      },
