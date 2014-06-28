@@ -340,8 +340,10 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 236,    "SNMPv3AccessViewMask",              3,      233,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* TLV 202.54.3 eRouter-I12 Annex B.4.6.3 */
 { 237,    "SNMPv3AccessViewType",              4,      233,    (encode_uchar),          (decode_uchar),          1,           2             }, /* TLV 202.54.4 eRouter-I12 Annex B.4.6.4 */
 { 239,    "SnmpMibObject",                     11,     175,    (encode_nothing),        (decode_snmp_object),    0,           0             }, /* TLV 202.11 eRouter-I12 Annex B.4.8 */
+{ 240,    "VendorSpecific",                    43,     175,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 202.43 eRouter-I12 Annex B.4.7 */
+{ 241,    "VendorIdentifier",                  8,      240,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 202.43 eRouter-I12 Annex B.4.7.1 */
 
-/* A little more organized -> Start with 240 */
+/* A little more organized -> Start with 242 */
 
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/
 { 998,    "GenericTLV",                        0, 0,           (encode_nothing),        (decode_special),        0,           0             },
