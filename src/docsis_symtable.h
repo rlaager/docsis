@@ -72,7 +72,43 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 150,    "BaselinePrivacySupport",            6,      144,    (encode_uchar),          (decode_uchar),          0,           1             }, /* MULPIv3.0-I24 Annex C.1.3.1.6 */
 { 151,    "DownstreamSAIDSupport",             7,      144,    (encode_uchar),          (decode_uchar),          0,           255           }, /* MULPIv3.0-I24 Annex C.1.3.1.7 */
 { 152,    "UpstreamSIDSupport",                8,      144,    (encode_uchar),          (decode_uchar),          0,           255           }, /* MULPIv3.0-I24 Annex C.1.3.1.8 */
+{ 274,    "OptionalFilteringSupport",          9,      144,    (encode_uchar),          (decode_uchar),          0,           0             }, /* MULPIv3.0-I24 Annex C.1.3.1.9 */
+{ 275,    "TransmitPreEqualizerTapsPerModulationInterval",  10,  144,  (encode_uchar),  (decode_uchar),          1,           4             }, /* MULPIv3.0-I24 Annex C.1.3.1.10 */
+{ 276,    "NumberofTransmitEqualizerTaps",     11,     144,    (encode_uchar),          (decode_uchar),          8,           64            }, /* MULPIv3.0-I24 Annex C.1.3.1.11 */
 { 153,    "DCCSupport",                        12,     144,    (encode_uchar),          (decode_uchar),          0,           1             }, /* MULPIv3.0-I24 Annex C.1.3.1.12 */
+{ 242,    "IPFiltersSupport",                  13,     144,    (encode_ushort),         (decode_ushort),         64,          65535         }, /* MULPIv3.0-I24 Annex C.1.3.1.13 */
+{ 243,    "LLCFiltersSupport",                 14,     144,    (encode_ushort),         (decode_ushort),         10,          65535         }, /* MULPIv3.0-I24 Annex C.1.3.1.14 */
+{ 244,    "ExpandedUnicastSIDSpace",           15,     144,    (encode_uchar),          (decode_uchar),          0,           1             }, /* MULPIv3.0-I24 Annex C.1.3.1.15 */
+{ 245,    "RangingHoldOffSupport",             16,     144,    (encode_hexstr),         (decode_hexstr),         4,           4             }, /* MULPIv3.0-I24 Annex C.1.3.1.16 */
+{ 246,    "L2VPNCapability",                   17,     144,    (encode_uchar),          (decode_uchar),          0,           1             }, /* MULPIv3.0-I24 Annex C.1.3.1.17 */
+{ 247,    "L2VPNeSAFEHostCapability",          18,     144,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* MULPIv3.0-I24 Annex C.1.3.1.18 */
+{ 248,    "DUTFilteringSupport",               19,     144,    (encode_uchar),          (decode_uchar),          0,           1             }, /* MULPIv3.0-I24 Annex C.1.3.1.19 */
+{ 249,    "UpstreamFrequencyRangeSupport",     20,     144,    (encode_uchar),          (decode_uchar),          0,           1             }, /* MULPIv3.0-I24 Annex C.1.3.1.20 */
+{ 250,    "UpstreamSymbolRateSupport",         21,     144,    (encode_uchar),          (decode_uchar),          0,           0             }, /* MULPIv3.0-I24 Annex C.1.3.1.21 */
+{ 251,    "SelectableActiveCodeMode2Support",  22,     144,    (encode_uchar),          (decode_uchar),          0,           1             }, /* MULPIv3.0-I24 Annex C.1.3.1.22 */
+{ 252,    "CodeHoppingMode2Support",           23,     144,    (encode_uchar),          (decode_uchar),          0,           1             }, /* MULPIv3.0-I24 Annex C.1.3.1.23 */
+{ 253,    "MultipleTransmitChannelSupport",    24,     144,    (encode_uchar),          (decode_uchar),          0,           0             }, /* MULPIv3.0-I24 Annex C.1.3.1.24 */
+{ 254,    "M512MspsUpstreamTransmitChannel",   25,     144,    (encode_uchar),          (decode_uchar),          0,           0             }, /* MULPIv3.0-I24 Aneex C.1.3.1.25 */
+{ 254,    "M256MspsUpstreamTransmitChannel",   26,     144,    (encode_uchar),          (decode_uchar),          0,           0             }, /* MULPIv3.0-I24 Aneex C.1.3.1.26 */
+{ 255,    "TotalSIDClusterSupport",            27,     144,    (encode_uchar),          (decode_uchar),          0,           0             }, /* MULPIv3.0-I24 Annex C.1.3.1.27 */
+{ 256,    "SIDClustersPerServiceFlow",         28,     144,    (encode_uchar),          (decode_uchar),          2,           8             }, /* MULPIv3.0-I24 Annex C.1.3.1.28 */
+{ 257,    "MultipleReceiveChannelSupport",     29,     144,    (encode_uchar),          (decode_uchar),          0,           0             }, /* MULPIv3.0-I24 Annex C.1.3.1.29 */
+{ 258,    "TotalDownstreamServiceIDSupport",   30,     144,    (encode_uchar),          (decode_uchar),          32,          255           }, /* MULPIv3.0-I24 Annex C.1.3.1.30 */
+{ 259,    "ResequencingDownstreamServiceID",   31,     144,    (encode_uchar),          (decode_uchar),          16,          255           }, /* MULPIv3.0-I24 Annex C.1.3.1.31 */
+{ 260,    "MulticastDownstreamServiceID",      32,     144,    (encode_uchar),          (decode_uchar),          16,          255           }, /* MULPIv3.0-I24 Annex C.1.3.1.32 */
+{ 261,    "MulticastDSIDForwarding",           33,     144,    (encode_uchar),          (decode_uchar),          0,           2             }, /* MULPIv3.0-I24 Annex C.1.3.1.33 */
+{ 262,    "FrameControlTypeForwarding",        34,     144,    (encode_uchar),          (decode_uchar),          0,           1             }, /* MULPIv3.0-I24 Annex C.1.3.1.34 */
+{ 263,    "DPVCapability",                     35,     144,    (encode_uchar),          (decode_uchar),          0,           0             }, /* MULPIv3.0-I24 Annex C.1.3.1.35 */
+{ 264,    "UnsolicitedGrantServiceSupport",    36,     144,    (encode_uchar),          (decode_uchar),          0,           0             }, /* MULPIv3.0-I24 Annex C.1.3.1.36 */
+{ 265,    "MAPandUCDReceiptSupport",           37,     144,    (encode_uchar),          (decode_uchar),          0,           1             }, /* MULPIv3.0-I24 Annex C.1.3.1.37 */
+{ 266,    "UpstreamDropClassifierSupport",     38,     144,    (encode_ushort),         (decode_ushort),         64,          65535         }, /* MULPIv3.0-I24 Annex C.1.3.1.38 */
+{ 267,    "IPv6Support",                       39,     144,    (encode_uchar),          (decode_uchar),          0,           1             }, /* MULPIv3.0-I24 Annex C.1.3.1.39 */
+{ 268,    "ExtendedUpstreamTransmitPower",     40,     144,    (encode_uchar),          (decode_uchar),          0,           244           }, /* MULPIv3.0-I24 Annex C.1.3.1.40 */
+{ 269,    "MPLSClassificationSupport",         41,     144,    (encode_hexstr),         (decode_hexstr),         4,           4             }, /* MULPIv3.0-I24 Annex C.1.3.1.41 */
+{ 270,    "DONUCapabilitiesEncoding",          42,     144,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* MULPIv3.0-I24 Annex C.1.3.1.42 */
+{ 271,    "EnergyManagementCapabilities",      44,     144,    (encode_hexstr),         (decode_hexstr),         4,           4             }, /* MULPIv3.0-I24 Annex C.1.3.1.43 */
+{ 272,    "CDOCSISCapabilityEncoding",         45,     144,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* MULPIv3.0-I24 Annex C.1.3.1.44 */
+{ 273,    "CMSTATUSACK",                       46,     144,    (encode_uchar),          (decode_uchar),          0,           1             }, /* MULPIv3.0-I24 Annex C.1.3.1.45 */
 
 { 4,      "CmMic",                             6,      0,      (encode_nothing),        (decode_md5),            0,           0             }, /* MULPIv3.0-I24 Annex C.1.1.5 */
 { 5,      "CmtsMic",                           7,      0,      (encode_nothing),        (decode_md5),            0,           0             }, /* MULPIv3.0-I24 Annex C.1.1.6 */
@@ -328,7 +364,10 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 184,    "ACSOverride",                       7,      177,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 202.2.7 eRouter-I12 Annex B.4.3.7 */
 { 227,    "InitializationModeOverride",        3,      175,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 202.3 eRouter-I12 Annex B.4.4 */
 { 238,    "RATransmissionInterval",            10,     175,    (encode_ushort),         (decode_ushort),         3,           1800          }, /* TLV 202.10 eRouter-I12 Annex B.4.10 */
+{ 239,    "SnmpMibObject",                     11,     175,    (encode_nothing),        (decode_snmp_object),    0,           0             }, /* TLV 202.11 eRouter-I12 Annex B.4.8 */
 { 239,    "TopologyModeEncoding",              42,     175,    (encode_uchar),          (decode_uchar),          1,           2             }, /* TLV 202.42 eRouter-I12 Annex B.4.9 */
+{ 240,    "VendorSpecific",                    43,     175,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 202.43 eRouter-I12 Annex B.4.7 */
+{ 241,    "VendorIdentifier",                  8,      240,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 202.43 eRouter-I12 Annex B.4.7.1 */
 { 228,    "SNMPv1v2cCoexistenceConfig",        53,     175,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 202.53 eRouter-I12 Annex B.4.5 */
 { 229,    "SNMPv1v2cCommunityName",            1,      228,    (encode_string),         (decode_string),         0,           0             }, /* TLV 202.53.1 eRouter-I12 Annex B.4.5.1 */
 { 230,    "SNMPv1v2cTransportAddressAccess",   2,      228,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 202.53.2 eRouter-I12 Annex B.4.5.2 */
@@ -339,11 +378,8 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 235,    "SNMPv3AccessViewSubtree",           2,      233,    (encode_oid),            (decode_oid),            0,           0             }, /* TLV 202.54.2 eRouter-I12 Annex B.4.6.2 */
 { 236,    "SNMPv3AccessViewMask",              3,      233,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* TLV 202.54.3 eRouter-I12 Annex B.4.6.3 */
 { 237,    "SNMPv3AccessViewType",              4,      233,    (encode_uchar),          (decode_uchar),          1,           2             }, /* TLV 202.54.4 eRouter-I12 Annex B.4.6.4 */
-{ 239,    "SnmpMibObject",                     11,     175,    (encode_nothing),        (decode_snmp_object),    0,           0             }, /* TLV 202.11 eRouter-I12 Annex B.4.8 */
-{ 240,    "VendorSpecific",                    43,     175,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 202.43 eRouter-I12 Annex B.4.7 */
-{ 241,    "VendorIdentifier",                  8,      240,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 202.43 eRouter-I12 Annex B.4.7.1 */
 
-/* A little more organized -> Start with 242 */
+/* A little more organized -> Start with 242, 277 */
 
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/
 { 998,    "GenericTLV",                        0, 0,           (encode_nothing),        (decode_special),        0,           0             },
