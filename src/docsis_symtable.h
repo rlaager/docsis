@@ -376,7 +376,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 233,    "SNMPv3AccessViewConfiguration",     54,     175,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 202.54 eRouter-I12 Annex B.4.6 */
 { 234,    "SNMPv3AccessViewName",              1,      233,    (encode_string),         (decode_string),         0,           0             }, /* TLV 202.54.1 eRouter-I12 Annex B.4.6.1 */
 { 235,    "SNMPv3AccessViewSubtree",           2,      233,    (encode_oid),            (decode_oid),            0,           0             }, /* TLV 202.54.2 eRouter-I12 Annex B.4.6.2 */
-{ 236,    "SNMPv3AccessViewMask",              3,      233,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* TLV 202.54.3 eRouter-I12 Annex B.4.6.3 */
+{ 236,    "SNMPv3AccessViewMask",              3,      233,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 202.54.3 eRouter-I12 Annex B.4.6.3 */
 { 237,    "SNMPv3AccessViewType",              4,      233,    (encode_uchar),          (decode_uchar),          1,           2             }, /* TLV 202.54.4 eRouter-I12 Annex B.4.6.4 */
 
 /* A little more organized -> Start with 242, 277 */
