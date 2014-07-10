@@ -112,29 +112,29 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 
 { 4,      "CmMic",                             6,      0,      (encode_nothing),        (decode_md5),            0,           0             }, /* MULPIv3.0-I24 Annex C.1.1.5 */
 { 5,      "CmtsMic",                           7,      0,      (encode_nothing),        (decode_md5),            0,           0             }, /* MULPIv3.0-I24 Annex C.1.1.6 */
-{ 14,     "SwUpgradeFilename",                 9,      0,      (encode_string),         (decode_string),         0,           0             },
-{ 15,     "SnmpWriteControl",                  10,     0,      (encode_nothing),        (decode_snmp_wd),        0,           0             },
-{ 16,     "SnmpMibObject",                     11,     0,      (encode_nothing),        (decode_snmp_object),    0,           0             },
+{ 14,     "SwUpgradeFilename",                 9,      0,      (encode_string),         (decode_string),         0,           0             }, /* MULPIv3.0-I24 Annex C.1.2.3 */
+{ 15,     "SnmpWriteControl",                  10,     0,      (encode_nothing),        (decode_snmp_wd),        0,           0             }, /* MULPIv3.0-I24 Annex C.1.2.4 */
+{ 16,     "SnmpMibObject",                     11,     0,      (encode_nothing),        (decode_snmp_object),    0,           0             }, /* MULPIv3.0-I24 Annex C.1.2.5 */
 { 277,    "ModemIPAddress",                    12,     0,      (encode_ip),             (decode_ip),             0,           0             }, /* MULPIv3.0-I24 Annex C.1.3.3 */
-{ 17,     "CpeMacAddress",                     14,     0,      (encode_ether),          (decode_ether),          0,           0             },
+{ 17,     "CpeMacAddress",                     14,     0,      (encode_ether),          (decode_ether),          0,           0             }, /* MULPIv3.0-I24 Annex C.1.2.6 */
 
 /* BPI+ */
 
-{ 18,     "BaselinePrivacy",                   17,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* CM-SP_SECv3.0-I15 Annex A.1.1.1 */
-{ 19,     "AuthTimeout",                       1,      18,     (encode_uint),           (decode_uint),           1,           30            }, /* CM-SP_SECv3.0-I15 Annex A.1.1.1.1 */
-{ 20,     "ReAuthTimeout",                     2,      18,     (encode_uint),           (decode_uint),           1,           30            }, /* CM-SP_SECv3.0-I15 Annex A.1.1.1.2 */
-{ 21,     "AuthGraceTime",                     3,      18,     (encode_uint),           (decode_uint),           1,           6047999       }, /* CM-SP_SECv3.0-I15 Annex A.1.1.1.3 */
-{ 22,     "OperTimeout",                       4,      18,     (encode_uint),           (decode_uint),           1,           10            }, /* CM-SP_SECv3.0-I15 Annex A.1.1.1.4 */
-{ 23,     "ReKeyTimeout",                      5,      18,     (encode_uint),           (decode_uint),           1,           10            }, /* CM-SP_SECv3.0-I15 Annex A.1.1.1.5 */
-{ 24,     "TEKGraceTime",                      6,      18,     (encode_uint),           (decode_uint),           1,           302399        }, /* CM-SP_SECv3.0-I15 Annex A.1.1.1.6 */
-{ 25,     "AuthRejectTimeout",                 7,      18,     (encode_uint),           (decode_uint),           1,           600           }, /* CM-SP_SECv3.0-I15 Annex A.1.1.1.7 */
-{ 127,    "SAMapWaitTimeout",                  8,      18,     (encode_uint),           (decode_uint),           1,           10            }, /* CM-SP_SECv3.0-I15 Annex A.1.1.1.8 */
-{ 128,    "SAMapMaxRetries",                   9,      18,     (encode_uint),           (decode_uint),           0,           10            }, /* CM-SP_SECv3.0-I15 Annex A.1.1.1.9 */
+{ 18,     "BaselinePrivacy",                   17,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* SECv3.0-I15 Annex A.1.1.1 */
+{ 19,     "AuthTimeout",                       1,      18,     (encode_uint),           (decode_uint),           1,           30            }, /* SECv3.0-I15 Annex A.1.1.1.1 */
+{ 20,     "ReAuthTimeout",                     2,      18,     (encode_uint),           (decode_uint),           1,           30            }, /* SECv3.0-I15 Annex A.1.1.1.2 */
+{ 21,     "AuthGraceTime",                     3,      18,     (encode_uint),           (decode_uint),           1,           6047999       }, /* SECv3.0-I15 Annex A.1.1.1.3 */
+{ 22,     "OperTimeout",                       4,      18,     (encode_uint),           (decode_uint),           1,           10            }, /* SECv3.0-I15 Annex A.1.1.1.4 */
+{ 23,     "ReKeyTimeout",                      5,      18,     (encode_uint),           (decode_uint),           1,           10            }, /* SECv3.0-I15 Annex A.1.1.1.5 */
+{ 24,     "TEKGraceTime",                      6,      18,     (encode_uint),           (decode_uint),           1,           302399        }, /* SECv3.0-I15 Annex A.1.1.1.6 */
+{ 25,     "AuthRejectTimeout",                 7,      18,     (encode_uint),           (decode_uint),           1,           600           }, /* SECv3.0-I15 Annex A.1.1.1.7 */
+{ 127,    "SAMapWaitTimeout",                  8,      18,     (encode_uint),           (decode_uint),           1,           10            }, /* SECv3.0-I15 Annex A.1.1.1.8 */
+{ 128,    "SAMapMaxRetries",                   9,      18,     (encode_uint),           (decode_uint),           0,           10            }, /* SECv3.0-I15 Annex A.1.1.1.9 */
 
-{ 26,     "MaxCPE",                            18,     0,      (encode_uchar),          (decode_uchar),          1,           254           },
-{ 168,    "TftpTimestamp",                     19,     0,      (encode_uint),           (decode_uint),           0,           0xFFFFFFFF    },
-{ 169,    "TftpModemAddress",                  20,     0,      (encode_ip),             (decode_ip),             0,           0             },
-{ 27,     "SwUpgradeServer",                   21,     0,      (encode_ip),             (decode_ip),             0,           0             },
+{ 26,     "MaxCPE",                            18,     0,      (encode_uchar),          (decode_uchar),          1,           254           }, /* MULPIv3.0-I24 Annex C.1.1.7 */
+{ 168,    "TftpTimestamp",                     19,     0,      (encode_uint),           (decode_uint),           0,           0xFFFFFFFF    }, /* MULPIv3.0-I24 Annex C.1.1.8 */
+{ 169,    "TftpModemAddress",                  20,     0,      (encode_ip),             (decode_ip),             0,           0             }, /* MULPIv3.0-I24 Annex C.1.1.9 */
+{ 27,     "SwUpgradeServer",                   21,     0,      (encode_ip),             (decode_ip),             0,           0             }, /* MULPIv3.0-I24 Annex C.1.2.7 */
 
 /* DOCSIS 1.1-2.0 */
 
