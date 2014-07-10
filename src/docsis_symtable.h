@@ -120,16 +120,16 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 
 /* BPI+ */
 
-{ 18,     "BaselinePrivacy",                   17,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* 17 */
-{ 19,     "AuthTimeout",                       1,      18,     (encode_uint),           (decode_uint),           1,           30            },
-{ 20,     "ReAuthTimeout",                     2,      18,     (encode_uint),           (decode_uint),           1,           30            },
-{ 21,     "AuthGraceTime",                     3,      18,     (encode_uint),           (decode_uint),           1,           6047999       },
-{ 22,     "OperTimeout",                       4,      18,     (encode_uint),           (decode_uint),           1,           10            },
-{ 23,     "ReKeyTimeout",                      5,      18,     (encode_uint),           (decode_uint),           1,           10            },
-{ 24,     "TEKGraceTime",                      6,      18,     (encode_uint),           (decode_uint),           1,           302399        },
-{ 25,     "AuthRejectTimeout",                 7,      18,     (encode_uint),           (decode_uint),           1,           600           },
-{ 127,    "SAMapWaitTimeout",                  8,      18,     (encode_uint),           (decode_uint),           1,           10            },
-{ 128,    "SAMapMaxRetries",                   9,      18,     (encode_uint),           (decode_uint),           0,           10            },
+{ 18,     "BaselinePrivacy",                   17,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* CM-SP_SECv3.0-I15 Annex A.1.1.1 */
+{ 19,     "AuthTimeout",                       1,      18,     (encode_uint),           (decode_uint),           1,           30            }, /* CM-SP_SECv3.0-I15 Annex A.1.1.1.1 */
+{ 20,     "ReAuthTimeout",                     2,      18,     (encode_uint),           (decode_uint),           1,           30            }, /* CM-SP_SECv3.0-I15 Annex A.1.1.1.2 */
+{ 21,     "AuthGraceTime",                     3,      18,     (encode_uint),           (decode_uint),           1,           6047999       }, /* CM-SP_SECv3.0-I15 Annex A.1.1.1.3 */
+{ 22,     "OperTimeout",                       4,      18,     (encode_uint),           (decode_uint),           1,           10            }, /* CM-SP_SECv3.0-I15 Annex A.1.1.1.4 */
+{ 23,     "ReKeyTimeout",                      5,      18,     (encode_uint),           (decode_uint),           1,           10            }, /* CM-SP_SECv3.0-I15 Annex A.1.1.1.5 */
+{ 24,     "TEKGraceTime",                      6,      18,     (encode_uint),           (decode_uint),           1,           302399        }, /* CM-SP_SECv3.0-I15 Annex A.1.1.1.6 */
+{ 25,     "AuthRejectTimeout",                 7,      18,     (encode_uint),           (decode_uint),           1,           600           }, /* CM-SP_SECv3.0-I15 Annex A.1.1.1.7 */
+{ 127,    "SAMapWaitTimeout",                  8,      18,     (encode_uint),           (decode_uint),           1,           10            }, /* CM-SP_SECv3.0-I15 Annex A.1.1.1.8 */
+{ 128,    "SAMapMaxRetries",                   9,      18,     (encode_uint),           (decode_uint),           0,           10            }, /* CM-SP_SECv3.0-I15 Annex A.1.1.1.9 */
 
 { 26,     "MaxCPE",                            18,     0,      (encode_uchar),          (decode_uchar),          1,           254           },
 { 168,    "TftpTimestamp",                     19,     0,      (encode_uint),           (decode_uint),           0,           0xFFFFFFFF    },
