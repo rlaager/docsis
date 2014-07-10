@@ -112,10 +112,10 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 
 { 4,      "CmMic",                             6,      0,      (encode_nothing),        (decode_md5),            0,           0             }, /* MULPIv3.0-I24 Annex C.1.1.5 */
 { 5,      "CmtsMic",                           7,      0,      (encode_nothing),        (decode_md5),            0,           0             }, /* MULPIv3.0-I24 Annex C.1.1.6 */
-
 { 14,     "SwUpgradeFilename",                 9,      0,      (encode_string),         (decode_string),         0,           0             },
 { 15,     "SnmpWriteControl",                  10,     0,      (encode_nothing),        (decode_snmp_wd),        0,           0             },
 { 16,     "SnmpMibObject",                     11,     0,      (encode_nothing),        (decode_snmp_object),    0,           0             },
+{ 277,    "ModemIPAddress",                    12,     0,      (encode_ip),             (decode_ip),             0,           0             }, /* MULPIv3.0-I24 Annex C.1.3.3 */
 { 17,     "CpeMacAddress",                     14,     0,      (encode_ether),          (decode_ether),          0,           0             },
 
 /* BPI+ */
@@ -379,7 +379,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 236,    "SNMPv3AccessViewMask",              3,      233,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 202.54.3 eRouter-I12 Annex B.4.6.3 */
 { 237,    "SNMPv3AccessViewType",              4,      233,    (encode_uchar),          (decode_uchar),          1,           2             }, /* TLV 202.54.4 eRouter-I12 Annex B.4.6.4 */
 
-/* A little more organized -> Start with 242, 277 */
+/* A little more organized -> Start with 278 */
 
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/
 { 998,    "GenericTLV",                        0, 0,           (encode_nothing),        (decode_special),        0,           0             },
