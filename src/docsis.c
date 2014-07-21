@@ -45,7 +45,7 @@
 struct tlv *global_tlvtree_head;
 symbol_type *global_symtable;
 
-static void setup_mib_flags(int resolve_oids);
+static void setup_mib_flags(int resolve_oids, char *custom_mibs);
 
 static unsigned int
 add_cm_mic (unsigned char *tlvbuf, unsigned int tlvbuflen)
@@ -151,7 +151,17 @@ usage ()
   fprintf(stderr, "To encode multiple MTA configuration files: \n\t docsis -m -p <mta_file1> ...  <new_extension>\n");
   fprintf(stderr, "To decode a CM or MTA config file: \n\t docsis -d <binary_file>\n");
   fprintf(stderr, "To decode a CM or MTA config file with OIDs: \n\t docsis -o -d <binary_file>\n");
-  fprintf(stderr, "\nWhere:\n<cfg_file>\t\t= name of text (human readable) cable modem or MTA \n\t\t\t  configuration file\n<key_file>\t\t= text file containing the authentication key \n\t\t\t  (shared secret) to be used for the CMTS MIC\n<output_file> \t\t= name of output file where the binary data will\n\t\t\t  be written to (if it does not exist it is created).\n<binary_file>\t\t= name of binary file to be decoded\n<new_extension>\t\t= new extension to be used when encoding multiple files\n");
+  fprintf(stderr, "\nTo specify the MIBPATH encode or decode use: \n"
+		  "\tdocsis -M \"PATH1:PATH2\" -d <binary_file>\n"
+		  "\tdocsis -M \"PATH1:PATH2\" -e <modem_cfg_file> <key_file> <output_file>\n"
+		  "\tdocsis -M \"PATH1:PATH2\" -m <modem_cfg_file1> ...  <key_file> <new_extension>\n"
+		  "\tdocsis -M \"PATH1:PATH2\" -p <mta_cfg_file> <output_file>\n"
+		  "\tdocsis -M \"PATH1:PATH2\" -m -p <mta_file1> ...  <new_extension>\n");
+  fprintf(stderr, "\nWhere:\n<cfg_file>\t\t= name of text (human readable) cable modem or MTA \n\t\t\t"
+		  "configuration file\n<key_file>\t\t= text file containing the authentication key \n\t\t\t"
+		  "(shared secret) to be used for the CMTS MIC\n<output_file> \t\t= name of output file where"
+		  "the binary data will\n\t\t\t  be written to (if it does not exist it is created).\n<binary_file>"
+                  "\t\t= name of binary file to be decoded\n<new_extension>\t\t= new extension to be used when encoding multiple files\n");
   fprintf(stderr, "\nSee examples/*.cfg for configuration file format.\n");
   fprintf(stderr, "\nPlease send bugs or questions to docsis-users@lists.sourceforge.net\n\n");
   exit (-10);
@@ -163,7 +173,7 @@ main (int argc, char *argv[])
 {
   unsigned char key[65];
   FILE *kf;
-  char *config_file=NULL, *key_file=NULL, *output_file=NULL, *extension_string=NULL;
+  char *config_file=NULL, *key_file=NULL, *output_file=NULL, *extension_string=NULL, *custom_mibs=NULL;
   unsigned int keylen = 0;
   unsigned int encode_docsis = FALSE, decode_bin = FALSE;
   int i;
@@ -192,6 +202,36 @@ main (int argc, char *argv[])
 		key_file = argv[argc-2];
 		encode_docsis = TRUE;
 	}
+  } else if (!strcmp (argv[1], "-M") ){ /* define custom MIBDIRS */
+        if (argc < 4 ) {
+                usage();
+        }
+	custom_mibs=argv[2];
+        if (!strcmp (argv[3], "-d")) {
+                decode_bin = TRUE;
+                config_file = argv[4];
+        } else if (!strcmp (argv[3], "-m")) {
+        	if (argc < 5 ) {
+                	usage();
+        	}
+        	extension_string = argv[argc-1];
+        	if (!strcmp ( argv[4], "-p")) {
+                	key_file = NULL;
+        	} else {
+                	key_file = argv[argc-2];
+                	encode_docsis = TRUE;
+        	}
+        } else if (!strcmp (argv[3], "-p")) {
+                config_file = argv[4];
+                output_file = argv[5];
+        } else if (!strcmp (argv[3], "-e")) {
+                encode_docsis = TRUE;
+                config_file = argv[4];
+                key_file = argv[5];
+                output_file = argv[6];
+	} else {
+                usage();
+        }	
   } else {
   	switch (argc)
     	{
@@ -238,7 +278,7 @@ main (int argc, char *argv[])
     }
 
   init_global_symtable ();
-  setup_mib_flags(resolve_oids);
+  setup_mib_flags(resolve_oids,custom_mibs);
 
   if (decode_bin)
   {
@@ -397,15 +437,21 @@ decode_file (char *file)
 
 
 static void
-setup_mib_flags(int resolve_oids) {
+setup_mib_flags(int resolve_oids, char *custom_mibs) {
 
 #ifdef DEBUG
 /*  snmp_set_mib_warnings (2); */
 #endif /* DEBUG  */
+snmp_set_mib_warnings (1);
+
+  if (custom_mibs)
+    {
+     setenv ("MIBDIRS", custom_mibs, 1);
+    }
 
   if (resolve_oids)
     {
-      setenv ("MIBS", "ALL", 1);
+     setenv ("MIBS", "ALL", 1);
     }
 
 #ifdef HAVE_NETSNMP_INIT_MIB
@@ -491,5 +537,3 @@ char *get_output_name ( char *input_path, char *extension_string )
   return new_path;
   /* !!! caller has to free the new string after using it !!!  */
 }
-
-
