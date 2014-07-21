@@ -136,35 +136,36 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 169,    "TftpModemAddress",                  20,     0,      (encode_ip),             (decode_ip),             0,           0             }, /* MULPIv3.0-I24 Annex C.1.1.9 */
 { 27,     "SwUpgradeServer",                   21,     0,      (encode_ip),             (decode_ip),             0,           0             }, /* MULPIv3.0-I24 Annex C.1.2.7 */
 
-/* DOCSIS 1.1-2.0 */
+/* DOCSIS 1.1-2.0-3.0 */
 
-{ 28,     "UsPacketClass",                     22,     0,      (encode_nothing),        (decode_aggregate),      0,           0             },
-{ 29,     "ClassifierRef",                     1,      28,     (encode_uchar),          (decode_uchar),          1,           255           }   ,
-{ 30,     "ClassifierId",                      2,      28,     (encode_ushort),         (decode_ushort),         1,           65535         },
-{ 31,     "ServiceFlowRef",                    3,      28,     (encode_ushort),         (decode_ushort),         1,           65535         },
-{ 32,     "ServiceFlowId",                     4,      28,     (encode_uint),           (decode_uint),           1,           0xFFFFFFFF    },
-{ 33,     "RulePriority",                      5,      28,     (encode_uchar),          (decode_uchar),          0,           255           },
-{ 34,     "ActivationState",                   6,      28,     (encode_uchar),          (decode_uchar),          0,           1             },
-{ 35,     "DscAction",                         7,      28,     (encode_uchar),          (decode_uchar),          0,           2             },
-{ 36,     "IpPacketClassifier",                9,      28,     (encode_nothing),        (decode_aggregate),      0,           0             },
-{ 37,     "IpTos",                             1,      36,     (encode_hexstr),         (decode_hexstr),         3,           3             },
-{ 38,     "IpProto",                           2,      36,     (encode_ushort),         (decode_ushort),         0,           257           },
-{ 39,     "IpSrcAddr",                         3,      36,     (encode_ip),             (decode_ip),             0,           0             },
-{ 40,     "IpSrcMask",                         4,      36,     (encode_ip),             (decode_ip),             0,           0             },
-{ 41,     "IpDstAddr",                         5,      36,     (encode_ip),             (decode_ip),             0,           0             },
-{ 42,     "IpDstMask",                         6,      36,     (encode_ip),             (decode_ip),             0,           0             },
-{ 43,     "SrcPortStart",                      7,      36,     (encode_ushort),         (decode_ushort),         0,           65535         },
-{ 44,     "SrcPortEnd",                        8,      36,     (encode_ushort),         (decode_ushort),         0,           65535         },
-{ 45,     "DstPortStart",                      9,      36,     (encode_ushort),         (decode_ushort),         0,           65535         },
-{ 46,     "DstPortEnd",                        10,     36,     (encode_ushort),         (decode_ushort),         0,           65535         },
-{ 47,     "LLCPacketClassifier",               10,     28,     (encode_nothing),        (decode_aggregate),      0,           0             },
-{ 48,     "DstMacAddress",                     1,      47,     (encode_ethermask),      (decode_ethermask),      0,           0             },
-{ 49,     "SrcMacAddress",                     2,      47,     (encode_ether),          (decode_ether),          0,           0             },
-{ 50,     "EtherType",                         3,      47,     (encode_hexstr),         (decode_hexstr),         3,           3             },
-{ 51,     "IEEE802Classifier",                 11,     28,     (encode_nothing),        (decode_aggregate),      0,           0             },
-{ 52,     "UserPriority",                      1,      51,     (encode_ushort),         (decode_ushort),         0,           0             },
-{ 53,     "VlanID",                            2,      51,     (encode_ushort),         (decode_ushort),         0,           0             },
-{ 211,    "PcIPv6PacketClassification",        12,     28,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* 22.12 */
+{ 28,     "UsPacketClass",                     22,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22 MULPIv3.0-I24 Annex C.2.1.1 */
+{ 29,     "ClassifierRef",                     1,      28,     (encode_uchar),          (decode_uchar),          1,           255           }, /* TLV 22.1 MULPIv3.0-I24 Annex C.2.1.4.1 */
+{ 30,     "ClassifierId",                      2,      28,     (encode_ushort),         (decode_ushort),         1,           65535         }, /* TLV 22.2 MULPIv3.0-I24 Annex C.2.1.4.2 */
+{ 31,     "ServiceFlowRef",                    3,      28,     (encode_ushort),         (decode_ushort),         1,           65535         }, /* TLV 22.3 MULPIv3.0-I24 Annex C.2.1.4.3 */
+{ 32,     "ServiceFlowId",                     4,      28,     (encode_uint),           (decode_uint),           1,           0xFFFFFFFF    }, /* TLV 22.4 MULPIv3.0-I24 Annex C.2.1.4.4 */
+{ 33,     "RulePriority",                      5,      28,     (encode_uchar),          (decode_uchar),          0,           255           }, /* TLV 22.5 MULPIv3.0-I24 Annex C.2.1.4.5 */
+{ 34,     "ActivationState",                   6,      28,     (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 22.6 MULPIv3.0-I24 Annex C.2.1.4.6 */
+{ 35,     "DscAction",                         7,      28,     (encode_uchar),          (decode_uchar),          0,           2             }, /* TLV 22.7 MULPIv3.0-I24 Annex C.2.1.4.7 */
+{ 36,     "IpPacketClassifier",                9,      28,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.9 MULPIv3.0-I24 Annex C.2.1.6 */
+{ 37,     "IpTos",                             1,      36,     (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 22.9.1 MULPIv3.0-I24 Annex C.2.1.6.1 */
+{ 38,     "IpProto",                           2,      36,     (encode_ushort),         (decode_ushort),         0,           257           }, /* TLV 22.9.2 MULPIv3.0-I24 Annex C.2.1.6.2 */
+{ 39,     "IpSrcAddr",                         3,      36,     (encode_ip),             (decode_ip),             0,           0             }, /* TLV 22.9.3 MULPIv3.0-I24 Annex C.2.1.6.3 */
+{ 40,     "IpSrcMask",                         4,      36,     (encode_ip),             (decode_ip),             0,           0             }, /* TLV 22.9.4 MULPIv3.0-I24 Annex C.2.1.6.4 */
+{ 41,     "IpDstAddr",                         5,      36,     (encode_ip),             (decode_ip),             0,           0             }, /* TLV 22.9.5 MULPIv3.0-I24 Annex C.2.1.6.5 */
+{ 42,     "IpDstMask",                         6,      36,     (encode_ip),             (decode_ip),             0,           0             }, /* TLV 22.9.6 MULPIv3.0-I24 Annex C.2.1.6.6 */
+{ 43,     "SrcPortStart",                      7,      36,     (encode_ushort),         (decode_ushort),         0,           65535         }, /* TLV 22.9.7 MULPIv3.0-I24 Annex C.2.1.7.1 */
+{ 44,     "SrcPortEnd",                        8,      36,     (encode_ushort),         (decode_ushort),         0,           65535         }, /* TLV 22.9.8 MULPIv3.0-I24 Annex C.2.1.7.2 */
+{ 45,     "DstPortStart",                      9,      36,     (encode_ushort),         (decode_ushort),         0,           65535         }, /* TLV 22.9.9 MULPIv3.0-I24 Annex C.2.1.7.3 */
+{ 46,     "DstPortEnd",                        10,     36,     (encode_ushort),         (decode_ushort),         0,           65535         }, /* TLV 22.9.10 MULPIv3.0-I24 Annex C.2.1.7.4 */
+{ 47,     "LLCPacketClassifier",               10,     28,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.10  MULPIv3.0-I24 Annex C.2.1.8 */
+{ 48,     "DstMacAddress",                     1,      47,     (encode_ethermask),      (decode_ethermask),      0,           0             }, /* TLV 22.10.1 MULPIv3.0-I24 Annex C.2.1.8.1 */
+{ 49,     "SrcMacAddress",                     2,      47,     (encode_ether),          (decode_ether),          0,           0             }, /* TLV 22.10.2 MULPIv3.0-I24 Annex C.2.1.8.2 */
+{ 50,     "EtherType",                         3,      47,     (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 22.10.3 MULPIv3.0-I24 Annex C.2.1.8.3 */
+{ 51,     "IEEE802Classifier",                 11,     28,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.11 MULPIv3.0-I24 Annex C.2.1.9 */
+/* Fix the UserPriotity to be as per MULPI spec, check the POSTER for more info */
+{ 52,     "UserPriority",                      1,      51,     (encode_ushort),         (decode_ushort),         0,           0             }, /* TLV 22.11.1 MULPIv3.0-I24 Annex C.2.1.9.1 */
+{ 53,     "VlanID",                            2,      51,     (encode_ushort),         (decode_ushort),         0,           4096          }, /* TLV 22.11.2 MULPIv3.0-I24 Annex C.2.1.9.2 */
+{ 211,    "PcIPv6PacketClassification",        12,     28,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.12 MULPIv3.0-I24 Annex C.2.1.10 */
 { 212,    "PcIPv6TrafficClassRangeAndMask",    1,      211,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* 22.12.1 */
 { 213,    "PcIPv6FlowLabel",                   2,      211,    (encode_hexstr),         (decode_hexstr),         4,           4             }, /* 22.12.2 */
 { 214,    "PcIPv6NextHeaderType",              3,      211,    (encode_ushort),         (decode_ushort),         0,           257           }, /* 22.12.3 */
