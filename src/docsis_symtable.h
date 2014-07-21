@@ -166,19 +166,19 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 52,     "UserPriority",                      1,      51,     (encode_ushort),         (decode_ushort),         0,           0             }, /* TLV 22.11.1 MULPIv3.0-I24 Annex C.2.1.9.1 */
 { 53,     "VlanID",                            2,      51,     (encode_ushort),         (decode_ushort),         0,           4096          }, /* TLV 22.11.2 MULPIv3.0-I24 Annex C.2.1.9.2 */
 { 211,    "PcIPv6PacketClassification",        12,     28,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.12 MULPIv3.0-I24 Annex C.2.1.10 */
-{ 212,    "PcIPv6TrafficClassRangeAndMask",    1,      211,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* 22.12.1 */
-{ 213,    "PcIPv6FlowLabel",                   2,      211,    (encode_hexstr),         (decode_hexstr),         4,           4             }, /* 22.12.2 */
-{ 214,    "PcIPv6NextHeaderType",              3,      211,    (encode_ushort),         (decode_ushort),         0,           257           }, /* 22.12.3 */
-{ 215,    "PcIPv6SourceAddress",               4,      211,    (encode_ip6),            (decode_ip6),            0,           0             }, /* 22.12.4 */
-{ 216,    "PcIPv6SourcePrefixLength",          5,      211,    (encode_uchar),          (decode_uchar),          0,           128           }, /* 22.12.5 */
-{ 217,    "PcIPv6DestAddress",                 6,      211,    (encode_ip6),            (decode_ip6),            0,           0             }, /* 22.12.6 */
-{ 218,    "PcIPv6DestPrefixLength",            7,      211,    (encode_uchar),          (decode_uchar),          0,           128           }, /* 22.12.7 */
+{ 212,    "PcIPv6TrafficClassRangeAndMask",    1,      211,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 22.12.1 MULPIv3.0-I24 Annex C.2.1.10.1 */
+{ 213,    "PcIPv6FlowLabel",                   2,      211,    (encode_hexstr),         (decode_hexstr),         4,           4             }, /* TLV 22.12.2 MULPIv3.0-I24 Annex C.2.1.10.2 */
+{ 214,    "PcIPv6NextHeaderType",              3,      211,    (encode_ushort),         (decode_ushort),         0,           257           }, /* TLV 22.12.3 MULPIv3.0-I24 Annex C.2.1.10.3 */
+{ 215,    "PcIPv6SourceAddress",               4,      211,    (encode_ip6),            (decode_ip6),            0,           0             }, /* TLV 22.12.4 MULPIv3.0-I24 Annex C.2.1.10.4 */
+{ 216,    "PcIPv6SourcePrefixLength",          5,      211,    (encode_uchar),          (decode_uchar),          0,           128           }, /* TLV 22.12.5 MULPIv3.0-I24 Annex C.2.1.10.5 */
+{ 217,    "PcIPv6DestAddress",                 6,      211,    (encode_ip6),            (decode_ip6),            0,           0             }, /* TLV 22.12.6 MULPIv3.0-I24 Annex C.2.1.10.6 */
+{ 218,    "PcIPv6DestPrefixLength",            7,      211,    (encode_uchar),          (decode_uchar),          0,           128           }, /* TLV 22.12.7 MULPIv3.0-I24 Annex C.2.1.10.7 */
 { 219,    "PcCMIMEncoding",                    13,     28,     (encode_hexstr),         (decode_hexstr),         0,           0             }, /* 22.13 */
 /* TLV 22 - Upstream Packet Classification */
-{ 200,    "VendorSpecific",                    43,     28,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* 22.43 */
-{ 201,    "VendorIdentifier",                  8,      200,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* 22.43.8 */
-{ 202,    "L2VPNEncoding",                     5,      200,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* 22.43.5 */
-{ 203,    "VPNIdentifier",                     1,      202,    (encode_string),         (decode_string),         4,           255           }, /* 22.43.5.1 */
+{ 200,    "VendorSpecific",                    43,     28,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.43 MULPIv3.0-I24 Annex C.2.1.11 */
+{ 202,    "L2VPNEncoding",                     5,      200,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.43.5 MULPIv3.0-I24 Annex C.1.1.18.1.5 */
+{ 203,    "VPNIdentifier",                     1,      202,    (encode_string),         (decode_string),         4,           255           }, /* TLV 22.43.5.1 L2VPN-I13 Annex B.3.1 */
+{ 201,    "VendorIdentifier",                  8,      200,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 22.43.8 */
 
 /* TODO: Vendor Specific support in the IEEE802Classifier */
 
