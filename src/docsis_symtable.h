@@ -166,7 +166,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 52,     "UserPriority",                      1,      51,     (encode_ushort),         (decode_ushort),         0,           0             }, /* TLV 22.11.1 MULPIv3.0-I24 Annex C.2.1.9.1 */
 { 53,     "VlanID",                            2,      51,     (encode_ushort),         (decode_ushort),         0,           4096          }, /* TLV 22.11.2 MULPIv3.0-I24 Annex C.2.1.9.2 */
 { 211,    "PcIPv6PacketClassification",        12,     28,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.12 MULPIv3.0-I24 Annex C.2.1.10 */
-{ 212,    "PcIPv6TrafficClassRangeAndMask",    1,      211,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* 22.12.1 */
+{ 212,    "PcIPv6TrafficClassRangeAndMask",    1,      211,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* 22.12.1 */
 { 213,    "PcIPv6FlowLabel",                   2,      211,    (encode_hexstr),         (decode_hexstr),         4,           4             }, /* 22.12.2 */
 { 214,    "PcIPv6NextHeaderType",              3,      211,    (encode_ushort),         (decode_ushort),         0,           257           }, /* 22.12.3 */
 { 215,    "PcIPv6SourceAddress",               4,      211,    (encode_ip6),            (decode_ip6),            0,           0             }, /* 22.12.4 */
