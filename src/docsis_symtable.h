@@ -220,7 +220,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 204,    "VendorSpecific",                    43,     54,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* 23.43 */
 { 205,    "VendorIdentifier",                  8,      204,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* 23.43.8 */
 { 206,    "L2VPNEncoding",                     5,      204,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* 23.43.5 */
-{ 207,    "VPNIdentifier",                     1,      206,    (encode_string),         (decode_string),         4,           255           }, /* 23.43.5.1 */
+{ 207,    "VPNIdentifier",                     1,      206,    (encode_hexstr),         (decode_hexstr),         4,           255           }, /* 23.43.5.1 */
 
 /* Upstream Service Flow */
 
@@ -249,7 +249,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 /* TLV 24 Upstream Service Flow */
 { 192,    "VendorSpecific",                    43,     80,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* 24.43 */
 { 194,    "L2VPNEncoding",                     5,      192,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* 24.43.5 */
-{ 195,    "VPNIdentifier",                     1,      194,    (encode_string),         (decode_string),         4,           255           }, /* 24.43.5.1 */
+{ 195,    "VPNIdentifier",                     1,      194,    (encode_hexstr),         (decode_hexstr),         4,           255           }, /* 24.43.5.1 */
 { 193,    "VendorIdentifier",                  8,      192,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* 24.43.8 */
 
 /* Downstream Service Flow */
@@ -271,7 +271,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 196,    "VendorSpecific",                    43,     102,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* 25.43 */
 { 197,    "VendorIdentifier",                  8,      196,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* 25.43.8 */
 { 198,    "L2VPNEncoding",                     5,      196,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* 25.43.5 */
-{ 199,    "VPNIdentifier",                     1,      198,    (encode_string),         (decode_string),         4,           255           }, /* 25.43.5.1 */
+{ 199,    "VPNIdentifier",                     1,      198,    (encode_hexstr),         (decode_hexstr),         4,           255           }, /* 25.43.5.1 */
 
 /* Payload Header Suppression - Appendix C.2.2.8 */
 
@@ -331,7 +331,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 /* DOCSIS Extension Field - Vendor Specific */
 { 130,    "VendorSpecific",                    43,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* 43 */
 { 188,    "L2VPNEncoding",                     5,      130,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* 43.5 */
-{ 189,    "VPNIdentifier",                     1,      188,    (encode_string),         (decode_string),         4,           255           }, /* 43.5.1 */
+{ 189,    "VPNIdentifier",                     1,      188,    (encode_hexstr),         (decode_hexstr),         4,           255           }, /* 43.5.1 */
 { 190,    "NSIEncapsulation",                  2,      188,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* 43.5.2 */
 { 191,    "NSIEncapsulationSingleQTag",        2,      190,    (encode_ushort),         (decode_ushort),         1,           4095          }, /* 43.5.2.2 */
 { 191,    "NSIEncapsulationDualQTag",          3,      190,    (encode_dual_qtag),      (decode_dual_qtag),      0,           0             }, /* 43.5.2.3 */
