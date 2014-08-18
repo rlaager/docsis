@@ -177,7 +177,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 /* TLV 22 - Upstream Packet Classification */
 { 200,    "VendorSpecific",                    43,     28,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.43 MULPIv3.0-I24 Annex C.2.1.11 */
 { 202,    "L2VPNEncoding",                     5,      200,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.43.5 MULPIv3.0-I24 Annex C.1.1.18.1.5 */
-{ 203,    "VPNIdentifier",                     1,      202,    (encode_string),         (decode_string),         4,           255           }, /* TLV 22.43.5.1 L2VPN-I13 Annex B.3.1 */
+{ 203,    "VPNIdentifier",                     1,      202,    (encode_hexstr),         (decode_hexstr),         4,           255           }, /* TLV 22.43.5.1 L2VPN-I13 Annex B.3.1 */
 { 201,    "VendorIdentifier",                  8,      200,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 22.43.8 */
 
 /* TODO: Vendor Specific support in the IEEE802Classifier */
