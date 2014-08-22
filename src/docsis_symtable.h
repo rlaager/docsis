@@ -162,8 +162,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 49,     "SrcMacAddress",                     2,      47,     (encode_ether),          (decode_ether),          0,           0             }, /* TLV 22.10.2 MULPIv3.0-I24 Annex C.2.1.8.2 */
 { 50,     "EtherType",                         3,      47,     (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 22.10.3 MULPIv3.0-I24 Annex C.2.1.8.3 */
 { 51,     "IEEE802Classifier",                 11,     28,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.11 MULPIv3.0-I24 Annex C.2.1.9 */
-/* TODO: Fix the UserPriotity to be as per MULPI spec, check the POSTER for more info */
-{ 52,     "UserPriority",                      1,      51,     (encode_ushort),         (decode_ushort),         0,           0             }, /* TLV 22.11.1 MULPIv3.0-I24 Annex C.2.1.9.1 */
+{ 52,     "UserPriority",                      1,      51,     (encode_dual_int),       (decode_dual_int),       0,           0             }, /* TLV 22.11.1 MULPIv3.0-I24 Annex C.2.1.9.1 */
 { 53,     "VlanID",                            2,      51,     (encode_ushort),         (decode_ushort),         0,           4096          }, /* TLV 22.11.2 MULPIv3.0-I24 Annex C.2.1.9.2 */
 { 211,    "PcIPv6PacketClassification",        12,     28,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.12 MULPIv3.0-I24 Annex C.2.1.10 */
 { 212,    "PcIPv6TrafficClassRangeAndMask",    1,      211,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 22.12.1 MULPIv3.0-I24 Annex C.2.1.10.1 */

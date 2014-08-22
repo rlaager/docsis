@@ -129,6 +129,15 @@ void decode_dual_qtag (unsigned char *tlvbuf, symbol_type *sym, size_t length )
     printf("%s %d,%d;\n", sym->sym_ident, tlvbuf[0] * 256 + tlvbuf[1], tlvbuf[2]*256 + tlvbuf[3]);
 }
 
+void decode_dual_int (unsigned char *tlvbuf, symbol_type *sym, size_t length )
+{
+    if (length != 2 ) {
+        fprintf(stderr, "dual integers length mismatch\n");
+        exit(-45);
+    }
+    printf("%s %d,%d;\n", sym->sym_ident, tlvbuf[0], tlvbuf[1]);
+}
+
 void decode_ethermask (unsigned char *tlvbuf, symbol_type *sym, size_t length)
 {
 /* the return value of ether_ntoa is a pointer to a static string
