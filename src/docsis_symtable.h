@@ -172,7 +172,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 216,    "PcIPv6SourcePrefixLength",          5,      211,    (encode_uchar),          (decode_uchar),          0,           128           }, /* TLV 22.12.5 MULPIv3.0-I24 Annex C.2.1.10.5 */
 { 217,    "PcIPv6DestAddress",                 6,      211,    (encode_ip6),            (decode_ip6),            0,           0             }, /* TLV 22.12.6 MULPIv3.0-I24 Annex C.2.1.10.6 */
 { 218,    "PcIPv6DestPrefixLength",            7,      211,    (encode_uchar),          (decode_uchar),          0,           128           }, /* TLV 22.12.7 MULPIv3.0-I24 Annex C.2.1.10.7 */
-{ 219,    "PcCMIMEncoding",                    13,     28,     (encode_hexstr),         (decode_hexstr),         0,           0             }, /* 22.13 */
+{ 219,    "PcCMIMEncoding",                    13,     28,     (encode_hexstr),         (decode_hexstr),         0,           0             }, /* TLV 22.13 MULPIv3.0-I24 Annex C.2.1.4.8 */
 /* TLV 22 - Upstream Packet Classification */
 { 200,    "VendorSpecific",                    43,     28,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.43 MULPIv3.0-I24 Annex C.2.1.11 */
 { 202,    "L2VPNEncoding",                     5,      200,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.43.5 MULPIv3.0-I24 Annex C.1.1.18.1.5 */
@@ -181,45 +181,45 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 
 /* TODO: Vendor Specific support in the IEEE802Classifier */
 
-{ 54,     "DsPacketClass",                     23,     0,      (encode_nothing),        (decode_aggregate),      0,           0             },
-{ 55,     "ClassifierRef",                     1,      54,     (encode_uchar),          (decode_uchar),          1,           255           },
-{ 56,     "ClassifierId",                      2,      54,     (encode_ushort),         (decode_ushort),         1,           65535         },
-{ 57,     "ServiceFlowRef",                    3,      54,     (encode_ushort),         (decode_ushort),         1,           65535         },
-{ 58,     "ServiceFlowId",                     4,      54,     (encode_uint),           (decode_uint),           1,           0xFFFFFFFF    },
-{ 59,     "RulePriority",                      5,      54,     (encode_uchar),          (decode_uchar),          0,           255           },
-{ 60,     "ActivationState",                   6,      54,     (encode_uchar),          (decode_uchar),          0,           1             },
-{ 61,     "DscAction",                         7,      54,     (encode_uchar),          (decode_uchar),          0,           2             },
-{ 62,     "IpPacketClassifier",                9,      54,     (encode_nothing),        (decode_aggregate),      0,           0             },
-{ 63,     "IpTos",                             1,      62,     (encode_hexstr),         (decode_hexstr),         3,           3             },
-{ 64,     "IpProto",                           2,      62,     (encode_ushort),         (decode_ushort),         0,           257           },
-{ 65,     "IpSrcAddr",                         3,      62,     (encode_ip),             (decode_ip),             0,           0             },
-{ 66,     "IpSrcMask",                         4,      62,     (encode_ip),             (decode_ip),             0,           0             },
-{ 67,     "IpDstAddr",                         5,      62,     (encode_ip),             (decode_ip),             0,           0             },
-{ 68,     "IpDstMask",                         6,      62,     (encode_ip),             (decode_ip),             0,           0             },
-{ 69,     "SrcPortStart",                      7,      62,     (encode_ushort),         (decode_ushort),         0,           65535         },
-{ 70,     "SrcPortEnd",                        8,      62,     (encode_ushort),         (decode_ushort),         0,           65535         },
-{ 71,     "DstPortStart",                      9,      62,     (encode_ushort),         (decode_ushort),         0,           65535         },
-{ 72,     "DstPortEnd",                        10,     62,     (encode_ushort),         (decode_ushort),         0,           65535         },
-{ 73,     "LLCPacketClassifier",               10,     54,     (encode_nothing),        (decode_aggregate),      0,           0             },
-{ 74,     "DstMacAddress",                     1,      73,     (encode_ethermask),      (decode_ethermask),      0,           0             },
-{ 75,     "SrcMacAddress",                     2,      73,     (encode_ether),          (decode_ether),          0,           0             },
-{ 76,     "EtherType",                         3,      73,     (encode_hexstr),         (decode_hexstr),         0,           255           },
-{ 77,     "IEEE802Classifier",                 11,     54,     (encode_nothing),        (decode_aggregate),      0,           0             },
-{ 78,     "UserPriority",                      1,      77,     (encode_ushort),         (decode_ushort),         0,           0             },
-{ 79,     "VlanID",                            2,      77,     (encode_ushort),         (decode_ushort),         0,           0             },
-{ 220,    "PcIPv6PacketClassification",        12,     54,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* 23.12 */
-{ 221,    "PcIPv6TrafficClassRangeAndMask",    1,      220,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* 23.12.1 */
-{ 222,    "PcIPv6FlowLabel",                   2,      220,    (encode_hexstr),         (decode_hexstr),         4,           4             }, /* 23.12.2 */
-{ 223,    "PcIPv6NextHeaderType",              3,      220,    (encode_ushort),         (decode_ushort),         0,           257           }, /* 23.12.3 */
-{ 224,    "PcIPv6SourceAddress",               4,      220,    (encode_ip6),            (decode_ip6),            0,           0             }, /* 23.12.4 */
-{ 225,    "PcIPv6SourcePrefixLength",          5,      220,    (encode_uchar),          (decode_uchar),          0,           128           }, /* 23.12.5 */
-{ 226,    "PcIPv6DestAddress",                 6,      220,    (encode_ip6),            (decode_ip6),            0,           0             }, /* 23.12.6 */
-{ 227,    "PcIPv6DestPrefixLength",            7,      220,    (encode_uchar),          (decode_uchar),          0,           128           }, /* 23.12.7 */
+{ 54,     "DsPacketClass",                     23,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23 MULPIv3.0-I24 Annex C.2.1.3 */
+{ 55,     "ClassifierRef",                     1,      54,     (encode_uchar),          (decode_uchar),          1,           255           }, /* TLV 23.1 */
+{ 56,     "ClassifierId",                      2,      54,     (encode_ushort),         (decode_ushort),         1,           65535         }, /* TLV 23.2 */
+{ 57,     "ServiceFlowRef",                    3,      54,     (encode_ushort),         (decode_ushort),         1,           65535         }, /* TLV 23.3 */
+{ 58,     "ServiceFlowId",                     4,      54,     (encode_uint),           (decode_uint),           1,           0xFFFFFFFF    }, /* TLV 23.4 */
+{ 59,     "RulePriority",                      5,      54,     (encode_uchar),          (decode_uchar),          0,           255           }, /* TLV 23.5 */
+{ 60,     "ActivationState",                   6,      54,     (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 23.6 */
+{ 61,     "DscAction",                         7,      54,     (encode_uchar),          (decode_uchar),          0,           2             }, /* TLV 23.7 */
+{ 62,     "IpPacketClassifier",                9,      54,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.9 */
+{ 63,     "IpTos",                             1,      62,     (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 23.9.1 */
+{ 64,     "IpProto",                           2,      62,     (encode_ushort),         (decode_ushort),         0,           257           }, /* TLV 23.9.2 */
+{ 65,     "IpSrcAddr",                         3,      62,     (encode_ip),             (decode_ip),             0,           0             }, /* TLV 23.9.3 */
+{ 66,     "IpSrcMask",                         4,      62,     (encode_ip),             (decode_ip),             0,           0             }, /* TLV 23.9.4 */
+{ 67,     "IpDstAddr",                         5,      62,     (encode_ip),             (decode_ip),             0,           0             }, /* TLV 23.9.5 */
+{ 68,     "IpDstMask",                         6,      62,     (encode_ip),             (decode_ip),             0,           0             }, /* TLV 23.9.6 */
+{ 69,     "SrcPortStart",                      7,      62,     (encode_ushort),         (decode_ushort),         0,           65535         }, /* TLV 23.9.7 */
+{ 70,     "SrcPortEnd",                        8,      62,     (encode_ushort),         (decode_ushort),         0,           65535         }, /* TLV 23.9.8 */
+{ 71,     "DstPortStart",                      9,      62,     (encode_ushort),         (decode_ushort),         0,           65535         }, /* TLV 23.9.9 */
+{ 72,     "DstPortEnd",                        10,     62,     (encode_ushort),         (decode_ushort),         0,           65535         }, /* TLV 23.9.10 */
+{ 73,     "LLCPacketClassifier",               10,     54,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.10 */
+{ 74,     "DstMacAddress",                     1,      73,     (encode_ethermask),      (decode_ethermask),      0,           0             }, /* TLV 23.10.1 */
+{ 75,     "SrcMacAddress",                     2,      73,     (encode_ether),          (decode_ether),          0,           0             }, /* TLV 23.10.2 */
+{ 76,     "EtherType",                         3,      73,     (encode_hexstr),         (decode_hexstr),         0,           3             }, /* TLV 23.10.3 */
+{ 77,     "IEEE802Classifier",                 11,     54,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.11 */
+{ 78,     "UserPriority",                      1,      77,     (encode_ushort),         (decode_ushort),         0,           0             }, /* TLV 23.11.1 */
+{ 79,     "VlanID",                            2,      77,     (encode_ushort),         (decode_ushort),         0,           0             }, /* TLV 23.11.2 */
+{ 220,    "PcIPv6PacketClassification",        12,     54,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.12 */
+{ 221,    "PcIPv6TrafficClassRangeAndMask",    1,      220,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* TLV 23.12.1 */
+{ 222,    "PcIPv6FlowLabel",                   2,      220,    (encode_hexstr),         (decode_hexstr),         4,           4             }, /* TLV 23.12.2 */
+{ 223,    "PcIPv6NextHeaderType",              3,      220,    (encode_ushort),         (decode_ushort),         0,           257           }, /* TLV 23.12.3 */
+{ 224,    "PcIPv6SourceAddress",               4,      220,    (encode_ip6),            (decode_ip6),            0,           0             }, /* TLV 23.12.4 */
+{ 225,    "PcIPv6SourcePrefixLength",          5,      220,    (encode_uchar),          (decode_uchar),          0,           128           }, /* TLV 23.12.5 */
+{ 226,    "PcIPv6DestAddress",                 6,      220,    (encode_ip6),            (decode_ip6),            0,           0             }, /* TLV 23.12.6 */
+{ 227,    "PcIPv6DestPrefixLength",            7,      220,    (encode_uchar),          (decode_uchar),          0,           128           }, /* TLV 23.12.7 */
 /* TLV 23 - Downstream Packet Classification */
-{ 204,    "VendorSpecific",                    43,     54,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* 23.43 */
-{ 205,    "VendorIdentifier",                  8,      204,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* 23.43.8 */
-{ 206,    "L2VPNEncoding",                     5,      204,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* 23.43.5 */
-{ 207,    "VPNIdentifier",                     1,      206,    (encode_hexstr),         (decode_hexstr),         4,           255           }, /* 23.43.5.1 */
+{ 204,    "VendorSpecific",                    43,     54,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.43 */
+{ 205,    "VendorIdentifier",                  8,      204,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 23.43.8 */
+{ 206,    "L2VPNEncoding",                     5,      204,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.43.5 */
+{ 207,    "VPNIdentifier",                     1,      206,    (encode_hexstr),         (decode_hexstr),         4,           255           }, /* TLV 23.43.5.1 */
 
 /* Upstream Service Flow */
 
