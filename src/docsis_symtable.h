@@ -173,7 +173,6 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 217,    "PcIPv6DestAddress",                 6,      211,    (encode_ip6),            (decode_ip6),            0,           0             }, /* TLV 22.12.6 MULPIv3.0-I24 Annex C.2.1.10.6 */
 { 218,    "PcIPv6DestPrefixLength",            7,      211,    (encode_uchar),          (decode_uchar),          0,           128           }, /* TLV 22.12.7 MULPIv3.0-I24 Annex C.2.1.10.7 */
 { 219,    "PcCMIMEncoding",                    13,     28,     (encode_hexstr),         (decode_hexstr),         0,           0             }, /* TLV 22.13 MULPIv3.0-I24 Annex C.2.1.4.8 */
-/* TLV 22 - Upstream Packet Classification */
 { 200,    "VendorSpecific",                    43,     28,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.43 MULPIv3.0-I24 Annex C.2.1.11 */
 { 202,    "L2VPNEncoding",                     5,      200,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.43.5 MULPIv3.0-I24 Annex C.1.1.18.1.5 */
 { 203,    "VPNIdentifier",                     1,      202,    (encode_hexstr),         (decode_hexstr),         4,           255           }, /* TLV 22.43.5.1 L2VPN-I13 Annex B.3.1 */
@@ -182,172 +181,171 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 /* TODO: Vendor Specific support in the IEEE802Classifier */
 
 { 54,     "DsPacketClass",                     23,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23 MULPIv3.0-I24 Annex C.2.1.3 */
-{ 55,     "ClassifierRef",                     1,      54,     (encode_uchar),          (decode_uchar),          1,           255           }, /* TLV 23.1 */
-{ 56,     "ClassifierId",                      2,      54,     (encode_ushort),         (decode_ushort),         1,           65535         }, /* TLV 23.2 */
-{ 57,     "ServiceFlowRef",                    3,      54,     (encode_ushort),         (decode_ushort),         1,           65535         }, /* TLV 23.3 */
-{ 58,     "ServiceFlowId",                     4,      54,     (encode_uint),           (decode_uint),           1,           0xFFFFFFFF    }, /* TLV 23.4 */
-{ 59,     "RulePriority",                      5,      54,     (encode_uchar),          (decode_uchar),          0,           255           }, /* TLV 23.5 */
-{ 60,     "ActivationState",                   6,      54,     (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 23.6 */
-{ 61,     "DscAction",                         7,      54,     (encode_uchar),          (decode_uchar),          0,           2             }, /* TLV 23.7 */
-{ 62,     "IpPacketClassifier",                9,      54,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.9 */
-{ 63,     "IpTos",                             1,      62,     (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 23.9.1 */
-{ 64,     "IpProto",                           2,      62,     (encode_ushort),         (decode_ushort),         0,           257           }, /* TLV 23.9.2 */
-{ 65,     "IpSrcAddr",                         3,      62,     (encode_ip),             (decode_ip),             0,           0             }, /* TLV 23.9.3 */
-{ 66,     "IpSrcMask",                         4,      62,     (encode_ip),             (decode_ip),             0,           0             }, /* TLV 23.9.4 */
-{ 67,     "IpDstAddr",                         5,      62,     (encode_ip),             (decode_ip),             0,           0             }, /* TLV 23.9.5 */
-{ 68,     "IpDstMask",                         6,      62,     (encode_ip),             (decode_ip),             0,           0             }, /* TLV 23.9.6 */
-{ 69,     "SrcPortStart",                      7,      62,     (encode_ushort),         (decode_ushort),         0,           65535         }, /* TLV 23.9.7 */
-{ 70,     "SrcPortEnd",                        8,      62,     (encode_ushort),         (decode_ushort),         0,           65535         }, /* TLV 23.9.8 */
-{ 71,     "DstPortStart",                      9,      62,     (encode_ushort),         (decode_ushort),         0,           65535         }, /* TLV 23.9.9 */
-{ 72,     "DstPortEnd",                        10,     62,     (encode_ushort),         (decode_ushort),         0,           65535         }, /* TLV 23.9.10 */
-{ 73,     "LLCPacketClassifier",               10,     54,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.10 */
-{ 74,     "DstMacAddress",                     1,      73,     (encode_ethermask),      (decode_ethermask),      0,           0             }, /* TLV 23.10.1 */
-{ 75,     "SrcMacAddress",                     2,      73,     (encode_ether),          (decode_ether),          0,           0             }, /* TLV 23.10.2 */
-{ 76,     "EtherType",                         3,      73,     (encode_hexstr),         (decode_hexstr),         0,           3             }, /* TLV 23.10.3 */
-{ 77,     "IEEE802Classifier",                 11,     54,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.11 */
-{ 78,     "UserPriority",                      1,      77,     (encode_ushort),         (decode_ushort),         0,           0             }, /* TLV 23.11.1 */
-{ 79,     "VlanID",                            2,      77,     (encode_ushort),         (decode_ushort),         0,           0             }, /* TLV 23.11.2 */
-{ 220,    "PcIPv6PacketClassification",        12,     54,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.12 */
-{ 221,    "PcIPv6TrafficClassRangeAndMask",    1,      220,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* TLV 23.12.1 */
-{ 222,    "PcIPv6FlowLabel",                   2,      220,    (encode_hexstr),         (decode_hexstr),         4,           4             }, /* TLV 23.12.2 */
-{ 223,    "PcIPv6NextHeaderType",              3,      220,    (encode_ushort),         (decode_ushort),         0,           257           }, /* TLV 23.12.3 */
-{ 224,    "PcIPv6SourceAddress",               4,      220,    (encode_ip6),            (decode_ip6),            0,           0             }, /* TLV 23.12.4 */
-{ 225,    "PcIPv6SourcePrefixLength",          5,      220,    (encode_uchar),          (decode_uchar),          0,           128           }, /* TLV 23.12.5 */
-{ 226,    "PcIPv6DestAddress",                 6,      220,    (encode_ip6),            (decode_ip6),            0,           0             }, /* TLV 23.12.6 */
-{ 227,    "PcIPv6DestPrefixLength",            7,      220,    (encode_uchar),          (decode_uchar),          0,           128           }, /* TLV 23.12.7 */
-/* TLV 23 - Downstream Packet Classification */
-{ 204,    "VendorSpecific",                    43,     54,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.43 */
+{ 55,     "ClassifierRef",                     1,      54,     (encode_uchar),          (decode_uchar),          1,           255           }, /* TLV 23.1 MULPIv3.0-I24 Annex C.2.1.4.1 */
+{ 56,     "ClassifierId",                      2,      54,     (encode_ushort),         (decode_ushort),         1,           65535         }, /* TLV 23.2 MULPIv3.0-I24 Annex C.2.1.4.2 */
+{ 57,     "ServiceFlowRef",                    3,      54,     (encode_ushort),         (decode_ushort),         1,           65535         }, /* TLV 23.3 MULPIv3.0-I24 Annex C.2.1.4.3 */
+{ 58,     "ServiceFlowId",                     4,      54,     (encode_uint),           (decode_uint),           1,           0xFFFFFFFF    }, /* TLV 23.4 MULPIv3.0-I24 Annex C.2.1.4.4 */
+{ 59,     "RulePriority",                      5,      54,     (encode_uchar),          (decode_uchar),          0,           255           }, /* TLV 23.5 MULPIv3.0-I24 Annex C.2.1.4.5 */
+{ 60,     "ActivationState",                   6,      54,     (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 23.6 MULPIv3.0-I24 Annex C.2.1.4.6 */
+{ 61,     "DscAction",                         7,      54,     (encode_uchar),          (decode_uchar),          0,           2             }, /* TLV 23.7 MULPIv3.0-I24 Annex C.2.1.4.7 */
+{ 62,     "IpPacketClassifier",                9,      54,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.9 MULPIv3.0-I24 Annex C.2.1.6 */
+{ 63,     "IpTos",                             1,      62,     (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 23.9.1 MULPIv3.0-I24 Annex C.2.1.6.1 */
+{ 64,     "IpProto",                           2,      62,     (encode_ushort),         (decode_ushort),         0,           257           }, /* TLV 23.9.2 MULPIv3.0-I24 Annex C.2.1.6.2 */
+{ 65,     "IpSrcAddr",                         3,      62,     (encode_ip),             (decode_ip),             0,           0             }, /* TLV 23.9.3 MULPIv3.0-I24 Annex C.2.1.6.3 */
+{ 66,     "IpSrcMask",                         4,      62,     (encode_ip),             (decode_ip),             0,           0             }, /* TLV 23.9.4 MULPIv3.0-I24 Annex C.2.1.6.4 */
+{ 67,     "IpDstAddr",                         5,      62,     (encode_ip),             (decode_ip),             0,           0             }, /* TLV 23.9.5 MULPIv3.0-I24 Annex C.2.1.6.5 */
+{ 68,     "IpDstMask",                         6,      62,     (encode_ip),             (decode_ip),             0,           0             }, /* TLV 23.9.6 MULPIv3.0-I24 Annex C.2.1.6.6 */
+{ 69,     "SrcPortStart",                      7,      62,     (encode_ushort),         (decode_ushort),         0,           65535         }, /* TLV 23.9.7 MULPIv3.0-I24 Annex C.2.1.7.1 */
+{ 70,     "SrcPortEnd",                        8,      62,     (encode_ushort),         (decode_ushort),         0,           65535         }, /* TLV 23.9.8 MULPIv3.0-I24 Annex C.2.1.7.2 */
+{ 71,     "DstPortStart",                      9,      62,     (encode_ushort),         (decode_ushort),         0,           65535         }, /* TLV 23.9.9 MULPIv3.0-I24 Annex C.2.1.7.3 */
+{ 72,     "DstPortEnd",                        10,     62,     (encode_ushort),         (decode_ushort),         0,           65535         }, /* TLV 23.9.10 MULPIv3.0-I24 Annex C.2.1.7.4 */
+{ 73,     "LLCPacketClassifier",               10,     54,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.10 MULPIv3.0-I24 Annex C.2.1.8 */
+{ 74,     "DstMacAddress",                     1,      73,     (encode_ethermask),      (decode_ethermask),      0,           0             }, /* TLV 23.10.1 MULPIv3.0-I24 Annex C.2.1.8.1 */
+{ 75,     "SrcMacAddress",                     2,      73,     (encode_ether),          (decode_ether),          0,           0             }, /* TLV 23.10.2 MULPIv3.0-I24 Annex C.2.1.8.2 */
+{ 76,     "EtherType",                         3,      73,     (encode_hexstr),         (decode_hexstr),         0,           3             }, /* TLV 23.10.3 MULPIv3.0-I24 Annex C.2.1.8.3 */
+{ 77,     "IEEE802Classifier",                 11,     54,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.11 MULPIv3.0-I24 Annex C.2.1.9 */
+{ 78,     "UserPriority",                      1,      77,     (encode_dual_int),       (decode_dual_int),       0,           0             }, /* TLV 23.11.1 MULPIv3.0-I24 Annex C.2.1.9.1 */
+{ 79,     "VlanID",                            2,      77,     (encode_ushort),         (decode_ushort),         0,           0             }, /* TLV 23.11.2 MULPIv3.0-I24 Annex C.2.1.9.2 */
+{ 220,    "PcIPv6PacketClassification",        12,     54,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.12 MULPIv3.0-I24 Annex C.2.1.10 */
+{ 221,    "PcIPv6TrafficClassRangeAndMask",    1,      220,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* TLV 23.12.1 MULPIv3.0-I24 Annex C.2.1.10.1 */
+{ 222,    "PcIPv6FlowLabel",                   2,      220,    (encode_hexstr),         (decode_hexstr),         4,           4             }, /* TLV 23.12.2 MULPIv3.0-I24 Annex C.2.1.10.2 */
+{ 223,    "PcIPv6NextHeaderType",              3,      220,    (encode_ushort),         (decode_ushort),         0,           257           }, /* TLV 23.12.3 MULPIv3.0-I24 Annex C.2.1.10.3 */
+{ 224,    "PcIPv6SourceAddress",               4,      220,    (encode_ip6),            (decode_ip6),            0,           0             }, /* TLV 23.12.4 MULPIv3.0-I24 Annex C.2.1.10.4 */
+{ 225,    "PcIPv6SourcePrefixLength",          5,      220,    (encode_uchar),          (decode_uchar),          0,           128           }, /* TLV 23.12.5 MULPIv3.0-I24 Annex C.2.1.10.5 */
+{ 226,    "PcIPv6DestAddress",                 6,      220,    (encode_ip6),            (decode_ip6),            0,           0             }, /* TLV 23.12.6 MULPIv3.0-I24 Annex C.2.1.10.6 */
+{ 227,    "PcIPv6DestPrefixLength",            7,      220,    (encode_uchar),          (decode_uchar),          0,           128           }, /* TLV 23.12.7 MULPIv3.0-I24 Annex C.2.1.10.7 */
+{ 204,    "VendorSpecific",                    43,     54,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.43 MULPIv3.0-I24 Annex C.2.1.11 */
+{ 206,    "L2VPNEncoding",                     5,      204,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.43.5 MULPIv3.0-I24 Annex C.1.1.18.1.5 */
+{ 207,    "VPNIdentifier",                     1,      206,    (encode_hexstr),         (decode_hexstr),         4,           255           }, /* TLV 23.43.5.1 L2VPN-I13 Annex B.3.1 */
 { 205,    "VendorIdentifier",                  8,      204,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 23.43.8 */
-{ 206,    "L2VPNEncoding",                     5,      204,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.43.5 */
-{ 207,    "VPNIdentifier",                     1,      206,    (encode_hexstr),         (decode_hexstr),         4,           255           }, /* TLV 23.43.5.1 */
 
 /* Upstream Service Flow */
 
-{ 80,     "UsServiceFlow",                     24,     0,      (encode_nothing),        (decode_aggregate),      0,           0             },
-{ 81,     "UsServiceFlowRef",                  1,      80,     (encode_ushort),         (decode_ushort),         1,           65535         },
-{ 82,     "UsServiceFlowId",                   2,      80,     (encode_uint),           (decode_uint),           1,           0xFFFFFFFF    },
-{ 83,     "ServiceClassName",                  4,      80,     (encode_strzero),        (decode_strzero),        2,           16            },
-{ 84,     "QosParamSetType",                   6,      80,     (encode_uchar),          (decode_uchar),          0,           255           },
-{ 85,     "TrafficPriority",                   7,      80,     (encode_uchar),          (decode_uchar),          0,           7             },
-{ 86,     "MaxRateSustained",                  8,      80,     (encode_uint),           (decode_uint),           0,           0             },
-{ 87,     "MaxTrafficBurst",                   9,      80,     (encode_uint),           (decode_uint),           0,           0             },
-{ 88,     "MinReservedRate",                   10,     80,     (encode_uint),           (decode_uint),           0,           0             },
-{ 89,     "MinResPacketSize",                  11,     80,     (encode_ushort),         (decode_ushort),         0,           65535         },
-{ 90,     "ActQosParamsTimeout",               12,     80,     (encode_ushort),         (decode_ushort),         0,           65535         },
-{ 91,     "AdmQosParamsTimeout",               13,     80,     (encode_ushort),         (decode_ushort),         0,           65535         },
-{ 92,     "MaxConcatenatedBurst",              14,     80,     (encode_ushort),         (decode_ushort),         0,           65535         },
-{ 93,     "SchedulingType",                    15,     80,     (encode_uchar),          (decode_uchar),          0,           6             },
-{ 94,     "RequestOrTxPolicy",                 16,     80,     (encode_hexstr),         (decode_hexstr),         4,           4             },
-{ 95,     "NominalPollInterval",               17,     80,     (encode_uint),           (decode_uint),           0,           0             },
-{ 96,     "ToleratedPollJitter",               18,     80,     (encode_uint),           (decode_uint),           0,           0             },
-{ 97,     "UnsolicitedGrantSize",              19,     80,     (encode_ushort),         (decode_ushort),         0,           65535         },
-{ 98,     "NominalGrantInterval",              20,     80,     (encode_uint),           (decode_uint),           0,           0             },
-{ 99,     "ToleratedGrantJitter",              21,     80,     (encode_uint),           (decode_uint),           0,           0             },
-{ 100,    "GrantsPerInterval",                 22,     80,     (encode_uchar),          (decode_uchar),          0,           127           },
-{ 101,    "IpTosOverwrite",                    23,     80,     (encode_hexstr),         (decode_hexstr),         2,           2             },
+{ 80,     "UsServiceFlow",                     24,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 24 MULPIv3.0-I24 Annex C.2.2.5 */
+{ 81,     "UsServiceFlowRef",                  1,      80,     (encode_ushort),         (decode_ushort),         1,           65535         }, /* TLV 24.1 MULPIv3.0-I24 Annex C.2.2.5.1 */
+{ 82,     "UsServiceFlowId",                   2,      80,     (encode_uint),           (decode_uint),           1,           0xFFFFFFFF    }, /* TLV 24.2 MULPIv3.0-I24 Annex C.2.2.5.2 */
+                                                                                                                                               /* TLV 24.3 MULPIv3.0-I24 Annex C.2.2.5.3 */
+{ 83,     "ServiceClassName",                  4,      80,     (encode_strzero),        (decode_strzero),        2,           16            }, /* TLV 24.4 MULPIv3.0-I24 Annex C.2.2.5.4 */
+{ 84,     "QosParamSetType",                   6,      80,     (encode_uchar),          (decode_uchar),          0,           255           }, /* TLV 24.6 MULPIv3.0-I24 Annex C.2.2.5.5 */
+{ 85,     "TrafficPriority",                   7,      80,     (encode_uchar),          (decode_uchar),          0,           7             }, /* TLV 24.7 MULPIv3.0-I24 Annex C.2.2.7.1 */
+{ 86,     "MaxRateSustained",                  8,      80,     (encode_uint),           (decode_uint),           0,           0             }, /* TLV 24.8 MULPIv3.0-I24 Annex C.2.2.7.2.1 */
+{ 87,     "MaxTrafficBurst",                   9,      80,     (encode_uint),           (decode_uint),           0,           0             }, /* TLV 24.9 MULPIv3.0-I24 Annex C.2.2.7.3 */
+{ 88,     "MinReservedRate",                   10,     80,     (encode_uint),           (decode_uint),           0,           0             }, /* TLV 24.10 MULPIv3.0-I24 Annex C.2.2.7.4 */
+{ 89,     "MinResPacketSize",                  11,     80,     (encode_ushort),         (decode_ushort),         0,           65535         }, /* TLV 24.11 MULPIv3.0-I24 Annex C.2.2.7.5 */
+{ 90,     "ActQosParamsTimeout",               12,     80,     (encode_ushort),         (decode_ushort),         0,           65535         }, /* TLV 24.12 MULPIv3.0-I24 Annex C.2.2.7.6 */
+{ 91,     "AdmQosParamsTimeout",               13,     80,     (encode_ushort),         (decode_ushort),         0,           65535         }, /* TLV 24.13 MULPIv3.0-I24 Annex C.2.2.7.7 */
+{ 92,     "MaxConcatenatedBurst",              14,     80,     (encode_ushort),         (decode_ushort),         0,           65535         }, /* TLV 24.14 MULPIv3.0-I24 Annex C.2.2.8.1 */
+{ 93,     "SchedulingType",                    15,     80,     (encode_uchar),          (decode_uchar),          0,           6             }, /* TLV 24.15 MULPIv3.0-I24 Annex C.2.2.8.2 */
+{ 94,     "RequestOrTxPolicy",                 16,     80,     (encode_hexstr),         (decode_hexstr),         4,           4             }, /* TLV 24.16 MULPIv3.0-I24 Annex C.2.2.8.3 */
+{ 95,     "NominalPollInterval",               17,     80,     (encode_uint),           (decode_uint),           0,           0             }, /* TLV 24.17 MULPIv3.0-I24 Annex C.2.2.8.4 */
+{ 96,     "ToleratedPollJitter",               18,     80,     (encode_uint),           (decode_uint),           0,           0             }, /* TLV 24.18 MULPIv3.0-I24 Annex C.2.2.8.5 */
+{ 97,     "UnsolicitedGrantSize",              19,     80,     (encode_ushort),         (decode_ushort),         0,           65535         }, /* TLV 24.19 MULPIv3.0-I24 Annex C.2.2.8.6 */
+{ 98,     "NominalGrantInterval",              20,     80,     (encode_uint),           (decode_uint),           0,           0             }, /* TLV 24.20 MULPIv3.0-I24 Annex C.2.2.8.7 */
+{ 99,     "ToleratedGrantJitter",              21,     80,     (encode_uint),           (decode_uint),           0,           0             }, /* TLV 24.21 MULPIv3.0-I24 Annex C.2.2.8.8 */
+{ 100,    "GrantsPerInterval",                 22,     80,     (encode_uchar),          (decode_uchar),          0,           127           }, /* TLV 24.22 MULPIv3.0-I24 Annex C.2.2.8.9 */
+{ 101,    "IpTosOverwrite",                    23,     80,     (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 24.23 MULPIv3.0-I24 Annex C.2.2.7.9 */
 /* TLV 24 Upstream Service Flow */
-{ 192,    "VendorSpecific",                    43,     80,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* 24.43 */
-{ 194,    "L2VPNEncoding",                     5,      192,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* 24.43.5 */
-{ 195,    "VPNIdentifier",                     1,      194,    (encode_hexstr),         (decode_hexstr),         4,           255           }, /* 24.43.5.1 */
-{ 193,    "VendorIdentifier",                  8,      192,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* 24.43.8 */
+{ 192,    "VendorSpecific",                    43,     80,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 24.43 MULPIv3.0-I24 Annex C.2.2.7.8 */
+{ 194,    "L2VPNEncoding",                     5,      192,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 24.43.5 */
+{ 195,    "VPNIdentifier",                     1,      194,    (encode_hexstr),         (decode_hexstr),         4,           255           }, /* TLV 24.43.5.1 */
+{ 193,    "VendorIdentifier",                  8,      192,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 24.43.8 */
 
 /* Downstream Service Flow */
 
-{ 102,    "DsServiceFlow",                     25,     0,      (encode_nothing),        (decode_aggregate),      0,           0             },
-{ 103,    "DsServiceFlowRef",                  1,      102,    (encode_ushort),         (decode_ushort),         1,           65535         },
-{ 104,    "DsServiceFlowId",                   2,      102,    (encode_uint),           (decode_uint),           1,           0xFFFFFFFF    },
-{ 105,    "ServiceClassName",                  4,      102,    (encode_strzero),        (decode_strzero),        2,           16            },
-{ 106,    "QosParamSetType",                   6,      102,    (encode_uchar),          (decode_uchar),          0,           255           },
-{ 107,    "TrafficPriority",                   7,      102,    (encode_uchar),          (decode_uchar),          0,           7             },
-{ 108,    "MaxRateSustained",                  8,      102,    (encode_uint),           (decode_uint),           0,           0xFFFFFFFF    },
-{ 109,    "MaxTrafficBurst",                   9,      102,    (encode_uint),           (decode_uint),           0,           0xFFFFFFFF    },
-{ 110,    "MinReservedRate",                   10,     102,    (encode_uint),           (decode_uint),           0,           0xFFFFFFFF    },
-{ 111,    "MinResPacketSize",                  11,     102,    (encode_ushort),         (decode_ushort),         0,           65535         },
-{ 112,    "ActQosParamsTimeout",               12,     102,    (encode_ushort),         (decode_ushort),         0,           65535         },
-{ 113,    "AdmQosParamsTimeout",               13,     102,    (encode_ushort),         (decode_ushort),         0,           65535         },
-{ 114,    "MaxDsLatency",                      14,     102,    (encode_uint),           (decode_uint),           0,           0             },
-/* TLV 25 - Downstream Service Flow */
-{ 196,    "VendorSpecific",                    43,     102,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* 25.43 */
-{ 197,    "VendorIdentifier",                  8,      196,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* 25.43.8 */
-{ 198,    "L2VPNEncoding",                     5,      196,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* 25.43.5 */
-{ 199,    "VPNIdentifier",                     1,      198,    (encode_hexstr),         (decode_hexstr),         4,           255           }, /* 25.43.5.1 */
+{ 102,    "DsServiceFlow",                     25,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 24 MULPIv3.0-I24 Annex C.2.2.5 */
+{ 103,    "DsServiceFlowRef",                  1,      102,    (encode_ushort),         (decode_ushort),         1,           65535         }, /* TLV 24.1 MULPIv3.0-I24 Annex C.2.2.5.1 */
+{ 104,    "DsServiceFlowId",                   2,      102,    (encode_uint),           (decode_uint),           1,           0xFFFFFFFF    }, /* TLV 24.2 MULPIv3.0-I24 Annex C.2.2.5.2 */
+{ 105,    "ServiceClassName",                  4,      102,    (encode_strzero),        (decode_strzero),        2,           16            }, /* TLV 24.4 MULPIv3.0-I24 Annex C.2.2.5.4 */
+{ 106,    "QosParamSetType",                   6,      102,    (encode_uchar),          (decode_uchar),          0,           255           }, /* TLV 24.6 MULPIv3.0-I24 Annex C.2.2.5.5 */
+{ 107,    "TrafficPriority",                   7,      102,    (encode_uchar),          (decode_uchar),          0,           7             }, /* TLV 24.7 MULPIv3.0-I24 Annex C.2.2.7.1 */
+{ 108,    "MaxRateSustained",                  8,      102,    (encode_uint),           (decode_uint),           0,           0xFFFFFFFF    }, /* TLV 24.8 MULPIv3.0-I24 Annex C.2.2.7.2.2 */
+{ 109,    "MaxTrafficBurst",                   9,      102,    (encode_uint),           (decode_uint),           0,           0xFFFFFFFF    }, /* TLV 24.9 MULPIv3.0-I24 Annex C.2.2.7.3 */
+{ 110,    "MinReservedRate",                   10,     102,    (encode_uint),           (decode_uint),           0,           0xFFFFFFFF    }, /* TLV 24.10 MULPIv3.0-I24 Annex C.2.2.7.4 */
+{ 111,    "MinResPacketSize",                  11,     102,    (encode_ushort),         (decode_ushort),         0,           65535         }, /* TLV 24.11 MULPIv3.0-I24 Annex C.2.2.7.5 */
+{ 112,    "ActQosParamsTimeout",               12,     102,    (encode_ushort),         (decode_ushort),         0,           65535         }, /* TLV 24.12 MULPIv3.0-I24 Annex C.2.2.7.6 */
+{ 113,    "AdmQosParamsTimeout",               13,     102,    (encode_ushort),         (decode_ushort),         0,           65535         }, /* TLV 24.13 MULPIv3.0-I24 Annex C.2.2.7.7 */
+{ 114,    "MaxDsLatency",                      14,     102,    (encode_uint),           (decode_uint),           0,           0             }, /* TLV 25.14 MULPIv3.0-I24 Annex C.2.2.9.1 */
+{ 196,    "VendorSpecific",                    43,     102,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 25.43 MULPIv3.0-I24 Annex C.2.2.7.8 */
+{ 197,    "VendorIdentifier",                  8,      196,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 25.43.8 */
+{ 198,    "L2VPNEncoding",                     5,      196,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 25.43.5 */
+{ 199,    "VPNIdentifier",                     1,      198,    (encode_hexstr),         (decode_hexstr),         4,           255           }, /* TLV 25.43.5.1 */
 
 /* Payload Header Suppression - Appendix C.2.2.8 */
 
-{ 115,    "PHS",                               26,     0,      (encode_nothing),        (decode_aggregate)   ,   0,           0             },
-{ 116,    "PHSClassifierRef",                  1,      115,    (encode_uchar),          (decode_uchar),          1,           255           },
-{ 117,    "PHSClassifierId",                   2,      115,    (encode_ushort),         (decode_ushort),         1,           65535         },
-{ 118,    "PHSServiceFlowRef",                 3,      115,    (encode_ushort),         (decode_ushort),         1,           65535         },
-{ 119,    "PHSServiceFlowId",                  4,      115,    (encode_uint),           (decode_uint),           1,           0xFFFFFFFF    },
-{ 120,    "PHSField",                          7,      115,    (encode_hexstr),         (decode_hexstr),         1,           255           },
-{ 121,    "PHSIndex",                          8,      115,    (encode_uchar),          (decode_uchar),          1,           255           },
-{ 122,    "PHSMask",                           9,      115,    (encode_hexstr),         (decode_hexstr),         1,           255           },
-{ 123,    "PHSSize",                           10,     115,    (encode_uchar),          (decode_uchar),          1,           255           },
-{ 124,    "PHSVerify",                         11,     115,    (encode_uchar),          (decode_uchar),          0,           1             },
+{ 115,    "PHS",                               26,     0,      (encode_nothing),        (decode_aggregate)   ,   0,           0             }, /* TLV 26 MULPIv3.0-I24 Annex C.2.3 */
+{ 116,    "PHSClassifierRef",                  1,      115,    (encode_uchar),          (decode_uchar),          1,           255           }, /* TLV 26.1 MULPIv3.0-I24 Annex C.2.3.1.1 */
+{ 117,    "PHSClassifierId",                   2,      115,    (encode_ushort),         (decode_ushort),         1,           65535         }, /* TLV 26.2 MULPIv3.0-I24 Annex C.2.3.1.2 */
+{ 118,    "PHSServiceFlowRef",                 3,      115,    (encode_ushort),         (decode_ushort),         1,           65535         }, /* TLV 26.3 MULPIv3.0-I24 Annex C.2.3.1.3 */
+{ 119,    "PHSServiceFlowId",                  4,      115,    (encode_uint),           (decode_uint),           1,           0xFFFFFFFF    }, /* TLV 26.4 MULPIv3.0-I24 Annex C.2.3.1.4 */
+{ 120,    "PHSField",                          7,      115,    (encode_hexstr),         (decode_hexstr),         1,           255           }, /* TLV 26.7 MULPIv3.0-I24 Annex C.2.4.2.1 */
+{ 121,    "PHSIndex",                          8,      115,    (encode_uchar),          (decode_uchar),          1,           255           }, /* TLV 26.8 MULPIv3.0-I24 Annex C.2.4.2.2 */
+{ 122,    "PHSMask",                           9,      115,    (encode_hexstr),         (decode_hexstr),         1,           255           }, /* TLV 26.9 MULPIv3.0-I24 Annex C.2.4.2.3 */
+{ 123,    "PHSSize",                           10,     115,    (encode_uchar),          (decode_uchar),          1,           255           }, /* TLV 26.10 MULPIv3.0-I24 Annex C.2.4.2.4 */
+{ 124,    "PHSVerify",                         11,     115,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 26.11 MULPIv3.0-I24 Annex C.2.4.2.5 */
 
-{ 125,    "MaxClassifiers",                    28,     0,      (encode_ushort),         (decode_ushort),         0,           0             },
-{ 126,    "GlobalPrivacyEnable",               29,     0,      (encode_uchar),          (decode_uchar),          0,           0             },
+{ 125,    "MaxClassifiers",                    28,     0,      (encode_ushort),         (decode_ushort),         0,           0             }, /* TLV 28 MULPIv3.0-I24 Annex C.1.1.16 */
+{ 126,    "GlobalPrivacyEnable",               29,     0,      (encode_uchar),          (decode_uchar),          0,           0             }, /* TLV 29 MULPIv3.0-I24 Annex C.1.1.17 */
 
 /* ManufacturerCVC */
 
-{ 129,    "MfgCVCData",                        32,     0,      (encode_hexstr),         (decode_hexstr),         0,           255           },
+{ 129,    "MfgCVCData",                        32,     0,      (encode_hexstr),         (decode_hexstr),         0,           255           }, /* TLV 32 MULPIv3.0-I24 Annex C.1.2.10 */
 { 170,    "ManufacturerCVC",                   32,     0,      (encode_nothing),        (decode_hexstr),         0,           255           },
-{ 171,    "CoSignerCVCData",                   33,     0,      (encode_hexstr),         (decode_hexstr),         0,           255           },
+{ 171,    "CoSignerCVCData",                   33,     0,      (encode_hexstr),         (decode_hexstr),         0,           255           }, /* TLV 33 MULPIv3.0-I24 Annex C.1.2.11 */
 { 172,    "CoSignerCVC",                       33,     0,      (encode_nothing),        (decode_hexstr),         0,           255           },
 
 /* SNMPv3 Kickstart */
-{ 132,    "SnmpV3Kickstart",                   34,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* 34 */
+{ 132,    "SnmpV3Kickstart",                   34,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 34 MULPIv3.0-I24 Annex C.1.2.9 */
 /* TODO: SP-RFI-v2.0 says the SecurityName is UTF8 encoded */
-{ 133,    "SnmpV3SecurityName",                1,      132,    (encode_string),         (decode_string),         1,           16            }, /* 34.1 */
-{ 134,    "SnmpV3MgrPublicNumber",             2,      132,    (encode_hexstr),         (decode_hexstr),         1,           514           }, /* 34.2 */
+{ 133,    "SnmpV3SecurityName",                1,      132,    (encode_string),         (decode_string),         1,           16            }, /* TLV 34.1 MULPIv3.0-I24 Annex C.1.2.9.1 */
+{ 134,    "SnmpV3MgrPublicNumber",             2,      132,    (encode_hexstr),         (decode_hexstr),         1,           514           }, /* TLV 34.2 MULPIv3.0-I24 Annex C.1.2.9.2 */
 
-{ 154,    "SubMgmtControl",                    35,     0,      (encode_hexstr),         (decode_hexstr),         3,           3             },
-{ 155,    "SubMgmtFilters",                    37,     0,      (encode_ushort_list),    (decode_ushort_list),    4,           4             },
+{ 154,    "SubMgmtControl",                    35,     0,      (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 35 MULPIv3.0-I24 Annex C.1.1.19.1 */
+{ 155,    "SubMgmtFilters",                    37,     0,      (encode_ushort_list),    (decode_ushort_list),    4,           4             }, /* TLV 37 MULPIv3.0-I24 Annex C.1.1.19.4 */
 
 /* Snmpv3 Notification Receiver */
-{ 135,    "SnmpV3TrapReceiver",                38,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* 38 */
-{ 136,    "SnmpV3TrapRxIP",                    1,      135,    (encode_ip),             (decode_ip),             0,           0             },
-{ 137,    "SnmpV3TrapRxPort",                  2,      135,    (encode_ushort),         (decode_ushort),         0,           0             },
-{ 138,    "SnmpV3TrapRxType",                  3,      135,    (encode_ushort),         (decode_ushort),         1,           5             },
-{ 139,    "SnmpV3TrapRxTimeout",               4,      135,    (encode_ushort),         (decode_ushort),         0,           65535         },
-{ 140,    "SnmpV3TrapRxRetries",               5,      135,    (encode_ushort),         (decode_ushort),         0,           65535         },
-{ 141,    "SnmpV3TrapRxFilterOID",             6,      135,    (encode_oid),            (decode_oid),            1,           5             },
-{ 142,    "SnmpV3TrapRxSecurityName",          7,      135,    (encode_string),         (decode_string),         1,           16            },
+{ 135,    "SnmpV3TrapReceiver",                38,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 38 MULPIv3.0-I24 Annex C.1.2.12 */
+{ 136,    "SnmpV3TrapRxIP",                    1,      135,    (encode_ip),             (decode_ip),             0,           0             }, /* TLV 38.1 MULPIv3.0-I24 Annex C.1.2.12.1 */
+{ 137,    "SnmpV3TrapRxPort",                  2,      135,    (encode_ushort),         (decode_ushort),         0,           0             }, /* TLV 38.2 MULPIv3.0-I24 Annex C.1.2.12.2 */
+{ 138,    "SnmpV3TrapRxType",                  3,      135,    (encode_ushort),         (decode_ushort),         1,           5             }, /* TLV 38.3 MULPIv3.0-I24 Annex C.1.2.12.3 */
+{ 139,    "SnmpV3TrapRxTimeout",               4,      135,    (encode_ushort),         (decode_ushort),         0,           65535         }, /* TLV 38.4 MULPIv3.0-I24 Annex C.1.2.12.4 */
+{ 140,    "SnmpV3TrapRxRetries",               5,      135,    (encode_ushort),         (decode_ushort),         0,           65535         }, /* TLV 38.5 MULPIv3.0-I24 Annex C.1.2.12.5 */
+{ 141,    "SnmpV3TrapRxFilterOID",             6,      135,    (encode_oid),            (decode_oid),            1,           5             }, /* TLV 38.6 MULPIv3.0-I24 Annex C.1.2.12.6 */
+{ 142,    "SnmpV3TrapRxSecurityName",          7,      135,    (encode_string),         (decode_string),         1,           16            }, /* TLV 38.7 MULPIv3.0-I24 Annex C.1.2.12.7 */
 
-{ 143,    "DocsisTwoEnable",                   39,     0,      (encode_uchar),          (decode_uchar),          0,           1             },
+{ 143,    "DocsisTwoEnable",                   39,     0,      (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 39 MULPIv3.0-I24 Annex C.1.1.20 */
 
-{ 158,    "DsChannelList",                     41,     0,      (encode_nothing),        (decode_aggregate),      1,           255           },
-{ 159,    "SingleDsChannel",                   1,      158,    (encode_nothing),        (decode_aggregate),      1,           255           },
-{ 160,    "SingleDsTimeout",                   1,      159,    (encode_ushort),         (decode_ushort),         0,           65535         },
-{ 161,    "SingleDsFrequency",                 2,      159,    (encode_uint),           (decode_uint),           0,           0xFFFFFFFF    },
-{ 162,    "DsFreqRange",                       2,      158,    (encode_nothing),        (decode_aggregate),      1,           255           },
-{ 163,    "DsFreqRangeTimeout",                1,      162,    (encode_ushort),         (decode_ushort),         0,           65535         },
-{ 164,    "DsFreqRangeStart",                  2,      162,    (encode_uint),           (decode_uint),           0,           0xFFFFFFFF    },
-{ 165,    "DsFreqRangeEnd",                    3,      162,    (encode_uint),           (decode_uint),           0,           0xFFFFFFFF    },
-{ 166,    "DsFreqRangeStepSize",               4,      162,    (encode_uint),           (decode_uint),           0,           0xFFFFFFFF    },
-{ 167,    "DefaultScanTimeout",                3,      158,    (encode_ushort),         (decode_ushort),         0,           65535         },
+{ 158,    "DsChannelList",                     41,     0,      (encode_nothing),        (decode_aggregate),      1,           255           }, /* TLV 41 MULPIv3.0-I24 Annex C.1.1.22 */
+{ 159,    "SingleDsChannel",                   1,      158,    (encode_nothing),        (decode_aggregate),      1,           255           }, /* TLV 41.1 MULPIv3.0-I24 Annex C.1.1.22.1 */
+{ 160,    "SingleDsTimeout",                   1,      159,    (encode_ushort),         (decode_ushort),         0,           65535         }, /* TLV 41.1.1 MULPIv3.0-I24 Annex C.1.1.22.1.1 */
+{ 161,    "SingleDsFrequency",                 2,      159,    (encode_uint),           (decode_uint),           0,           0xFFFFFFFF    }, /* TLV 41.1.2 MULPIv3.0-I24 Annex C.1.1.22.1.2 */
+{ 162,    "DsFreqRange",                       2,      158,    (encode_nothing),        (decode_aggregate),      1,           255           }, /* TLV 41.2 MULPIv3.0-I24 Annex C.1.1.22.2 */
+{ 163,    "DsFreqRangeTimeout",                1,      162,    (encode_ushort),         (decode_ushort),         0,           65535         }, /* TLV 41.2.1 MULPIv3.0-I24 Annex C.1.1.22.2.1 */
+{ 164,    "DsFreqRangeStart",                  2,      162,    (encode_uint),           (decode_uint),           0,           0xFFFFFFFF    }, /* TLV 41.2.2 MULPIv3.0-I24 Annex C.1.1.22.2.2 */
+{ 165,    "DsFreqRangeEnd",                    3,      162,    (encode_uint),           (decode_uint),           0,           0xFFFFFFFF    }, /* TLV 41.2.3 MULPIv3.0-I24 Annex C.1.1.22.2.3 */
+{ 166,    "DsFreqRangeStepSize",               4,      162,    (encode_uint),           (decode_uint),           0,           0xFFFFFFFF    }, /* TLV 41.2.4 MULPIv3.0-I24 Annex C.1.1.22.2.4 */
+{ 167,    "DefaultScanTimeout",                3,      158,    (encode_ushort),         (decode_ushort),         0,           65535         }, /* TLV 41.3 MULPIv3.0-I24 Annex C.1.1.22.3 */
 
 /* DOCSIS Extension Field - Vendor Specific */
-{ 130,    "VendorSpecific",                    43,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* 43 */
-{ 188,    "L2VPNEncoding",                     5,      130,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* 43.5 */
-{ 189,    "VPNIdentifier",                     1,      188,    (encode_hexstr),         (decode_hexstr),         4,           255           }, /* 43.5.1 */
-{ 190,    "NSIEncapsulation",                  2,      188,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* 43.5.2 */
-{ 191,    "NSIEncapsulationSingleQTag",        2,      190,    (encode_ushort),         (decode_ushort),         1,           4095          }, /* 43.5.2.2 */
-{ 191,    "NSIEncapsulationDualQTag",          3,      190,    (encode_dual_qtag),      (decode_dual_qtag),      0,           0             }, /* 43.5.2.3 */
-{ 131,    "VendorIdentifier",                  8,      130,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* 43.8 */
+{ 130,    "VendorSpecific",                    43,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 43 */
+{ 188,    "L2VPNEncoding",                     5,      130,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 43.5 */
+{ 189,    "VPNIdentifier",                     1,      188,    (encode_hexstr),         (decode_hexstr),         4,           255           }, /* TLV 43.5.1 */
+{ 190,    "NSIEncapsulation",                  2,      188,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 43.5.2 */
+{ 191,    "NSIEncapsulationSingleQTag",        2,      190,    (encode_ushort),         (decode_ushort),         1,           4095          }, /* TLV 43.5.2.2 */
+{ 191,    "NSIEncapsulationDualQTag",          3,      190,    (encode_dual_qtag),      (decode_dual_qtag),      0,           0             }, /* TLV 43.5.2.3 */
+{ 131,    "VendorIdentifier",                  8,      130,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 43.8 */
 
-{ 208,    "DUTFiltering",                      45,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* 45 */
-{ 209,    "DUTControl",                        1,      208,    (encode_uchar),          (decode_uchar),          0,           1             }, /* 45.1 */
-{ 210,    "DUTCMIM",                           2,      208,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* 45.2 */
+{ 208,    "DUTFiltering",                      45,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 45 MULPIv3.0-I24 Annex C.1.1.24 */
+{ 209,    "DUTControl",                        1,      208,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 45.1 L2VPN Spec*/
+{ 210,    "DUTCMIM",                           2,      208,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* TLV 45.2 L2VPN Spec*/
 
 /* Channel Assignment Configuration Settings per Docsis3.1 CM-SP-MULPIv3.1-I01-131029 Annex C C.1.2.15 */
-{ 185,    "ChannelAssignmentConfig",           56,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* 56 */
-{ 186,    "CaTransmit",                        1,      185,    (encode_uchar),          (decode_uchar),          0,           255           },
-{ 187,    "CaReceive",                         2,      185,    (encode_uint),           (decode_uint),           88000000,    860000000     },
+{ 185,    "ChannelAssignmentConfig",           56,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 56 MULPIv3.0-I24 Annex C.1.1.25 */
+{ 186,    "CaTransmit",                        1,      185,    (encode_uchar),          (decode_uchar),          0,           255           }, /* TLV 56.1 MULPIv3.0-I24 Annex C.1.1.25.1 */
+{ 187,    "CaReceive",                         2,      185,    (encode_uint),           (decode_uint),           88000000,    860000000     }, /* TLV 56.2 MULPIv3.0-I24 Annex C.1.1.25.2 */
 
 /* IPv6 */
-{ 173,    "SwUpgradeServer6",                  58,     0,      (encode_ip6),            (decode_ip6),            0,           0             },
-{ 174,    "SubMgmtControl6",                   63,     0,      (encode_hexstr),         (decode_hexstr),         2,           2             },
+{ 173,    "SwUpgradeServer6",                  58,     0,      (encode_ip6),            (decode_ip6),            0,           0             }, /* TLV 58 MULPIv3.0-I24 Annex C.1.2.8 */
+{ 174,    "SubMgmtControl6",                   63,     0,      (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 63 MULPIv3.0-I24 Annex C.1.1.19.5 */
 
 /*{ 156, "SnmpMibObject",                    64, 0,    (encode_nothing),     (decode_snmp_object),    1,        2048       },*/
 
@@ -385,7 +383,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 998,    "GenericTLV",                        0, 0,           (encode_nothing),        (decode_special),        0,           0             },
 /* PacketCable MTA Configuration File Delimiter  */
 { 157,    "MtaConfigDelimiter",                254,    0,      (encode_uchar),          (decode_uchar),          1,           255           },
-{ 999,    "/*EndOfDataMkr*/",                  255,    0,      (encode_nothing),        (decode_special),        0,           0             }
+{ 999,    "/*EndOfDataMkr*/",                  255,    0,      (encode_nothing),        (decode_special),        0,           0             } /* TLV 255 MULPIv3.0-I24 Annex C.1.2.1 */
 };
 
 #endif /* _DOCSIS_SYMTABLE_H */
