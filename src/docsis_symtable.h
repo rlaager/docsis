@@ -173,6 +173,17 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 217,    "PcIPv6DestAddress",                 6,      211,    (encode_ip6),            (decode_ip6),            0,           0             }, /* TLV 22.12.6 MULPIv3.0-I24 Annex C.2.1.10.6 */
 { 218,    "PcIPv6DestPrefixLength",            7,      211,    (encode_uchar),          (decode_uchar),          0,           128           }, /* TLV 22.12.7 MULPIv3.0-I24 Annex C.2.1.10.7 */
 { 219,    "PcCMIMEncoding",                    13,     28,     (encode_hexstr),         (decode_hexstr),         0,           0             }, /* TLV 22.13 MULPIv3.0-I24 Annex C.2.1.4.8 */
+{ 278,    "STagCTagFrameClassification",       14,     28,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.14 MULPIv3.0-I24 Annex C.2.1.13 */
+{ 279,    "STPID",                             1,      278,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 22.14.1 MULPIv3.0-I24 Annex C.2.1.13.1 */
+{ 280,    "SVID",                              2,      278,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 22.14.2 MULPIv3.0-I24 Annex C.2.1.13.2 */
+{ 281,    "SPCP",                              3,      278,    (encode_hexstr),         (decode_hexstr),         1,           1             }, /* TLV 22.14.3 MULPIv3.0-I24 Annex C.2.1.13.3 */
+{ 282,    "SDEI",                              4,      278,    (encode_hexstr),         (decode_hexstr),         1,           1             }, /* TLV 22.14.4 MULPIv3.0-I24 Annex C.2.1.13.4 */
+{ 283,    "CTPID",                             5,      278,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 22.14.5 MULPIv3.0-I24 Annex C.2.1.13.5 */
+{ 284,    "CVID",                              6,      278,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 22.14.6 MULPIv3.0-I24 Annex C.2.1.13.6 */
+{ 285,    "CPCP",                              7,      278,    (encode_hexstr),         (decode_hexstr),         1,           1             }, /* TLV 22.14.7 MULPIv3.0-I24 Annex C.2.1.13.7 */
+{ 286,    "CCFI",                              8,      278,    (encode_hexstr),         (decode_hexstr),         1,           1             }, /* TLV 22.14.8 MULPIv3.0-I24 Annex C.2.1.13.8 */
+{ 287,    "STCI",                              9,      278,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 22.14.9 MULPIv3.0-I24 Annex C.2.1.13.9 */
+{ 288,    "CTCI",                              10,     278,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 22.14.10 MULPIv3.0-I24 Annex C.2.1.13.10 */
 { 200,    "VendorSpecific",                    43,     28,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.43 MULPIv3.0-I24 Annex C.2.1.11 */
 { 202,    "L2VPNEncoding",                     5,      200,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.43.5 MULPIv3.0-I24 Annex C.1.1.18.1.5 */
 { 203,    "VPNIdentifier",                     1,      202,    (encode_hexstr),         (decode_hexstr),         4,           255           }, /* TLV 22.43.5.1 L2VPN-I13 Annex B.3.1 */
@@ -214,6 +225,17 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 225,    "PcIPv6SourcePrefixLength",          5,      220,    (encode_uchar),          (decode_uchar),          0,           128           }, /* TLV 23.12.5 MULPIv3.0-I24 Annex C.2.1.10.5 */
 { 226,    "PcIPv6DestAddress",                 6,      220,    (encode_ip6),            (decode_ip6),            0,           0             }, /* TLV 23.12.6 MULPIv3.0-I24 Annex C.2.1.10.6 */
 { 227,    "PcIPv6DestPrefixLength",            7,      220,    (encode_uchar),          (decode_uchar),          0,           128           }, /* TLV 23.12.7 MULPIv3.0-I24 Annex C.2.1.10.7 */
+{ 289,    "STagCTagFrameClassification",       14,     54,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.14 MULPIv3.0-I24 Annex C.2.1.13 */
+{ 290,    "STPID",                             1,      289,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 23.14.1 MULPIv3.0-I24 Annex C.2.1.13.1 */
+{ 291,    "SVID",                              2,      289,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 23.14.2 MULPIv3.0-I24 Annex C.2.1.13.2 */
+{ 292,    "SPCP",                              3,      289,    (encode_hexstr),         (decode_hexstr),         1,           1             }, /* TLV 23.14.3 MULPIv3.0-I24 Annex C.2.1.13.3 */
+{ 293,    "SDEI",                              4,      289,    (encode_hexstr),         (decode_hexstr),         1,           1             }, /* TLV 23.14.4 MULPIv3.0-I24 Annex C.2.1.13.4 */
+{ 294,    "CTPID",                             5,      289,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 23.14.5 MULPIv3.0-I24 Annex C.2.1.13.5 */
+{ 295,    "CVID",                              6,      289,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 23.14.6 MULPIv3.0-I24 Annex C.2.1.13.6 */
+{ 296,    "CPCP",                              7,      289,    (encode_hexstr),         (decode_hexstr),         1,           1             }, /* TLV 23.14.7 MULPIv3.0-I24 Annex C.2.1.13.7 */
+{ 297,    "CCFI",                              8,      289,    (encode_hexstr),         (decode_hexstr),         1,           1             }, /* TLV 23.14.8 MULPIv3.0-I24 Annex C.2.1.13.8 */
+{ 298,    "STCI",                              9,      289,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 23.14.9 MULPIv3.0-I24 Annex C.2.1.13.9 */
+{ 299,    "CTCI",                              10,     289,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 23.14.10 MULPIv3.0-I24 Annex C.2.1.13.10 */
 { 204,    "VendorSpecific",                    43,     54,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.43 MULPIv3.0-I24 Annex C.2.1.11 */
 { 206,    "L2VPNEncoding",                     5,      204,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.43.5 MULPIv3.0-I24 Annex C.1.1.18.1.5 */
 { 207,    "VPNIdentifier",                     1,      206,    (encode_hexstr),         (decode_hexstr),         4,           255           }, /* TLV 23.43.5.1 L2VPN-I13 Annex B.3.1 */
@@ -252,18 +274,18 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 
 /* Downstream Service Flow */
 
-{ 102,    "DsServiceFlow",                     25,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 24 MULPIv3.0-I24 Annex C.2.2.5 */
-{ 103,    "DsServiceFlowRef",                  1,      102,    (encode_ushort),         (decode_ushort),         1,           65535         }, /* TLV 24.1 MULPIv3.0-I24 Annex C.2.2.5.1 */
-{ 104,    "DsServiceFlowId",                   2,      102,    (encode_uint),           (decode_uint),           1,           0xFFFFFFFF    }, /* TLV 24.2 MULPIv3.0-I24 Annex C.2.2.5.2 */
-{ 105,    "ServiceClassName",                  4,      102,    (encode_strzero),        (decode_strzero),        2,           16            }, /* TLV 24.4 MULPIv3.0-I24 Annex C.2.2.5.4 */
-{ 106,    "QosParamSetType",                   6,      102,    (encode_uchar),          (decode_uchar),          0,           255           }, /* TLV 24.6 MULPIv3.0-I24 Annex C.2.2.5.5 */
-{ 107,    "TrafficPriority",                   7,      102,    (encode_uchar),          (decode_uchar),          0,           7             }, /* TLV 24.7 MULPIv3.0-I24 Annex C.2.2.7.1 */
-{ 108,    "MaxRateSustained",                  8,      102,    (encode_uint),           (decode_uint),           0,           0xFFFFFFFF    }, /* TLV 24.8 MULPIv3.0-I24 Annex C.2.2.7.2.2 */
-{ 109,    "MaxTrafficBurst",                   9,      102,    (encode_uint),           (decode_uint),           0,           0xFFFFFFFF    }, /* TLV 24.9 MULPIv3.0-I24 Annex C.2.2.7.3 */
-{ 110,    "MinReservedRate",                   10,     102,    (encode_uint),           (decode_uint),           0,           0xFFFFFFFF    }, /* TLV 24.10 MULPIv3.0-I24 Annex C.2.2.7.4 */
-{ 111,    "MinResPacketSize",                  11,     102,    (encode_ushort),         (decode_ushort),         0,           65535         }, /* TLV 24.11 MULPIv3.0-I24 Annex C.2.2.7.5 */
-{ 112,    "ActQosParamsTimeout",               12,     102,    (encode_ushort),         (decode_ushort),         0,           65535         }, /* TLV 24.12 MULPIv3.0-I24 Annex C.2.2.7.6 */
-{ 113,    "AdmQosParamsTimeout",               13,     102,    (encode_ushort),         (decode_ushort),         0,           65535         }, /* TLV 24.13 MULPIv3.0-I24 Annex C.2.2.7.7 */
+{ 102,    "DsServiceFlow",                     25,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 25 MULPIv3.0-I24 Annex C.2.2.5 */
+{ 103,    "DsServiceFlowRef",                  1,      102,    (encode_ushort),         (decode_ushort),         1,           65535         }, /* TLV 25.1 MULPIv3.0-I24 Annex C.2.2.5.1 */
+{ 104,    "DsServiceFlowId",                   2,      102,    (encode_uint),           (decode_uint),           1,           0xFFFFFFFF    }, /* TLV 25.2 MULPIv3.0-I24 Annex C.2.2.5.2 */
+{ 105,    "ServiceClassName",                  4,      102,    (encode_strzero),        (decode_strzero),        2,           16            }, /* TLV 25.4 MULPIv3.0-I24 Annex C.2.2.5.4 */
+{ 106,    "QosParamSetType",                   6,      102,    (encode_uchar),          (decode_uchar),          0,           255           }, /* TLV 25.6 MULPIv3.0-I24 Annex C.2.2.5.5 */
+{ 107,    "TrafficPriority",                   7,      102,    (encode_uchar),          (decode_uchar),          0,           7             }, /* TLV 25.7 MULPIv3.0-I24 Annex C.2.2.7.1 */
+{ 108,    "MaxRateSustained",                  8,      102,    (encode_uint),           (decode_uint),           0,           0xFFFFFFFF    }, /* TLV 25.8 MULPIv3.0-I24 Annex C.2.2.7.2.2 */
+{ 109,    "MaxTrafficBurst",                   9,      102,    (encode_uint),           (decode_uint),           0,           0xFFFFFFFF    }, /* TLV 25.9 MULPIv3.0-I24 Annex C.2.2.7.3 */
+{ 110,    "MinReservedRate",                   10,     102,    (encode_uint),           (decode_uint),           0,           0xFFFFFFFF    }, /* TLV 25.10 MULPIv3.0-I24 Annex C.2.2.7.4 */
+{ 111,    "MinResPacketSize",                  11,     102,    (encode_ushort),         (decode_ushort),         0,           65535         }, /* TLV 25.11 MULPIv3.0-I24 Annex C.2.2.7.5 */
+{ 112,    "ActQosParamsTimeout",               12,     102,    (encode_ushort),         (decode_ushort),         0,           65535         }, /* TLV 25.12 MULPIv3.0-I24 Annex C.2.2.7.6 */
+{ 113,    "AdmQosParamsTimeout",               13,     102,    (encode_ushort),         (decode_ushort),         0,           65535         }, /* TLV 25.13 MULPIv3.0-I24 Annex C.2.2.7.7 */
 { 114,    "MaxDsLatency",                      14,     102,    (encode_uint),           (decode_uint),           0,           0             }, /* TLV 25.14 MULPIv3.0-I24 Annex C.2.2.9.1 */
 { 196,    "VendorSpecific",                    43,     102,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 25.43 MULPIv3.0-I24 Annex C.2.2.7.8 */
 { 197,    "VendorIdentifier",                  8,      196,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 25.43.8 */
@@ -377,7 +399,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 236,    "SNMPv3AccessViewMask",              3,      233,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 202.54.3 eRouter-I12 Annex B.4.6.3 */
 { 237,    "SNMPv3AccessViewType",              4,      233,    (encode_uchar),          (decode_uchar),          1,           2             }, /* TLV 202.54.4 eRouter-I12 Annex B.4.6.4 */
 
-/* A little more organized -> Start with 278 */
+/* A little more organized -> Start with 289 */
 
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/
 { 998,    "GenericTLV",                        0, 0,           (encode_nothing),        (decode_special),        0,           0             },
