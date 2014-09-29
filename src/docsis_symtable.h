@@ -201,6 +201,9 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 328,    "ICMPv4ICMPv6PacketClassification",  16,     28,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.16 MULPIv3.0-I24 Annex C.2.1.12 */
 { 329,    "ICMPv4ICMPv6TypeStart",             1,      328,    (encode_uchar),          (decode_uchar),          0,           255           }, /* TLV 22.16.1 MULPIv3.0-I24 Annex C.2.1.12.1 */
 { 330,    "ICMPv4ICMPv6TypeEnd",               2,      328,    (encode_uchar),          (decode_uchar),          0,           255           }, /* TLV 22.16.2 MULPIv3.0-I24 Annex C.2.1.12.2 */
+{ 334,    "MPLSClassificationEncoding",        17,     28,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.17 MULPIv3.0-I24 Annex C.2.1.15 */
+{ 335,    "MPLSTCbits",                        1,      334,    (encode_hexstr),         (decode_hexstr),         1,           1             }, /* TLV 22.17.1 MULPIv3.0-I24 Annex C.2.1.15.1 */
+{ 336,    "MPLSLabel",                         2,      334,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 22.17.2 MULPIv3.0-I24 Annex C.2.1.15.2 */
 { 200,    "VendorSpecific",                    43,     28,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.43 MULPIv3.0-I24 Annex C.2.1.11 */
 { 202,    "L2VPNEncoding",                     5,      200,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.43.5 MULPIv3.0-I24 Annex C.1.1.18.1.5 */
 { 203,    "VPNIdentifier",                     1,      202,    (encode_hexstr),         (decode_hexstr),         4,           255           }, /* TLV 22.43.5.1 L2VPN-I13 Annex B.3.1 */
@@ -270,6 +273,9 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 331,    "ICMPv4ICMPv6PacketClassification",  16,     54,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.16 MULPIv3.0-I24 Annex C.2.1.12 */
 { 332,    "ICMPv4ICMPv6TypeStart",             1,      331,    (encode_uchar),          (decode_uchar),          0,           255           }, /* TLV 23.16.1 MULPIv3.0-I24 Annex C.2.1.12.1 */
 { 333,    "ICMPv4ICMPv6TypeEnd",               2,      331,    (encode_uchar),          (decode_uchar),          0,           255           }, /* TLV 23.16.2 MULPIv3.0-I24 Annex C.2.1.12.2 */
+{ 337,    "MPLSClassificationEncoding",        17,     54,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.17 MULPIv3.0-I24 Annex C.2.1.15 */
+{ 338,    "MPLSTCbits",                        1,      337,    (encode_hexstr),         (decode_hexstr),         1,           1             }, /* TLV 23.17.1 MULPIv3.0-I24 Annex C.2.1.15.1 */
+{ 339,    "MPLSLabel",                         2,      337,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 23.17.2 MULPIv3.0-I24 Annex C.2.1.15.2 */
 { 204,    "VendorSpecific",                    43,     54,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.43 MULPIv3.0-I24 Annex C.2.1.11 */
 { 206,    "L2VPNEncoding",                     5,      204,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.43.5 MULPIv3.0-I24 Annex C.1.1.18.1.5 */
 { 207,    "VPNIdentifier",                     1,      206,    (encode_hexstr),         (decode_hexstr),         4,           255           }, /* TLV 23.43.5.1 L2VPN-I13 Annex B.3.1 */
