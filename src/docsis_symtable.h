@@ -184,6 +184,20 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 286,    "CCFI",                              8,      278,    (encode_hexstr),         (decode_hexstr),         1,           1             }, /* TLV 22.14.8 MULPIv3.0-I24 Annex C.2.1.13.8 */
 { 287,    "STCI",                              9,      278,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 22.14.9 MULPIv3.0-I24 Annex C.2.1.13.9 */
 { 288,    "CTCI",                              10,     278,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 22.14.10 MULPIv3.0-I24 Annex C.2.1.13.10 */
+{ 300,    "IEEE8021ahPacketClassification",    15,     28,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.15 MULPIv3.0-I24 Annex C.2.1.14 */
+{ 301,    "ITPID",                             1,      300,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 22.15.1 MULPIv3.0-I24 Annex C.2.1.14.1 */
+{ 302,    "ISID",                              2,      300,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 22.15.2 MULPIv3.0-I24 Annex C.2.1.14.2 */
+{ 303,    "ITCI",                              3,      300,    (encode_hexstr),         (decode_hexstr),         5,           5             }, /* TLV 22.15.3 MULPIv3.0-I24 Annex C.2.1.14.3 */
+{ 304,    "IPCP",                              4,      300,    (encode_hexstr),         (decode_hexstr),         1,           1             }, /* TLV 22.15.4 MULPIv3.0-I24 Annex C.2.1.14.4 */
+{ 305,    "IDEI",                              5,      300,    (encode_hexstr),         (decode_hexstr),         1,           1             }, /* TLV 22.15.5 MULPIv3.0-I24 Annex C.2.1.14.5 */
+{ 306,    "IUCA",                              6,      300,    (encode_hexstr),         (decode_hexstr),         1,           1             }, /* TLV 22.15.6 MULPIv3.0-I24 Annex C.2.1.14.6 */
+{ 307,    "BTPID",                             7,      300,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 22.15.7 MULPIv3.0-I24 Annex C.2.1.14.7 */
+{ 308,    "BTCI",                              8,      300,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 22.15.8 MULPIv3.0-I24 Annex C.2.1.14.8 */
+{ 309,    "BPCP",                              9,      300,    (encode_hexstr),         (decode_hexstr),         1,           1             }, /* TLV 22.15.9 MULPIv3.0-I24 Annex C.2.1.14.9 */
+{ 310,    "BDEI",                              10,     300,    (encode_hexstr),         (decode_hexstr),         1,           1             }, /* TLV 22.15.10 MULPIv3.0-I24 Annex C.2.1.14.10 */
+{ 311,    "BVID",                              11,     300,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 22.15.11 MULPIv3.0-I24 Annex C.2.1.14.11 */
+{ 312,    "BDA",                               12,     300,    (encode_ether),          (decode_ether),          0,           0             }, /* TLV 22.15.12 MULPIv3.0-I24 Annex C.2.1.14.12 */
+{ 313,    "BSA",                               13,     300,    (encode_ether),          (decode_ether),          0,           0             }, /* TLV 22.15.13 MULPIv3.0-I24 Annex C.2.1.14.13 */
 { 200,    "VendorSpecific",                    43,     28,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.43 MULPIv3.0-I24 Annex C.2.1.11 */
 { 202,    "L2VPNEncoding",                     5,      200,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.43.5 MULPIv3.0-I24 Annex C.1.1.18.1.5 */
 { 203,    "VPNIdentifier",                     1,      202,    (encode_hexstr),         (decode_hexstr),         4,           255           }, /* TLV 22.43.5.1 L2VPN-I13 Annex B.3.1 */
@@ -236,6 +250,20 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 297,    "CCFI",                              8,      289,    (encode_hexstr),         (decode_hexstr),         1,           1             }, /* TLV 23.14.8 MULPIv3.0-I24 Annex C.2.1.13.8 */
 { 298,    "STCI",                              9,      289,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 23.14.9 MULPIv3.0-I24 Annex C.2.1.13.9 */
 { 299,    "CTCI",                              10,     289,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 23.14.10 MULPIv3.0-I24 Annex C.2.1.13.10 */
+{ 314,    "IEEE8021ahPacketClassification",    15,     54,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.15 MULPIv3.0-I24 Annex C.2.1.14 */
+{ 315,    "ITPID",                             1,      314,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 23.15.1 MULPIv3.0-I24 Annex C.2.1.14.1 */
+{ 316,    "ISID",                              2,      314,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 23.15.2 MULPIv3.0-I24 Annex C.2.1.14.2 */
+{ 317,    "ITCI",                              3,      314,    (encode_hexstr),         (decode_hexstr),         5,           5             }, /* TLV 23.15.3 MULPIv3.0-I24 Annex C.2.1.14.3 */
+{ 318,    "IPCP",                              4,      314,    (encode_hexstr),         (decode_hexstr),         1,           1             }, /* TLV 23.15.4 MULPIv3.0-I24 Annex C.2.1.14.4 */
+{ 319,    "IDEI",                              5,      314,    (encode_hexstr),         (decode_hexstr),         1,           1             }, /* TLV 23.15.5 MULPIv3.0-I24 Annex C.2.1.14.5 */
+{ 320,    "IUCA",                              6,      314,    (encode_hexstr),         (decode_hexstr),         1,           1             }, /* TLV 23.15.6 MULPIv3.0-I24 Annex C.2.1.14.6 */
+{ 321,    "BTPID",                             7,      314,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 23.15.7 MULPIv3.0-I24 Annex C.2.1.14.7 */
+{ 322,    "BTCI",                              8,      314,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 23.15.8 MULPIv3.0-I24 Annex C.2.1.14.8 */
+{ 323,    "BPCP",                              9,      314,    (encode_hexstr),         (decode_hexstr),         1,           1             }, /* TLV 23.15.9 MULPIv3.0-I24 Annex C.2.1.14.9 */
+{ 324,    "BDEI",                              10,     314,    (encode_hexstr),         (decode_hexstr),         1,           1             }, /* TLV 23.15.10 MULPIv3.0-I24 Annex C.2.1.14.10 */
+{ 325,    "BVID",                              11,     314,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 23.15.11 MULPIv3.0-I24 Annex C.2.1.14.11 */
+{ 326,    "BDA",                               12,     314,    (encode_ether),          (decode_ether),          0,           0             }, /* TLV 23.15.12 MULPIv3.0-I24 Annex C.2.1.14.12 */
+{ 327,    "BSA",                               13,     314,    (encode_ether),          (decode_ether),          0,           0             }, /* TLV 23.15.13 MULPIv3.0-I24 Annex C.2.1.14.13 */
 { 204,    "VendorSpecific",                    43,     54,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.43 MULPIv3.0-I24 Annex C.2.1.11 */
 { 206,    "L2VPNEncoding",                     5,      204,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.43.5 MULPIv3.0-I24 Annex C.1.1.18.1.5 */
 { 207,    "VPNIdentifier",                     1,      206,    (encode_hexstr),         (decode_hexstr),         4,           255           }, /* TLV 23.43.5.1 L2VPN-I13 Annex B.3.1 */
@@ -399,7 +427,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 236,    "SNMPv3AccessViewMask",              3,      233,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 202.54.3 eRouter-I12 Annex B.4.6.3 */
 { 237,    "SNMPv3AccessViewType",              4,      233,    (encode_uchar),          (decode_uchar),          1,           2             }, /* TLV 202.54.4 eRouter-I12 Annex B.4.6.4 */
 
-/* A little more organized -> Start with 289 */
+/* A little more organized -> Start with 328 */
 
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/
 { 998,    "GenericTLV",                        0, 0,           (encode_nothing),        (decode_special),        0,           0             },
