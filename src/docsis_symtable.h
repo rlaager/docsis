@@ -48,93 +48,93 @@
 
 symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 0,      "/* Pad */",                         0,      0,      (encode_nothing),        (decode_special),        0,           0             },
-{ 1,      "DownstreamFrequency",               1,      0,      (encode_uint),           (decode_uint),           88000000,    1008000000    }, /* MULPIv3.0-I24 Annex C.1.1.1 */
-{ 2,      "UpstreamChannelId",                 2,      0,      (encode_uchar),          (decode_uchar),          0,           255           }, /* MULPIv3.0-I24 Annex C.1.1.2 */
-{ 3,      "NetworkAccess",                     3,      0,      (encode_uchar),          (decode_uchar),          0,           1             }, /* MULPIv3.0-I24 Annex C.1.1.3 */
+{ 1,      "DownstreamFrequency",               1,      0,      (encode_uint),           (decode_uint),           88000000,    1008000000    }, /* TLV 1 MULPIv3.0-I24 Annex C.1.1.1 */
+{ 2,      "UpstreamChannelId",                 2,      0,      (encode_uchar),          (decode_uchar),          0,           255           }, /* TLV 2 MULPIv3.0-I24 Annex C.1.1.2 */
+{ 3,      "NetworkAccess",                     3,      0,      (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 3 MULPIv3.0-I24 Annex C.1.1.3 */
 
 /* Class of Service */
-{ 6,      "ClassOfService",                    4,      0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* MULPIv3.0-I24 Annex C.1.1.4 */
-{ 7,      "ClassID",                           1,      6,      (encode_uchar),          (decode_uchar),          1,           16            }, /* MULPIv3.0-I24 Annex C.1.1.4.1 */
-{ 8,      "MaxRateDown",                       2,      6,      (encode_uint),           (decode_uint),           0,           1334880000    }, /* MULPIv3.0-I24 Annex C.1.1.4.2 */
-{ 9,      "MaxRateUp",                         3,      6,      (encode_uint),           (decode_uint),           0,           183900000     }, /* MULPIv3.0-I24 Annex C.1.1.4.3 */
-{ 10,     "PriorityUp",                        4,      6,      (encode_uchar),          (decode_uchar),          0,           7             }, /* MULPIv3.0-I24 Annex C.1.1.4.4 */
-{ 11,     "GuaranteedUp",                      5,      6,      (encode_uint),           (decode_uint),           0,           183900000     }, /* MULPIv3.0-I24 Annex C.1.1.4.5 */
-{ 12,     "MaxBurstUp",                        6,      6,      (encode_ushort),         (decode_ushort),         0,           65535         }, /* MULPIv3.0-I24 Annex C.1.1.4.6 */
-{ 13,     "PrivacyEnable",                     7,      6,      (encode_uchar),          (decode_uchar),          0,           1             }, /* MULPIv3.0-I24 Annex C.1.1.4.7 */
+{ 6,      "ClassOfService",                    4,      0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 4 MULPIv3.0-I24 Annex C.1.1.4 */
+{ 7,      "ClassID",                           1,      6,      (encode_uchar),          (decode_uchar),          1,           16            }, /* TLV 4.1 MULPIv3.0-I24 Annex C.1.1.4.1 */
+{ 8,      "MaxRateDown",                       2,      6,      (encode_uint),           (decode_uint),           0,           1334880000    }, /* TLV 4.2 MULPIv3.0-I24 Annex C.1.1.4.2 */
+{ 9,      "MaxRateUp",                         3,      6,      (encode_uint),           (decode_uint),           0,           183900000     }, /* TLV 4.3 MULPIv3.0-I24 Annex C.1.1.4.3 */
+{ 10,     "PriorityUp",                        4,      6,      (encode_uchar),          (decode_uchar),          0,           7             }, /* TLV 4.4 MULPIv3.0-I24 Annex C.1.1.4.4 */
+{ 11,     "GuaranteedUp",                      5,      6,      (encode_uint),           (decode_uint),           0,           183900000     }, /* TLV 4.5 MULPIv3.0-I24 Annex C.1.1.4.5 */
+{ 12,     "MaxBurstUp",                        6,      6,      (encode_ushort),         (decode_ushort),         0,           65535         }, /* TLV 4.6 MULPIv3.0-I24 Annex C.1.1.4.6 */
+{ 13,     "PrivacyEnable",                     7,      6,      (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 4.7 MULPIv3.0-I24 Annex C.1.1.4.7 */
 
 /* Modem Capabilities Encodings */
-{ 144,    "ModemCapabilities",                 5,      0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* MULPIv3.0-I24 Annex C.1.3.1 */
-{ 145,    "ConcatenationSupport",              1,      144,    (encode_uchar),          (decode_uchar),          0,           1             }, /* MULPIv3.0-I24 Annex C.1.3.1.1 */
-{ 146,    "ModemDocsisVersion",                2,      144,    (encode_uchar),          (decode_uchar),          0,           3             }, /* MULPIv3.0-I24 Annex C.1.3.1.2 */
-{ 147,    "FragmentationSupport",              3,      144,    (encode_uchar),          (decode_uchar),          0,           1             }, /* MULPIv3.0-I24 Annex C.1.3.1.3 */
-{ 148,    "PHSSupport",                        4,      144,    (encode_uchar),          (decode_uchar),          0,           1             }, /* MULPIv3.0-I24 Annex C.1.3.1.4 */
-{ 149,    "IGMPSupport",                       5,      144,    (encode_uchar),          (decode_uchar),          0,           1             }, /* MULPIv3.0-I24 Annex C.1.3.1.5 */
-{ 150,    "BaselinePrivacySupport",            6,      144,    (encode_uchar),          (decode_uchar),          0,           1             }, /* MULPIv3.0-I24 Annex C.1.3.1.6 */
-{ 151,    "DownstreamSAIDSupport",             7,      144,    (encode_uchar),          (decode_uchar),          0,           255           }, /* MULPIv3.0-I24 Annex C.1.3.1.7 */
-{ 152,    "UpstreamSIDSupport",                8,      144,    (encode_uchar),          (decode_uchar),          0,           255           }, /* MULPIv3.0-I24 Annex C.1.3.1.8 */
-{ 274,    "OptionalFilteringSupport",          9,      144,    (encode_uchar),          (decode_uchar),          0,           0             }, /* MULPIv3.0-I24 Annex C.1.3.1.9 */
-{ 275,    "TransmitPreEqualizerTapsPerModulationInterval",  10,  144,  (encode_uchar),  (decode_uchar),          1,           4             }, /* MULPIv3.0-I24 Annex C.1.3.1.10 */
-{ 276,    "NumberofTransmitEqualizerTaps",     11,     144,    (encode_uchar),          (decode_uchar),          8,           64            }, /* MULPIv3.0-I24 Annex C.1.3.1.11 */
-{ 153,    "DCCSupport",                        12,     144,    (encode_uchar),          (decode_uchar),          0,           1             }, /* MULPIv3.0-I24 Annex C.1.3.1.12 */
-{ 242,    "IPFiltersSupport",                  13,     144,    (encode_ushort),         (decode_ushort),         64,          65535         }, /* MULPIv3.0-I24 Annex C.1.3.1.13 */
-{ 243,    "LLCFiltersSupport",                 14,     144,    (encode_ushort),         (decode_ushort),         10,          65535         }, /* MULPIv3.0-I24 Annex C.1.3.1.14 */
-{ 244,    "ExpandedUnicastSIDSpace",           15,     144,    (encode_uchar),          (decode_uchar),          0,           1             }, /* MULPIv3.0-I24 Annex C.1.3.1.15 */
-{ 245,    "RangingHoldOffSupport",             16,     144,    (encode_hexstr),         (decode_hexstr),         4,           4             }, /* MULPIv3.0-I24 Annex C.1.3.1.16 */
-{ 246,    "L2VPNCapability",                   17,     144,    (encode_uchar),          (decode_uchar),          0,           1             }, /* MULPIv3.0-I24 Annex C.1.3.1.17 */
-{ 247,    "L2VPNeSAFEHostCapability",          18,     144,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* MULPIv3.0-I24 Annex C.1.3.1.18 */
-{ 248,    "DUTFilteringSupport",               19,     144,    (encode_uchar),          (decode_uchar),          0,           1             }, /* MULPIv3.0-I24 Annex C.1.3.1.19 */
-{ 249,    "UpstreamFrequencyRangeSupport",     20,     144,    (encode_uchar),          (decode_uchar),          0,           1             }, /* MULPIv3.0-I24 Annex C.1.3.1.20 */
-{ 250,    "UpstreamSymbolRateSupport",         21,     144,    (encode_uchar),          (decode_uchar),          0,           0             }, /* MULPIv3.0-I24 Annex C.1.3.1.21 */
-{ 251,    "SelectableActiveCodeMode2Support",  22,     144,    (encode_uchar),          (decode_uchar),          0,           1             }, /* MULPIv3.0-I24 Annex C.1.3.1.22 */
-{ 252,    "CodeHoppingMode2Support",           23,     144,    (encode_uchar),          (decode_uchar),          0,           1             }, /* MULPIv3.0-I24 Annex C.1.3.1.23 */
-{ 253,    "MultipleTransmitChannelSupport",    24,     144,    (encode_uchar),          (decode_uchar),          0,           0             }, /* MULPIv3.0-I24 Annex C.1.3.1.24 */
-{ 254,    "M512MspsUpstreamTransmitChannel",   25,     144,    (encode_uchar),          (decode_uchar),          0,           0             }, /* MULPIv3.0-I24 Aneex C.1.3.1.25 */
-{ 254,    "M256MspsUpstreamTransmitChannel",   26,     144,    (encode_uchar),          (decode_uchar),          0,           0             }, /* MULPIv3.0-I24 Aneex C.1.3.1.26 */
-{ 255,    "TotalSIDClusterSupport",            27,     144,    (encode_uchar),          (decode_uchar),          0,           0             }, /* MULPIv3.0-I24 Annex C.1.3.1.27 */
-{ 256,    "SIDClustersPerServiceFlow",         28,     144,    (encode_uchar),          (decode_uchar),          2,           8             }, /* MULPIv3.0-I24 Annex C.1.3.1.28 */
-{ 257,    "MultipleReceiveChannelSupport",     29,     144,    (encode_uchar),          (decode_uchar),          0,           0             }, /* MULPIv3.0-I24 Annex C.1.3.1.29 */
-{ 258,    "TotalDownstreamServiceIDSupport",   30,     144,    (encode_uchar),          (decode_uchar),          32,          255           }, /* MULPIv3.0-I24 Annex C.1.3.1.30 */
-{ 259,    "ResequencingDownstreamServiceID",   31,     144,    (encode_uchar),          (decode_uchar),          16,          255           }, /* MULPIv3.0-I24 Annex C.1.3.1.31 */
-{ 260,    "MulticastDownstreamServiceID",      32,     144,    (encode_uchar),          (decode_uchar),          16,          255           }, /* MULPIv3.0-I24 Annex C.1.3.1.32 */
-{ 261,    "MulticastDSIDForwarding",           33,     144,    (encode_uchar),          (decode_uchar),          0,           2             }, /* MULPIv3.0-I24 Annex C.1.3.1.33 */
-{ 262,    "FrameControlTypeForwarding",        34,     144,    (encode_uchar),          (decode_uchar),          0,           1             }, /* MULPIv3.0-I24 Annex C.1.3.1.34 */
-{ 263,    "DPVCapability",                     35,     144,    (encode_uchar),          (decode_uchar),          0,           0             }, /* MULPIv3.0-I24 Annex C.1.3.1.35 */
-{ 264,    "UnsolicitedGrantServiceSupport",    36,     144,    (encode_uchar),          (decode_uchar),          0,           0             }, /* MULPIv3.0-I24 Annex C.1.3.1.36 */
-{ 265,    "MAPandUCDReceiptSupport",           37,     144,    (encode_uchar),          (decode_uchar),          0,           1             }, /* MULPIv3.0-I24 Annex C.1.3.1.37 */
-{ 266,    "UpstreamDropClassifierSupport",     38,     144,    (encode_ushort),         (decode_ushort),         64,          65535         }, /* MULPIv3.0-I24 Annex C.1.3.1.38 */
-{ 267,    "IPv6Support",                       39,     144,    (encode_uchar),          (decode_uchar),          0,           1             }, /* MULPIv3.0-I24 Annex C.1.3.1.39 */
-{ 268,    "ExtendedUpstreamTransmitPower",     40,     144,    (encode_uchar),          (decode_uchar),          0,           244           }, /* MULPIv3.0-I24 Annex C.1.3.1.40 */
-{ 269,    "MPLSClassificationSupport",         41,     144,    (encode_hexstr),         (decode_hexstr),         4,           4             }, /* MULPIv3.0-I24 Annex C.1.3.1.41 */
-{ 270,    "DONUCapabilitiesEncoding",          42,     144,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* MULPIv3.0-I24 Annex C.1.3.1.42 */
-{ 271,    "EnergyManagementCapabilities",      44,     144,    (encode_hexstr),         (decode_hexstr),         4,           4             }, /* MULPIv3.0-I24 Annex C.1.3.1.43 */
-{ 272,    "CDOCSISCapabilityEncoding",         45,     144,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* MULPIv3.0-I24 Annex C.1.3.1.44 */
-{ 273,    "CMSTATUSACK",                       46,     144,    (encode_uchar),          (decode_uchar),          0,           1             }, /* MULPIv3.0-I24 Annex C.1.3.1.45 */
+{ 144,    "ModemCapabilities",                 5,      0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 5 MULPIv3.0-I24 Annex C.1.3.1 */
+{ 145,    "ConcatenationSupport",              1,      144,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 5.1 MULPIv3.0-I24 Annex C.1.3.1.1 */
+{ 146,    "ModemDocsisVersion",                2,      144,    (encode_uchar),          (decode_uchar),          0,           3             }, /* TLV 5.2 MULPIv3.0-I24 Annex C.1.3.1.2 */
+{ 147,    "FragmentationSupport",              3,      144,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 5.3 MULPIv3.0-I24 Annex C.1.3.1.3 */
+{ 148,    "PHSSupport",                        4,      144,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 5.4 MULPIv3.0-I24 Annex C.1.3.1.4 */
+{ 149,    "IGMPSupport",                       5,      144,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 5.5 MULPIv3.0-I24 Annex C.1.3.1.5 */
+{ 150,    "BaselinePrivacySupport",            6,      144,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 5.6 MULPIv3.0-I24 Annex C.1.3.1.6 */
+{ 151,    "DownstreamSAIDSupport",             7,      144,    (encode_uchar),          (decode_uchar),          0,           255           }, /* TLV 5.7 MULPIv3.0-I24 Annex C.1.3.1.7 */
+{ 152,    "UpstreamSIDSupport",                8,      144,    (encode_uchar),          (decode_uchar),          0,           255           }, /* TLV 5.8 MULPIv3.0-I24 Annex C.1.3.1.8 */
+{ 274,    "OptionalFilteringSupport",          9,      144,    (encode_uchar),          (decode_uchar),          0,           0             }, /* TLV 5.9 MULPIv3.0-I24 Annex C.1.3.1.9 */
+{ 275,    "TransmitPreEqualizerTapsPerModulationInterval",  10,  144,  (encode_uchar),  (decode_uchar),          1,           4             }, /* TLV 5.10 MULPIv3.0-I24 Annex C.1.3.1.10 */
+{ 276,    "NumberofTransmitEqualizerTaps",     11,     144,    (encode_uchar),          (decode_uchar),          8,           64            }, /* TLV 5.11 MULPIv3.0-I24 Annex C.1.3.1.11 */
+{ 153,    "DCCSupport",                        12,     144,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 5.12 MULPIv3.0-I24 Annex C.1.3.1.12 */
+{ 242,    "IPFiltersSupport",                  13,     144,    (encode_ushort),         (decode_ushort),         64,          65535         }, /* TLV 5.13 MULPIv3.0-I24 Annex C.1.3.1.13 */
+{ 243,    "LLCFiltersSupport",                 14,     144,    (encode_ushort),         (decode_ushort),         10,          65535         }, /* TLV 5.14 MULPIv3.0-I24 Annex C.1.3.1.14 */
+{ 244,    "ExpandedUnicastSIDSpace",           15,     144,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 5.15 MULPIv3.0-I24 Annex C.1.3.1.15 */
+{ 245,    "RangingHoldOffSupport",             16,     144,    (encode_hexstr),         (decode_hexstr),         4,           4             }, /* TLV 5.16 MULPIv3.0-I24 Annex C.1.3.1.16 */
+{ 246,    "L2VPNCapability",                   17,     144,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 5.17 MULPIv3.0-I24 Annex C.1.3.1.17 */
+{ 247,    "L2VPNeSAFEHostCapability",          18,     144,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* TLV 5.18 MULPIv3.0-I24 Annex C.1.3.1.18 */
+{ 248,    "DUTFilteringSupport",               19,     144,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 5.19 MULPIv3.0-I24 Annex C.1.3.1.19 */
+{ 249,    "UpstreamFrequencyRangeSupport",     20,     144,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 5.20 MULPIv3.0-I24 Annex C.1.3.1.20 */
+{ 250,    "UpstreamSymbolRateSupport",         21,     144,    (encode_uchar),          (decode_uchar),          0,           0             }, /* TLV 5.21 MULPIv3.0-I24 Annex C.1.3.1.21 */
+{ 251,    "SelectableActiveCodeMode2Support",  22,     144,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 5.22 MULPIv3.0-I24 Annex C.1.3.1.22 */
+{ 252,    "CodeHoppingMode2Support",           23,     144,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 5.23 MULPIv3.0-I24 Annex C.1.3.1.23 */
+{ 253,    "MultipleTransmitChannelSupport",    24,     144,    (encode_uchar),          (decode_uchar),          0,           0             }, /* TLV 5.24 MULPIv3.0-I24 Annex C.1.3.1.24 */
+{ 254,    "M512MspsUpstreamTransmitChannel",   25,     144,    (encode_uchar),          (decode_uchar),          0,           0             }, /* TLV 5.25 MULPIv3.0-I24 Aneex C.1.3.1.25 */
+{ 254,    "M256MspsUpstreamTransmitChannel",   26,     144,    (encode_uchar),          (decode_uchar),          0,           0             }, /* TLV 5.26 MULPIv3.0-I24 Aneex C.1.3.1.26 */
+{ 255,    "TotalSIDClusterSupport",            27,     144,    (encode_uchar),          (decode_uchar),          0,           0             }, /* TLV 5.27 MULPIv3.0-I24 Annex C.1.3.1.27 */
+{ 256,    "SIDClustersPerServiceFlow",         28,     144,    (encode_uchar),          (decode_uchar),          2,           8             }, /* TLV 5.28 MULPIv3.0-I24 Annex C.1.3.1.28 */
+{ 257,    "MultipleReceiveChannelSupport",     29,     144,    (encode_uchar),          (decode_uchar),          0,           0             }, /* TLV 5.29 MULPIv3.0-I24 Annex C.1.3.1.29 */
+{ 258,    "TotalDownstreamServiceIDSupport",   30,     144,    (encode_uchar),          (decode_uchar),          32,          255           }, /* TLV 5.30 MULPIv3.0-I24 Annex C.1.3.1.30 */
+{ 259,    "ResequencingDownstreamServiceID",   31,     144,    (encode_uchar),          (decode_uchar),          16,          255           }, /* TLV 5.31 MULPIv3.0-I24 Annex C.1.3.1.31 */
+{ 260,    "MulticastDownstreamServiceID",      32,     144,    (encode_uchar),          (decode_uchar),          16,          255           }, /* TLV 5.32 MULPIv3.0-I24 Annex C.1.3.1.32 */
+{ 261,    "MulticastDSIDForwarding",           33,     144,    (encode_uchar),          (decode_uchar),          0,           2             }, /* TLV 5.33 MULPIv3.0-I24 Annex C.1.3.1.33 */
+{ 262,    "FrameControlTypeForwarding",        34,     144,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 5.34 MULPIv3.0-I24 Annex C.1.3.1.34 */
+{ 263,    "DPVCapability",                     35,     144,    (encode_uchar),          (decode_uchar),          0,           0             }, /* TLV 5.35 MULPIv3.0-I24 Annex C.1.3.1.35 */
+{ 264,    "UnsolicitedGrantServiceSupport",    36,     144,    (encode_uchar),          (decode_uchar),          0,           0             }, /* TLV 5.36 MULPIv3.0-I24 Annex C.1.3.1.36 */
+{ 265,    "MAPandUCDReceiptSupport",           37,     144,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 5.37 MULPIv3.0-I24 Annex C.1.3.1.37 */
+{ 266,    "UpstreamDropClassifierSupport",     38,     144,    (encode_ushort),         (decode_ushort),         64,          65535         }, /* TLV 5.38 MULPIv3.0-I24 Annex C.1.3.1.38 */
+{ 267,    "IPv6Support",                       39,     144,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 5.39 MULPIv3.0-I24 Annex C.1.3.1.39 */
+{ 268,    "ExtendedUpstreamTransmitPower",     40,     144,    (encode_uchar),          (decode_uchar),          0,           244           }, /* TLV 5.40 MULPIv3.0-I24 Annex C.1.3.1.40 */
+{ 269,    "MPLSClassificationSupport",         41,     144,    (encode_hexstr),         (decode_hexstr),         4,           4             }, /* TLV 5.41 MULPIv3.0-I24 Annex C.1.3.1.41 */
+{ 270,    "DONUCapabilitiesEncoding",          42,     144,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* TLV 5.42 MULPIv3.0-I24 Annex C.1.3.1.42 */
+{ 271,    "EnergyManagementCapabilities",      44,     144,    (encode_hexstr),         (decode_hexstr),         4,           4             }, /* TLV 5.44 MULPIv3.0-I24 Annex C.1.3.1.43 */
+{ 272,    "CDOCSISCapabilityEncoding",         45,     144,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* TLV 5.45 MULPIv3.0-I24 Annex C.1.3.1.44 */
+{ 273,    "CMSTATUSACK",                       46,     144,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 5.46 MULPIv3.0-I24 Annex C.1.3.1.45 */
 
-{ 4,      "CmMic",                             6,      0,      (encode_nothing),        (decode_md5),            0,           0             }, /* MULPIv3.0-I24 Annex C.1.1.5 */
-{ 5,      "CmtsMic",                           7,      0,      (encode_nothing),        (decode_md5),            0,           0             }, /* MULPIv3.0-I24 Annex C.1.1.6 */
-{ 14,     "SwUpgradeFilename",                 9,      0,      (encode_string),         (decode_string),         0,           0             }, /* MULPIv3.0-I24 Annex C.1.2.3 */
-{ 15,     "SnmpWriteControl",                  10,     0,      (encode_nothing),        (decode_snmp_wd),        0,           0             }, /* MULPIv3.0-I24 Annex C.1.2.4 */
-{ 16,     "SnmpMibObject",                     11,     0,      (encode_nothing),        (decode_snmp_object),    0,           0             }, /* MULPIv3.0-I24 Annex C.1.2.5 */
-{ 277,    "ModemIPAddress",                    12,     0,      (encode_ip),             (decode_ip),             0,           0             }, /* MULPIv3.0-I24 Annex C.1.3.3 */
-{ 17,     "CpeMacAddress",                     14,     0,      (encode_ether),          (decode_ether),          0,           0             }, /* MULPIv3.0-I24 Annex C.1.2.6 */
+{ 4,      "CmMic",                             6,      0,      (encode_nothing),        (decode_md5),            0,           0             }, /* TLV 6 MULPIv3.0-I24 Annex C.1.1.5 */
+{ 5,      "CmtsMic",                           7,      0,      (encode_nothing),        (decode_md5),            0,           0             }, /* TLV 7 MULPIv3.0-I24 Annex C.1.1.6 */
+{ 14,     "SwUpgradeFilename",                 9,      0,      (encode_string),         (decode_string),         0,           0             }, /* TLV 9 MULPIv3.0-I24 Annex C.1.2.3 */
+{ 15,     "SnmpWriteControl",                  10,     0,      (encode_nothing),        (decode_snmp_wd),        0,           0             }, /* TLV 10 MULPIv3.0-I24 Annex C.1.2.4 */
+{ 16,     "SnmpMibObject",                     11,     0,      (encode_nothing),        (decode_snmp_object),    0,           0             }, /* TLV 11 MULPIv3.0-I24 Annex C.1.2.5 */
+{ 277,    "ModemIPAddress",                    12,     0,      (encode_ip),             (decode_ip),             0,           0             }, /* TLV 12 MULPIv3.0-I24 Annex C.1.3.3 */
+{ 17,     "CpeMacAddress",                     14,     0,      (encode_ether),          (decode_ether),          0,           0             }, /* TLV 14 MULPIv3.0-I24 Annex C.1.2.6 */
 
 /* BPI+ */
 
-{ 18,     "BaselinePrivacy",                   17,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* SECv3.0-I15 Annex A.1.1.1 */
-{ 19,     "AuthTimeout",                       1,      18,     (encode_uint),           (decode_uint),           1,           30            }, /* SECv3.0-I15 Annex A.1.1.1.1 */
-{ 20,     "ReAuthTimeout",                     2,      18,     (encode_uint),           (decode_uint),           1,           30            }, /* SECv3.0-I15 Annex A.1.1.1.2 */
-{ 21,     "AuthGraceTime",                     3,      18,     (encode_uint),           (decode_uint),           1,           6047999       }, /* SECv3.0-I15 Annex A.1.1.1.3 */
-{ 22,     "OperTimeout",                       4,      18,     (encode_uint),           (decode_uint),           1,           10            }, /* SECv3.0-I15 Annex A.1.1.1.4 */
-{ 23,     "ReKeyTimeout",                      5,      18,     (encode_uint),           (decode_uint),           1,           10            }, /* SECv3.0-I15 Annex A.1.1.1.5 */
-{ 24,     "TEKGraceTime",                      6,      18,     (encode_uint),           (decode_uint),           1,           302399        }, /* SECv3.0-I15 Annex A.1.1.1.6 */
-{ 25,     "AuthRejectTimeout",                 7,      18,     (encode_uint),           (decode_uint),           1,           600           }, /* SECv3.0-I15 Annex A.1.1.1.7 */
-{ 127,    "SAMapWaitTimeout",                  8,      18,     (encode_uint),           (decode_uint),           1,           10            }, /* SECv3.0-I15 Annex A.1.1.1.8 */
-{ 128,    "SAMapMaxRetries",                   9,      18,     (encode_uint),           (decode_uint),           0,           10            }, /* SECv3.0-I15 Annex A.1.1.1.9 */
+{ 18,     "BaselinePrivacy",                   17,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 17 SECv3.0-I15 Annex A.1.1.1 */
+{ 19,     "AuthTimeout",                       1,      18,     (encode_uint),           (decode_uint),           1,           30            }, /* TLV 17.1 SECv3.0-I15 Annex A.1.1.1.1 */
+{ 20,     "ReAuthTimeout",                     2,      18,     (encode_uint),           (decode_uint),           1,           30            }, /* TLV 17.2 SECv3.0-I15 Annex A.1.1.1.2 */
+{ 21,     "AuthGraceTime",                     3,      18,     (encode_uint),           (decode_uint),           1,           6047999       }, /* TLV 17.3 SECv3.0-I15 Annex A.1.1.1.3 */
+{ 22,     "OperTimeout",                       4,      18,     (encode_uint),           (decode_uint),           1,           10            }, /* TLV 17.4 SECv3.0-I15 Annex A.1.1.1.4 */
+{ 23,     "ReKeyTimeout",                      5,      18,     (encode_uint),           (decode_uint),           1,           10            }, /* TLV 17.5 SECv3.0-I15 Annex A.1.1.1.5 */
+{ 24,     "TEKGraceTime",                      6,      18,     (encode_uint),           (decode_uint),           1,           302399        }, /* TLV 17.6 SECv3.0-I15 Annex A.1.1.1.6 */
+{ 25,     "AuthRejectTimeout",                 7,      18,     (encode_uint),           (decode_uint),           1,           600           }, /* TLV 17.7 SECv3.0-I15 Annex A.1.1.1.7 */
+{ 127,    "SAMapWaitTimeout",                  8,      18,     (encode_uint),           (decode_uint),           1,           10            }, /* TLV 17.8 SECv3.0-I15 Annex A.1.1.1.8 */
+{ 128,    "SAMapMaxRetries",                   9,      18,     (encode_uint),           (decode_uint),           0,           10            }, /* TLV 17.9 SECv3.0-I15 Annex A.1.1.1.9 */
 
-{ 26,     "MaxCPE",                            18,     0,      (encode_uchar),          (decode_uchar),          1,           254           }, /* MULPIv3.0-I24 Annex C.1.1.7 */
-{ 168,    "TftpTimestamp",                     19,     0,      (encode_uint),           (decode_uint),           0,           0xFFFFFFFF    }, /* MULPIv3.0-I24 Annex C.1.1.8 */
-{ 169,    "TftpModemAddress",                  20,     0,      (encode_ip),             (decode_ip),             0,           0             }, /* MULPIv3.0-I24 Annex C.1.1.9 */
-{ 27,     "SwUpgradeServer",                   21,     0,      (encode_ip),             (decode_ip),             0,           0             }, /* MULPIv3.0-I24 Annex C.1.2.7 */
+{ 26,     "MaxCPE",                            18,     0,      (encode_uchar),          (decode_uchar),          1,           254           }, /* TLV 18 MULPIv3.0-I24 Annex C.1.1.7 */
+{ 168,    "TftpTimestamp",                     19,     0,      (encode_uint),           (decode_uint),           0,           0xFFFFFFFF    }, /* TLV 19 MULPIv3.0-I24 Annex C.1.1.8 */
+{ 169,    "TftpModemAddress",                  20,     0,      (encode_ip),             (decode_ip),             0,           0             }, /* TLV 20 MULPIv3.0-I24 Annex C.1.1.9 */
+{ 27,     "SwUpgradeServer",                   21,     0,      (encode_ip),             (decode_ip),             0,           0             }, /* TLV 21 MULPIv3.0-I24 Annex C.1.2.7 */
 
 /* DOCSIS 1.1-2.0-3.0 */
 
