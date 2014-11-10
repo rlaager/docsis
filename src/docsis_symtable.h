@@ -157,7 +157,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 44,     "SrcPortEnd",                        8,      36,     (encode_ushort),         (decode_ushort),         0,           65535         }, /* TLV 22.9.8 MULPIv3.0-I24 Annex C.2.1.7.2 */
 { 45,     "DstPortStart",                      9,      36,     (encode_ushort),         (decode_ushort),         0,           65535         }, /* TLV 22.9.9 MULPIv3.0-I24 Annex C.2.1.7.3 */
 { 46,     "DstPortEnd",                        10,     36,     (encode_ushort),         (decode_ushort),         0,           65535         }, /* TLV 22.9.10 MULPIv3.0-I24 Annex C.2.1.7.4 */
-{ 47,     "LLCPacketClassifier",               10,     28,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.10  MULPIv3.0-I24 Annex C.2.1.8 */
+{ 47,     "LLCPacketClassifier",               10,     28,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.10 MULPIv3.0-I24 Annex C.2.1.8 */
 { 48,     "DstMacAddress",                     1,      47,     (encode_ethermask),      (decode_ethermask),      0,           0             }, /* TLV 22.10.1 MULPIv3.0-I24 Annex C.2.1.8.1 */
 { 49,     "SrcMacAddress",                     2,      47,     (encode_ether),          (decode_ether),          0,           0             }, /* TLV 22.10.2 MULPIv3.0-I24 Annex C.2.1.8.2 */
 { 50,     "EtherType",                         3,      47,     (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 22.10.3 MULPIv3.0-I24 Annex C.2.1.8.3 */
@@ -427,7 +427,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 239,    "SnmpMibObject",                     11,     175,    (encode_nothing),        (decode_snmp_object),    0,           0             }, /* TLV 202.11 eRouter-I12 Annex B.4.8 */
 { 239,    "TopologyModeEncoding",              42,     175,    (encode_uchar),          (decode_uchar),          1,           2             }, /* TLV 202.42 eRouter-I12 Annex B.4.9 */
 { 240,    "VendorSpecific",                    43,     175,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 202.43 eRouter-I12 Annex B.4.7 */
-{ 241,    "VendorIdentifier",                  8,      240,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 202.43 eRouter-I12 Annex B.4.7.1 */
+{ 241,    "VendorIdentifier",                  8,      240,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 202.43.8 eRouter-I12 Annex B.4.7.1 */
 { 228,    "SNMPv1v2cCoexistenceConfig",        53,     175,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 202.53 eRouter-I12 Annex B.4.5 */
 { 229,    "SNMPv1v2cCommunityName",            1,      228,    (encode_string),         (decode_string),         0,           0             }, /* TLV 202.53.1 eRouter-I12 Annex B.4.5.1 */
 { 230,    "SNMPv1v2cTransportAddressAccess",   2,      228,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 202.53.2 eRouter-I12 Annex B.4.5.2 */
@@ -442,7 +442,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 /* A little more organized -> Start with 340 */
 
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/
-{ 998,    "GenericTLV",                        0, 0,           (encode_nothing),        (decode_special),        0,           0             },
+{ 998,    "GenericTLV",                        0,      0,      (encode_nothing),        (decode_special),        0,           0             },
 /* PacketCable MTA Configuration File Delimiter  */
 { 157,    "MtaConfigDelimiter",                254,    0,      (encode_uchar),          (decode_uchar),          1,           255           },
 { 999,    "/*EndOfDataMkr*/",                  255,    0,      (encode_nothing),        (decode_special),        0,           0             } /* TLV 255 MULPIv3.0-I24 Annex C.1.2.1 */
