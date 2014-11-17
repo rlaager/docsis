@@ -431,6 +431,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 228,    "SNMPv1v2cCoexistenceConfig",        53,     175,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 202.53 eRouter-I12 Annex B.4.5 */
 { 229,    "SNMPv1v2cCommunityName",            1,      228,    (encode_string),         (decode_string),         0,           0             }, /* TLV 202.53.1 eRouter-I12 Annex B.4.5.1 */
 { 230,    "SNMPv1v2cTransportAddressAccess",   2,      228,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 202.53.2 eRouter-I12 Annex B.4.5.2 */
+{ 340,    "SNMPv1v2cTransportAddress",         1,      230,    (encode_nothing),        (decode_ip_ip6_port),    0,           0             }, /* TLV 202.53.2.1 */
 { 231,    "SNMPv1v2cAccessViewType",           3,      228,    (encode_uchar),          (decode_uchar),          1,           2             }, /* TLV 202.53.3 eRouter-I12 Annex B.4.5.3 */
 { 232,    "SNMPv1v2cAccessViewName",           4,      228,    (encode_string),         (decode_string),         0,           0             }, /* TLV 202.53.4 eRouter-I12 Annex B.4.5.4 */
 { 233,    "SNMPv3AccessViewConfiguration",     54,     175,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 202.54 eRouter-I12 Annex B.4.6 */
