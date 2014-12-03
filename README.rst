@@ -16,7 +16,7 @@ Dependencies:
 
 .. code:: bash
 
-  apt-get install automake libsnmp-dev bison make gcc flex git
+  apt-get install automake libtool libsnmp-dev bison make gcc flex git
 
 Installation steps for Debian based systems:
 
