@@ -388,7 +388,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 167,    "DefaultScanTimeout",                3,      158,    (encode_ushort),         (decode_ushort),         0,           65535         }, /* TLV 41.3 MULPIv3.0-I24 Annex C.1.1.22.3 */
 
 /* Multicast MAC Address */
-{ 450,    "MulticastMACAddress",               42,       0,    (encode_ether),         	(decode_ether),          0,           0             }, /* TLV 42 */
+{ 340,    "MulticastMACAddress",               42,       0,    (encode_ether),         	(decode_ether),          0,           0             }, /* TLV 42 MULPIv3.0-I24 Annex C.1.1.23 */
 
 /* DOCSIS Extension Field - Vendor Specific */
 { 130,    "VendorSpecific",                    43,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 43 */
@@ -443,7 +443,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 236,    "SNMPv3AccessViewMask",              3,      233,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 202.54.3 eRouter-I12 Annex B.4.6.3 */
 { 237,    "SNMPv3AccessViewType",              4,      233,    (encode_uchar),          (decode_uchar),          1,           2             }, /* TLV 202.54.4 eRouter-I12 Annex B.4.6.4 */
 
-/* A little more organized -> Start with 340 */
+/* A little more organized -> Start with 341 */
 
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/
 { 998,    "GenericTLV",                        0,      0,      (encode_nothing),        (decode_special),        0,           0             },
