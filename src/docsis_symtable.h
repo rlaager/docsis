@@ -387,6 +387,9 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 166,    "DsFreqRangeStepSize",               4,      162,    (encode_uint),           (decode_uint),           0,           0xFFFFFFFF    }, /* TLV 41.2.4 MULPIv3.0-I24 Annex C.1.1.22.2.4 */
 { 167,    "DefaultScanTimeout",                3,      158,    (encode_ushort),         (decode_ushort),         0,           65535         }, /* TLV 41.3 MULPIv3.0-I24 Annex C.1.1.22.3 */
 
+/* Multicast MAC Address */
+{ 450,    "MulticastMACAddress",               42,       0,    (encode_ether),         	(decode_ether),          0,           0             }, /* TLV 42 */
+
 /* DOCSIS Extension Field - Vendor Specific */
 { 130,    "VendorSpecific",                    43,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 43 */
 { 188,    "L2VPNEncoding",                     5,      130,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 43.5 */
