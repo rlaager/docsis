@@ -441,18 +441,18 @@ void decode_main_aggregate (unsigned char *tlvbuf, size_t buflen)
   __docsis_indent(INDENT_NOOP, TRUE);
 
   current_symbol = find_symbol_by_code_and_pid (cp[0],0);
-  if (cp[0] == 64) {
-	tlv_llen = 2;
+ /* if (cp[0] == 64) {
+	tlv_llen = 1;
 	tlv_vlen = (size_t) ntohs(*((unsigned short *)(cp+1)));
-  } else  {
+  } else  { */
 	tlv_llen = 1;
 	tlv_vlen = (size_t) cp[1];
-  }
+/*  } */
   if (current_symbol == NULL) {
 		decode_unknown(cp, NULL, (size_t) cp[1] );
   	} else {
       		current_symbol->decode_func (cp+1+tlv_llen, current_symbol, tlv_vlen );
-  	}
+  	} 
 #ifdef DEBUG
 	if (cp[0] == 64 )   /* TLV 64 has length encoded as a short */
 	   printf("/* TLV 64, size %hu */ \n", ntohs(*((unsigned short *)(cp+1))) );
