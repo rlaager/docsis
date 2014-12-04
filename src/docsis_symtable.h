@@ -397,10 +397,10 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 190,    "NSIEncapsulation",                  2,      188,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 43.5.2 */
 { 191,    "NSIEncapsulationSingleQTag",        2,      190,    (encode_ushort),         (decode_ushort),         1,           4095          }, /* TLV 43.5.2.2 */
 { 191,    "NSIEncapsulationDualQTag",          3,      190,    (encode_dual_qtag),      (decode_dual_qtag),      0,           0             }, /* TLV 43.5.2.3 */
-{ 510,    "ExtendedCMTSMICConfiguration",      6,      130,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 43.6 MULPIv3.0-I25 Annex C.1.1.18.1.6*/
-{ 511,    "ExtendedCMTSMICHMACDigestType",     1,      510,    (encode_hexstr),         (decode_hexstr),         0,           0xFF          }, /* TLV 43.6.1 MULPIv3.0-I25 Annex C.1.1.18.1.6.1 */
-{ 512,    "ExtendedCMTSMICHMACBitmap",         2,      510,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* TLV 43.6.2 MULPIv3.0-I25 Annex C.1.1.18.1.6.2 */
-{ 513,    "ExtendedCMTSMICHMACDigest",         3,      510,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* TLV 43.6.3 MULPIv3.0-I25 Annex C.1.1.18.1.6.3 */
+{ 345,    "ExtendedCMTSMICConfiguration",      6,      130,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 43.6 MULPIv3.0-I25 Annex C.1.1.18.1.6 */
+{ 346,    "ExtendedCMTSMICHMACDigestType",     1,      345,    (encode_hexstr),         (decode_hexstr),         0,           0xFF          }, /* TLV 43.6.1 MULPIv3.0-I25 Annex C.1.1.18.1.6.1 */
+{ 347,    "ExtendedCMTSMICHMACBitmap",         2,      345,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* TLV 43.6.2 MULPIv3.0-I25 Annex C.1.1.18.1.6.2 */
+{ 348,    "ExtendedCMTSMICHMACDigest",         3,      345,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* TLV 43.6.3 MULPIv3.0-I25 Annex C.1.1.18.1.6.3 */
 { 131,    "VendorIdentifier",                  8,      130,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 43.8 */
 
 { 208,    "DUTFiltering",                      45,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 45 MULPIv3.0-I24 Annex C.1.1.24 */
@@ -418,10 +418,11 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 
 /*{ 156, "SnmpMibObject",                    64, 0,    (encode_nothing),     (decode_snmp_object),    1,        2048       },*/
 
-{ 500, "CMTSStaticMulticastSessionEncodings",  64,     0,    (encode_nothing),          (decode_aggregate),      0,           0	            },
-{ 501, "CMTSStaticMulticastSessionGroup",      1,      500,  (encode_ip),               (decode_ip),             4,           16            },
-{ 502, "CMTSStaticMulticastSessionSource",     2,      500,  (encode_ip),               (decode_ip),             4,           16            },
-{ 503, "CMTSStaticMulticastSessionCMIM",       3,      500,  (encode_hexstr),           (decode_hexstr),         0,           0             },
+{ 341,    "CMTSStaticMulticastSessionEncodings",  64,  0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 64 MULPIv3.0-I24 Annex C.1.1.27 */
+/* TODO For TLV 64.1 and 64.2 encoding and decoding as IPv4 is a temporary solution, another encoder/decoder needs to be created to support both IPv4 and IPv6 */
+{ 342,    "CMTSStaticMulticastSessionGroup",   1,      341,    (encode_ip),             (decode_ip),             0,           0             }, /* TLV 64 MULPIv3.0-I24 Annex C.1.1.27.1 */
+{ 343,    "CMTSStaticMulticastSessionSource",  2,      341,    (encode_ip),             (decode_ip),             0,           0             }, /* TLV 64 MULPIv3.0-I24 Annex C.1.1.27.2 */
+{ 344,    "CMTSStaticMulticastSessionCMIM",    3,      341,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* TLV 64 MULPIv3.0-I24 Annex C.1.1.27.3 */
 
 /* eRouter TLVs */
 { 175,    "eRouter",                           202,    0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 202 eRouter-I12 */
@@ -452,7 +453,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 236,    "SNMPv3AccessViewMask",              3,      233,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 202.54.3 eRouter-I12 Annex B.4.6.3 */
 { 237,    "SNMPv3AccessViewType",              4,      233,    (encode_uchar),          (decode_uchar),          1,           2             }, /* TLV 202.54.4 eRouter-I12 Annex B.4.6.4 */
 
-/* A little more organized -> Start with 341 */
+/* A little more organized -> Start with 349 */
 
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/
 { 998,    "GenericTLV",                        0,      0,      (encode_nothing),        (decode_special),        0,           0             },
