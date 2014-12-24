@@ -427,6 +427,7 @@ void decode_main_aggregate (unsigned char *tlvbuf, size_t buflen)
   register unsigned char *cp = NULL;
   symbol_type *current_symbol;
   unsigned int tlv_llen = 1; /* length of "Length" encoding of current TLV */
+  unsigned int is_mta = FALSE;
   size_t tlv_vlen; 	/* length of "Value" encoding of current TLV */
 
   cp = tlvbuf;
@@ -441,16 +442,18 @@ void decode_main_aggregate (unsigned char *tlvbuf, size_t buflen)
   __docsis_indent(INDENT_NOOP, TRUE);
 
   current_symbol = find_symbol_by_code_and_pid (cp[0],0);
-/* TODO TLV 64 is now defined by MULPI and PacketCable specs, with different Length. We need a solution for MTA config files when TLV 64 has 2 bytes.
- * The way it is now, it works for MULPI (cm config files) and it breaks for PacketCable (mta config files).
- * For more documentation check PKT-SP-PROV Chapter 9.1 and MULPI C.1.1.27 */  
- /* if (cp[0] == 64) {
-	tlv_llen = 2;
-	tlv_vlen = (size_t) ntohs(*((unsigned short *)(cp+1)));
-  } else  { */
-	tlv_llen = 1;
-	tlv_vlen = (size_t) cp[1];
-/*  } */
+    tlv_llen = 1;
+    tlv_vlen = (size_t) cp[1];
+    if (cp[0] == 254) {
+        is_mta = TRUE;
+    }
+    if (is_mta) {
+        if (cp[0] == 64) {
+            current_symbol = find_symbol_by_code_and_pid (11,0);
+            tlv_llen = 2;
+            tlv_vlen = (size_t) ntohs(*((unsigned short *)(cp+1)));
+        }
+    }
   if (current_symbol == NULL) {
 		decode_unknown(cp, NULL, (size_t) cp[1] );
   	} else {
