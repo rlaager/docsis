@@ -180,7 +180,7 @@ int encode_ip6( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
   helper = (union t_val *) tval;
 
   if ( !inet_pton(AF_INET6, helper->strval, &in) ) {
-	fprintf(stderr,  "Invalid IP address %s at line %d", helper->strval, line );
+	fprintf(stderr,  "Invalid IP address %s at line %d\n", helper->strval, line );
 	exit (-1);
   }
 #ifdef DEBUG
@@ -189,6 +189,28 @@ int encode_ip6( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
   memcpy ( buf, &in, sizeof(struct in6_addr));
   free(helper->strval);
   return ( sizeof(struct in6_addr));
+}
+
+int encode_ip_ip6( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
+{
+  struct in6_addr in6;
+  struct in_addr in;
+  union t_val *helper; /* We only use this to cast the void* we receive to what we think it should be */
+
+  helper = (union t_val *) tval;
+
+  if ( inet_pton(AF_INET6, helper->strval, &in6) ) {
+    memcpy ( buf, &in6, sizeof(struct in6_addr));
+    free(helper->strval);
+    return ( sizeof(struct in6_addr));
+  } else if ( inet_aton ( helper->strval, &in) ) {
+    memcpy ( buf, &in, sizeof(struct in_addr));
+    free(helper->strval);
+    return ( sizeof(struct in_addr));    
+  } else {
+    fprintf(stderr, "Invalid IP address %s at line %d\n", helper->strval, line );
+    exit (-1);
+  }
 }
 
 int encode_ether ( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
