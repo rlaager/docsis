@@ -109,6 +109,21 @@ void decode_ip6 (unsigned char *tlvbuf, symbol_type *sym, size_t length )
 	sym->sym_ident, inet_ntop(AF_INET6,tlvbuf,ipstr,sizeof ipstr) );
 }
 
+void decode_ip_ip6 (unsigned char *tlvbuf, symbol_type *sym, size_t length )
+{
+  static char ip6_addr[INET6_ADDRSTRLEN];
+  char ipstr[INET6_ADDRSTRLEN];
+  static struct in_addr ip_addr;
+  if (length == 4 ) {
+    memcpy (&ip_addr, tlvbuf, 4);
+    printf("%s %s;\n", sym->sym_ident, inet_ntoa(ip_addr) );
+  }
+  if (length == 16 ) {
+      memcpy (&ip6_addr, tlvbuf, INET6_ADDRSTRLEN);
+      printf("%s %s;\n", sym->sym_ident, inet_ntop(AF_INET6,ip6_addr,ipstr,sizeof ipstr) );
+  }
+}
+
 void decode_ip_ip6_port (unsigned char *tlvbuf, symbol_type *sym, size_t length )
 {
   static char ip6_addr[INET6_ADDRSTRLEN];

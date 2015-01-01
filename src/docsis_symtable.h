@@ -419,10 +419,10 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 /*{ 156, "SnmpMibObject",                    64, 0,    (encode_nothing),     (decode_snmp_object),    1,        2048       },*/
 
 { 341,    "CMTSStaticMulticastSessionEncodings",  64,  0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 64 MULPIv3.0-I24 Annex C.1.1.27 */
-/* TODO For TLV 64.1 and 64.2 encoding and decoding as IPv4 is a temporary solution, another encoder/decoder needs to be created to support both IPv4 and IPv6 */
-{ 342,    "CMTSStaticMulticastSessionGroup",   1,      341,    (encode_ip),             (decode_ip),             0,           0             }, /* TLV 64 MULPIv3.0-I24 Annex C.1.1.27.1 */
-{ 343,    "CMTSStaticMulticastSessionSource",  2,      341,    (encode_ip),             (decode_ip),             0,           0             }, /* TLV 64 MULPIv3.0-I24 Annex C.1.1.27.2 */
-{ 344,    "CMTSStaticMulticastSessionCMIM",    3,      341,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* TLV 64 MULPIv3.0-I24 Annex C.1.1.27.3 */
+/* TODO For TLV 64.1 and 64.2 encoding as IPv4 is a temporary solution, another encoder needs to be created to support both IPv4 and IPv6 */
+{ 342,    "CMTSStaticMulticastSessionGroup",   1,      341,    (encode_ip),             (decode_ip_ip6),         0,           0             }, /* TLV 64.1 MULPIv3.0-I24 Annex C.1.1.27.1 */
+{ 343,    "CMTSStaticMulticastSessionSource",  2,      341,    (encode_ip),             (decode_ip_ip6),         0,           0             }, /* TLV 64.2 MULPIv3.0-I24 Annex C.1.1.27.2 */
+{ 344,    "CMTSStaticMulticastSessionCMIM",    3,      341,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* TLV 64.3 MULPIv3.0-I24 Annex C.1.1.27.3 */
 
 /* eRouter TLVs */
 { 175,    "eRouter",                           202,    0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 202 eRouter-I12 */
