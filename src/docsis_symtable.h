@@ -407,7 +407,6 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 209,    "DUTControl",                        1,      208,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 45.1 L2VPN-I13 Annex B.2.1 */
 { 210,    "DUTCMIM",                           2,      208,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* TLV 45.2 L2VPN-I13 Annex B.2.2 */
 
-/* Channel Assignment Configuration Settings per Docsis3.1 CM-SP-MULPIv3.1-I01-131029 Annex C C.1.2.15 */
 { 185,    "ChannelAssignmentConfig",           56,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 56 MULPIv3.0-I24 Annex C.1.1.25 */
 { 186,    "CaTransmit",                        1,      185,    (encode_uchar),          (decode_uchar),          0,           255           }, /* TLV 56.1 MULPIv3.0-I24 Annex C.1.1.25.1 */
 { 187,    "CaReceive",                         2,      185,    (encode_uint),           (decode_uint),           88000000,    860000000     }, /* TLV 56.2 MULPIv3.0-I24 Annex C.1.1.25.2 */
