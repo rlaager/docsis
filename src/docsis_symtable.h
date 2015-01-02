@@ -346,7 +346,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 124,    "PHSVerify",                         11,     115,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 26.11 MULPIv3.0-I24 Annex C.2.4.2.5 */
 
 { 125,    "MaxClassifiers",                    28,     0,      (encode_ushort),         (decode_ushort),         0,           0             }, /* TLV 28 MULPIv3.0-I24 Annex C.1.1.16 */
-{ 126,    "GlobalPrivacyEnable",               29,     0,      (encode_uchar),          (decode_uchar),          0,           0             }, /* TLV 29 MULPIv3.0-I24 Annex C.1.1.17 */
+{ 126,    "GlobalPrivacyEnable",               29,     0,      (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 29 MULPIv3.0-I24 Annex C.1.1.17 */
 
 /* ManufacturerCVC */
 
