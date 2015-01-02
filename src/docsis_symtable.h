@@ -455,8 +455,8 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/
 { 998,    "GenericTLV",                        0,      0,      (encode_nothing),        (decode_special),        0,           0             },
 /* PacketCable MTA Configuration File Delimiter  */
-{ 157,    "MtaConfigDelimiter",                254,    0,      (encode_uchar),          (decode_uchar),          1,           255           },
-{ 999,    "/*EndOfDataMkr*/",                  255,    0,      (encode_nothing),        (decode_special),        0,           0             } /* TLV 255 MULPIv3.0-I24 Annex C.1.2.1 */
+{ 157,    "MtaConfigDelimiter",                254,    0,      (encode_uchar),          (decode_uchar),          1,           255           }, /* TLV 254 PKT-SP-PROV1.5-I04 Chapter 9.1 */
+{ 999,    "/*EndOfDataMkr*/",                  255,    0,      (encode_nothing),        (decode_special),        0,           0             }  /* TLV 255 MULPIv3.0-I24 Annex C.1.2.1 */
 };
 
 #endif /* _DOCSIS_SYMTABLE_H */
