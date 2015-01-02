@@ -47,3 +47,5 @@ CMTS and CM MIC are have the wrong value when calculated on a big endian CPU. Us
 
 Quoting the hex strings will result in a crash. Do not use something similar to "0xABCD".
 
+Following TLVs can only be decoded but not encoded: SNMPv1v2cTransportAddress, SNMPv1v2cTransportAddressMask.
+
