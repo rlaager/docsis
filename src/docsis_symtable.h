@@ -413,7 +413,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 
 /* IPv6 */
 { 173,    "SwUpgradeServer6",                  58,     0,      (encode_ip6),            (decode_ip6),            0,           0             }, /* TLV 58 MULPIv3.0-I24 Annex C.1.2.8 */
-{ 174,    "SubMgmtControl6",                   63,     0,      (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 63 MULPIv3.0-I24 Annex C.1.1.19.5 */
+{ 174,    "SubMgmtControl6",                   63,     0,      (encode_ushort),         (decode_ushort),         0,           0             }, /* TLV 63 MULPIv3.0-I24 Annex C.1.1.19.5 */
 
 { 341,    "CMTSStaticMulticastSessionEncodings",  64,  0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 64 MULPIv3.0-I24 Annex C.1.1.27 */
 { 342,    "CMTSStaticMulticastSessionGroup",   1,      341,    (encode_ip_ip6),         (decode_ip_ip6),         0,           0             }, /* TLV 64.1 MULPIv3.0-I24 Annex C.1.1.27.1 */
