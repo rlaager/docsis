@@ -57,6 +57,7 @@ char *tsave;
 %%
 
 ([0-9]+,){3}[0-9]+		{ TSAVE(yytext);yylval.strval=tsave; return T_SUBMGT_FILTERS;	  }
+([0-9]+,){9}[0-9]+		{ TSAVE(yytext);yylval.strval=tsave; return T_SUBMGT_FILTERS;	  }
 ([0-9]+\.){3}[0-9]+	 	{ TSAVE(yytext);yylval.strval=tsave; return T_IP;	  }
 0[Xx]([0-9A-Fa-f])+		{ TSAVE(yytext);yylval.strval=tsave; return T_HEX_STRING; }
 ([0-9A-Fa-f][0-9A-Fa-f]:){5}[0-9A-Fa-f][0-9A-Fa-f]\/([0-9A-Fa-f][0-9A-Fa-f]:){5}[0-9A-Fa-f][0-9A-Fa-f]  { TSAVE(yytext);yylval.strval=tsave; return T_ETHERMASK; 			       }
