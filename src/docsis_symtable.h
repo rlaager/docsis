@@ -376,11 +376,11 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 
 { 143,    "DocsisTwoEnable",                   39,     0,      (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 39 MULPIv3.0-I24 Annex C.1.1.20 */
 
-{ 158,    "DsChannelList",                     41,     0,      (encode_nothing),        (decode_aggregate),      1,           255           }, /* TLV 41 MULPIv3.0-I24 Annex C.1.1.22 */
-{ 159,    "SingleDsChannel",                   1,      158,    (encode_nothing),        (decode_aggregate),      1,           255           }, /* TLV 41.1 MULPIv3.0-I24 Annex C.1.1.22.1 */
+{ 158,    "DsChannelList",                     41,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 41 MULPIv3.0-I24 Annex C.1.1.22 */
+{ 159,    "SingleDsChannel",                   1,      158,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 41.1 MULPIv3.0-I24 Annex C.1.1.22.1 */
 { 160,    "SingleDsTimeout",                   1,      159,    (encode_ushort),         (decode_ushort),         0,           65535         }, /* TLV 41.1.1 MULPIv3.0-I24 Annex C.1.1.22.1.1 */
 { 161,    "SingleDsFrequency",                 2,      159,    (encode_uint),           (decode_uint),           0,           0xFFFFFFFF    }, /* TLV 41.1.2 MULPIv3.0-I24 Annex C.1.1.22.1.2 */
-{ 162,    "DsFreqRange",                       2,      158,    (encode_nothing),        (decode_aggregate),      1,           255           }, /* TLV 41.2 MULPIv3.0-I24 Annex C.1.1.22.2 */
+{ 162,    "DsFreqRange",                       2,      158,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 41.2 MULPIv3.0-I24 Annex C.1.1.22.2 */
 { 163,    "DsFreqRangeTimeout",                1,      162,    (encode_ushort),         (decode_ushort),         0,           65535         }, /* TLV 41.2.1 MULPIv3.0-I24 Annex C.1.1.22.2.1 */
 { 164,    "DsFreqRangeStart",                  2,      162,    (encode_uint),           (decode_uint),           0,           0xFFFFFFFF    }, /* TLV 41.2.2 MULPIv3.0-I24 Annex C.1.1.22.2.2 */
 { 165,    "DsFreqRangeEnd",                    3,      162,    (encode_uint),           (decode_uint),           0,           0xFFFFFFFF    }, /* TLV 41.2.3 MULPIv3.0-I24 Annex C.1.1.22.2.3 */
