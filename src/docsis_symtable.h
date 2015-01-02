@@ -362,7 +362,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 134,    "SnmpV3MgrPublicNumber",             2,      132,    (encode_hexstr),         (decode_hexstr),         1,           514           }, /* TLV 34.2 MULPIv3.0-I24 Annex C.1.2.9.2 */
 
 { 154,    "SubMgmtControl",                    35,     0,      (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 35 MULPIv3.0-I24 Annex C.1.1.19.1 */
-{ 155,    "SubMgmtFilters",                    37,     0,      (encode_ushort_list),    (decode_ushort_list),    4,           4             }, /* TLV 37 MULPIv3.0-I24 Annex C.1.1.19.4 */
+{ 155,    "SubMgmtFilters",                    37,     0,      (encode_ushort_list),    (decode_ushort_list),    4,           10            }, /* TLV 37 MULPIv3.0-I24 Annex C.1.1.19.4 */
 
 /* Snmpv3 Notification Receiver */
 { 135,    "SnmpV3TrapReceiver",                38,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 38 MULPIv3.0-I24 Annex C.1.2.12 */
