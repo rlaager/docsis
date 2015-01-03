@@ -139,6 +139,11 @@ void decode_ip_ip6_port (unsigned char *tlvbuf, symbol_type *sym, size_t length 
   }
 }
 
+void decode_lenzero (unsigned char *tlvbuf, symbol_type *sym, size_t length )
+{
+  printf("%s 0x00;\n", sym->sym_ident );
+}
+
 void decode_ether (unsigned char *tlvbuf, symbol_type *sym, size_t length )
 {
 

@@ -36,6 +36,7 @@ void decode_ip (unsigned char *tlvbuf, symbol_type *sym, size_t length );
 void decode_ip6 (unsigned char *tlvbuf, symbol_type *sym, size_t length );
 void decode_ip_ip6 (unsigned char *tlvbuf, symbol_type *sym, size_t length );
 void decode_ip_ip6_port (unsigned char *tlvbuf, symbol_type *sym, size_t length );
+void decode_lenzero (unsigned char *tlvbuf, symbol_type *sym, size_t length );
 void decode_ether (unsigned char *tlvbuf, symbol_type *sym, size_t length );
 void decode_dual_qtag (unsigned char *tlvbuf, symbol_type *sym, size_t length );
 void decode_dual_int (unsigned char *tlvbuf, symbol_type *sym, size_t length );

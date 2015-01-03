@@ -246,10 +246,10 @@ create_tlv(struct symbol_entry *sym_ptr, union t_val *value)
   TLVINIT(tlvbuf);
   tlvbuf->docs_code = sym_ptr->docsis_code;
   tlvbuf->tlv_len = sym_ptr->encode_func(tlvbuf->tlv_value,value,sym_ptr);
-		if (tlvbuf->tlv_len <= 0 ) {
+/*		if (tlvbuf->tlv_len <= 0 ) {
 			fprintf(stderr, "Got 0-length value while scanning for %s at line %d\n",sym_ptr->sym_ident,line );
 			exit (-1);
-   		}
+   		} */
   return tlvbuf;
 }
 

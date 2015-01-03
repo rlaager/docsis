@@ -213,6 +213,11 @@ int encode_ip_ip6( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr 
   }
 }
 
+int encode_lenzero( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
+{
+  return (0);
+}
+
 int encode_ether ( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
 {
 int retval; 	     /* return value of inet_aton */
