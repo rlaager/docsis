@@ -207,10 +207,8 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 200,    "VendorSpecific",                    43,     28,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.43 MULPIv3.0-I24 Annex C.2.1.11 */
 { 202,    "L2VPNEncoding",                     5,      200,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.43.5 MULPIv3.0-I24 Annex C.1.1.18.1.5 */
 { 203,    "VPNIdentifier",                     1,      202,    (encode_hexstr),         (decode_hexstr),         4,           255           }, /* TLV 22.43.5.1 L2VPN-I13 Annex B.3.1 */
-/* 22.43.5.2 */
-{ 350,    "NSIEncapsulationSubtype",           2,      202,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.43.5.2 */
-/* 22.43.5.2.1 */
-{ 351,    "ServiceMultiplexingValueOther",     1,      350,    (encode_lenzero),        (decode_lenzero),        0,           0             }, /* TLV 22.43.5.2.1 */
+{ 350,    "NSIEncapsulationSubtype",           2,      202,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.43.5.2 L2VPN-I13 Annex B.3.2 */
+{ 351,    "ServiceMultiplexingValueOther",     1,      350,    (encode_lenzero),        (decode_lenzero),        0,           0             }, /* TLV 22.43.5.2.1 L2VPN-I13 Annex B.3.2 */
 { 201,    "VendorIdentifier",                  8,      200,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 22.43.8 */
 
 /* TODO: Vendor Specific support in the IEEE802Classifier */
@@ -454,7 +452,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 236,    "SNMPv3AccessViewMask",              3,      233,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 202.54.3 eRouter-I12 Annex B.4.6.3 */
 { 237,    "SNMPv3AccessViewType",              4,      233,    (encode_uchar),          (decode_uchar),          1,           2             }, /* TLV 202.54.4 eRouter-I12 Annex B.4.6.4 */
 
-/* A little more organized -> Start with 350 */
+/* A little more organized -> Start with 352 */
 
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/
 { 998,    "GenericTLV",                        0,      0,      (encode_nothing),        (decode_special),        0,           0             },
