@@ -1,0 +1,11 @@
+language: c
+
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -y automake libtool libsnmp-dev bison make gcc flex snmp-mibs-downloader
+  - ./autogen.sh
+
+script: 
+  - ./configure && make && sudo make install
+  - cd tests/
+  - ./TEST_0001.sh
