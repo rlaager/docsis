@@ -1,0 +1,12 @@
+Main 
+{
+NetworkAccess 1;
+MaxCPE 3;
+ClassOfService
+{
+ClassID 1;
+MaxRateDown 20000000;
+MaxRateUp 10000000;
+PrivacyEnable 0;
+}
+}

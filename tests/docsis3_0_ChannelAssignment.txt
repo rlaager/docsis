@@ -1,0 +1,23 @@
+Main 
+{
+NetworkAccess 1;
+UsServiceFlow
+{
+UsServiceFlowRef 1;
+QosParamSetType 7;
+}
+DsServiceFlow
+{
+DsServiceFlowRef 2;
+QosParamSetType 7;
+}
+ChannelAssignmentConfig
+{
+CaTransmit 1;
+CaTransmit 10;
+CaReceive 410000000;
+CaReceive 418000000;
+CaReceive 426000000;
+CaReceive 434000000;
+}
+}

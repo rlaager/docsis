@@ -1,0 +1,154 @@
+Main 
+{
+DsPacketClass
+{
+ClassifierRef 255;
+ClassifierId 65535;
+ServiceFlowRef 65535;
+ServiceFlowId 2147483647;
+RulePriority 255;
+ActivationState 1;
+IpPacketClassifier
+{
+IpTos 0x00ffff;
+IpProto 234;
+IpSrcAddr 10.1.2.3;
+IpSrcMask 255.255.0.0;
+IpDstAddr 10.5.2.5;
+IpDstMask 255.255.0.0;
+SrcPortStart 80;
+SrcPortEnd 81;
+DstPortStart 500;
+DstPortEnd 501;
+}
+}
+UsPacketClass
+{
+ClassifierRef 253;
+ClassifierId 65533;
+ServiceFlowRef 65533;
+ServiceFlowId 2147483645;
+RulePriority 255;
+ActivationState 1;
+LLCPacketClassifier
+{
+DstMacAddress 00:00:de:ad:be:ef/00:00:ff:ff:ff:ff;
+SrcMacAddress 00:a0:a0:a0:a0:a0;
+EtherType 0x030303;
+}
+}
+DsServiceFlow
+{
+DsServiceFlowRef 65535;
+DsServiceFlowId 2147483647;
+TrafficPriority 6;
+MaxRateSustained 3421234;
+MaxTrafficBurst 564343;
+MaxDsLatency 7856345;
+}
+UsServiceFlow
+{
+UsServiceFlowRef 65533;
+UsServiceFlowId 2147483645;
+TrafficPriority 6;
+MaxRateSustained 3421234;
+MaxTrafficBurst 564343;
+SchedulingType 3;
+MaxConcatenatedBurst 34534;
+ToleratedGrantJitter 4653512;
+}
+NetworkAccess 1;
+DownstreamFrequency 123000000;
+UpstreamChannelId 1;
+ClassOfService
+{
+ClassID 1;
+MaxRateDown 512000;
+MaxRateUp 64000;
+PriorityUp 3;
+GuaranteedUp 32000;
+MaxBurstUp 254;
+}
+BaselinePrivacy
+{
+AuthTimeout 10;
+ReAuthTimeout 10;
+AuthGraceTime 600;
+OperTimeout 10;
+ReKeyTimeout 10;
+TEKGraceTime 600;
+AuthRejectTimeout 9;
+}
+SnmpMibObject docsDevFilterIpDefault.0 Integer 1; /* discard */
+SnmpMibObject docsDevFilterIpStatus.1 Integer 6; /* destroy */
+SnmpMibObject docsDevFilterIpControl.1 Integer 2; /* accept */
+SnmpMibObject docsDevFilterIpIfIndex.1 Integer 0;
+SnmpMibObject docsDevFilterIpDirection.1 Integer 3; /* both */
+SnmpMibObject docsDevFilterIpBroadcast.1 Integer 2; /* false */
+SnmpMibObject docsDevFilterIpSaddr.1 IPAddress 0.0.0.0;
+SnmpMibObject docsDevFilterIpSmask.1 IPAddress 0.0.0.0;
+SnmpMibObject docsDevFilterIpDaddr.1 IPAddress 0.0.0.0;
+SnmpMibObject docsDevFilterIpDmask.1 IPAddress 0.0.0.0;
+SnmpMibObject docsDevFilterIpProtocol.1 Integer 1;
+SnmpMibObject docsDevFilterIpStatus.1 Integer 4; /* createAndGo */
+SnmpMibObject docsDevFilterIpStatus.2 Integer 6; /* destroy */
+SnmpMibObject docsDevFilterIpControl.2 Integer 2; /* accept */
+SnmpMibObject docsDevFilterIpIfIndex.2 Integer 0;
+SnmpMibObject docsDevFilterIpDirection.2 Integer 3; /* both */
+SnmpMibObject docsDevFilterIpBroadcast.2 Integer 2; /* false */
+SnmpMibObject docsDevFilterIpSaddr.2 IPAddress 0.0.0.0;
+SnmpMibObject docsDevFilterIpSmask.2 IPAddress 0.0.0.0;
+SnmpMibObject docsDevFilterIpDaddr.2 IPAddress 10.1.1.1;
+SnmpMibObject docsDevFilterIpDmask.2 IPAddress 255.255.255.255;
+SnmpMibObject docsDevFilterIpProtocol.2 Integer 6;
+SnmpMibObject docsDevFilterIpStatus.2 Integer 4; /* createAndGo */
+SnmpMibObject docsDevFilterIpStatus.3 Integer 6; /* destroy */
+SnmpMibObject docsDevFilterIpControl.3 Integer 2; /* accept */
+SnmpMibObject docsDevFilterIpIfIndex.3 Integer 0;
+SnmpMibObject docsDevFilterIpDirection.3 Integer 3; /* both */
+SnmpMibObject docsDevFilterIpBroadcast.3 Integer 2; /* false */
+SnmpMibObject docsDevFilterIpSaddr.3 IPAddress 10.1.1.1;
+SnmpMibObject docsDevFilterIpSmask.3 IPAddress 255.255.255.255;
+SnmpMibObject docsDevFilterIpDaddr.3 IPAddress 0.0.0.0;
+SnmpMibObject docsDevFilterIpDmask.3 IPAddress 0.0.0.0;
+SnmpMibObject docsDevFilterIpProtocol.3 Integer 6;
+SnmpMibObject docsDevFilterIpStatus.3 Integer 4; /* createAndGo */
+SnmpMibObject docsDevFilterIpStatus.4 Integer 6; /* destroy */
+SnmpMibObject docsDevFilterIpControl.4 Integer 2; /* accept */
+SnmpMibObject docsDevFilterIpIfIndex.4 Integer 0;
+SnmpMibObject docsDevFilterIpDirection.4 Integer 3; /* both */
+SnmpMibObject docsDevFilterIpBroadcast.4 Integer 1; /* true */
+SnmpMibObject docsDevFilterIpSaddr.4 IPAddress 0.0.0.0;
+SnmpMibObject docsDevFilterIpSmask.4 IPAddress 0.0.0.0;
+SnmpMibObject docsDevFilterIpDaddr.4 IPAddress 0.0.0.0;
+SnmpMibObject docsDevFilterIpDmask.4 IPAddress 0.0.0.0;
+SnmpMibObject docsDevFilterIpProtocol.4 Integer 17;
+SnmpMibObject docsDevFilterIpStatus.4 Integer 4; /* createAndGo */
+SnmpMibObject docsDevFilterIpStatus.5 Integer 6; /* destroy */
+SnmpMibObject docsDevFilterIpControl.5 Integer 2; /* accept */
+SnmpMibObject docsDevFilterIpIfIndex.5 Integer 0;
+SnmpMibObject docsDevFilterIpDirection.5 Integer 3; /* both */
+SnmpMibObject docsDevFilterIpBroadcast.5 Integer 2; /* false */
+SnmpMibObject docsDevFilterIpSaddr.5 IPAddress 0.0.0.0;
+SnmpMibObject docsDevFilterIpSmask.5 IPAddress 0.0.0.0;
+SnmpMibObject docsDevFilterIpDaddr.5 IPAddress 0.0.0.0;
+SnmpMibObject docsDevFilterIpDmask.5 IPAddress 0.0.0.0;
+SnmpMibObject docsDevFilterIpProtocol.5 Integer 17;
+SnmpMibObject docsDevFilterIpStatus.5 Integer 4; /* createAndGo */
+SnmpMibObject docsDevFilterIpStatus.6 Integer 6; /* destroy */
+SnmpMibObject docsDevFilterIpControl.6 Integer 2; /* accept */
+SnmpMibObject docsDevFilterIpIfIndex.6 Integer 0;
+SnmpMibObject docsDevFilterIpDirection.6 Integer 3; /* both */
+SnmpMibObject docsDevFilterIpBroadcast.6 Integer 2; /* false */
+SnmpMibObject docsDevFilterIpSaddr.6 IPAddress 0.0.0.0;
+SnmpMibObject docsDevFilterIpSmask.6 IPAddress 0.0.0.0;
+SnmpMibObject docsDevFilterIpDaddr.6 IPAddress 0.0.0.0;
+SnmpMibObject docsDevFilterIpDmask.6 IPAddress 0.0.0.0;
+SnmpMibObject docsDevFilterIpProtocol.6 Integer 6;
+SnmpMibObject docsDevFilterIpSourcePortLow.6 Integer 53;
+SnmpMibObject docsDevFilterIpSourcePortHigh.6 Integer 53;
+SnmpMibObject docsDevFilterIpDestPortLow.6 Integer 53;
+SnmpMibObject docsDevFilterIpDestPortHigh.6 Integer 53;
+SnmpMibObject docsDevFilterIpStatus.6 Integer 4; /* createAndGo */
+MaxCPE 3;
+}

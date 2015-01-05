@@ -1,0 +1,28 @@
+Main 
+{
+DownstreamFrequency 130000000;
+UpstreamChannelId 123;
+NetworkAccess 1;
+ClassOfService
+{
+ClassID 5;
+MaxRateDown 512000;
+MaxRateUp 64000;
+PriorityUp 3;
+GuaranteedUp 32000;
+MaxBurstUp 54314;
+PrivacyEnable 1;
+}
+SwUpgradeFilename "filename1.bin";
+BaselinePrivacy
+{
+AuthTimeout 25;
+ReAuthTimeout 15;
+AuthGraceTime 120;
+OperTimeout 9;
+ReKeyTimeout 10;
+TEKGraceTime 600;
+}
+MaxCPE 13;
+SwUpgradeServer 10.1.1.1;
+}

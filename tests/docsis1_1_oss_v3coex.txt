@@ -1,0 +1,135 @@
+Main 
+{
+DownstreamFrequency 340000000;
+NetworkAccess 1;
+BaselinePrivacy
+{
+AuthTimeout 5;
+ReAuthTimeout 20;
+AuthGraceTime 60;
+OperTimeout 2;
+ReKeyTimeout 2;
+TEKGraceTime 60;
+AuthRejectTimeout 60;
+SAMapWaitTimeout 1;
+SAMapMaxRetries 4;
+}
+MaxCPE 8;
+UsPacketClass
+{
+ClassifierRef 1;
+ServiceFlowRef 1;
+RulePriority 4;
+ActivationState 1;
+IpPacketClassifier
+{
+IpTos 0x00ffff;
+IpSrcAddr 10.0.100.100;
+}
+}
+UsServiceFlow
+{
+UsServiceFlowRef 1;
+QosParamSetType 7;
+TrafficPriority 1;
+MaxRateSustained 2500000;
+MaxTrafficBurst 2000;
+MinReservedRate 0;
+MinResPacketSize 1;
+ActQosParamsTimeout 0;
+AdmQosParamsTimeout 0;
+MaxConcatenatedBurst 1522;
+SchedulingType 2;
+RequestOrTxPolicy 0x000000f4;
+}
+DsServiceFlow
+{
+DsServiceFlowRef 5;
+QosParamSetType 7;
+TrafficPriority 1;
+MaxRateSustained 10000000;
+MaxTrafficBurst 2000;
+MinReservedRate 0;
+ActQosParamsTimeout 0;
+AdmQosParamsTimeout 0;
+}
+GlobalPrivacyEnable 1;
+SnmpMibObject docsDevFilterLLCStatus.1 Integer 4; /* createAndGo */
+SnmpMibObject docsDevFilterLLCIfIndex.1 Integer 0;
+SnmpMibObject docsDevFilterLLCProtocolType.1 Integer 1; /* ethertype */
+SnmpMibObject docsDevFilterLLCProtocol.1 Integer 8137;
+SnmpMibObject docsDevFilterIpStatus.1 Integer 4; /* createAndGo */
+SnmpMibObject docsDevFilterIpControl.1 Integer 2; /* accept */
+SnmpMibObject docsDevFilterIpIfIndex.1 Integer 2;
+SnmpMibObject docsDevFilterIpDirection.1 Integer 1; /* inbound */
+SnmpMibObject docsDevFilterIpBroadcast.1 Integer 2; /* false */
+SnmpMibObject docsDevFilterIpSaddr.1 IPAddress 172.11.12.13;
+SnmpMibObject docsDevFilterIpSmask.1 IPAddress 255.255.255.255;
+SnmpMibObject docsDevFilterIpDaddr.1 IPAddress 172.16.0.1;
+SnmpMibObject docsDevFilterIpDmask.1 IPAddress 255.255.255.255;
+SnmpMibObject docsDevFilterIpProtocol.1 Integer 1;
+SnmpMibObject docsDevFilterIpSourcePortLow.1 Integer 0;
+SnmpMibObject docsDevFilterIpSourcePortHigh.1 Integer 65535;
+SnmpMibObject docsDevFilterIpDestPortLow.1 Integer 0;
+SnmpMibObject docsDevFilterIpDestPortHigh.1 Integer 65535;
+SnmpMibObject docsDevFilterPolicyId.1 Integer 3;
+SnmpMibObject docsDevFilterPolicyStatus.1 Integer 4; /* createAndGo */
+SnmpMibObject docsDevFilterTosStatus.1 Integer 4; /* createAndGo */
+SnmpMibObject docsDevFilterTosAndMask.1 HexString 0xf0;
+SnmpMibObject docsDevFilterTosOrMask.1 HexString 0x0f;
+SnmpMibObject docsDevCpeIpMax.0 Integer 3;
+SnmpMibObject docsDevCpeStatus.10.0.34.172 Integer 4; /* createAndGo */
+SnmpMibObject snmpCommunityStatus.'rocablelabs' Integer 4; /* createAndGo */
+SnmpMibObject snmpCommunityName.'rocablelabs' String "rotesting";
+SnmpMibObject snmpCommunitySecurityName.'rocablelabs' String "rotesting";
+SnmpMibObject snmpCommunityStorageType.'rocablelabs' Integer 2; /* volatile */
+SnmpMibObject snmpCommunityStatus.'rwcablelabs' Integer 4; /* createAndGo */
+SnmpMibObject snmpCommunityName.'rwcablelabs' String "rwtesting";
+SnmpMibObject snmpCommunitySecurityName.'rwcablelabs' String "rwtesting";
+SnmpMibObject snmpCommunityStorageType.'rwcablelabs' Integer 2; /* volatile */
+SnmpMibObject vacmSecurityToGroupStatus.1."rotesting" Integer 4; /* createAndGo */
+SnmpMibObject vacmGroupName.1."rotesting" String "rotesting";
+SnmpMibObject vacmSecurityToGroupStorageType.1."rotesting" Integer 2; /* volatile */
+SnmpMibObject vacmSecurityToGroupStatus.1."rwtesting" Integer 4; /* createAndGo */
+SnmpMibObject vacmGroupName.1."rwtesting" String "rotesting";
+SnmpMibObject vacmSecurityToGroupStorageType.1."rwtesting" Integer 2; /* volatile */
+SnmpMibObject vacmSecurityToGroupStatus.2."rotesting" Integer 4; /* createAndGo */
+SnmpMibObject vacmGroupName.2."rotesting" String "rotesting";
+SnmpMibObject vacmSecurityToGroupStorageType.2."rotesting" Integer 2; /* volatile */
+SnmpMibObject vacmSecurityToGroupStatus.2."rwtesting" Integer 4; /* createAndGo */
+SnmpMibObject vacmGroupName.2."rwtesting" String "rotesting";
+SnmpMibObject vacmSecurityToGroupStorageType.2."rwtesting" Integer 2; /* volatile */
+SnmpMibObject vacmAccessStatus."rotesting"."".1.noAuthNoPriv Integer 4; /* createAndGo */
+SnmpMibObject vacmAccessContextMatch."rotesting"."".1.noAuthNoPriv Integer 1; /* exact */
+SnmpMibObject vacmAccessReadViewName."rotesting"."".1.noAuthNoPriv String "docsisManagerView";
+SnmpMibObject vacmAccessStorageType."rotesting"."".1.noAuthNoPriv Integer 2; /* volatile */
+SnmpMibObject vacmAccessStatus."rwtesting"."".1.noAuthNoPriv Integer 4; /* createAndGo */
+SnmpMibObject vacmAccessContextMatch."rwtesting"."".1.noAuthNoPriv Integer 1; /* exact */
+SnmpMibObject vacmAccessReadViewName."rwtesting"."".1.noAuthNoPriv String "docsisManagerView";
+SnmpMibObject vacmAccessWriteViewName."rwtesting"."".1.noAuthNoPriv String "docsisManagerView";
+SnmpMibObject vacmAccessStorageType."rwtesting"."".1.noAuthNoPriv Integer 2; /* volatile */
+SnmpMibObject vacmAccessStatus."rotesting"."".2.noAuthNoPriv Integer 4; /* createAndGo */
+SnmpMibObject vacmAccessContextMatch."rotesting"."".2.noAuthNoPriv Integer 1; /* exact */
+SnmpMibObject vacmAccessReadViewName."rotesting"."".2.noAuthNoPriv String "docsisManagerView";
+SnmpMibObject vacmAccessStorageType."rotesting"."".2.noAuthNoPriv Integer 2; /* volatile */
+SnmpMibObject vacmAccessStatus."rwtesting"."".2.noAuthNoPriv Integer 4; /* createAndGo */
+SnmpMibObject vacmAccessContextMatch."rwtesting"."".2.noAuthNoPriv Integer 1; /* exact */
+SnmpMibObject vacmAccessReadViewName."rwtesting"."".2.noAuthNoPriv String "docsisManagerView";
+SnmpMibObject vacmAccessWriteViewName."rwtesting"."".2.noAuthNoPriv String "docsisManagerView";
+SnmpMibObject vacmAccessStorageType."rwtesting"."".2.noAuthNoPriv Integer 2; /* volatile */
+SnmpV3Kickstart
+{
+SnmpV3SecurityName "2adfla6";
+}
+SnmpV3TrapReceiver
+{
+SnmpV3TrapRxIP 10.0.1.253;
+SnmpV3TrapRxPort 56790;
+SnmpV3TrapRxType 2;
+SnmpV3TrapRxTimeout 500;
+SnmpV3TrapRxRetries 3;
+SnmpV3TrapRxSecurityName "2adfla6";
+SnmpV3TrapRxFilterOID .1.3.6.1;
+}
+SnmpWriteControl .1.3.6.1 1 ;
+}

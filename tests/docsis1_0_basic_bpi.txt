@@ -1,0 +1,25 @@
+Main 
+{
+NetworkAccess 1;
+ClassOfService
+{
+ClassID 1;
+MaxRateDown 20000000;
+MaxRateUp 10000000;
+PriorityUp 3;
+GuaranteedUp 56072;
+MaxBurstUp 1722;
+PrivacyEnable 1;
+}
+BaselinePrivacy
+{
+AuthTimeout 10;
+ReAuthTimeout 10;
+AuthGraceTime 600;
+OperTimeout 10;
+ReKeyTimeout 10;
+TEKGraceTime 600;
+AuthRejectTimeout 9;
+}
+MaxCPE 3;
+}

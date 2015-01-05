@@ -1,0 +1,83 @@
+Main 
+{
+DsPacketClass
+{
+ClassifierRef 255;
+ClassifierId 65535;
+ServiceFlowRef 65535;
+ServiceFlowId 2147483647;
+RulePriority 255;
+ActivationState 1;
+IpPacketClassifier
+{
+IpTos 0x00ffff;
+IpProto 234;
+IpSrcAddr 10.1.2.3;
+IpSrcMask 255.255.0.0;
+IpDstAddr 10.5.2.5;
+IpDstMask 255.255.0.0;
+SrcPortStart 80;
+SrcPortEnd 81;
+DstPortStart 500;
+DstPortEnd 501;
+}
+}
+UsPacketClass
+{
+ClassifierRef 253;
+ClassifierId 65533;
+ServiceFlowRef 65533;
+ServiceFlowId 2147483645;
+RulePriority 255;
+ActivationState 1;
+LLCPacketClassifier
+{
+DstMacAddress 00:00:de:ad:be:ef/00:00:ff:ff:ff:ff;
+SrcMacAddress 00:a0:a0:a0:a0:a0;
+EtherType 0x030303;
+}
+}
+DsServiceFlow
+{
+DsServiceFlowRef 65535;
+DsServiceFlowId 2147483647;
+TrafficPriority 6;
+MaxRateSustained 3421234;
+MaxTrafficBurst 564343;
+MaxDsLatency 7856345;
+}
+UsServiceFlow
+{
+UsServiceFlowRef 65533;
+UsServiceFlowId 2147483645;
+TrafficPriority 6;
+MaxRateSustained 3421234;
+MaxTrafficBurst 564343;
+SchedulingType 3;
+MaxConcatenatedBurst 34534;
+ToleratedGrantJitter 4653512;
+}
+NetworkAccess 1;
+DownstreamFrequency 123000000;
+UpstreamChannelId 1;
+ClassOfService
+{
+ClassID 1;
+MaxRateDown 512000;
+MaxRateUp 64000;
+PriorityUp 3;
+GuaranteedUp 32000;
+MaxBurstUp 254;
+}
+BaselinePrivacy
+{
+AuthTimeout 10;
+ReAuthTimeout 10;
+AuthGraceTime 600;
+OperTimeout 10;
+ReKeyTimeout 10;
+TEKGraceTime 600;
+AuthRejectTimeout 9;
+}
+MaxCPE 3;
+}

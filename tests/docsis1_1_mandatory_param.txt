@@ -1,0 +1,100 @@
+Main 
+{
+NetworkAccess 1;
+UsServiceFlow
+{
+UsServiceFlowRef 1;
+ServiceClassName "USPrimaryBE";
+QosParamSetType 7;
+TrafficPriority 1;
+MaxRateSustained 0;
+MaxTrafficBurst 1522;
+MinReservedRate 0;
+MinResPacketSize 64;
+ActQosParamsTimeout 0;
+AdmQosParamsTimeout 200;
+MaxConcatenatedBurst 0;
+SchedulingType 2;
+RequestOrTxPolicy 0x00000080;
+IpTosOverwrite 0xfc00;
+}
+UsServiceFlow
+{
+UsServiceFlowRef 2;
+ServiceClassName "USMTAMGCP";
+QosParamSetType 7;
+TrafficPriority 7;
+MaxRateSustained 0;
+MaxTrafficBurst 1522;
+MinReservedRate 0;
+MinResPacketSize 64;
+ActQosParamsTimeout 0;
+AdmQosParamsTimeout 200;
+MaxConcatenatedBurst 3000;
+SchedulingType 2;
+RequestOrTxPolicy 0x00000088;
+IpTosOverwrite 0xfc00;
+}
+DsServiceFlow
+{
+DsServiceFlowRef 101;
+ServiceClassName "DSPrimaryBE";
+QosParamSetType 7;
+TrafficPriority 1;
+MaxRateSustained 100000000;
+MaxTrafficBurst 1522;
+MinReservedRate 0;
+MinResPacketSize 64;
+ActQosParamsTimeout 0;
+AdmQosParamsTimeout 200;
+MaxDsLatency 20000;
+}
+DsServiceFlow
+{
+DsServiceFlowRef 102;
+ServiceClassName "DSMTAMGCP";
+QosParamSetType 7;
+TrafficPriority 7;
+MaxRateSustained 10000000;
+MaxTrafficBurst 1522;
+MinReservedRate 12000;
+MinResPacketSize 64;
+ActQosParamsTimeout 0;
+AdmQosParamsTimeout 200;
+MaxDsLatency 5000;
+}
+UsPacketClass
+{
+ServiceFlowRef 2;
+ClassifierRef 2;
+RulePriority 1;
+ActivationState 1;
+IpPacketClassifier
+{
+IpProto 17;
+IpSrcAddr 0.0.0.0;
+IpSrcMask 0.0.0.0;
+IpDstAddr 0.0.0.0;
+IpDstMask 0.0.0.0;
+SrcPortStart 2727;
+SrcPortEnd 2727;
+}
+}
+DsPacketClass
+{
+ServiceFlowRef 102;
+ClassifierRef 102;
+RulePriority 1;
+ActivationState 1;
+IpPacketClassifier
+{
+IpProto 17;
+IpSrcAddr 0.0.0.0;
+IpSrcMask 0.0.0.0;
+IpDstAddr 0.0.0.0;
+IpDstMask 0.0.0.0;
+DstPortStart 2427;
+DstPortEnd 2427;
+}
+}
+}

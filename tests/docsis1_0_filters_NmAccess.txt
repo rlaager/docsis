@@ -1,0 +1,87 @@
+Main 
+{
+DownstreamFrequency 426000000;
+UpstreamChannelId 1;
+NetworkAccess 1;
+ClassOfService
+{
+ClassID 1;
+MaxRateDown 10000000;
+MaxRateUp 250000;
+PriorityUp 1;
+PrivacyEnable 1;
+}
+BaselinePrivacy
+{
+AuthTimeout 10;
+ReAuthTimeout 10;
+AuthGraceTime 600;
+OperTimeout 10;
+ReKeyTimeout 10;
+TEKGraceTime 600;
+AuthRejectTimeout 9;
+}
+SnmpMibObject experimental.83.1.6.3.0 Integer 2;
+SnmpMibObject experimental.83.1.6.4.1.3.1 Integer 1;
+SnmpMibObject experimental.83.1.6.4.1.4.1 Integer 0;
+SnmpMibObject experimental.83.1.6.4.1.5.1 Integer 1;
+SnmpMibObject experimental.83.1.6.4.1.6.1 Integer 2;
+SnmpMibObject experimental.83.1.6.4.1.7.1 IPAddress 0.0.0.0;
+SnmpMibObject experimental.83.1.6.4.1.9.1 IPAddress 0.0.0.0;
+SnmpMibObject experimental.83.1.6.4.1.11.1 Integer 17;
+SnmpMibObject experimental.83.1.6.4.1.14.1 Integer 135;
+SnmpMibObject experimental.83.1.6.4.1.15.1 Integer 135;
+SnmpMibObject experimental.83.1.6.4.1.2.1 Integer 1;
+SnmpMibObject experimental.83.1.6.4.1.3.2 Integer 1;
+SnmpMibObject experimental.83.1.6.4.1.4.2 Integer 0;
+SnmpMibObject experimental.83.1.6.4.1.5.2 Integer 1;
+SnmpMibObject experimental.83.1.6.4.1.6.2 Integer 2;
+SnmpMibObject experimental.83.1.6.4.1.7.2 IPAddress 0.0.0.0;
+SnmpMibObject experimental.83.1.6.4.1.9.2 IPAddress 0.0.0.0;
+SnmpMibObject experimental.83.1.6.4.1.11.2 Integer 17;
+SnmpMibObject experimental.83.1.6.4.1.14.2 Integer 137;
+SnmpMibObject experimental.83.1.6.4.1.15.2 Integer 138;
+SnmpMibObject experimental.83.1.6.4.1.2.2 Integer 1;
+SnmpMibObject experimental.83.1.6.4.1.3.3 Integer 1;
+SnmpMibObject experimental.83.1.6.4.1.4.3 Integer 0;
+SnmpMibObject experimental.83.1.6.4.1.5.3 Integer 1;
+SnmpMibObject experimental.83.1.6.4.1.6.3 Integer 2;
+SnmpMibObject experimental.83.1.6.4.1.7.3 IPAddress 0.0.0.0;
+SnmpMibObject experimental.83.1.6.4.1.9.3 IPAddress 0.0.0.0;
+SnmpMibObject experimental.83.1.6.4.1.11.3 Integer 6;
+SnmpMibObject experimental.83.1.6.4.1.14.3 Integer 139;
+SnmpMibObject experimental.83.1.6.4.1.15.3 Integer 139;
+SnmpMibObject experimental.83.1.6.4.1.2.3 Integer 1;
+SnmpMibObject experimental.83.1.6.4.1.3.4 Integer 2;
+SnmpMibObject experimental.83.1.6.4.1.4.4 Integer 1;
+SnmpMibObject experimental.83.1.6.4.1.5.4 Integer 1;
+SnmpMibObject experimental.83.1.6.4.1.6.4 Integer 2;
+SnmpMibObject experimental.83.1.6.4.1.7.4 IPAddress 10.11.12.13;
+SnmpMibObject experimental.83.1.6.4.1.8.4 IPAddress 255.255.255.255;
+SnmpMibObject experimental.83.1.6.4.1.9.4 IPAddress 0.0.0.0;
+SnmpMibObject experimental.83.1.6.4.1.10.4 IPAddress 0.0.0.0;
+SnmpMibObject experimental.83.1.6.4.1.11.4 Integer 256;
+SnmpMibObject experimental.83.1.6.4.1.2.4 Integer 4;
+SnmpMibObject experimental.83.1.6.4.1.3.5 Integer 1;
+SnmpMibObject experimental.83.1.6.4.1.4.5 Integer 1;
+SnmpMibObject experimental.83.1.6.4.1.5.5 Integer 1;
+SnmpMibObject experimental.83.1.6.4.1.6.5 Integer 2;
+SnmpMibObject experimental.83.1.6.4.1.7.5 IPAddress 0.0.0.0;
+SnmpMibObject experimental.83.1.6.4.1.8.5 IPAddress 0.0.0.0;
+SnmpMibObject experimental.83.1.6.4.1.9.5 IPAddress 0.0.0.0;
+SnmpMibObject experimental.83.1.6.4.1.10.5 IPAddress 0.0.0.0;
+SnmpMibObject experimental.83.1.6.4.1.11.5 Integer 256;
+SnmpMibObject experimental.83.1.6.4.1.2.5 Integer 4;
+SnmpMibObject experimental.83.1.2.1.2.1 IPAddress 255.255.255.255;
+SnmpMibObject experimental.83.1.2.1.3.1 IPAddress 255.255.255.255;
+SnmpMibObject experimental.83.1.2.1.5.1 Integer 4;
+SnmpMibObject experimental.83.1.2.1.7.1 Integer 1;
+SnmpMibObject experimental.83.1.2.1.2.2 IPAddress 192.168.70.0;
+SnmpMibObject experimental.83.1.2.1.3.2 IPAddress 255.255.255.0;
+SnmpMibObject experimental.83.1.2.1.4.2 String "example_community";
+SnmpMibObject experimental.83.1.2.1.5.2 Integer 3;
+SnmpMibObject experimental.83.1.2.1.6.2 HexString 0xc0;
+SnmpMibObject experimental.83.1.2.1.7.2 Integer 1;
+MaxCPE 16;
+CpeMacAddress 00:10:4b:f5:3d:96;
+}

@@ -1,0 +1,28 @@
+Main 
+{
+NetworkAccess 1;
+UsServiceFlow
+{
+UsServiceFlowRef 1;
+QosParamSetType 7;
+}
+DsServiceFlow
+{
+DsServiceFlowRef 2;
+QosParamSetType 7;
+}
+eRouter
+{
+InitializationMode 1;
+TR69ManagementServer
+{
+EnableCWMP 1;
+URL "https://www.example.com/index.xml";
+Username "ExampleUsername";
+Password "ExamplePassword";
+ConnectionRequestUsername "ConnectionUsername";
+ConnectionRequestPassword "ConnectionPassword";
+ACSOverride 0;
+	}
+}
+}
