@@ -611,7 +611,7 @@ decode_vbind (unsigned char *data, unsigned int vb_len)
   if (enum_string)
 	printf(" %s %s; /* %s */", _docsis_snmp_label, outbuf, enum_string);
   else
-	printf(" %s %s ;", _docsis_snmp_label, outbuf);
+	printf(" %s %s;", _docsis_snmp_label, outbuf);
 
 
   snmp_free_var (vp);
