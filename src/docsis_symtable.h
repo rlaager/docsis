@@ -206,6 +206,8 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 336,    "MPLSLabel",                         2,      334,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 22.17.2 MULPIv3.0-I24 Annex C.2.1.15.2 */
 { 200,    "VendorSpecific",                    43,     28,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.43 MULPIv3.0-I24 Annex C.2.1.11 */
 { 352,    "CMLoadBalancingPolicyID",           1,      200,    (encode_uint),           (decode_uint),           0,           0             }, /* TLV 22.43.1 MULPIv3.0-I24 Annex C.1.1.18.1.1 */
+{ 353,    "CMLoadBalancingPriority",           2,      200,    (encode_uint),           (decode_uint),           0,           0             }, /* TLV 22.43.2 MULPIv3.0-I24 Annex C.1.1.18.1.2 */
+{ 354,    "CMLoadBalancingGroupID",            3,      200,    (encode_uint),           (decode_uint),           0,           0             }, /* TLV 22.43.3 MULPIv3.0-I24 Annex C.1.1.18.1.3 */
 { 202,    "L2VPNEncoding",                     5,      200,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.43.5 MULPIv3.0-I24 Annex C.1.1.18.1.5 */
 { 203,    "VPNIdentifier",                     1,      202,    (encode_hexstr),         (decode_hexstr),         4,           255           }, /* TLV 22.43.5.1 L2VPN-I13 Annex B.3.1 */
 { 350,    "NSIEncapsulationSubtype",           2,      202,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.43.5.2 L2VPN-I13 Annex B.3.2 */
