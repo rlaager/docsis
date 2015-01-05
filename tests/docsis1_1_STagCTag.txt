@@ -1,0 +1,46 @@
+Main 
+{
+DsPacketClass
+{
+STagCTagFrameClassification
+{
+STPID 0x88a8;
+SVID 0x0102;
+SPCP 0x01;
+SDEI 0x01;
+CTPID 0x8100;
+CVID 0x0001;
+CPCP 0x01;
+CCFI 0x01;
+STCI 0x0102;
+CTCI 0x0102;
+}
+}
+NetworkAccess 1;
+UsServiceFlow
+{
+UsServiceFlowRef 1;
+QosParamSetType 7;
+}
+DsServiceFlow
+{
+DsServiceFlowRef 2;
+QosParamSetType 7;
+}
+UsPacketClass
+{
+STagCTagFrameClassification
+{
+STPID 0x88a8;
+SVID 0x0102;
+SPCP 0x01;
+SDEI 0x01;
+CTPID 0x8100;
+CVID 0x0001;
+CPCP 0x01;
+CCFI 0x01;
+STCI 0x0102;
+CTCI 0x0102;
+}
+}
+}

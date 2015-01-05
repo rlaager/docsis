@@ -1,0 +1,52 @@
+Main 
+{
+DsPacketClass
+{
+IEEE8021ahPacketClassification
+{
+ITPID 0x88e7;
+ISID 0x010203;
+ITCI 0x0102030405;
+IPCP 0x01;
+IDEI 0x01;
+IUCA 0x01;
+BTPID 0x88a8;
+BTCI 0x0102;
+BPCP 0x01;
+BDEI 0x01;
+BVID 0x0102;
+BDA 01:02:03:04:05:06;
+BSA 01:02:03:04:05:06;
+}
+}
+UsPacketClass
+{
+IEEE8021ahPacketClassification
+{
+ITPID 0x88e7;
+ISID 0x010203;
+ITCI 0x0102030405;
+IPCP 0x01;
+IDEI 0x01;
+IUCA 0x01;
+BTPID 0x88a8;
+BTCI 0x0102;
+BPCP 0x01;
+BDEI 0x01;
+BVID 0x0102;
+BDA 01:02:03:04:05:06;
+BSA 01:02:03:04:05:06;
+}
+}
+NetworkAccess 1;
+UsServiceFlow
+{
+UsServiceFlowRef 1;
+QosParamSetType 7;
+}
+DsServiceFlow
+{
+DsServiceFlowRef 2;
+QosParamSetType 7;
+}
+}

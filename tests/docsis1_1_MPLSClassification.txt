@@ -1,0 +1,30 @@
+Main 
+{
+DsPacketClass
+{
+MPLSClassificationEncoding
+{
+MPLSTCbits 0x01;
+MPLSLabel 0x010203;
+}
+}
+UsPacketClass
+{
+MPLSClassificationEncoding
+{
+MPLSTCbits 0x01;
+MPLSLabel 0x010203;
+}
+}
+NetworkAccess 1;
+UsServiceFlow
+{
+UsServiceFlowRef 1;
+QosParamSetType 7;
+}
+DsServiceFlow
+{
+DsServiceFlowRef 2;
+QosParamSetType 7;
+}
+}

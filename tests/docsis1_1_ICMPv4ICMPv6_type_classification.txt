@@ -1,0 +1,30 @@
+Main 
+{
+DsPacketClass
+{
+ICMPv4ICMPv6PacketClassification
+{
+ICMPv4ICMPv6TypeStart 0;
+ICMPv4ICMPv6TypeEnd 255;
+}
+}
+UsPacketClass
+{
+ICMPv4ICMPv6PacketClassification
+{
+ICMPv4ICMPv6TypeStart 0;
+ICMPv4ICMPv6TypeEnd 255;
+}
+}
+NetworkAccess 1;
+UsServiceFlow
+{
+UsServiceFlowRef 1;
+QosParamSetType 7;
+}
+DsServiceFlow
+{
+DsServiceFlowRef 2;
+QosParamSetType 7;
+}
+}

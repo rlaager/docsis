@@ -1,0 +1,28 @@
+Main 
+{
+NetworkAccess 1;
+UsServiceFlow
+{
+UsServiceFlowRef 1;
+QosParamSetType 7;
+}
+DsServiceFlow
+{
+DsServiceFlowRef 2;
+QosParamSetType 7;
+}
+eRouter
+{
+SNMPv1v2cCoexistenceConfig
+{
+SNMPv1v2cCommunityName "public";
+SNMPv1v2cTransportAddressAccess
+{
+SNMPv1v2cTransportAddress 1.2.3.4/1234;
+SNMPv1v2cTransportAddressMask 2001::1/1234;
+}
+SNMPv1v2cAccessViewType 2;
+SNMPv1v2cAccessViewName "write";
+}
+}
+}

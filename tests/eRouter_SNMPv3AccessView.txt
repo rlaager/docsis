@@ -1,0 +1,24 @@
+Main 
+{
+NetworkAccess 1;
+UsServiceFlow
+{
+UsServiceFlowRef 1;
+QosParamSetType 7;
+}
+DsServiceFlow
+{
+DsServiceFlowRef 2;
+QosParamSetType 7;
+}
+eRouter
+{
+SNMPv3AccessViewConfiguration
+{
+SNMPv3AccessViewName "accessviewname";
+SNMPv3AccessViewSubtree .1.3.6.1.1.2.1.2.3;
+SNMPv3AccessViewMask 0x0102;
+SNMPv3AccessViewType 2;
+}
+}
+}

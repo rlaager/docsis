@@ -1,0 +1,30 @@
+Main 
+{
+NetworkAccess 1;
+UsServiceFlow
+{
+UsServiceFlowRef 1;
+QosParamSetType 7;
+}
+DsServiceFlow
+{
+DsServiceFlowRef 2;
+QosParamSetType 7;
+}
+DsChannelList
+{
+SingleDsChannel
+{
+SingleDsTimeout 100;
+SingleDsFrequency 112000000;
+}
+DsFreqRange
+{
+DsFreqRangeTimeout 1000;
+DsFreqRangeStart 112000000;
+DsFreqRangeEnd 850000000;
+DsFreqRangeStepSize 8000000;
+}
+DefaultScanTimeout 10;
+}
+}
