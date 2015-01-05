@@ -8,4 +8,4 @@ before_install:
 script: 
   - ./configure && make && sudo make install
   - cd tests/
-  - ./TEST_0001.sh
+  - ./RunTests.sh
