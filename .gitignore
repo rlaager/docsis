@@ -39,7 +39,7 @@ src/docsis_yy.c
 src/docsis_yy.h
 doc/config-settings.html
 po/Makefile.in.in
-regression/*
+tests/*.new
 /Default/
 .cproject
 .project
