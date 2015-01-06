@@ -1,0 +1,33 @@
+Main 
+{
+	UsPacketClass
+	{
+		VendorSpecific
+		{
+			VendorIdentifier 0xffffff;
+			L2VPNEncoding
+			{
+				NSIEncapsulationSubtype
+				{
+					ServiceMultiplexingValueIEEE8021ad 0x01020304;
+				}
+			}
+		}
+		ClassifierRef 1;
+		ServiceFlowRef 1;
+	}
+	NetworkAccess 1;
+	UsServiceFlow
+	{
+		UsServiceFlowRef 1;
+		QosParamSetType 7;
+	}
+	DsServiceFlow
+	{
+		DsServiceFlowRef 2;
+		QosParamSetType 7;
+	}
+	/* CmMic 07037e114dbc770c829862d4d7ac3cf0; */
+	/* CmtsMic 0be334fb17848e86b6735fd580776ae3; */
+	/*EndOfDataMkr*/
+}
