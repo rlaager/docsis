@@ -213,6 +213,33 @@ int encode_ip_ip6( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr 
   }
 }
 
+int encode_char_ip_ip6( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
+{
+  struct in6_addr in6;
+  struct in_addr in;
+  union t_val *helper; /* We only use this to cast the void* we receive to what we think it should be */
+  
+  char ipv4 = 1;
+  char ipv6 = 2;
+
+  helper = (union t_val *) tval;
+
+  if ( inet_pton(AF_INET6, helper->strval, &in6) ) {
+    memcpy ( buf, &ipv6, sizeof(char) );
+    memcpy ( buf + 1, &in6, sizeof(struct in6_addr));
+    free(helper->strval);
+    return ( sizeof(char) + sizeof(struct in6_addr));
+  } else if ( inet_aton ( helper->strval, &in) ) {
+    memcpy ( buf, &ipv4, sizeof(char) );
+    memcpy ( buf + 1, &in, sizeof(struct in_addr));
+    free(helper->strval);
+    return ( sizeof(char) + sizeof(struct in_addr));    
+  } else {
+    fprintf(stderr, "Invalid IP address %s at line %d\n", helper->strval, line );
+    exit (-1);
+  }
+}
+
 int encode_lenzero( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
 {
   return (0);
