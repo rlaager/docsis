@@ -223,19 +223,19 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 362,    "MPLSBackupPseudowireID",            4,      358,    (encode_uint),           (decode_uint),           0,           0             }, /* TLV 22.43.5.2.4.4 L2VPN-I13 Annex B.3.2 */
 /* We need a new encode/decode function for TLV 22.43.5.2.4.5 */
 /* { 363,    "MPLSBackupPeerIpAddress",           5,      358,    (encode_ip_ip6),         (decode_ip_ip6),         0,           0             }, */ /* TLV 22.43.5.2.4.5 L2VPN-I13 Annex B.3.2 */
-{ 364,    "IEEE8021ahEncapsulation",           6,      350,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.43.5.2.6 L2VPN-I13 Annex B.3.2 */
-{ 365,    "ITCIEncapsulation",                 1,      364,    (encode_hexstr),         (decode_hexstr),         4,           4             }, /* TLV 22.43.5.2.6.1 L2VPN-I13 Annex B.3.2 */
-{ 366,    "BDAEncapsulation",                  2,      364,    (encode_hexstr),         (decode_hexstr),         6,           6             }, /* TLV 22.43.5.2.6.2 L2VPN-I13 Annex B.3.2 */
-{ 367,    "BTCIEncapsulation",                 3,      364,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 22.43.5.2.6.3 L2VPN-I13 Annex B.3.2 */
-{ 368,    "ITPIDEncapsulation",                4,      364,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 22.43.5.2.6.4 L2VPN-I13 Annex B.3.2 */
-{ 369,    "IPCPEncapsulation",                 5,      364,    (encode_hexstr),         (decode_hexstr),         1,           1             }, /* TLV 22.43.5.2.6.5 L2VPN-I13 Annex B.3.2 */
-{ 370,    "IDEIEncapsulation",                 6,      364,    (encode_hexstr),         (decode_hexstr),         1,           1             }, /* TLV 22.43.5.2.6.6 L2VPN-I13 Annex B.3.2 */
-{ 371,    "IUCAEncapsulation",                 7,      364,    (encode_hexstr),         (decode_hexstr),         1,           1             }, /* TLV 22.43.5.2.6.7 L2VPN-I13 Annex B.3.2 */
-{ 372,    "ISIDEncapsulation",                 8,      364,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 22.43.5.2.6.8 L2VPN-I13 Annex B.3.2 */
-{ 373,    "BTPIDEncapsulation",                9,      364,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 22.43.5.2.6.9 L2VPN-I13 Annex B.3.2 */
-{ 374,    "BPCPEncapsulation",                 10,     364,    (encode_hexstr),         (decode_hexstr),         1,           1             }, /* TLV 22.43.5.2.6.10 L2VPN-I13 Annex B.3.2 */
-{ 375,    "BDEIEncapsulation",                 11,     364,    (encode_hexstr),         (decode_hexstr),         1,           1             }, /* TLV 22.43.5.2.6.11 L2VPN-I13 Annex B.3.2 */
-{ 376,    "BVIDEncapsulation",                 12,     364,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 22.43.5.2.6.12 L2VPN-I13 Annex B.3.2 */
+{ 364,    "IEEE8021ahEncapsulation",           6,      350,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.43.5.2.6 L2VPN-I13 Annex B.3.2.2 */
+{ 365,    "ITCIEncapsulation",                 1,      364,    (encode_hexstr),         (decode_hexstr),         4,           4             }, /* TLV 22.43.5.2.6.1 L2VPN-I13 Annex B.3.2.2.1 */
+{ 366,    "BDAEncapsulation",                  2,      364,    (encode_hexstr),         (decode_hexstr),         6,           6             }, /* TLV 22.43.5.2.6.2 L2VPN-I13 Annex B.3.2.2.2 */
+{ 367,    "BTCIEncapsulation",                 3,      364,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 22.43.5.2.6.3 L2VPN-I13 Annex B.3.2.2.3 */
+{ 368,    "ITPIDEncapsulation",                4,      364,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 22.43.5.2.6.4 L2VPN-I13 Annex B.3.2.2.4 */
+{ 369,    "IPCPEncapsulation",                 5,      364,    (encode_hexstr),         (decode_hexstr),         1,           1             }, /* TLV 22.43.5.2.6.5 L2VPN-I13 Annex B.3.2.2.5 */
+{ 370,    "IDEIEncapsulation",                 6,      364,    (encode_hexstr),         (decode_hexstr),         1,           1             }, /* TLV 22.43.5.2.6.6 L2VPN-I13 Annex B.3.2.2.6 */
+{ 371,    "IUCAEncapsulation",                 7,      364,    (encode_hexstr),         (decode_hexstr),         1,           1             }, /* TLV 22.43.5.2.6.7 L2VPN-I13 Annex B.3.2.2.7 */
+{ 372,    "ISIDEncapsulation",                 8,      364,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 22.43.5.2.6.8 L2VPN-I13 Annex B.3.2.2.8 */
+{ 373,    "BTPIDEncapsulation",                9,      364,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 22.43.5.2.6.9 L2VPN-I13 Annex B.3.2.2.9 */
+{ 374,    "BPCPEncapsulation",                 10,     364,    (encode_hexstr),         (decode_hexstr),         1,           1             }, /* TLV 22.43.5.2.6.10 L2VPN-I13 Annex B.3.2.2.10 */
+{ 375,    "BDEIEncapsulation",                 11,     364,    (encode_hexstr),         (decode_hexstr),         1,           1             }, /* TLV 22.43.5.2.6.11 L2VPN-I13 Annex B.3.2.2.11 */
+{ 376,    "BVIDEncapsulation",                 12,     364,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 22.43.5.2.6.12 L2VPN-I13 Annex B.3.2.2.11 */
 { 201,    "VendorIdentifier",                  8,      200,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 22.43.8 */
 
 /* TODO: Vendor Specific support in the IEEE802Classifier */
