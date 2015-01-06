@@ -215,6 +215,14 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 351,    "ServiceMultiplexingValueOther",     1,      350,    (encode_lenzero),        (decode_lenzero),        0,           0             }, /* TLV 22.43.5.2.1 L2VPN-I13 Annex B.3.2 */
 { 356,    "ServiceMultiplexingValueIEEE8021Q", 2,      350,    (encode_ushort),         (decode_ushort),         0,           4096          }, /* TLV 22.43.5.2.2 L2VPN-I13 Annex B.3.2 */
 { 357,    "ServiceMultiplexingValueIEEE8021ad", 3,     350,    (encode_hexstr),         (decode_hexstr),         4,           4             }, /* TLV 22.43.5.2.3 L2VPN-I13 Annex B.3.2 */
+{ 358,    "ServiceMultiplexingValueMPLSPW",    4,      350,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.43.5.2.4 L2VPN-I13 Annex B.3.2 */
+{ 359,    "MPLSPseudowireID",                  1,      358,    (encode_uint),           (decode_uint),           0,           0             }, /* TLV 22.43.5.2.4.1 L2VPN-I13 Annex B.3.2 */
+/* We need a new encode/decode function for TLV 22.43.5.2.4.2 */
+/* { 360,    "MPLSPeerIpAddress",                 2,      358,    (encode_ip_ip6),         (decode_ip_ip6),         0,           0             }, */ /* TLV 22.43.5.2.4.2 L2VPN-I13 Annex B.3.2 */
+{ 361,    "MPLSPseudowireType",                3,      358,    (encode_uchar),          (decode_uchar),          0,           0             }, /* TLV 22.43.5.2.4.3 L2VPN-I13 Annex B.3.2 */
+{ 362,    "MPLSBackupPseudowireID",            4,      358,    (encode_uint),           (decode_uint),           0,           0             }, /* TLV 22.43.5.2.4.4 L2VPN-I13 Annex B.3.2 */
+/* We need a new encode/decode function for TLV 22.43.5.2.4.5 */
+/* { 363,    "MPLSBackupPeerIpAddress",           5,      358,    (encode_ip_ip6),         (decode_ip_ip6),         0,           0             }, */ /* TLV 22.43.5.2.4.5 L2VPN-I13 Annex B.3.2 */
 { 201,    "VendorIdentifier",                  8,      200,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 22.43.8 */
 
 /* TODO: Vendor Specific support in the IEEE802Classifier */
@@ -458,7 +466,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 236,    "SNMPv3AccessViewMask",              3,      233,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 202.54.3 eRouter-I12 Annex B.4.6.3 */
 { 237,    "SNMPv3AccessViewType",              4,      233,    (encode_uchar),          (decode_uchar),          1,           2             }, /* TLV 202.54.4 eRouter-I12 Annex B.4.6.4 */
 
-/* A little more organized -> Start with 358 */
+/* A little more organized -> Start with 364 */
 
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/
 { 998,    "GenericTLV",                        0,      0,      (encode_nothing),        (decode_special),        0,           0             },
