@@ -271,6 +271,12 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 410,    "ETreeRole",                         2,      408,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 22.43.5.20.2 L2VPN-I13 Annex B.3.20.2 */
 { 411,    "ETreeRootVID",                      3,      408,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 22.43.5.20.3 L2VPN-I13 Annex B.3.20.3 */
 { 412,    "ETreeLeafVID",                      4,      408,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 22.43.5.20.4 L2VPN-I13 Annex B.3.20.4 */
+{ 413,    "BGPAttribute",                      21,     202,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.43.5.21 L2VPN-I13 Annex B.3.21 */
+{ 414,    "BGPVPNID",                          1,      413,    (encode_uint),           (decode_uint),           0,           0             }, /* TLV 22.43.5.21.1 L2VPN-I13 Annex B.3.21.1 */
+{ 415,    "RouteDistinguisher",                2,      413,    (encode_hexstr),         (decode_hexstr),         8,           8             }, /* TLV 22.43.5.21.2 L2VPN-I13 Annex B.3.21.2 */
+{ 416,    "RouteTargetImport",                 3,      413,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* TLV 22.43.5.21.3 L2VPN-I13 Annex B.3.21.3 */
+{ 417,    "RouteTargetExport",                 4,      413,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* TLV 22.43.5.21.4 L2VPN-I13 Annex B.3.21.4 */
+{ 418,    "CEIDVEID",                          5,      413,    (encode_ushort),         (decode_ushort),         0,           0             }, /* TLV 22.43.5.21.5 L2VPN-I13 Annex B.3.21.5 */
 { 201,    "VendorIdentifier",                  8,      200,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 22.43.8 */
 
 /* TODO: Vendor Specific support in the IEEE802Classifier */
@@ -514,7 +520,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 236,    "SNMPv3AccessViewMask",              3,      233,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 202.54.3 eRouter-I12 Annex B.4.6.3 */
 { 237,    "SNMPv3AccessViewType",              4,      233,    (encode_uchar),          (decode_uchar),          1,           2             }, /* TLV 202.54.4 eRouter-I12 Annex B.4.6.4 */
 
-/* A little more organized -> Start with 413 */
+/* A little more organized -> Start with 419 */
 
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/
 { 998,    "GenericTLV",                        0,      0,      (encode_nothing),        (decode_special),        0,           0             },
