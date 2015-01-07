@@ -246,6 +246,31 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 385,    "L2VPNSADescriptorSubtype",          10,     202,    (encode_hexstr),         (decode_hexstr),         14,          14            }, /* TLV 22.43.5.10 L2VPN-I13 Annex B.3.10 */
 { 386,    "PseudowireType",                    12,     202,    (encode_uchar),          (decode_uchar),          4,           5             }, /* TLV 22.43.5.12 L2VPN-I13 Annex B.3.13 */
 { 387,    "L2VPNMode",                         13,     202,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 22.43.5.13 L2VPN-I13 Annex B.3.14 */
+{ 388,    "TPIDTranslation",                   14,     202,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.43.5.14 L2VPN-I13 Annex B.3.15 */
+{ 389,    "UpstreamTPIDTranslation",           1,      388,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 22.43.5.14.1 L2VPN-I13 Annex B.3.15.1 */
+{ 390,    "DownstreamTPIDTranslation",         2,      388,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 22.43.5.14.2 L2VPN-I13 Annex B.3.15.1 */
+{ 391,    "UpstreamSTPIDTranslation",          3,      388,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 22.43.5.14.3 L2VPN-I13 Annex B.3.15.1 */
+{ 392,    "DownstreamSTPIDTranslation",        4,      388,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 22.43.5.14.4 L2VPN-I13 Annex B.3.15.1 */
+{ 393,    "UpstreamBTPIDTranslation",          5,      388,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 22.43.5.14.5 L2VPN-I13 Annex B.3.15.1 */
+{ 394,    "DownstreamBTPIDTranslation",        6,      388,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 22.43.5.14.6 L2VPN-I13 Annex B.3.15.1 */
+{ 395,    "UpstreamITPIDTranslation",          7,      388,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 22.43.5.14.7 L2VPN-I13 Annex B.3.15.1 */
+{ 396,    "DownstreamITPIDTranslation",        8,      388,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 22.43.5.14.8 L2VPN-I13 Annex B.3.15.1 */
+{ 397,    "L2CPProcessing",                    15,     202,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.43.5.15 L2VPN-I13 Annex B.3.16 */
+{ 398,    "L2CPTunnelMode",                    1,      397,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 22.43.5.15.1 L2VPN-I13 Annex B.3.16.1 */
+{ 399,    "L2CPDMACAddress",                   2,      397,    (encode_ether),          (decode_ether),          0,           0             }, /* TLV 22.43.5.15.1 L2VPN-I13 Annex B.3.16.1 */
+{ 400,    "L2CPOverwrotingDMACAddress",        3,      397,    (encode_ether),          (decode_ether),          0,           0             }, /* TLV 22.43.5.15.1 L2VPN-I13 Annex B.3.16.1 */
+{ 401,    "DACDisableEnableConfiguration",     16,     202,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 22.43.5.16 L2VPN-I13 Annex B.3.17 */
+{ 402,    "PseudowireClass",                   18,     202,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* TLV 22.43.5.18 L2VPN-I13 Annex B.3.18 */
+{ 403,    "ServiceDelimiter",                  19,     202,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.43.5.19 L2VPN-I13 Annex B.3.19 */
+{ 404,    "CVIDDelimiter",                     1,      403,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 22.43.5.19.1 L2VPN-I13 Annex B.3.19.1 */
+{ 405,    "SVIDDelimiter",                     2,      403,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 22.43.5.19.2 L2VPN-I13 Annex B.3.19.2 */
+{ 406,    "ISIDDelimiter",                     3,      403,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 22.43.5.19.3 L2VPN-I13 Annex B.3.19.3 */
+{ 407,    "BVIDDelimiter",                     4,      403,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 22.43.5.19.4 L2VPN-I13 Annex B.3.19.4 */
+{ 408,    "VirtualSwitchInstanceEncoding",     20,     202,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.43.5.20 L2VPN-I13 Annex B.3.20 */
+{ 409,    "VPLSClass",                         1,      408,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* TLV 22.43.5.20.1 L2VPN-I13 Annex B.3.20.1 */
+{ 410,    "ETreeRole",                         2,      408,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 22.43.5.20.2 L2VPN-I13 Annex B.3.20.2 */
+{ 411,    "ETreeRootVID",                      3,      408,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 22.43.5.20.3 L2VPN-I13 Annex B.3.20.3 */
+{ 412,    "ETreeLeafVID",                      4,      408,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 22.43.5.20.4 L2VPN-I13 Annex B.3.20.4 */
 { 201,    "VendorIdentifier",                  8,      200,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 22.43.8 */
 
 /* TODO: Vendor Specific support in the IEEE802Classifier */
@@ -489,7 +514,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 236,    "SNMPv3AccessViewMask",              3,      233,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 202.54.3 eRouter-I12 Annex B.4.6.3 */
 { 237,    "SNMPv3AccessViewType",              4,      233,    (encode_uchar),          (decode_uchar),          1,           2             }, /* TLV 202.54.4 eRouter-I12 Annex B.4.6.4 */
 
-/* A little more organized -> Start with 388 */
+/* A little more organized -> Start with 413 */
 
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/
 { 998,    "GenericTLV",                        0,      0,      (encode_nothing),        (decode_special),        0,           0             },
