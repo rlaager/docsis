@@ -221,6 +221,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 361,    "MPLSPseudowireType",                3,      358,    (encode_uchar),          (decode_uchar),          0,           0             }, /* TLV 22.43.5.2.4.3 L2VPN-I13 Annex B.3.2 */
 { 362,    "MPLSBackupPseudowireID",            4,      358,    (encode_uint),           (decode_uint),           0,           0             }, /* TLV 22.43.5.2.4.4 L2VPN-I13 Annex B.3.2 */
 { 363,    "MPLSBackupPeerIpAddress",           5,      358,    (encode_char_ip_ip6),    (decode_char_ip_ip6),    0,           0             }, /* TLV 22.43.5.2.4.5 L2VPN-I13 Annex B.3.2 */
+{ 384,    "ServiceMultiplexingValueL2TPv3Peer", 5,     350,    (encode_char_ip_ip6),    (decode_char_ip_ip6),    0,           0             }, /* TLV 22.43.5.2.5 L2VPN-I13 Annex B.3.2 */
 { 364,    "IEEE8021ahEncapsulation",           6,      350,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.43.5.2.6 L2VPN-I13 Annex B.3.2.2 */
 { 365,    "ITCIEncapsulation",                 1,      364,    (encode_hexstr),         (decode_hexstr),         4,           4             }, /* TLV 22.43.5.2.6.1 L2VPN-I13 Annex B.3.2.2.1 */
 { 366,    "BDAEncapsulation",                  2,      364,    (encode_hexstr),         (decode_hexstr),         6,           6             }, /* TLV 22.43.5.2.6.2 L2VPN-I13 Annex B.3.2.2.2 */
@@ -485,7 +486,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 236,    "SNMPv3AccessViewMask",              3,      233,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 202.54.3 eRouter-I12 Annex B.4.6.3 */
 { 237,    "SNMPv3AccessViewType",              4,      233,    (encode_uchar),          (decode_uchar),          1,           2             }, /* TLV 202.54.4 eRouter-I12 Annex B.4.6.4 */
 
-/* A little more organized -> Start with 384 */
+/* A little more organized -> Start with 385 */
 
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/
 { 998,    "GenericTLV",                        0,      0,      (encode_nothing),        (decode_special),        0,           0             },
