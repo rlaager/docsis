@@ -48,3 +48,6 @@ backup*
 doc-pak/*
 *.deb
 description-pak
+*.gcno
+*.gcda
+*.gcov

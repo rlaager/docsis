@@ -1,7 +1,7 @@
 Docsis utility
 ==============
 
-[![Travis-CI builds](https://travis-ci.org/AdrianSimionov/docsis.svg?branch=master)](https://travis-ci.org/AdrianSimionov/docsis)
+[![Travis-CI builds](https://travis-ci.org/AdrianSimionov/docsis.svg?branch=master)](https://travis-ci.org/AdrianSimionov/docsis) [![Coverage Status](https://coveralls.io/repos/AdrianSimionov/docsis/badge.png)](https://coveralls.io/r/AdrianSimionov/docsis)
 
 This program encodes a DOCSIS binary configuration file from a human-readable text configuration file.
 
