@@ -1,0 +1,27 @@
+Main 
+{
+NetworkAccess 1;
+UsServiceFlow
+{
+UsServiceFlowRef 1;
+QosParamSetType 7;
+}
+DsServiceFlow
+{
+DsServiceFlowRef 2;
+QosParamSetType 7;
+}
+UsPacketClass
+{
+VendorSpecific
+{
+VendorIdentifier 0xffffff;
+L2VPNEncoding
+{
+L2VPNMode 1;
+}
+}
+ClassifierRef 1;
+ServiceFlowRef 1;
+}
+}

@@ -245,6 +245,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 383,    "UserPriorityRange",                 9,      202,    (encode_dual_int),       (decode_dual_int),       0,           0             }, /* TLV 22.43.5.9 L2VPN-I13 Annex B.3.9 */
 { 385,    "L2VPNSADescriptorSubtype",          10,     202,    (encode_hexstr),         (decode_hexstr),         14,          14            }, /* TLV 22.43.5.10 L2VPN-I13 Annex B.3.10 */
 { 386,    "PseudowireType",                    12,     202,    (encode_uchar),          (decode_uchar),          4,           5             }, /* TLV 22.43.5.12 L2VPN-I13 Annex B.3.13 */
+{ 387,    "L2VPNMode",                         13,     202,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 22.43.5.13 L2VPN-I13 Annex B.3.14 */
 { 201,    "VendorIdentifier",                  8,      200,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 22.43.8 */
 
 /* TODO: Vendor Specific support in the IEEE802Classifier */
@@ -488,7 +489,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 236,    "SNMPv3AccessViewMask",              3,      233,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 202.54.3 eRouter-I12 Annex B.4.6.3 */
 { 237,    "SNMPv3AccessViewType",              4,      233,    (encode_uchar),          (decode_uchar),          1,           2             }, /* TLV 202.54.4 eRouter-I12 Annex B.4.6.4 */
 
-/* A little more organized -> Start with 387 */
+/* A little more organized -> Start with 388 */
 
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/
 { 998,    "GenericTLV",                        0,      0,      (encode_nothing),        (decode_special),        0,           0             },
