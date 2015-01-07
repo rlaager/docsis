@@ -244,7 +244,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 382,    "IngressUserPriority",               8,      202,    (encode_uchar),          (decode_uchar),          0,           7             }, /* TLV 22.43.5.8 L2VPN-I13 Annex B.3.8 */
 { 383,    "UserPriorityRange",                 9,      202,    (encode_dual_int),       (decode_dual_int),       0,           0             }, /* TLV 22.43.5.9 L2VPN-I13 Annex B.3.9 */
 { 385,    "L2VPNSADescriptorSubtype",          10,     202,    (encode_hexstr),         (decode_hexstr),         14,          14            }, /* TLV 22.43.5.10 L2VPN-I13 Annex B.3.10 */
-{ 386,    "PseudowireType",                    12,     202,    (encode_uchar),          (decode_uchar),          4,           5             }, /* TLV 22.43.5.12 L2VPN-I13 Annex B.3.12 */
+{ 386,    "PseudowireType",                    12,     202,    (encode_uchar),          (decode_uchar),          4,           5             }, /* TLV 22.43.5.12 L2VPN-I13 Annex B.3.13 */
 { 201,    "VendorIdentifier",                  8,      200,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 22.43.8 */
 
 /* TODO: Vendor Specific support in the IEEE802Classifier */
