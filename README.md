@@ -1,8 +1,7 @@
 Docsis utility
 ==============
 
-.. image:: https://travis-ci.org/AdrianSimionov/docsis.svg?branch=master
-    :target: https://travis-ci.org/AdrianSimionov/docsis
+[![Travis-CI builds](https://travis-ci.org/AdrianSimionov/docsis.svg?branch=master)](https://travis-ci.org/AdrianSimionov/docsis)
 
 This program encodes a DOCSIS binary configuration file from a human-readable text configuration file.
 
@@ -13,25 +12,20 @@ This build is an experimental one and is based on a fork from the GitHub project
 Linux/Unix
 ----------
 
-This was tested on Ubuntu 14.04 amd64 (little endian) ~~and Debian 7.5 Sparc64 (big endian)~~ and it is known to work without issues. It is know to have issues on Sparc64 (big endian) CPU.
+This was tested on Ubuntu 14.04 amd64 (little endian) ~~and Debian 7.5 Sparc64 (big endian)~~ and it is known to work without issues. It is known to have issues on Sparc64 (big endian) CPU.
 
 Dependencies:
 
-.. code:: bash
-
-  apt-get install automake libtool libsnmp-dev bison make gcc flex git
+    apt-get install automake libtool libsnmp-dev bison make gcc flex git
 
 Installation steps for Debian based systems:
 
-.. code:: bash
-
-   git clone https://github.com/AdrianSimionov/docsis.git
-   cd docsis
-   ./autogen.sh
-   ./configure
-   make
-   make install (optional)
-   
+    git clone https://github.com/AdrianSimionov/docsis.git
+    cd docsis
+    ./autogen.sh
+    ./configure
+    make
+    make install (optional)
 
 Windows and Mac OS X
 --------------------
