@@ -1,15 +1,15 @@
-AC_INIT([docsis], [0.9.6])
+AC_INIT([docsis],[0.9.6])
 AC_CONFIG_SRCDIR([src/docsis.c])
 AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE([dist-bzip2])
 
-AC_LANG_C
-AM_PROG_LIBTOOL
+AC_LANG([C])
+LT_INIT
 dnl AC_PROG_YACC
 AC_PROG_LEX
 
 AC_CHECK_LIB(resolv, inet_aton)
-AC_CHECK_LIBM
+LT_LIB_M
 AC_SUBST(LIBM)
 
 AC_PATH_PROGS([M4], [gm4 gnum4 m4], [notfound],[/usr/local/bin:/usr/freeware/bin:/usr/gnu/bin:${prefix}/bin:${exec_prefix}/bin:$PATH] )
@@ -190,4 +190,5 @@ if test "x$GCC" = "xyes"; then
 	CFLAGS="-Wall $DEBUG_CFLAGS -g $CFLAGS"
 fi
 
-AC_OUTPUT(build_setup.nsi Makefile src/Makefile doc/Makefile examples/Makefile mibs/Makefile)
+AC_CONFIG_FILES([build_setup.nsi Makefile src/Makefile doc/Makefile examples/Makefile mibs/Makefile])
+AC_OUTPUT

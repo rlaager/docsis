@@ -2,7 +2,7 @@ bin_PROGRAMS = docsis
 docsis_SOURCES = docsis.c ethermac.c md5.c docsis_encode.c docsis_decode.c docsis_snmp.c docsis_yy.y docsis_lex.l hmac_md5.c
 
 # set the include path found by configure
-INCLUDES = $(all_includes) $(NETSNMP_CFLAGS)
+AM_CPPFLAGS = $(all_includes) $(NETSNMP_CFLAGS)
 
 # the library search path.
 docsis_LDFLAGS = $(all_libraries) $(NETSNMP_LIBS) $(LEXLIB) $(LIBM)
