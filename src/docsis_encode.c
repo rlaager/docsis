@@ -534,8 +534,8 @@ int encode_oid(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
   helper = (union t_val *) tval;
 
   output_size = encode_snmp_oid(helper->strval, buf, TLV_VSIZE);
-  return ( output_size );
   free(helper->strval);
+  return ( output_size );
 }
 
 
