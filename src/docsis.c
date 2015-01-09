@@ -56,9 +56,9 @@ add_cm_mic (unsigned char *tlvbuf, unsigned int tlvbuflen)
   if (tlvbuf == NULL || tlvbuflen == 0)
 	return 0;
 
-  MD5Init (&mdContext);
-  MD5Update (&mdContext, tlvbuf, tlvbuflen);
-  MD5Final (digest, &mdContext);
+  MD5_Init (&mdContext);
+  MD5_Update (&mdContext, tlvbuf, tlvbuflen);
+  MD5_Final (digest, &mdContext);
   tlvbuf[tlvbuflen] = 6;
   tlvbuf[tlvbuflen + 1] = 16;
   memcpy (tlvbuf + tlvbuflen + 2, digest, 16);
