@@ -16,9 +16,10 @@ This was tested on Ubuntu 14.04 amd64 (little endian) ~~and Debian 7.5 Sparc64 (
 
 Dependencies:
 
-    apt-get install automake libtool libsnmp-dev bison make gcc flex git libglib2.0-dev
+    Debian/Ubuntu: apt-get install automake libtool libsnmp-dev bison make gcc flex git libglib2.0-dev
+    Fedore/RedHat: yum install autoconf automake libtool glib2-devel bison flex net-snmp-devel
 
-Installation steps for Debian based systems:
+Installation steps for Linux based systems:
 
     git clone https://github.com/AdrianSimionov/docsis.git
     cd docsis
@@ -30,7 +31,7 @@ Installation steps for Debian based systems:
 Windows and Mac OS X
 --------------------
 
-Not tested. If someone has the resources to do it, please post your findings.
+Not ~~tested~~ working. If someone has the resources to do it, please post your findings. If I will find a box to test, I will fix the installation.
 
 Bug reporting
 -------------
