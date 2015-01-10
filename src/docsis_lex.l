@@ -38,6 +38,8 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+%option noyywrap
+
 %{
 #include "docsis.h"
 #include "docsis_yy.h"
