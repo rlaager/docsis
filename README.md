@@ -16,8 +16,11 @@ This was tested on Ubuntu 14.04 amd64 (little endian) ~~and Debian 7.5 Sparc64 (
 
 Dependencies:
 
-    Debian/Ubuntu: apt-get install automake libtool libsnmp-dev bison make gcc flex git libglib2.0-dev
-    Fedore/RedHat: yum install autoconf automake libtool glib2-devel bison flex net-snmp-devel
+    Debian/Ubuntu:
+    apt-get install automake libtool libsnmp-dev bison make gcc flex git libglib2.0-dev
+    
+    Fedore/RedHat:
+    yum install autoconf automake libtool glib2-devel bison flex net-snmp-devel
 
 Installation steps for Linux based systems:
 
