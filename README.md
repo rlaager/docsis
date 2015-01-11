@@ -19,7 +19,7 @@ Dependencies:
     Debian/Ubuntu:
     apt-get install automake libtool libsnmp-dev bison make gcc flex git libglib2.0-dev
     
-    Fedore/RedHat:
+    Fedore/RedHat/CentOS:
     yum install autoconf automake libtool glib2-devel bison flex net-snmp-devel
 
 Installation steps for Linux based systems:
