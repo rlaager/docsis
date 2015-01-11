@@ -21,7 +21,11 @@ Dependencies:
     
     Fedore/RedHat/CentOS:
     yum install autoconf automake libtool glib2-devel bison flex net-snmp-devel
-
+    
+    openSUSE/SLES:
+    zypper install autoconf automake libtool glib2-devel bison flex net-snmp-devel
+    
+    
 Installation steps for Linux based systems:
 
     git clone https://github.com/AdrianSimionov/docsis.git
