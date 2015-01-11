@@ -12,7 +12,7 @@ This build is an experimental one and is based on a fork from the GitHub project
 Linux/Unix
 ----------
 
-This was tested on Ubuntu 14.04 amd64 (little endian) ~~and Debian 7.5 Sparc64 (big endian)~~ and it is known to work without issues. It is known to have issues on Sparc64 (big endian) CPU.
+This was tested on Ubuntu 14.10, Fedora 21, openSUSE 13.2 (little endian) and Debian 7.5 Sparc64 (big endian) and it is known to work without issues.
 
 Dependencies:
 
@@ -25,8 +25,22 @@ Dependencies:
     openSUSE/SLES:
     zypper install autoconf automake libtool glib2-devel bison flex net-snmp-devel
     
-    
-Installation steps for Linux based systems:
+Mac OS X
+--------
+
+Tested and working on OS X Mavericks. Dependencies should be installed using MacPorts:
+
+    sudo port install autoconf automake libtool glib2-devel bison flex net-snmp
+
+Windows
+-------
+
+Not tested.
+
+Installation steps
+------------------
+
+Follow the following steps to download and install the utility.
 
     git clone https://github.com/AdrianSimionov/docsis.git
     cd docsis
@@ -34,11 +48,6 @@ Installation steps for Linux based systems:
     ./configure
     make
     make install (optional)
-
-Windows and Mac OS X
---------------------
-
-Not ~~tested~~ working. If someone has the resources to do it, please post your findings. If I will find a box to test, I will fix the installation.
 
 Bug reporting
 -------------
