@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if [ $1 == '--help' ]; then
+if [ "$1" == '--help' ]; then
   echo "";
   echo "  Usage: RunTests.sh [OPTIONS]";
   echo "     or: Runtests.sh --help";
@@ -13,10 +13,18 @@ if [ $1 == '--help' ]; then
   exit -1;
 fi
 
-if [ $1 == '--allow-failed=TRUE' ]; then
+if [ "$1" == '--allow-failed=TRUE' ]; then
   ALLOW_FAILED=TRUE;
 else
   ALLOW_FAILED=FALSE;
+fi
+
+MD5=$(which md5sum)
+
+if [ ! $MD5 ]; then
+  MD5='md5 -q';
+else
+  MD5='md5sum';
 fi
 
 FILES=*.txt
@@ -33,9 +41,9 @@ do
       exit -1;
     fi
   fi
-  MD5SUM_1=$(md5sum $TEST.cm)
+  MD5SUM_1=$($MD5 $TEST.cm)
   MD5SUM_1_array=($MD5SUM_1)
-  MD5SUM_2=$(md5sum $TEST.cm.new)
+  MD5SUM_2=$($MD5 $TEST.cm.new)
   MD5SUM_2_array=($MD5SUM_2)
   if [ "${MD5SUM_1_array[0]}" != "${MD5SUM_2_array[0]}" ]; then
     echo "Test $TEST created a wrong CM file on first pass.";
@@ -50,9 +58,9 @@ do
       exit -1;
     fi
   fi
-  MD5SUM_1=$(md5sum $TEST.conf)
+  MD5SUM_1=$($MD5 $TEST.conf)
   MD5SUM_1_array=($MD5SUM_1)
-  MD5SUM_2=$(md5sum $TEST.conf.new)
+  MD5SUM_2=$($MD5 $TEST.conf.new)
   MD5SUM_2_array=($MD5SUM_2)
   if [ "${MD5SUM_1_array[0]}" != "${MD5SUM_2_array[0]}" ]; then
     echo "Test $TEST created a wrong CONF file on second pass.";
@@ -67,9 +75,9 @@ do
       exit -1;
     fi
   fi
-  MD5SUM_1=$(md5sum $TEST.cm)
+  MD5SUM_1=$($MD5 $TEST.cm)
   MD5SUM_1_array=($MD5SUM_1)
-  MD5SUM_2=$(md5sum $TEST.cm.new)
+  MD5SUM_2=$($MD5 $TEST.cm.new)
   MD5SUM_2_array=($MD5SUM_2)
   if [ "${MD5SUM_1_array[0]}" != "${MD5SUM_2_array[0]}" ]; then
     echo "Test $TEST created a wrong CM file on third pass.";
