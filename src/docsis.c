@@ -442,7 +442,8 @@ setup_mib_flags(int resolve_oids, char *custom_mibs) {
 #ifdef DEBUG
 /*  snmp_set_mib_warnings (2); */
 #endif /* DEBUG  */
-snmp_set_mib_warnings (1);
+/* We do not want warning for normal users. Should be set with an argument on the CLI maybe?
+ * snmp_set_mib_warnings (1); */
 
   if (custom_mibs)
     {
