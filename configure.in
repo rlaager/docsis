@@ -73,12 +73,12 @@ if test -n "$NETSNMP_CONFIG"; then
      NETSNMP_RPATH=`echo $NETSNMP_RPATH | sed -e "s/-L/-R/g"`
      NETSNMP_CFLAGS="`$NETSNMP_CONFIG --cflags`"
 
-     AC_CHECK_HEADERS(net-snmp/net-snmp-config.h, [
+     # AC_CHECK_HEADERS(net-snmp/net-snmp-config.h, [
           AC_MSG_RESULT([   found net-snmp version $vers])
           AC_DEFINE_UNQUOTED(HAVE_NETSNMP, 1, [Defines if your system has the net-snmp library])
-     ], [
-          AC_MSG_ERROR([You need at least net-snmp 5.0.7, get it at http://www.net-snmp.org])
-     ])
+     # ], [
+     #      AC_MSG_ERROR([You need at least net-snmp 5.0.7, get it at http://www.net-snmp.org])
+     # ])
   else
      AC_MSG_ERROR([You need at least net-snmp 5.0.7, get it at http://www.net-snmp.org])
   fi
