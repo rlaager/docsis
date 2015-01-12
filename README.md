@@ -25,6 +25,9 @@ Dependencies:
     openSUSE/SLES:
     zypper install autoconf automake libtool glib2-devel bison flex net-snmp-devel
     
+    FreeBSD/OpenBSD/NetBSD
+    pkg install automake autoconf bison flex gcc libtool glib net-snmp
+    
 Mac OS X
 --------
 
