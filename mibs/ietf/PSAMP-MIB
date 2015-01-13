@@ -1,0 +1,815 @@
+PSAMP-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+    MODULE-IDENTITY, OBJECT-TYPE, Integer32, Unsigned32, mib-2
+        FROM SNMPv2-SMI                  -- RFC 2578
+    TruthValue
+        FROM SNMPv2-TC                   -- RFC 2579
+    MODULE-COMPLIANCE, OBJECT-GROUP
+        FROM SNMPv2-CONF                 -- RFC 2580
+    Unsigned64TC
+        FROM APPLICATION-MIB             -- RFC 2564
+    Float64TC
+        FROM FLOAT-TC-MIB                -- RFC 6340
+    ipfixSelectorFunctions
+        FROM IPFIX-SELECTOR-MIB;         -- RFC 6615
+
+psampMIB MODULE-IDENTITY
+    LAST-UPDATED "201209051200Z"         -- 5 September 2012
+    ORGANIZATION "IETF IPFIX Working Group"
+    CONTACT-INFO
+        "WG charter:
+          http://datatracker.ietf.org/wg/ipfix/charter/
+
+        Mailing Lists:
+          General Discussion: ipfix@ietf.org
+          To Subscribe: https://www.ietf.org/mailman/listinfo/ipfix
+          Archive:
+     http://www.ietf.org/mail-archive/web/ipfix/current/maillist.html
+
+          Thomas Dietz (editor)
+          NEC Europe Ltd.
+          NEC Laboratories Europe
+          Network Research Division
+          Kurfuersten-Anlage 36
+          69115 Heidelberg
+          Germany
+          Phone: +49 6221 4342-128
+          EMail: Thomas.Dietz@neclab.eu
+
+          Benoit Claise
+          Cisco Systems, Inc.
+          De Kleetlaan 6a b1
+          Diegem 1831
+          Belgium
+          Phone:  +32 2 704 5622
+          EMail: bclaise@cisco.com
+
+
+
+          Juergen Quittek
+          NEC Europe Ltd.
+          NEC Laboratories Europe
+          Network Research Division
+          Kurfuersten-Anlage 36
+          69115 Heidelberg
+          Germany
+          Phone: +49 6221 4342-115
+          EMail: quittek@neclab.eu"
+        DESCRIPTION
+        "The PSAMP MIB defines managed objects for packet sampling
+        and filtering.
+
+        These objects provide information about managed nodes
+        supporting packet sampling, including packet sampling
+        capabilities, configuration, and statistics.
+        The PSAMP MIB module registers additional top-level OIDs for
+        the parameter subtrees of its Selector functions in the
+        IPFIX-SELECTOR-MIB Function sub-registry according to the
+        procedures defined in RFC 6615.
+
+        Copyright (c) 2012 IETF Trust and the persons identified
+        as authors of the code. All rights reserved.
+
+        Redistribution and use in source and binary forms, with or
+        without modification, is permitted pursuant to, and subject
+        to the license terms contained in, the Simplified BSD License
+        set forth in Section 4.c of the IETF Trust's Legal Provisions
+        Relating to IETF Documents
+        (http://trustee.ietf.org/license-info).
+
+        This version of this MIB module is part of RFC 6727; see the
+        RFC itself for full legal notices."
+     --  Revision history
+     REVISION     "201209051200Z"         -- 5 September 2012
+     DESCRIPTION
+         "Initial version, published as RFC 6727."
+    ::= { mib-2 212 }
+
+-- Top-level structure of the MIB
+
+psampObjects     OBJECT IDENTIFIER ::= { psampMIB 1 }
+psampConformance OBJECT IDENTIFIER ::= { psampMIB 2 }
+
+--==================================================================
+-- Packet selection sampling methods group of objects
+--==================================================================
+
+
+
+
+--==================================================================
+--* Method 1: Systematic count-based Sampling
+--==================================================================
+
+-- Reference: RFC 5475 (Section 5.1), RFC 5476 (Section 6.5.2.1),
+--            and RFC 5477 (Section 8.2)
+psampSampCountBased OBJECT IDENTIFIER
+    ::= { ipfixSelectorFunctions 2 }
+
+psampSampCountBasedAvail OBJECT-TYPE
+    SYNTAX      TruthValue
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This object indicates the availability of systematic
+        count-based sampling at the managed node.
+
+        A Selector may be unavailable if it is implemented but
+        currently disabled due to, e.g., administrative reasons, lack
+        of resources, or similar."
+    ::= { psampSampCountBased 1 }
+
+-- Parameter Set Table +++++++++++++++++++++++++++++++++++++++++++++
+
+psampSampCountBasedParamSetTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF
+                PsampSampCountBasedParamSetEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "This table lists configurations of systematic count-based
+        packet sampling.  A parameter set describing a
+        configuration contains two parameters: the sampling
+        interval length and space."
+    ::= { psampSampCountBased 2 }
+
+psampSampCountBasedParamSetEntry OBJECT-TYPE
+    SYNTAX      PsampSampCountBasedParamSetEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "Defines an entry in the psampSampCountBasedParamSetTable."
+    INDEX { psampSampCountBasedIndex }
+    ::= { psampSampCountBasedParamSetTable 1 }
+
+PsampSampCountBasedParamSetEntry ::=
+    SEQUENCE {
+        psampSampCountBasedIndex     Integer32,
+
+
+
+        psampSampCountBasedInterval  Unsigned32,
+        psampSampCountBasedSpace     Unsigned32
+    }
+
+psampSampCountBasedIndex OBJECT-TYPE
+    SYNTAX      Integer32 (1..2147483647)
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "The index of this parameter set in the
+        psampSampCountBasedParamSetTable.  It is used in the
+        object ipfixSelectionProcessSelectorFunction entries of
+        the ipfixSelectionProcessTable in the IPFIX-MIB as reference
+        to this parameter set."
+    ::= { psampSampCountBasedParamSetEntry 1 }
+
+psampSampCountBasedInterval OBJECT-TYPE
+    SYNTAX      Unsigned32
+    UNITS       "packets"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This object specifies the number of packets that are
+        consecutively sampled.  A value of 100 means that 100
+        consecutive packets are sampled."
+    REFERENCE
+        "RFC 5475 (Section 5.1) and RFC 5477 (Section 8.2)"
+    ::= { psampSampCountBasedParamSetEntry 2 }
+
+psampSampCountBasedSpace OBJECT-TYPE
+    SYNTAX      Unsigned32
+    UNITS       "packets"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This object specifies the number of packets between two
+        intervals specified by the object
+        psampSampCountBasedInterval.  A value of 100 means that
+        the next interval starts 100 packets (which are not sampled)
+        after the current psampSampCountBasedInterval is over."
+    REFERENCE
+        "RFC 5475 (Section 5.1) and RFC 5477 (Section 8.2)"
+    ::= { psampSampCountBasedParamSetEntry 3 }
+
+--==================================================================
+--* Method 2: Systematic time-based Sampling
+--==================================================================
+
+
+
+
+-- Reference: RFC 5475 (Section 5.1), RFC 5476 (Section 6.5.2.2),
+--            and RFC 5477 (Section 8.2)
+psampSampTimeBased OBJECT IDENTIFIER
+    ::= { ipfixSelectorFunctions 3 }
+
+psampSampTimeBasedAvail OBJECT-TYPE
+    SYNTAX      TruthValue
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This object indicates the availability of systematic
+        time-based sampling at the managed node.
+
+        A Selector may be unavailable if it is implemented but
+        currently disabled due to, e.g., administrative reasons, lack
+        of resources, or similar."
+    ::= { psampSampTimeBased 1 }
+
+-- Parameter Set Table +++++++++++++++++++++++++++++++++++++++++++++
+
+psampSampTimeBasedParamSetTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF
+                PsampSampTimeBasedParamSetEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "This table lists configurations of systematic time-based
+        packet sampling.  A parameter set describing a configuration
+        contains two parameters: the sampling interval length and
+        the space."
+    ::= { psampSampTimeBased 2 }
+
+psampSampTimeBasedParamSetEntry OBJECT-TYPE
+    SYNTAX      PsampSampTimeBasedParamSetEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "Defines an entry in the psampSampTimeBasedParamSetTable."
+    INDEX { psampSampTimeBasedIndex }
+    ::= { psampSampTimeBasedParamSetTable 1 }
+
+PsampSampTimeBasedParamSetEntry ::=
+    SEQUENCE {
+        psampSampTimeBasedIndex     Integer32,
+        psampSampTimeBasedInterval  Unsigned32,
+        psampSampTimeBasedSpace     Unsigned32
+    }
+
+
+
+
+psampSampTimeBasedIndex OBJECT-TYPE
+    SYNTAX      Integer32 (1..2147483647)
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "The index of this parameter set in the
+        psampSampTimeBasedParamSetTable.  It is used in the
+        object ipfixSelectionProcessSelectorFunction entries of
+        the ipfixSelectionProcessTable in the IPFIX-MIB as reference
+        to this parameter set."
+    ::= { psampSampTimeBasedParamSetEntry 1 }
+
+psampSampTimeBasedInterval OBJECT-TYPE
+    SYNTAX      Unsigned32
+    UNITS       "microseconds"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This object specifies the time interval in microseconds
+        during which all arriving packets are sampled."
+    REFERENCE
+        "RFC 5475 (Section 5.1) and RFC 5477 (Section 8.2)"
+    ::= { psampSampTimeBasedParamSetEntry 2 }
+
+psampSampTimeBasedSpace OBJECT-TYPE
+    SYNTAX      Unsigned32
+    UNITS       "microseconds"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This object specifies the time interval in microseconds
+        between two intervals specified by the object
+        psampSampTimeBasedInterval.  A value of 100 means that the
+        next interval starts 100 microseconds (during which no
+        packets are sampled) after the current
+        psampSampTimeBasedInterval is over."
+    REFERENCE
+        "RFC 5475 (Section 5.1) and RFC 5477 (Section 8.2)"
+    ::= { psampSampTimeBasedParamSetEntry 3 }
+
+--==================================================================
+--* Method 3: Random n-out-of-N Sampling
+--==================================================================
+
+-- Reference: RFC 5475 (Section 5.2.1), RFC 5476 (Section 6.5.2.3),
+--            and RFC 5477 (Section 8.2)
+psampSampRandOutOfN OBJECT IDENTIFIER
+    ::= { ipfixSelectorFunctions 4 }
+
+
+
+psampSampRandOutOfNAvail OBJECT-TYPE
+    SYNTAX      TruthValue
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This object indicates the availability of random n-out-of-N
+        sampling at the managed node.
+
+        A Selector may be unavailable if it is implemented but
+        currently disabled due to, e.g., administrative reasons, lack
+        of resources, or similar."
+    ::= { psampSampRandOutOfN 1 }
+
+-- Parameter Set Table +++++++++++++++++++++++++++++++++++++++++++++
+
+psampSampRandOutOfNParamSetTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF
+                PsampSampRandOutOfNParamSetEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "This table lists configurations of random n-out-of-N
+        sampling.  A parameter set describing a configuration
+        contains two parameters: the sampling size and the
+        parent population."
+    ::= { psampSampRandOutOfN 2 }
+
+psampSampRandOutOfNParamSetEntry OBJECT-TYPE
+    SYNTAX      PsampSampRandOutOfNParamSetEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "Defines an entry in the psampSampRandOutOfNParamSetTable."
+    INDEX { psampSampRandOutOfNIndex }
+    ::= { psampSampRandOutOfNParamSetTable 1 }
+
+PsampSampRandOutOfNParamSetEntry ::=
+    SEQUENCE {
+        psampSampRandOutOfNIndex        Integer32,
+        psampSampRandOutOfNSize Unsigned32,
+        psampSampRandOutOfNPopulation   Unsigned32
+    }
+
+psampSampRandOutOfNIndex OBJECT-TYPE
+    SYNTAX      Integer32 (1..2147483647)
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+
+
+
+        "The index of this parameter set in the
+        psampSampRandOutOfNParamSetTable.  It is used in the
+        object ipfixSelectionProcessSelectorFunction entries of
+        the ipfixSelectionProcessTable in the IPFIX-MIB as reference
+        to this parameter set."
+    ::= { psampSampRandOutOfNParamSetEntry 1 }
+
+psampSampRandOutOfNSize OBJECT-TYPE
+    SYNTAX      Unsigned32
+    UNITS       "packets"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This object specifies the number of elements taken from the
+        parent Population specified in
+        psampSampRandOutOfNPopulation."
+    REFERENCE
+        "RFC 5475 (Section 5.2.1) and RFC 5477 (Section 8.2)"
+    ::= { psampSampRandOutOfNParamSetEntry 2 }
+
+psampSampRandOutOfNPopulation OBJECT-TYPE
+    SYNTAX      Unsigned32
+    UNITS       "packets"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This object specifies the number of elements in the parent
+        Population."
+    REFERENCE
+        "RFC 5475 (Section 5.2.1) and RFC 5477 (Section 8.2)"
+    ::= { psampSampRandOutOfNParamSetEntry 3 }
+
+--==================================================================
+--* Method 4: Uniform probabilistic Sampling
+--==================================================================
+
+-- Reference: RFC 5475 (Section 5.2.2), RFC 5476 (Section 6.5.2.4),
+--            and RFC 5477 (Section 8.2)
+psampSampUniProb OBJECT IDENTIFIER ::= { ipfixSelectorFunctions 5 }
+
+psampSampUniProbAvail OBJECT-TYPE
+    SYNTAX      TruthValue
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This object indicates the availability of random uniform
+        probabilistic sampling at the managed node.
+
+
+
+
+        A Selector may be unavailable if it is implemented but
+        currently disabled due to, e.g., administrative reasons, lack
+        of resources, or similar."
+    ::= { psampSampUniProb 1 }
+
+-- Parameter Set Table +++++++++++++++++++++++++++++++++++++++++++++
+
+-- Reference: RFC 5475 (Section 5.2.2.1) and RFC 5477 (Section 8.2)
+psampSampUniProbParamSetTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF
+                PsampSampUniProbParamSetEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "This table lists configurations of random probabilistic
+        sampling.  A parameter set describing a configuration
+        contains a single parameter only: the sampling probability."
+    ::= { psampSampUniProb 2 }
+
+psampSampUniProbParamSetEntry OBJECT-TYPE
+    SYNTAX      PsampSampUniProbParamSetEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "Defines an entry in the psampSampUniProbParamSetTable."
+    INDEX { psampSampUniProbIndex }
+    ::= { psampSampUniProbParamSetTable 1 }
+
+PsampSampUniProbParamSetEntry ::=
+    SEQUENCE {
+        psampSampUniProbIndex       Integer32,
+        psampSampUniProbProbability Float64TC
+    }
+
+psampSampUniProbIndex OBJECT-TYPE
+    SYNTAX      Integer32 (1..2147483647)
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "The index of this parameter set in the
+        psampSampUniProbParamSetTable.  It is used in the
+        object ipfixSelectionProcessSelectorFunction entries of
+        the ipfixSelectionProcessTable in the IPFIX-MIB as reference
+        to this parameter set."
+    ::= { psampSampUniProbParamSetEntry 1 }
+
+psampSampUniProbProbability OBJECT-TYPE
+    SYNTAX      Float64TC
+
+
+
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This object specifies the probability that a packet is
+        sampled, expressed as a value between 0 and 1.  The
+        probability is equal for every packet.  A value of 0 means
+        no packet is sampled since the probability is 0.  A value
+        of 1 means all packets are sampled since the
+        probability is 1.  NaN (not a number) and infinity MUST NOT
+        be used."
+    REFERENCE
+        "RFC 5475 (Section 5.2.2.1) and RFC 5477 (Section 8.2)"
+    ::= { psampSampUniProbParamSetEntry 2 }
+
+--==================================================================
+-- Packet selection filtering methods for a group of objects
+--==================================================================
+
+--==================================================================
+--* Method 5: Property Match filtering
+--==================================================================
+
+-- Reserves Method 5; see RFC 5475 (Section 6.1), RFC 5476
+-- (Section 6.5.2.5), and RFC 5477
+psampFiltPropMatch OBJECT IDENTIFIER
+    ::= { ipfixSelectorFunctions 6 }
+
+psampFiltPropMatchAvail OBJECT-TYPE
+    SYNTAX      TruthValue
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This object indicates the availability of property match
+        filtering at the managed node.
+
+        A Selector may be unavailable if it is implemented but
+        currently disabled due to, e.g., administrative reasons, lack
+        of resources, or similar."
+    ::= { psampFiltPropMatch 1 }
+
+--==================================================================
+--* Method 6: Hash filtering
+--==================================================================
+
+-- Reference: RFC 5475 (Section 6.2), RFC 5476 (Section 6.5.2.6),
+--            and RFC 5477 (Section 8.3)
+psampFiltHash OBJECT IDENTIFIER ::= { ipfixSelectorFunctions 7 }
+
+
+
+
+psampFiltHashAvail OBJECT-TYPE
+    SYNTAX      TruthValue
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This object indicates the availability of hash filtering
+        at the managed node.
+
+        A Selector may be unavailable if it is implemented but
+        currently disabled due to, e.g., administrative reasons, lack
+        of resources, or similar."
+    ::= { psampFiltHash 1 }
+
+psampFiltHashCapabilities OBJECT IDENTIFIER
+    ::= { psampFiltHash 2 }
+
+-- Parameter Set Table +++++++++++++++++++++++++++++++++++++++++++++
+
+-- Reference: RFC 5475, Sections 6.2, 3.8, and 7.1
+psampFiltHashParamSetTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF
+                PsampFiltHashParamSetEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "This table lists configurations of hash filtering.  A
+        parameter set describing a configuration contains eight
+        parameters describing the hash function."
+    ::= { psampFiltHash 3 }
+
+psampFiltHashParamSetEntry OBJECT-TYPE
+    SYNTAX      PsampFiltHashParamSetEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "Defines an entry in the psampFiltHashParamSetTable."
+    INDEX { psampFiltHashIndex }
+    ::= { psampFiltHashParamSetTable 1 }
+
+PsampFiltHashParamSetEntry ::=
+    SEQUENCE {
+        psampFiltHashIndex            Integer32,
+        psampFiltHashFunction         INTEGER,
+        psampFiltHashInitializerValue Unsigned64TC,
+        psampFiltHashIpPayloadOffset  Unsigned64TC,
+        psampFiltHashIpPayloadSize    Unsigned64TC,
+        psampFiltHashSelectedRangeMin Unsigned64TC,
+        psampFiltHashSelectedRangeMax Unsigned64TC,
+
+
+
+        psampFiltHashOutputRangeMin   Unsigned64TC,
+        psampFiltHashOutputRangeMax   Unsigned64TC
+    }
+
+psampFiltHashIndex OBJECT-TYPE
+    SYNTAX      Integer32 (1..2147483647)
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "The index of this parameter set in the
+        psampFiltHashParamSetTable.  It is used in the
+        object ipfixSelectionProcessSelectorFunction entries of
+        the ipfixSelectionProcessTable in the IPFIX-MIB as reference
+        to this parameter set."
+    ::= { psampFiltHashParamSetEntry 1 }
+
+psampFiltHashFunction OBJECT-TYPE
+    SYNTAX      INTEGER {
+                    crc32(1),
+                    ipsx(2),
+                    bob(3)
+                }
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The hash function used by this filter.  The PSAMP-MIB
+        defines the following hash functions:
+
+        crc32(1): The CRC-32 Hash Function as defined in RFC 1141.
+
+        ipsx(2): The IPSX Hash Function as described in RFC 5475,
+            Appendix A.1.
+
+        bob(3): The BOB Hash Function as described in RFC 5475,
+            Appendix A.2.
+        "
+    REFERENCE
+        "RFC 5475 (Section 6.2 and Appendixes A.1 and A.2)
+         and RFC 1141"
+    ::= { psampFiltHashParamSetEntry 2 }
+
+psampFiltHashInitializerValue OBJECT-TYPE
+    SYNTAX      Unsigned64TC
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This object specifies the initializer value to the hash
+        function."
+
+
+
+    REFERENCE
+        "RFC 5475, Sections 6.2, 3.8, and 7.1"
+    ::= { psampFiltHashParamSetEntry 3 }
+
+psampFiltHashIpPayloadOffset OBJECT-TYPE
+    SYNTAX      Unsigned64TC
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This object specifies the IP payload offset used by a
+        Hash-based Selection Selector."
+    REFERENCE
+        "RFC 5475, Sections 6.2, 3.8, and 7.1"
+    ::= { psampFiltHashParamSetEntry 4 }
+
+psampFiltHashIpPayloadSize OBJECT-TYPE
+    SYNTAX      Unsigned64TC
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This object specifies the IP payload size used by a
+        Hash-based Selection Selector."
+    REFERENCE
+        "RFC 5475, Sections 6.2, 3.8, and 7.1"
+    ::= { psampFiltHashParamSetEntry 5 }
+
+psampFiltHashSelectedRangeMin OBJECT-TYPE
+    SYNTAX      Unsigned64TC
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This object specifies the value for the beginning of a hash
+        function's selected range."
+    REFERENCE
+        "RFC 5475, Sections 6.2, 3.8, and 7.1"
+    ::= { psampFiltHashParamSetEntry 6 }
+
+psampFiltHashSelectedRangeMax OBJECT-TYPE
+    SYNTAX      Unsigned64TC
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This object specifies the value for the end of a hash
+        function's selected range."
+    REFERENCE
+        "RFC 5475, Sections 6.2, 3.8, and 7.1"
+    ::= { psampFiltHashParamSetEntry 7 }
+
+
+
+
+psampFiltHashOutputRangeMin OBJECT-TYPE
+    SYNTAX      Unsigned64TC
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This object specifies the value for the beginning of a hash
+        function's potential output range."
+    REFERENCE
+        "RFC 5475, Sections 6.2, 3.8, and 7.1"
+    ::= { psampFiltHashParamSetEntry 8 }
+
+psampFiltHashOutputRangeMax OBJECT-TYPE
+    SYNTAX      Unsigned64TC
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This object specifies the value for the end of a hash
+        function's potential output range."
+    REFERENCE
+        "RFC 5475, Sections 6.2, 3.8, and 7.1"
+    ::= { psampFiltHashParamSetEntry 9 }
+
+--==================================================================
+-- Conformance information
+--==================================================================
+
+psampCompliances OBJECT IDENTIFIER ::= { psampConformance 1 }
+psampGroups      OBJECT IDENTIFIER ::= { psampConformance 2 }
+
+--==================================================================
+-- Compliance statements
+--==================================================================
+
+psampCompliance MODULE-COMPLIANCE
+    STATUS  current
+    DESCRIPTION
+        "The implementation of all objects is optional and depends
+        on the implementation of the corresponding functionality in
+        the equipment."
+    MODULE  -- this module
+        GROUP psampGroupSampCountBased
+        DESCRIPTION
+            "These objects must be implemented if systematic
+            count-based sampling is implemented in the equipment."
+        GROUP psampGroupSampTimeBased
+        DESCRIPTION
+            "These objects must be implemented if systematic
+            time-based sampling is implemented in the equipment."
+
+
+
+        GROUP psampGroupSampRandOutOfN
+        DESCRIPTION
+            "These objects must be implemented if random n-out-of-N
+            sampling is implemented in the equipment."
+        GROUP psampGroupSampUniProb
+        DESCRIPTION
+            "These objects must be implemented if uniform
+            probabilistic sampling is implemented in the equipment."
+        GROUP psampGroupFiltPropMatch
+        DESCRIPTION
+            "These objects must be implemented if the property match
+            filtering is implemented in the equipment."
+        GROUP psampGroupFiltHash
+        DESCRIPTION
+            "These objects must be implemented if hash filtering
+            is implemented in the equipment."
+    ::= { psampCompliances 1 }
+
+--==================================================================
+-- MIB groupings
+--==================================================================
+
+psampGroupSampCountBased OBJECT-GROUP
+    OBJECTS {
+              psampSampCountBasedAvail,
+              psampSampCountBasedInterval,
+              psampSampCountBasedSpace
+            }
+    STATUS  current
+    DESCRIPTION
+        "These objects are needed if count based sampling is
+        implemented."
+    ::= { psampGroups 1 }
+
+psampGroupSampTimeBased OBJECT-GROUP
+    OBJECTS {
+              psampSampTimeBasedAvail,
+              psampSampTimeBasedInterval,
+              psampSampTimeBasedSpace
+            }
+    STATUS  current
+    DESCRIPTION
+        "These objects are needed if time based sampling is
+        implemented."
+    ::= { psampGroups 2 }
+
+psampGroupSampRandOutOfN OBJECT-GROUP
+    OBJECTS {
+
+
+
+              psampSampRandOutOfNAvail,
+              psampSampRandOutOfNSize,
+              psampSampRandOutOfNPopulation
+            }
+    STATUS  current
+    DESCRIPTION
+        "These objects are needed if random n-out-of-N sampling is
+        implemented."
+    ::= { psampGroups 3 }
+
+psampGroupSampUniProb OBJECT-GROUP
+    OBJECTS {
+              psampSampUniProbAvail,
+              psampSampUniProbProbability
+            }
+    STATUS  current
+    DESCRIPTION
+        "These objects are needed if uniform probabilistic sampling
+        is implemented."
+    ::= { psampGroups 4 }
+
+psampGroupFiltPropMatch OBJECT-GROUP
+    OBJECTS {
+              psampFiltPropMatchAvail
+            }
+    STATUS  current
+    DESCRIPTION
+        "These objects are needed if property match filtering is
+        implemented."
+    ::= { psampGroups 5 }
+
+psampGroupFiltHash OBJECT-GROUP
+    OBJECTS {
+              psampFiltHashAvail,
+              psampFiltHashFunction,
+              psampFiltHashInitializerValue,
+              psampFiltHashIpPayloadOffset,
+              psampFiltHashIpPayloadSize,
+              psampFiltHashSelectedRangeMin,
+              psampFiltHashSelectedRangeMax,
+              psampFiltHashOutputRangeMin,
+              psampFiltHashOutputRangeMax
+            }
+    STATUS  current
+    DESCRIPTION
+        "These objects are needed if hash filtering is implemented."
+    ::= { psampGroups 6 }
+
+
+
+
+END

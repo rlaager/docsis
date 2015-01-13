@@ -1,0 +1,1329 @@
+TED-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+   MODULE-IDENTITY, OBJECT-TYPE, Integer32, Unsigned32, transmission,
+   NOTIFICATION-TYPE
+     FROM SNMPv2-SMI                            -- RFC 2578
+   MODULE-COMPLIANCE, OBJECT-GROUP, NOTIFICATION-GROUP
+     FROM SNMPv2-CONF                           -- RFC 2580
+   TEXTUAL-CONVENTION, RowPointer
+     FROM SNMPv2-TC                             -- RFC 2579
+   IANAGmplsLSPEncodingTypeTC, IANAGmplsSwitchingTypeTC
+     FROM IANA-GMPLS-TC-MIB                     -- RFC 4802
+   InetAddress, InetAddressType
+     FROM INET-ADDRESS-MIB                      -- RFC 4001
+   Float32TC
+     FROM FLOAT-TC-MIB                          -- RFC 6340
+   ;
+
+tedMIB MODULE-IDENTITY
+   LAST-UPDATED "201212210000Z"  -- 21 Dec. 2012 00:00:00 GMT
+   ORGANIZATION "IETF CCAMP Working Group."
+   CONTACT-INFO
+      "          Tomohiro Otani
+                 Tm-otani@kddi.com
+
+                 Masanori Miyazawa
+                 ma-miyazawa@kddilabs.jp
+
+                 Thomas D. Nadeau
+                 tnadeau@juniper.net
+
+                 Kenji Kumaki
+                 ke-kumaki@kddi.com
+
+                 Comments and discussion to ccamp@ietf.org"
+
+
+
+
+
+
+
+
+DESCRIPTION
+  "This MIB module contains managed object definitions for TED in
+  support of MPLS/GMPLS TE Database.
+
+  Copyright (c) 2013 IETF Trust and the persons identified as
+  authors of the code.  All rights reserved.
+
+  Redistribution and use in source and binary forms, with or without
+  modification, is permitted pursuant to, and subject to the license
+  terms contained in, the Simplified BSD License set forth in
+  Section 4.c of the IETF Trust's Legal Provisions Relating to IETF
+  Documents (http://trustee.ietf.org/license-info)."
+-- Revision history.
+   REVISION
+     "201212210000Z"  -- 21 Dec. 2012 00:00:00 GMT
+   DESCRIPTION
+     "Initial version.  Published as RFC 6825."
+   ::= { transmission 273 }
+-- assigned by IANA; see Section 9 for details.
+
+-- Textual Conventions.
+
+TedAreaIdTC ::= TEXTUAL-CONVENTION
+    STATUS       current
+    DESCRIPTION
+     "The area identifier of the IGP.  If OSPF is used to advertise
+     LSA, this represents an ospfArea.  If IS-IS is used, this
+     represents an area address."
+    SYNTAX       OCTET STRING (SIZE (0..20))
+
+TedRouterIdTC ::= TEXTUAL-CONVENTION
+   STATUS       current
+    DESCRIPTION
+     "The router identifier.  If OSPF is used to advertise LSA, this
+     represents a Router ID.  If IS-IS is used, this represents a
+     System ID."
+    SYNTAX       OCTET STRING (SIZE (0..6))
+
+TedLinkIndexTC ::= TEXTUAL-CONVENTION
+   STATUS       current
+   DESCRIPTION
+     "The link identifier.  If OSPF is used, this represents an
+     ospfLsdbID.  If IS-IS is used, this represents an isisLSPID.
+     If a locally configured link is used, this object represents an
+     arbitrary value, which is locally defined in a router."
+    SYNTAX       OCTET STRING (SIZE (0..8))
+
+
+
+
+
+-- Top-level components of this MIB module.
+
+tedNotifications OBJECT IDENTIFIER ::= { tedMIB 0 }
+tedObjects       OBJECT IDENTIFIER ::= { tedMIB 1 }
+tedConformance   OBJECT IDENTIFIER ::= { tedMIB 2 }
+
+--  TED Table
+
+tedTable OBJECT-TYPE
+   SYNTAX       SEQUENCE OF TedEntry
+   MAX-ACCESS   not-accessible
+   STATUS       current
+   DESCRIPTION
+     "This table indicates multiple TED information, which has been
+     supported by RFC 3630 and RFC 5305."
+::= { tedObjects 1 }
+
+tedEntry OBJECT-TYPE
+    SYNTAX       TedEntry
+    MAX-ACCESS   not-accessible
+    STATUS       current
+    DESCRIPTION
+     "This entry contains TED information commonly utilized in both
+     MPLS and GMPLS."
+   INDEX { tedLocalRouterId, tedRemoteRouterId,
+   tedLinkInformationSource, tedLinkIndex }
+
+::= { tedTable 1 }
+
+TedEntry ::= SEQUENCE {
+    tedLinkInformationSource     INTEGER,
+    tedLocalRouterId             TedRouterIdTC,
+    tedRemoteRouterId            TedRouterIdTC,
+    tedLinkIndex                 TedLinkIndexTC,
+    tedLinkInformationData       RowPointer,
+    tedLinkState                 INTEGER,
+    tedAreaId                    TedAreaIdTC,
+    tedLinkType                  INTEGER,
+    tedTeRouterIdAddrType        InetAddressType,
+    tedTeRouterIdAddr            InetAddress,
+    tedLinkIdAddrType            InetAddressType,
+    tedLinkIdAddr                InetAddress,
+    tedMetric                    Integer32,
+    tedMaxBandwidth              Float32TC,
+    tedMaxReservableBandwidth    Float32TC,
+    tedUnreservedBandwidthPri0   Float32TC,
+    tedUnreservedBandwidthPri1   Float32TC,
+    tedUnreservedBandwidthPri2   Float32TC,
+
+
+
+    tedUnreservedBandwidthPri3   Float32TC,
+    tedUnreservedBandwidthPri4   Float32TC,
+    tedUnreservedBandwidthPri5   Float32TC,
+    tedUnreservedBandwidthPri6   Float32TC,
+    tedUnreservedBandwidthPri7   Float32TC,
+    tedAdministrativeGroup       Integer32,
+    tedLocalId                   Integer32,
+    tedRemoteId                  Integer32,
+    tedLinkProtectionType        BITS
+    }
+
+tedLinkInformationSource OBJECT-TYPE
+    SYNTAX       INTEGER {
+                 unknown(0),
+                 locallyConfigured(1),
+                 ospfv2(2),
+                 ospfv3(3),
+                 isis(4),
+                 other(5)
+                 }
+    MAX-ACCESS   not-accessible
+    STATUS       current
+    DESCRIPTION
+     "This object indicates the source of the information about the
+     TE link."
+  ::= { tedEntry 1 }
+
+tedLocalRouterId OBJECT-TYPE
+    SYNTAX       TedRouterIdTC
+    MAX-ACCESS   not-accessible
+    STATUS       current
+    DESCRIPTION
+     "This object represents the Router ID of the router originating
+     the LSA.  If OSPF is used to advertise LSA, this represents a
+     Router ID.  If IS-IS is used, this represents a System ID.
+     Otherwise, this represents zero."
+    REFERENCE
+      "OSPF Version 2, RFC 2328, Appendix C.1
+        OSPF for IPv6, RFC 5340, Appendix C.1
+        ISO10589, Section 7.1"
+::= { tedEntry 2 }
+
+
+
+
+
+
+
+
+
+
+tedRemoteRouterId OBJECT-TYPE
+    SYNTAX       TedRouterIdTC
+    MAX-ACCESS   not-accessible
+    STATUS       current
+    DESCRIPTION
+     "This object indicates the router at the remote end of the link
+     from the originating router.  If OSPF is used to advertise LSA,
+     this represents a Link ID in the Link TLV.  If IS-IS is used,
+     this represents a neighbor System ID defined in RFC 5305.
+     Otherwise, this represents zero."
+    REFERENCE
+      "OSPF Version 2, RFC 2328, Appendix C.1
+        OSPF for IPv6, RFC 5340, Appendix C.1
+        ISO10589, Section 7.1"
+::= { tedEntry 3 }
+
+tedLinkIndex OBJECT-TYPE
+    SYNTAX       TedLinkIndexTC
+    MAX-ACCESS   not-accessible
+    STATUS       current
+    DESCRIPTION
+     "This object indicates the link state identifier.  If OSPF is
+     used, this represents an ospfLsdbID.  If IS-IS is used, this
+     represents an isisLSPID.  Otherwise, this represents a unique
+     identifier within a node."
+    REFERENCE
+      "OSPF Version 2, RFC 2328, Appendix A.4.1,
+        OSPF for IPv6, RFC 5340, Appendix A.4.2
+        ISO10589, Section 9.8 "
+::= { tedEntry 4 }
+
+tedLinkInformationData OBJECT-TYPE
+    SYNTAX       RowPointer
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+     "If tedLinkInformationSource has the value unknown(0), this
+     object MUST contain a value of zeroDotZero.
+
+     If tedLinkInformationSource has the value locallyConfigured(1),
+     an implementation can use this object to supply the identifier
+     of the corresponding row entry in the teLinkTable of TE-LINK-
+     STD-MIB (RFC 4220), the identifier of the corresponding row in
+     a local proprietary TE link MIB module, or the value of
+     zeroDotZero.
+
+     If tedLinkInformationSource has the value ospfv2(2) and
+     ospfv3(3), an implementation can use this object to supply the
+
+
+
+     identifier of the corresponding row entry in the
+     ospfLocalLsdbTable (OSPFv2-MIB) and the ospfv3AreaLsdbTable
+     (OSPFv3-MIB), or the value of zeroDotZero.
+
+     If tedLinkInformationSource has the value isis(4), an
+     implementation can use this object to supply the identifier of
+     the corresponding row entry in the isisAreaAddr of ISIS-MIB
+     (RFC 4444), or the value of zeroDotZero.
+
+     If tedLinkInformationSource has the value other(5), an
+     implementation can use this object to supply the identifier of
+     the corresponding row entry in the local proprietary MIB module,
+     or the value of zeroDotZero."
+::= { tedEntry 5 }
+
+tedLinkState OBJECT-TYPE
+     SYNTAX       INTEGER {
+                  unknown (0),
+                  up (1),
+                  down (2)
+                  }
+     MAX-ACCESS   read-only
+     STATUS       current
+     DESCRIPTION
+      "This object represents the actual operational state of this TE
+      link.  For instance, if a row is created in the TED table, but
+      the actual TE link is not available for some reason (e.g., when
+      there is not yet a physical link or the link has been manually
+      disabled), then the object would be down(2) state.
+      In contrast, if a row is added and the TE link is available,
+      this would be operationally up(1)."
+::= { tedEntry 6 }
+
+tedAreaId OBJECT-TYPE
+    SYNTAX       TedAreaIdTC
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+     "This object indicates the area identifier of the IGP.  If OSPF
+     is used to advertise LSA, this represents an ospfArea.  If IS-IS
+     is used, this represents an area address.  Otherwise, this
+     represents zero."
+    REFERENCE
+      "OSPF Version 2, RFC 2328, Appendix C.2
+        OSPF for IPv6, RFC 5340, Appendix C.2
+        ISO10589, Section 9.8"
+::= { tedEntry 7 }
+
+
+
+
+tedLinkType OBJECT-TYPE
+    SYNTAX       INTEGER {
+                 pointToPoint (1),
+                 multiAccess (2)
+                 }
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+     "This indicates the type of the link, such as point to point or
+     multi-access."
+    REFERENCE
+     "Traffic Engineering (TE) Extensions to OSPF Version 2,
+      RFC 3630, Section 2.5.1"
+::= { tedEntry 8 }
+
+tedTeRouterIdAddrType OBJECT-TYPE
+    SYNTAX       InetAddressType
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+     "This object indicates the TE-Router ID address type.  Only
+     values unknown(0), ipv4(1), or ipv6(2) are supported."
+::= { tedEntry 9 }
+
+tedTeRouterIdAddr OBJECT-TYPE
+    SYNTAX       InetAddress
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+      "This object indicates the TE-Router ID."
+    REFERENCE
+     "Traffic Engineering (TE) Extensions to OSPF Version 2,
+      RFC 3630, Section 2.4.1
+       IS-IS extensions for TE, RFC 5305, Section 4.3"
+::= { tedEntry 10 }
+
+tedLinkIdAddrType OBJECT-TYPE
+    SYNTAX       InetAddressType
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+     "This object indicates the address type of the TE Link ID.  Only
+     values unknown(0), ipv4(1), or ipv6(2) are supported."
+::= { tedEntry 11 }
+
+tedLinkIdAddr OBJECT-TYPE
+    SYNTAX       InetAddress
+    MAX-ACCESS   read-only
+
+
+
+    STATUS       current
+    DESCRIPTION
+     "This indicates the Router ID of the neighbor in the case of
+     point-to-point links.  This also indicates the interface
+     address of the designated router in the case of multi-access
+     links."
+    REFERENCE
+     "Traffic Engineering (TE) Extensions to OSPF Version 2,
+      RFC 3630, Section 2.5.2
+       IS-IS extensions for TE, RFC 5305, Section 4.3"
+::= { tedEntry 12 }
+
+tedMetric OBJECT-TYPE
+    SYNTAX       Integer32
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+     "This indicates the traffic engineering metric value of the TE
+     link."
+    REFERENCE
+     "Traffic Engineering (TE) Extensions to OSPF Version 2,
+      RFC 3630, Section 2.5.5
+       IS-IS extensions for TE, RFC 5305, Section 3.7"
+::= { tedEntry 13 }
+
+tedMaxBandwidth OBJECT-TYPE
+    SYNTAX       Float32TC
+    UNITS        "Byte per second"
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+     "This indicates the maximum bandwidth that can be used on this
+     link in this direction."
+    REFERENCE
+     "Traffic Engineering (TE) Extensions to OSPF Version 2,
+      RFC 3630, Section 2.5.6
+       IS-IS extensions for TE, RFC 5305, Section 3.4"
+::= { tedEntry 14 }
+
+tedMaxReservableBandwidth OBJECT-TYPE
+    SYNTAX       Float32TC
+    UNITS        "Byte per second"
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+     "This indicates the maximum bandwidth that may be reserved on
+     this link in this direction."
+
+
+
+
+    REFERENCE
+     "Traffic Engineering (TE) Extensions to OSPF Version 2,
+      RFC 3630, Section 2.5.7
+       IS-IS extensions for TE, RFC 5305, Section 3.5"
+::= { tedEntry 15 }
+
+tedUnreservedBandwidthPri0 OBJECT-TYPE
+    SYNTAX       Float32TC
+    UNITS        "Byte per second"
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+     "This indicates the amount of bandwidth not yet reserved at the
+     priority 0."
+    REFERENCE
+     "Traffic Engineering (TE) Extensions to OSPF Version 2,
+      RFC 3630, Section 2.5.8
+       IS-IS extensions for TE, RFC 5305, Section 3.6"
+::= { tedEntry 16 }
+
+tedUnreservedBandwidthPri1 OBJECT-TYPE
+    SYNTAX       Float32TC
+    UNITS        "Byte per second"
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+     "This indicates the amount of bandwidth not yet reserved at the
+     priority 1."
+    REFERENCE
+     "Traffic Engineering (TE) Extensions to OSPF Version 2,
+      RFC 3630, Section 2.5.8
+       IS-IS extensions for TE, RFC 5305, Section 3.6"
+::= { tedEntry 17 }
+
+tedUnreservedBandwidthPri2 OBJECT-TYPE
+    SYNTAX       Float32TC
+    UNITS        "Byte per second"
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+     "This indicates the amount of bandwidth not yet reserved at the
+     priority 2."
+    REFERENCE
+     "Traffic Engineering (TE) Extensions to OSPF Version 2,
+      RFC 3630, Section 2.5.8
+       IS-IS extensions for TE, RFC 5305, Section 3.6"
+::= { tedEntry 18 }
+
+
+
+
+tedUnreservedBandwidthPri3 OBJECT-TYPE
+    SYNTAX       Float32TC
+    UNITS        "Byte per second"
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+     "This indicates the amount of bandwidth not yet reserved at the
+     priority 3."
+    REFERENCE
+     "Traffic Engineering (TE) Extensions to OSPF Version 2,
+      RFC 3630, Section 2.5.8
+       IS-IS extensions for TE, RFC 5305, Section 3.6"
+::= { tedEntry 19 }
+
+tedUnreservedBandwidthPri4 OBJECT-TYPE
+    SYNTAX       Float32TC
+    UNITS        "Byte per second"
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+     "This indicates the amount of bandwidth not yet reserved at the
+     priority 4."
+    REFERENCE
+     "Traffic Engineering (TE) Extensions to OSPF Version 2,
+      RFC 3630, Section 2.5.8
+       IS-IS extensions for TE, RFC 5305, Section 3.6"
+::= { tedEntry 20 }
+
+tedUnreservedBandwidthPri5 OBJECT-TYPE
+    SYNTAX       Float32TC
+    UNITS        "Byte per second"
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+     "This indicates the amount of bandwidth not yet reserved at the
+     priority 5."
+    REFERENCE
+     "Traffic Engineering (TE) Extensions to OSPF Version 2,
+      RFC 3630, Section 2.5.8
+       IS-IS extensions for TE, RFC 5305, Section 3.6"
+::= { tedEntry 21 }
+
+tedUnreservedBandwidthPri6 OBJECT-TYPE
+    SYNTAX       Float32TC
+    UNITS        "Byte per second"
+    MAX-ACCESS   read-only
+    STATUS       current
+
+
+
+
+    DESCRIPTION
+     "This indicates the amount of bandwidth not yet reserved at the
+     priority 6."
+    REFERENCE
+     "Traffic Engineering (TE) Extensions to OSPF Version 2,
+      RFC 3630, Section 2.5.8
+       IS-IS extensions for TE, RFC 5305, 3.6"
+::= { tedEntry 22 }
+
+tedUnreservedBandwidthPri7 OBJECT-TYPE
+    SYNTAX       Float32TC
+    UNITS        "Byte per second"
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+     "This indicates the amount of bandwidth not yet reserved at the
+     priority 7."
+    REFERENCE
+     "Traffic Engineering (TE) Extensions to OSPF Version 2,
+      RFC 3630, Section 2.5.8
+       IS-IS extensions for TE, RFC 5305, Section 3.6"
+::= { tedEntry 23 }
+
+tedAdministrativeGroup OBJECT-TYPE
+    SYNTAX       Integer32
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+     "This indicates the Administrative Group to which the link
+     belongs.  Since the value is a bit mask, the link can belong
+     to multiple groups.  This is also called Resource Class/Color."
+    REFERENCE
+     "Traffic Engineering (TE) Extensions to OSPF Version 2,
+      RFC 3630, Section 2.5.9
+       IS-IS extensions for TE, RFC 5305, Section 3.1"
+::= { tedEntry 24 }
+
+tedLocalId OBJECT-TYPE
+    SYNTAX       Integer32
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+     "This indicates the Link Local Identifier of an unnumbered
+     link."
+    REFERENCE
+      "OSPF Extensions in Support of GMPLS, RFC 4203, Section 1.1
+        IS-IS Extensions in Support of GMPLS, RFC 5307, Section 1.1"
+::= { tedEntry 25 }
+
+
+
+tedRemoteId OBJECT-TYPE
+    SYNTAX       Integer32
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+     "This indicates the Link Remote Identifier of an unnumbered
+     link."
+    REFERENCE
+      "OSPF Extensions in Support of GMPLS, RFC 4203, Section 1.1
+        IS-IS Extensions in Support of GMPLS, RFC 5307, Section 1.1"
+::= { tedEntry 26 }
+
+tedLinkProtectionType OBJECT-TYPE
+    SYNTAX       BITS {
+                 extraTraffic(0),
+                 unprotected(1),
+                 shared (2),
+                 dedicatedOneToOne (3),
+                 dedicatedOnePlusOne(4),
+                 enhanced(5)
+                 }
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+      "This object indicates the protection type of the TE link."
+    REFERENCE
+      "OSPF Extensions in Support of GMPLS, RFC 4203, Section 1.2
+        IS-IS Extensions in Support of GMPLS, RFC 5307, Section 1.2"
+::= { tedEntry 27 }
+
+--  TED Local Interface IP Address Table
+
+tedLocalIfAddrTable OBJECT-TYPE
+    SYNTAX       SEQUENCE OF TedLocalIfAddrEntry
+    MAX-ACCESS   not-accessible
+    STATUS       current
+    DESCRIPTION
+     "This table contains the IP address information of a local TE
+     link."
+::= { tedObjects 2 }
+
+tedLocalIfAddrEntry OBJECT-TYPE
+    SYNTAX       TedLocalIfAddrEntry
+    MAX-ACCESS   not-accessible
+    STATUS       current
+    DESCRIPTION
+     "This entry contains the IP address information of the local TE
+     link."
+
+
+
+    INDEX { tedLinkIndex, tedLocalIfAddr }
+::= { tedLocalIfAddrTable 1 }
+
+TedLocalIfAddrEntry ::= SEQUENCE {
+    tedLocalIfAddrType    InetAddressType,
+    tedLocalIfAddr        InetAddress
+    }
+
+tedLocalIfAddrType OBJECT-TYPE
+    SYNTAX       InetAddressType
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+     "This object indicates the address type of the local TE link.
+     Only values unknown(0), ipv4(1), or ipv6(2) have to be
+     supported."
+::= { tedLocalIfAddrEntry 1 }
+
+tedLocalIfAddr OBJECT-TYPE
+    SYNTAX       InetAddress (SIZE (1..20))
+    MAX-ACCESS   not-accessible
+    STATUS       current
+    DESCRIPTION
+     "This object indicates the address of the local TE link."
+    REFERENCE
+     "Traffic Engineering (TE) Extensions to OSPF Version 2,
+      RFC 3630, Section 2.5.3,
+      Traffic Engineering Extensions to OSPF Version 3, RFC 5329,
+      Section 4.3
+       IS-IS extensions for TE, RFC 5305, Section 3.4"
+::= { tedLocalIfAddrEntry 2 }
+
+--  TED Remote Interface IP Address Table
+
+tedRemoteIfAddrTable OBJECT-TYPE
+    SYNTAX       SEQUENCE OF TedRemoteIfAddrEntry
+    MAX-ACCESS   not-accessible
+    STATUS       current
+    DESCRIPTION
+     "This table contains the IP address information of a remote TE
+     link."
+::= { tedObjects 3 }
+
+tedRemoteIfAddrEntry OBJECT-TYPE
+    SYNTAX       TedRemoteIfAddrEntry
+    MAX-ACCESS   not-accessible
+    STATUS       current
+
+
+
+
+    DESCRIPTION
+     "This entry contains the IP address information of the remote
+     TE link."
+INDEX { tedLinkIndex, tedRemoteIfAddr }
+    ::= { tedRemoteIfAddrTable 1 }
+
+TedRemoteIfAddrEntry ::= SEQUENCE {
+    tedRemoteIfAddrType    InetAddressType,
+    tedRemoteIfAddr        InetAddress
+    }
+
+tedRemoteIfAddrType OBJECT-TYPE
+    SYNTAX       InetAddressType
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+      "This object indicates the address type of the remote TE link."
+::= { tedRemoteIfAddrEntry 1 }
+
+tedRemoteIfAddr OBJECT-TYPE
+    SYNTAX       InetAddress(SIZE (1..20))
+    MAX-ACCESS   not-accessible
+    STATUS       current
+    DESCRIPTION
+     "This object indicates the address of the remote TE link."
+    REFERENCE
+     "Traffic Engineering (TE) Extensions to OSPF Version 2,
+      RFC 3630, Section 2.5.4,
+      Traffic Engineering Extensions to OSPF Version3, RFC 5329,
+      Section 4.4
+       IS-IS extensions for TE, RFC 5305, Section 3.3"
+::= { tedRemoteIfAddrEntry 2 }
+
+--  TED Switching Capability Table
+
+tedSwCapTable OBJECT-TYPE
+    SYNTAX       SEQUENCE OF TedSwCapEntry
+    MAX-ACCESS   not-accessible
+    STATUS       current
+    DESCRIPTION
+     "This table contains the GMPLS TED switching capability
+     information."
+::= { tedObjects 4 }
+
+tedSwCapEntry OBJECT-TYPE
+    SYNTAX       TedSwCapEntry
+    MAX-ACCESS   not-accessible
+    STATUS       current
+
+
+
+    DESCRIPTION
+     "This entry relates each TE link with its GMPLS TE switching
+     capability information.  If the MIB module deals with only OSPF-
+     TE information, the value of each object related with GMPLS TE
+     extensions should be null."
+    INDEX { tedLinkIndex, tedSwCapIndex }
+::= { tedSwCapTable 1 }
+
+TedSwCapEntry ::= SEQUENCE {
+    tedSwCapIndex                 Unsigned32,
+    tedSwCapType         IANAGmplsSwitchingTypeTC,
+    tedSwCapEncoding              IANAGmplsLSPEncodingTypeTC,
+    tedSwCapMaxLspBandwidthPri0   Float32TC,
+    tedSwCapMaxLspBandwidthPri1   Float32TC,
+    tedSwCapMaxLspBandwidthPri2   Float32TC,
+    tedSwCapMaxLspBandwidthPri3   Float32TC,
+    tedSwCapMaxLspBandwidthPri4   Float32TC,
+    tedSwCapMaxLspBandwidthPri5   Float32TC,
+    tedSwCapMaxLspBandwidthPri6   Float32TC,
+    tedSwCapMaxLspBandwidthPri7   Float32TC,
+    tedSwCapMinLspBandwidth       Float32TC,
+    tedSwCapIfMtu                 Integer32,
+    tedSwCapIndication            INTEGER
+    }
+
+tedSwCapIndex OBJECT-TYPE
+    SYNTAX       Unsigned32 (1..255)
+    MAX-ACCESS   not-accessible
+    STATUS       current
+    DESCRIPTION
+     "This index is utilized to identify multiple switching
+     functions on a local or remote TE link according to definitions
+     of textual conventions of GMPLS, RFC 4801."
+::= { tedSwCapEntry 1 }
+
+tedSwCapType OBJECT-TYPE
+    SYNTAX       IANAGmplsSwitchingTypeTC
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+     "This object indicates the GMPLS switching capability assigned
+     to the TE link according to definitions of textual conventions
+     of GMPLS, RFC 4801."
+    REFERENCE
+      "OSPF Extensions in Support of GMPLS, RFC 4203, Section 1.4
+        IS-IS Extensions in Support of GMPLS, RFC 5307, Section 1.3"
+::= { tedSwCapEntry 2 }
+
+
+
+
+tedSwCapEncoding OBJECT-TYPE
+    SYNTAX       IANAGmplsLSPEncodingTypeTC
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+     "This object indicates the GMPLS encoding type assigned to the
+     TE link."
+    REFERENCE
+      "OSPF Extensions in Support of GMPLS, RFC 4203, Section 1.4
+        IS-IS Extensions in Support of GMPLS, RFC 5307, Section 1.3"
+::= { tedSwCapEntry 3 }
+
+tedSwCapMaxLspBandwidthPri0 OBJECT-TYPE
+    SYNTAX       Float32TC
+    UNITS        "Byte per second"
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+     "This object indicates the maximum bandwidth of the TE link at
+     the priority 0 for GMPLS LSP creation."
+    REFERENCE
+      "OSPF Extensions in Support of GMPLS, RFC 4203, Section 1.4
+        IS-IS Extensions in Support of GMPLS, RFC 5307, Section 1.3"
+::= { tedSwCapEntry 4 }
+
+tedSwCapMaxLspBandwidthPri1 OBJECT-TYPE
+    SYNTAX       Float32TC
+    UNITS        "Byte per second"
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+     "This object indicates the maximum bandwidth of the TE link at
+     the priority 1 for GMPLS LSP creation."
+    REFERENCE
+      "OSPF Extensions in Support of GMPLS, RFC 4203, Section 1.4
+        IS-IS Extensions in Support of GMPLS, RFC 5307, Section 1.3"
+::= { tedSwCapEntry 5 }
+
+tedSwCapMaxLspBandwidthPri2  OBJECT-TYPE
+    SYNTAX       Float32TC
+    UNITS        "Byte per second"
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+     "This object indicates the maximum bandwidth of the TE link at
+     the priority 2 for GMPLS LSP creation."
+
+
+
+
+
+    REFERENCE
+      "OSPF Extensions in Support of GMPLS, RFC 4203, Section 1.4
+        IS-IS Extensions in Support of GMPLS, RFC 5307, Section 1.3"
+::= { tedSwCapEntry 6 }
+
+tedSwCapMaxLspBandwidthPri3 OBJECT-TYPE
+    SYNTAX       Float32TC
+    UNITS        "Byte per second"
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+     "This object indicates the maximum bandwidth of the TE link at
+     the priority 3 for GMPLS LSP creation."
+    REFERENCE
+      "OSPF Extensions in Support of GMPLS, RFC 4203, Section 1.4
+        IS-IS Extensions in Support of GMPLS, RFC 5307, Section 1.3"
+::= { tedSwCapEntry 7 }
+
+tedSwCapMaxLspBandwidthPri4 OBJECT-TYPE
+    SYNTAX       Float32TC
+    UNITS        "Byte per second"
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+     "This object indicates the maximum bandwidth of the TE link at
+     the priority 4 for GMPLS LSP creation."
+    REFERENCE
+      "OSPF Extensions in Support of GMPLS, RFC 4203, Section 1.4
+        IS-IS Extensions in Support of GMPLS, RFC 5307, Section 1.3"
+::= { tedSwCapEntry 8 }
+
+tedSwCapMaxLspBandwidthPri5  OBJECT-TYPE
+    SYNTAX       Float32TC
+    UNITS        "Byte per second"
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+     "This object indicates the maximum bandwidth of the TE link at
+     the priority 5 for GMPLS LSP creation."
+    REFERENCE
+      "OSPF Extensions in Support of GMPLS, RFC 4203, Section 1.4
+        IS-IS Extensions in Support of GMPLS, RFC 5307, Section 1.3"
+::= { tedSwCapEntry 9 }
+
+tedSwCapMaxLspBandwidthPri6 OBJECT-TYPE
+    SYNTAX       Float32TC
+    UNITS        "Byte per second"
+    MAX-ACCESS   read-only
+
+
+
+    STATUS       current
+    DESCRIPTION
+     "This object indicates the maximum bandwidth of the TE link at
+     the priority 6 for GMPLS LSP creation."
+    REFERENCE
+      "OSPF Extensions in Support of GMPLS, RFC 4203, Section 1.4
+        IS-IS Extensions in Support of GMPLS, RFC 5307, Section 1.3"
+::= { tedSwCapEntry 10 }
+
+tedSwCapMaxLspBandwidthPri7 OBJECT-TYPE
+    SYNTAX       Float32TC
+    UNITS        "Byte per second"
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+     "This object indicates the maximum bandwidth of the TE link at
+     the priority 7 for GMPLS LSP creation."
+    REFERENCE
+      "OSPF Extensions in Support of GMPLS, RFC 4203, Section 1.4
+        IS-IS Extensions in Support of GMPLS, RFC 5307, Section 1.3"
+::= { tedSwCapEntry 11 }
+
+tedSwCapMinLspBandwidth OBJECT-TYPE
+    SYNTAX       Float32TC
+    UNITS        "Byte per second"
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+     "This object indicates the minimum bandwidth of the TE link for
+     GMPLS LSP creation if the switching capability field is TDM,
+     PSC-1, PSC-2, PSC-3, or PSC-4."
+    REFERENCE
+      "OSPF Extensions in Support of GMPLS, RFC 4203, Section 1.4
+        IS-IS Extensions in Support of GMPLS, RFC 5307, Section 1.3"
+::= { tedSwCapEntry 12 }
+
+tedSwCapIfMtu OBJECT-TYPE
+    SYNTAX       Integer32
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+      "This object indicates the MTU of the local or remote TE link."
+    REFERENCE
+      "OSPF Extensions in Support of GMPLS, RFC 4203, Section 1.4
+        IS-IS Extensions in Support of GMPLS, RFC 5307, Section 1.3"
+::= { tedSwCapEntry 13 }
+
+
+
+
+
+tedSwCapIndication OBJECT-TYPE
+    SYNTAX       INTEGER {
+                 standard (0),
+                 arbitrary (1)
+                 }
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+     "This object indicates whether the interface supports Standard
+     or Arbitrary SONET/SDH."
+    REFERENCE
+      "OSPF Extensions in Support of GMPLS, RFC 4203, Section 1.4
+        IS-IS Extensions in Support of GMPLS, RFC 5307, Section 1.3"
+::= { tedSwCapEntry 14 }
+
+--  TED SRLG Table
+
+tedSrlgTable OBJECT-TYPE
+    SYNTAX       SEQUENCE OF TedSrlgEntry
+    MAX-ACCESS   not-accessible
+    STATUS       current
+    DESCRIPTION
+      "This table contains the SRLG information of the TE link."
+::= { tedObjects 5 }
+
+tedSrlgEntry OBJECT-TYPE
+    SYNTAX       TedSrlgEntry
+    MAX-ACCESS   not-accessible
+    STATUS       current
+    DESCRIPTION
+      "This entry relates each TE link with its SRLG information."
+    INDEX { tedLinkIndex, tedSrlgIndex }
+::= { tedSrlgTable 1 }
+
+TedSrlgEntry ::= SEQUENCE {
+    tedSrlgIndex   Unsigned32,
+    tedSrlg        Integer32
+    }
+
+tedSrlgIndex OBJECT-TYPE
+    SYNTAX       Unsigned32(1..255)
+    MAX-ACCESS   not-accessible
+    STATUS       current
+    DESCRIPTION
+     "This index is utilized to identify multiple SRLG values on a
+     local or remote TE link.  This object represents an arbitrary
+     value, which is locally defined in a router."
+
+
+
+
+    REFERENCE
+     "OSPF Extensions in support of GMPLS, RFC 4203, Section 1.3
+       IS-IS Extensions in Support of GMPLS, RFC 5307, Section 1.4"
+::= { tedSrlgEntry 1 }
+
+tedSrlg OBJECT-TYPE
+    SYNTAX       Integer32
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+     "This object indicates the SRLG value assigned to a local or
+     remote TE link."
+    REFERENCE
+      "OSPF Extensions in Support of GMPLS, RFC 4203, Section 1.3
+        IS-IS Extensions in Support of GMPLS, RFC 5307, Section 1.4"
+::= { tedSrlgEntry 2 }
+
+-- Notification Configuration
+
+tedStatusChangeNotificationMaxRate OBJECT-TYPE
+    SYNTAX        Unsigned32
+    MAX-ACCESS    read-write
+    STATUS        current
+    DESCRIPTION
+     "A lot of notifications relating to the status change are
+     expected to generate in a node, especially when a network
+     failure occurs and might cause a performance degradation of the
+     node itself.  To avoid such a defect, this object provides the
+     maximum number of notifications generated per minute.  If
+     events occur more rapidly, the implementation may simply fail
+     to emit these notifications during that period, or may queue
+     them until an appropriate time.  A value of 0 means no
+     throttling is applied and events may be notified at the rate at
+     which they occur."
+    DEFVAL        {1}
+::= { tedObjects 6 }
+
+tedCreatedDeletedNotificationMaxRate OBJECT-TYPE
+    SYNTAX        Unsigned32
+    MAX-ACCESS    read-write
+    STATUS        current
+    DESCRIPTION
+     "A lot of notifications relating to new registration in the TED
+     table by receiving new TE link information or deletion of
+     existing entries in the TED table are expected to generate in a
+     node.  This object provides the maximum number of notifications
+     generated per minute."
+
+
+
+
+    DEFVAL        {1}
+::= { tedObjects 7 }
+
+-- Notifications
+
+tedStatusChange NOTIFICATION-TYPE
+    OBJECTS  {
+      tedLinkState
+      }
+    STATUS   current
+    DESCRIPTION
+     "This notification signifies that there has been change in the
+     TE information of tedTable, tedLocalIfAddrTable,
+     tedRemoteIfAddrTable, tedSwCapTable, and/or tedSrlgTable.  For
+     example, this should be generated when tedUnreservedBandwidth is
+     changed to create or delete LSP using the registered TE link."
+::= { tedNotifications 1 }
+
+tedEntryCreated NOTIFICATION-TYPE
+    OBJECTS  {
+      tedLinkState
+      }
+    STATUS   current
+    DESCRIPTION
+     "This notification signifies that there has been new
+     registration in the TED table by receiving new TE link
+     information.  For example, this should be generated when a new
+     index (tedLinkIndex) is registered in the TED table."
+::= { tedNotifications 2 }
+
+tedEntryDeleted NOTIFICATION-TYPE
+    OBJECTS  {
+      tedLinkState
+      }
+    STATUS      current
+   DESCRIPTION
+     "This notification signifies that there has been deletion of an
+     entry in the TED table.  For example, this should be generated
+     when one of the existing entries is deleted in the TED table."
+::= { tedNotifications 3 }
+
+-- Conformance Statement
+
+tedCompliances
+    OBJECT IDENTIFIER ::= { tedConformance 1 }
+tedGroups
+    OBJECT IDENTIFIER ::= { tedConformance 2 }
+
+
+
+
+-- Module Compliance
+
+tedModuleFullCompliance MODULE-COMPLIANCE
+    STATUS   current
+    DESCRIPTION
+      "Compliance statement for agents provides full support for the
+      TED MIB."
+    MODULE -- this module
+    MANDATORY-GROUPS   { tedMainGroup,
+                         tedObjectsGroup,
+                         tedNotificationGroup
+                       }
+
+GROUP tedUnnumberedLinkGroup
+   DESCRIPTION
+     "This group is mandatory for TE links that support the
+     unnumbered links."
+
+GROUP tedNumberedLinkGroup
+   DESCRIPTION
+     "This group is mandatory for TE links that support the
+     numbered links."
+
+GROUP tedSwCapGroup
+   DESCRIPTION
+     "This group is mandatory for TE links that support GMPLS
+     switching capability."
+
+GROUP tedSwCapMinLspBandwidthGroup
+   DESCRIPTION
+     "This group is mandatory for TE links if the switching
+     capability field is TDM, PSC-1, PSC-2, PSC-3, or PSC-4."
+
+GROUP tedSwCapIfMtuGroup
+   DESCRIPTION
+     "This group is mandatory for TE links that support the MTU of
+     the local or remote TE link."
+
+GROUP tedSwCapIndicationGroup
+   DESCRIPTION
+     "This group is mandatory for TE links that support Standard or
+     Arbitrary SONET/SDH."
+
+
+
+
+
+
+
+
+
+GROUP tedSrlgGroup
+   DESCRIPTION
+     "This group is mandatory for TE links that support SRLG
+     information."
+
+::= { tedCompliances 1 }
+
+--
+-- ReadOnly Compliance
+--
+
+tedModuleReadOnlyCompliance MODULE-COMPLIANCE
+   STATUS current
+    DESCRIPTION
+     "Compliance requirement for implementations only provides read-
+     only support for TED.  Such devices can then be monitored but
+     cannot be configured using this MIB module."
+    MODULE -- this module
+    MANDATORY-GROUPS   { tedMainGroup
+                       }
+
+GROUP tedUnnumberedLinkGroup
+   DESCRIPTION
+     "This group is mandatory for TE links that support the
+     unnumbered links."
+
+GROUP tedNumberedLinkGroup
+   DESCRIPTION
+     "This group is mandatory for TE links that support the
+     numbered links."
+
+GROUP tedSwCapGroup
+   DESCRIPTION
+     "This group is mandatory for TE links that support some GMPLS
+     switching capabilities."
+
+GROUP tedSwCapMinLspBandwidthGroup
+   DESCRIPTION
+     "This group is mandatory for TE links if the switching
+     capability field is TDM, PSC-1, PSC-2, PSC-3, or PSC-4."
+
+GROUP tedSwCapIfMtuGroup
+   DESCRIPTION
+     "This group is mandatory for TE links that support the MTU of
+     the local or remote TE link."
+
+
+
+
+
+
+GROUP tedSwCapIndicationGroup
+   DESCRIPTION
+     "This group is mandatory for TE links that support Standard or
+     Arbitrary SONET/SDH."
+
+GROUP tedSrlgGroup
+   DESCRIPTION
+     "This group is mandatory for TE links that support SRLG
+     information."
+
+::= { tedCompliances 2 }
+
+-- Units of conformance
+
+tedMainGroup OBJECT-GROUP
+    OBJECTS {
+            tedLinkState,
+            tedAreaId,
+            tedLinkType,
+            tedTeRouterIdAddrType,
+            tedTeRouterIdAddr,
+            tedLinkIdAddrType,
+            tedLinkIdAddr,
+            tedMetric,
+            tedMaxBandwidth,
+            tedMaxReservableBandwidth,
+            tedUnreservedBandwidthPri0,
+            tedUnreservedBandwidthPri1,
+            tedUnreservedBandwidthPri2,
+            tedUnreservedBandwidthPri3,
+            tedUnreservedBandwidthPri4,
+            tedUnreservedBandwidthPri5,
+            tedUnreservedBandwidthPri6,
+            tedUnreservedBandwidthPri7,
+            tedAdministrativeGroup,
+            tedLinkProtectionType,
+            tedLinkInformationData
+            }
+    STATUS   current
+    DESCRIPTION
+     "Collection of objects for TED management"
+::= { tedGroups 1 }
+
+tedObjectsGroup OBJECT-GROUP
+    OBJECTS {
+         tedStatusChangeNotificationMaxRate,
+         tedCreatedDeletedNotificationMaxRate
+    }
+
+
+
+    STATUS  current
+    DESCRIPTION
+     "The objects needed to implement notification."
+::= { tedGroups 2 }
+
+tedNotificationGroup NOTIFICATION-GROUP
+    NOTIFICATIONS {
+         tedStatusChange,
+         tedEntryCreated,
+         tedEntryDeleted
+         }
+    STATUS  current
+    DESCRIPTION
+     "This group is mandatory for those implementations that can
+     implement the notifications contained in this group."
+::= { tedGroups 3 }
+
+tedUnnumberedLinkGroup OBJECT-GROUP
+    OBJECTS {
+         tedLocalId,
+         tedRemoteId
+    }
+    STATUS  current
+    DESCRIPTION
+     "The objects needed to implement the unnumbered links."
+::= { tedGroups 4 }
+
+tedNumberedLinkGroup OBJECT-GROUP
+    OBJECTS {
+         tedLocalIfAddrType,
+         tedRemoteIfAddrType
+    }
+    STATUS  current
+    DESCRIPTION
+     "The objects needed to implement the numbered links."
+::= { tedGroups 5 }
+
+tedSwCapGroup OBJECT-GROUP
+    OBJECTS {
+         tedSwCapType,
+         tedSwCapEncoding,
+         tedSwCapMaxLspBandwidthPri0,
+         tedSwCapMaxLspBandwidthPri1,
+         tedSwCapMaxLspBandwidthPri2,
+         tedSwCapMaxLspBandwidthPri3,
+         tedSwCapMaxLspBandwidthPri4,
+
+
+
+
+
+         tedSwCapMaxLspBandwidthPri5,
+         tedSwCapMaxLspBandwidthPri6,
+         tedSwCapMaxLspBandwidthPri7
+    }
+    STATUS  current
+    DESCRIPTION
+     "The objects needed to implement the TE links with GMPLS TE
+     switching capability information."
+::= { tedGroups 6 }
+
+tedSwCapMinLspBandwidthGroup OBJECT-GROUP
+    OBJECTS {
+         tedSwCapMinLspBandwidth
+    }
+    STATUS  current
+    DESCRIPTION
+     "The objects needed to implement the minimum bandwidth of the
+     TE link for GMPLS LSP creation."
+::= { tedGroups 7 }
+
+tedSwCapIfMtuGroup OBJECT-GROUP
+    OBJECTS {
+         tedSwCapIfMtu
+    }
+    STATUS  current
+    DESCRIPTION
+     "The objects needed to implement the MTU information of the
+     local or remote TE link."
+::= { tedGroups 8 }
+
+tedSwCapIndicationGroup OBJECT-GROUP
+    OBJECTS {
+         tedSwCapIndication
+    }
+    STATUS  current
+    DESCRIPTION
+     "The objects needed to implement the indication of whether the
+     interface supports Standard or Arbitrary SONET/SDH."
+::= { tedGroups 9 }
+
+
+
+
+
+
+
+
+
+
+
+
+tedSrlgGroup OBJECT-GROUP
+    OBJECTS {
+         tedSrlg
+    }
+    STATUS  current
+    DESCRIPTION
+      "The objects needed to implement multiple SRLG values with
+      GMPLS TE information."
+::= { tedGroups 10 }
+
+END

@@ -1,0 +1,189 @@
+PMIPV6-TC-MIB DEFINITIONS ::= BEGIN
+   IMPORTS
+     MODULE-IDENTITY, mib-2, Unsigned32
+                FROM SNMPv2-SMI                   -- [RFC2578]
+     TEXTUAL-CONVENTION
+                FROM SNMPv2-TC;                   -- [RFC2579]
+
+   pmip6TCMIB  MODULE-IDENTITY
+      LAST-UPDATED "201205070000Z"     --  7th May, 2012
+      ORGANIZATION "IETF NETLMM Working Group"
+      CONTACT-INFO
+      "                 Glenn Mansfield Keeni
+                Postal: Cyber Solutions, Inc.
+                        6-6-3, Minami Yoshinari
+                        Aoba-ku, Sendai, Japan 989-3204.
+                   Tel: +81-22-303-4012
+                   Fax: +81-22-303-4015
+                 EMail: glenn@cysols.com
+
+                        Sri Gundavelli
+                Postal: Cisco Systems
+                        170 W.Tasman Drive,
+                        San Jose, CA 95134
+                        USA
+                   Tel: +1-408-527-6109
+                 EMail: sgundave@cisco.com
+
+                        Kazuhide Koide
+                Postal: KDDI Corporation
+                        GARDEN AIR TOWER 3-10-10, Iidabashi
+                        Chiyoda-ku, Tokyo 102-8460, Japan.
+                   Tel: +81-3-6678-3378
+                 EMail: ka-koide@kddi.com
+
+                        Ryuji Wakikawa
+                Postal: TOYOTA InfoTechnology Center, U.S.A., Inc.
+                        465 Bernardo Avenue
+                        Mountain View, CA
+                        94043
+                        USA
+                 EMail: ryuji@us.toyota-itc.com
+       Support Group EMail: netlmm@ietf.org
+       "
+
+    DESCRIPTION
+        "This MIB module provides textual conventions for
+         Proxy Mobile IPv6 Management information.
+
+         Copyright (c) 2012 IETF Trust and the persons
+         identified as authors of the code.  All rights
+         reserved.
+
+         Redistribution and use in source and binary forms,
+         with or without modification, is permitted pursuant
+         to, and subject to the license terms contained in,
+         the Simplified BSD License set forth in Section 4.c
+         of the IETF Trust's Legal Provisions Relating to IETF
+         Documents (http://trustee.ietf.org/license-info).
+        "
+
+    REVISION "201205070000Z"     --  7th May, 2012
+    DESCRIPTION
+        "The initial version, published as RFC 6475."
+    ::= { mib-2 205 }
+
+-- -------------------------------------------------------------
+-- Textual Conventions
+-- -------------------------------------------------------------
+   Pmip6TimeStamp64  ::=  TEXTUAL-CONVENTION
+       DISPLAY-HINT "6d:2d"
+       STATUS  current
+       DESCRIPTION
+           "A 64-bit unsigned integer field containing a timestamp.
+            The value indicates the elapsed time since January 1,
+            1970, 00:00 UTC, by using a fixed-point format.  In this
+            format, the integer number of seconds is contained in
+            the first 48 bits of the field, and the remaining 16
+            bits indicate the number of 1/65536 fractions of a
+            second.
+           "
+       REFERENCE
+           "RFC 5213: Section 8.8"
+       SYNTAX  OCTET STRING (SIZE (8))
+
+   Pmip6MnIdentifier  ::=  TEXTUAL-CONVENTION
+       DISPLAY-HINT "255a"
+       STATUS  current
+       DESCRIPTION
+           "The identity of a mobile node in the Proxy Mobile IPv6
+            domain.  This is the stable identifier of a mobile node
+            that the mobility entities in a Proxy Mobile IPv6 domain
+            can always acquire and use for predictably identifying
+            a mobile node.  Various forms of identifiers can be used
+            to identify a mobile node (MN).  Two examples are a
+            Network Access Identifier (NAI) and an opaque
+            identifier applicable to a particular application.
+           "
+       REFERENCE
+           "RFC 4283: Section 3"
+       SYNTAX  OCTET STRING (SIZE (0..255))
+
+   Pmip6MnLLIdentifier ::=  TEXTUAL-CONVENTION
+       DISPLAY-HINT "255a"
+       STATUS  current
+       DESCRIPTION
+           "An identifier that identifies the attached interface of
+            a mobile node.
+           "
+       REFERENCE
+           "RFC 5213: Section 8.6"
+       SYNTAX  OCTET STRING (SIZE (0..255))
+
+   Pmip6MnIndex ::= TEXTUAL-CONVENTION
+       DISPLAY-HINT "d"
+       STATUS       current
+       DESCRIPTION
+           "A unique integer value, greater than zero, assigned to
+            each mobile node that is currently attached to the
+            Proxy Mobile IPv6 domain by the management system.
+            It is recommended that the values are assigned in a
+            monotonically increasing order starting from 1.  It may
+            wrap after reaching its maximum value.  The value for
+            each mobile node must remain constant at least from one
+            re-initialization of the entity's network management
+            system to the next re-initialization.
+           "
+       SYNTAX       Unsigned32 (1..4294967295)
+
+   Pmip6MnLLIndex ::= TEXTUAL-CONVENTION
+       DISPLAY-HINT "d"
+       STATUS       current
+       DESCRIPTION
+           "A unique integer value, greater than zero, assigned to
+            each interface of a mobile node that is currently
+            attached to the Proxy Mobile IPv6 domain by the
+            management system.
+            It is recommended that the values are assigned in a
+            monotonically increasing order starting from 1.  It may
+            wrap after reaching its maximum value.  The value for
+            each interface of a mobile node must remain constant at
+            least from one re-initialization of the entity's network
+            management system to the next re-initialization.
+           "
+       SYNTAX       Unsigned32 (1..4294967295)
+
+   Pmip6MnInterfaceATT ::=  TEXTUAL-CONVENTION
+       STATUS  current
+       DESCRIPTION
+           "The object specifies the access technology that
+            connects the mobile node to the access link on the
+            mobile access gateway.
+            The enumerated values and the corresponding access
+            technology are as follows:
+             reserved                (0): Reserved (Not used)
+             logicalNetworkInterface (1): Logical network interface
+             pointToPointInterface   (2): Point-to-point interface
+             ethernet                (3): Ethernet interface
+             wirelessLan             (4): Wireless LAN interface
+             wimax                   (5): Wimax interface
+             threeGPPGERAN           (6): 3GPP GERAN
+             threeGPPUTRAN           (7): 3GPP UTRAN
+             threeGPPEUTRAN          (8): 3GPP E-UTRAN
+             threeGPP2eHRPD          (9): 3GPP2 eHRPD
+             threeGPP2HRPD          (10): 3GPP2 HRPD
+             threeGPP21xRTT         (11): 3GPP2 1xRTT
+             threeGPP2UMB           (12): 3GPP2 UMB
+           "
+       REFERENCE
+           "RFC 5213: Section 8.5,
+            Mobile IPv6 parameters registry on
+            http://www.iana.org/mobility-parameters"
+
+       SYNTAX INTEGER
+       {
+            reserved               (0),
+            logicalNetworkInterface(1),
+            pointToPointInterface  (2),
+            ethernet               (3),
+            wirelessLan            (4),
+            wimax                  (5),
+            threeGPPGERAN          (6),
+            threeGPPUTRAN          (7),
+            threeGPPEUTRAN         (8),
+            threeGPP2eHRPD         (9),
+            threeGPP2HRPD          (10),
+            threeGPP21xRTT         (11),
+            threeGPP2UMB           (12)
+       }
+END
