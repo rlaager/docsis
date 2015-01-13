@@ -32,6 +32,7 @@ int encode_ip     	(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr
 int encode_ip6     	(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );
 int encode_ip_ip6  	(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );
 int encode_char_ip_ip6  	(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );
+int encode_ip_ip6_port  	(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );
 int encode_lenzero  	(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );
 int encode_ether	(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );
 int encode_dual_qtag	(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );
