@@ -63,6 +63,11 @@ void decode_uint (unsigned char *tlvbuf, struct symbol_entry *sym, size_t length
   printf("%s %u;\n", sym->sym_ident, ntohl(helper));
 }
 
+void decode_uint24 (unsigned char *tlvbuf, struct symbol_entry *sym, size_t length)
+{
+  printf("%s %d;\n", sym->sym_ident, tlvbuf[0] * 256 * 256 + tlvbuf[1] * 256 + tlvbuf[2]);
+}
+
 void decode_ushort (unsigned char *tlvbuf, symbol_type *sym, size_t length)
 {
   static unsigned short helper;

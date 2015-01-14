@@ -301,6 +301,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 440,    "FrameLossMeasurement",              2,      435,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.43.5.24.4.2 L2VPN-I13 Annex B.3.24.4.2 */
 { 441,    "FrameLossMeasurementEnable",        1,      440,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 22.43.5.24.4.2.1 L2VPN-I13 Annex B.3.24.4.2.1 */
 { 442,    "FrameLossMeasurementTransmissionPeriodicity", 2, 440, (encode_ushort),       (decode_ushort),         0,           0             }, /* TLV 22.43.5.24.4.2.2 L2VPN-I13 Annex B.3.24.4.2.2 */
+{ 443,    "L2VPNDSID",                         26,     202,    (encode_uint24),         (decode_uint24),         1,           1048575       }, /* TLV 22.43.5.24.4.2.2 L2VPN-I13 Annex B.3.24.4.2.2 */
 { 201,    "VendorIdentifier",                  8,      200,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 22.43.8 */
 
 /* TODO: Vendor Specific support in the IEEE802Classifier */
@@ -544,7 +545,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 236,    "SNMPv3AccessViewMask",              3,      233,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 202.54.3 eRouter-I12 Annex B.4.6.3 */
 { 237,    "SNMPv3AccessViewType",              4,      233,    (encode_uchar),          (decode_uchar),          1,           2             }, /* TLV 202.54.4 eRouter-I12 Annex B.4.6.4 */
 
-/* A little more organized -> Start with 443 */
+/* A little more organized -> Start with 444 */
 
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/
 { 998,    "GenericTLV",                        0,      0,      (encode_nothing),        (decode_special),        0,           0             },

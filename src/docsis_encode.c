@@ -70,6 +70,22 @@ int encode_uint ( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
   return ( sizeof(unsigned int));
 }
 
+int encode_uint24 ( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
+{
+  unsigned char byte1, byte2, byte3;
+  union t_val *helper; /* We only use this to cast the void* we receive to what we think it should be */
+
+  helper = (union t_val *) tval;
+  
+  byte1 = (helper->uintval >> (0)) & 0xFF;
+  byte2 = (helper->uintval >> (8)) & 0xFF;
+  byte3 = (helper->uintval >> (16)) & 0xFF;
+
+  memcpy ( buf,&byte3, sizeof(char));
+  memcpy ( buf+sizeof(char),&byte2, sizeof(char));
+  memcpy ( buf+2*sizeof(char),&byte1, sizeof(char));
+  return ( 3 * sizeof(char));
+}
 
 int encode_ushort ( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
 {

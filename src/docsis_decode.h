@@ -30,6 +30,7 @@ struct symbol_entry *find_symbol_by_code_and_pid (unsigned char code, unsigned i
 
 void decode_special (unsigned char *tlvbuf, symbol_type *sym, size_t length);
 void decode_uint (unsigned char *tlvbuf, struct symbol_entry *sym, size_t length );
+void decode_uint24 (unsigned char *tlvbuf, struct symbol_entry *sym, size_t length );
 void decode_ushort (unsigned char *tlvbuf, symbol_type *sym, size_t length );
 void decode_uchar (unsigned char *tlvbuf, symbol_type *sym, size_t length );
 void decode_ip (unsigned char *tlvbuf, symbol_type *sym, size_t length );
