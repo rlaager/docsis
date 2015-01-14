@@ -278,6 +278,29 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 417,    "RouteTargetExport",                 4,      413,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* TLV 22.43.5.21.4 L2VPN-I13 Annex B.3.21.4 */
 { 418,    "CEIDVEID",                          5,      413,    (encode_ushort),         (decode_ushort),         0,           0             }, /* TLV 22.43.5.21.5 L2VPN-I13 Annex B.3.21.5 */
 { 419,    "PseudowireSignaling",               23,     202,    (encode_uchar),          (decode_uchar),          0,           2             }, /* TLV 22.43.5.23 L2VPN-I13 Annex B.3.23 */
+{ 420,    "SOAMSubtype",                       24,     202,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.43.5.24 L2VPN-I13 Annex B.3.24 */
+{ 421,    "MEPConfiguration",                  1,      420,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.43.5.24.1 L2VPN-I13 Annex B.3.24.1 */
+{ 422,    "MDLevel",                           1,      421,    (encode_uchar),          (decode_uchar),          0,           7             }, /* TLV 22.43.5.24.1.1 L2VPN-I13 Annex B.3.24.1.1 */
+{ 423,    "MDName",                            2,      421,    (encode_string),         (decode_string),         2,           16            }, /* TLV 22.43.5.24.1.2 L2VPN-I13 Annex B.3.24.1.2 */
+{ 424,    "MAName",                            3,      421,    (encode_string),         (decode_string),         2,           28            }, /* TLV 22.43.5.24.1.3 L2VPN-I13 Annex B.3.24.1.3 */
+{ 425,    "MEPID",                             4,      421,    (encode_ushort),         (decode_ushort),         1,           8191          }, /* TLV 22.43.5.24.1.4 L2VPN-I13 Annex B.3.24.1.4 */
+{ 426,    "RemoteMEPConfiguration",            2,      420,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.43.5.24.2 L2VPN-I13 Annex B.3.24.2 */
+{ 427,    "RemoteMDLevel",                     1,      426,    (encode_uchar),          (decode_uchar),          0,           7             }, /* TLV 22.43.5.24.2.1 L2VPN-I13 Annex B.3.24.2.1 */
+{ 428,    "RemoteMDName",                      2,      426,    (encode_string),         (decode_string),         2,           16            }, /* TLV 22.43.5.24.2.2 L2VPN-I13 Annex B.3.24.2.2 */
+{ 429,    "RemoteMAName",                      3,      426,    (encode_string),         (decode_string),         2,           28            }, /* TLV 22.43.5.24.2.3 L2VPN-I13 Annex B.3.24.2.3 */
+{ 430,    "RemoteMEPID",                       4,      426,    (encode_ushort),         (decode_ushort),         1,           8191          }, /* TLV 22.43.5.24.2.4 L2VPN-I13 Annex B.3.24.2.4 */
+{ 431,    "FaultManagementConfiguration",      3,      420,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.43.5.24.3 L2VPN-I13 Annex B.3.24.3 */
+{ 432,    "ContinuityCheckMessages",           1,      431,    (encode_uchar),          (decode_uchar),          0,           2             }, /* TLV 22.43.5.24.3.1 L2VPN-I13 Annex B.3.24.3.1 */
+{ 433,    "LoopbackFunction",                  2,      431,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 22.43.5.24.3.2 L2VPN-I13 Annex B.3.24.3.2 */
+{ 434,    "LinktraceFunction",                 3,      431,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 22.43.5.24.3.3 L2VPN-I13 Annex B.3.24.3.3 */
+{ 435,    "PerformanceManagementConfiguration", 4,     420,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.43.5.24.4 L2VPN-I13 Annex B.3.24.4 */
+{ 436,    "FrameDelayMeasurement",             1,      435,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.43.5.24.4.1 L2VPN-I13 Annex B.3.24.4.1 */
+{ 437,    "FrameDelayMeasurementEnable",       1,      436,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 22.43.5.24.4.1.1 L2VPN-I13 Annex B.3.24.4.1.1 */
+{ 438,    "FrameDelayMeasurementOneWayTwoWay", 2,      436,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 22.43.5.24.4.1.2 L2VPN-I13 Annex B.3.24.4.1.2 */
+{ 439,    "FrameDelayMeasurementTransmissionPeriodicity", 3, 436, (encode_ushort),      (decode_ushort),         0,           0             }, /* TLV 22.43.5.24.4.1.3 L2VPN-I13 Annex B.3.24.4.1.3 */
+{ 440,    "FrameLossMeasurement",              2,      435,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.43.5.24.4.2 L2VPN-I13 Annex B.3.24.4.2 */
+{ 441,    "FrameLossMeasurementEnable",        1,      440,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 22.43.5.24.4.2.1 L2VPN-I13 Annex B.3.24.4.2.1 */
+{ 442,    "FrameLossMeasurementTransmissionPeriodicity", 2, 440, (encode_ushort),       (decode_ushort),         0,           0             }, /* TLV 22.43.5.24.4.2.2 L2VPN-I13 Annex B.3.24.4.2.2 */
 { 201,    "VendorIdentifier",                  8,      200,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 22.43.8 */
 
 /* TODO: Vendor Specific support in the IEEE802Classifier */
@@ -521,7 +544,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 236,    "SNMPv3AccessViewMask",              3,      233,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 202.54.3 eRouter-I12 Annex B.4.6.3 */
 { 237,    "SNMPv3AccessViewType",              4,      233,    (encode_uchar),          (decode_uchar),          1,           2             }, /* TLV 202.54.4 eRouter-I12 Annex B.4.6.4 */
 
-/* A little more organized -> Start with 420 */
+/* A little more organized -> Start with 443 */
 
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/
 { 998,    "GenericTLV",                        0,      0,      (encode_nothing),        (decode_special),        0,           0             },
