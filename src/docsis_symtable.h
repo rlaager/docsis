@@ -319,6 +319,16 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 457,    "CMDownstreamForbiddenAttributeMask", 2,     455,    (encode_hexstr),         (decode_hexstr),         4,           4             }, /* TLV 22.43.9.2 MULPIv3.0-I24 Annex C.1.1.18.1.8.2 */
 { 458,    "CMUpstreamRequiredAttributeMask",   3,      455,    (encode_hexstr),         (decode_hexstr),         4,           4             }, /* TLV 22.43.9.3 MULPIv3.0-I24 Annex C.1.1.18.1.8.3 */
 { 459,    "CMUpstreamForbiddenAttributeMask",  4,      455,    (encode_hexstr),         (decode_hexstr),         4,           4             }, /* TLV 22.43.9.4 MULPIv3.0-I24 Annex C.1.1.18.1.8.4 */
+{ 460,    "IPMulticastJoinAuthorization",      10,     200,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.43.10 MULPIv3.0-I24 Annex C.1.1.18.1.9 */
+{ 461,    "IPMulticastProfileName",            1,      460,    (encode_string),         (decode_string),         1,           15            }, /* TLV 22.43.10.1 MULPIv3.0-I24 Annex C.1.1.18.1.9.1 */
+{ 462,    "IPMulticastJoinAuthStaticSessionRule", 2,   460,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.43.10.2 MULPIv3.0-I24 Annex C.1.1.18.1.9.2 */
+{ 463,    "MulticastRulePriority",             1,      462,    (encode_uchar),          (decode_uchar),          0,           255           }, /* TLV 22.43.10.2.1 MULPIv3.0-I24 Annex C.1.1.18.1.9.2.1 */
+{ 464,    "AuthorizationAction",               2,      462,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 22.43.10.2.2 MULPIv3.0-I24 Annex C.1.1.18.1.9.2.2 */
+{ 465,    "SourcePrefixAddress",               3,      462,    (encode_ip_ip6),         (decode_ip_ip6),         0,           0             }, /* TLV 22.43.10.2.3 MULPIv3.0-I24 Annex C.1.1.18.1.9.2.3 */
+{ 466,    "SourcePrefixLength",                4,      462,    (encode_uchar),          (decode_uchar),          0,           128           }, /* TLV 22.43.10.2.4 MULPIv3.0-I24 Annex C.1.1.18.1.9.2.4 */
+{ 467,    "GroupPrefixAddress",                5,      462,    (encode_ip_ip6),         (decode_ip_ip6),         0,           0             }, /* TLV 22.43.10.2.5 MULPIv3.0-I24 Annex C.1.1.18.1.9.2.5 */
+{ 468,    "GroupPrefixLength",                 6,      462,    (encode_uchar),          (decode_uchar),          0,           128           }, /* TLV 22.43.10.2.6 MULPIv3.0-I24 Annex C.1.1.18.1.9.2.6 */
+{ 469,    "MaximumMulticastSessions",          3,      460,    (encode_ushort),         (decode_ushort),         0,           0             }, /* TLV 22.43.10.3 MULPIv3.0-I24 Annex C.1.1.18.1.9.3 */
 
 /* TODO: Vendor Specific support in the IEEE802Classifier */
 
@@ -561,7 +571,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 236,    "SNMPv3AccessViewMask",              3,      233,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 202.54.3 eRouter-I12 Annex B.4.6.3 */
 { 237,    "SNMPv3AccessViewType",              4,      233,    (encode_uchar),          (decode_uchar),          1,           2             }, /* TLV 202.54.4 eRouter-I12 Annex B.4.6.4 */
 
-/* A little more organized -> Start with 460 */
+/* A little more organized -> Start with 470 */
 
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/
 { 998,    "GenericTLV",                        0,      0,      (encode_nothing),        (decode_special),        0,           0             },
