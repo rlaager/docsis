@@ -302,7 +302,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 441,    "FrameLossMeasurementEnable",        1,      440,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 22.43.5.24.4.2.1 L2VPN-I13 Annex B.3.24.4.2.1 */
 { 442,    "FrameLossMeasurementTransmissionPeriodicity", 2, 440, (encode_ushort),       (decode_ushort),         0,           0             }, /* TLV 22.43.5.24.4.2.2 L2VPN-I13 Annex B.3.24.4.2.2 */
 { 443,    "L2VPNDSID",                         26,     202,    (encode_uint24),         (decode_uint24),         1,           1048575       }, /* TLV 22.43.5.24.4.2.2 L2VPN-I13 Annex B.3.24.4.2.2 */
-{ 448,    "VendorSpecific",                    43,     202,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.43.5.43 L2VPN-I13 Annex B.3.11 */
+{ 448,    "VendorSpecificL2VPNSubtype",        43,     202,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.43.5.43 L2VPN-I13 Annex B.3.11 */
 { 449,    "VendorIdentifier",                  8,      448,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 22.43.5.43.8 L2VPN-I13 Annex B.3.11 */
 { 444,    "ExtendedCMTSMICConfigurationSetting", 6,    200,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.43.6 MULPIv3.0-I24 Annex C.1.1.18.1.6 */
 { 445,    "ExtendedCMTSMICHMACtype",           1,      444,    (encode_uchar),          (decode_uchar),          0,           0             }, /* TLV 22.43.6.1 MULPIv3.0-I24 Annex C.1.1.18.1.6.1 */

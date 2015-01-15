@@ -7,7 +7,7 @@ VendorSpecific
 VendorIdentifier 0xffffff;
 L2VPNEncoding
 {
-VendorSpecific
+VendorSpecificL2VPNSubtype
 {
 VendorIdentifier 0x010203;
 }
