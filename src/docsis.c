@@ -114,7 +114,6 @@ add_cmts_mic (unsigned char *tlvbuf, unsigned int tlvbuflen,
 	  else
 	    {
 	      if ( cp[0] == 64 ) {
-		fprintf(stderr, "docsis: warning: TLV64 (length > 255) not allowed in DOCSIS config files\n");
 		cp = cp + (size_t) ntohs(*((unsigned short *)(cp+1))) + 3;
 	      } else {
 	      	cp = cp + cp[1] + 2;
