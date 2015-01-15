@@ -329,6 +329,12 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 467,    "GroupPrefixAddress",                5,      462,    (encode_ip_ip6),         (decode_ip_ip6),         0,           0             }, /* TLV 22.43.10.2.5 MULPIv3.0-I24 Annex C.1.1.18.1.9.2.5 */
 { 468,    "GroupPrefixLength",                 6,      462,    (encode_uchar),          (decode_uchar),          0,           128           }, /* TLV 22.43.10.2.6 MULPIv3.0-I24 Annex C.1.1.18.1.9.2.6 */
 { 469,    "MaximumMulticastSessions",          3,      460,    (encode_ushort),         (decode_ushort),         0,           0             }, /* TLV 22.43.10.3 MULPIv3.0-I24 Annex C.1.1.18.1.9.3 */
+{ 470,    "ServiceTypeIdentifier",             11,     200,    (encode_string),         (decode_string),         1,           16            }, /* TLV 22.43.11 MULPIv3.0-I24 Annex C.1.1.18.1.10 */
+{ 471,    "DEMARCAutoConfiguration",           12,     200,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.43.12 MULPIv3.0-I24 Annex C.1.1.18.1.11 */
+{ 472,    "DACDisableEnableConfig",            1,      471,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 22.43.12.1 DEMARCv1.0-I04 Annex B.1 */
+{ 473,    "CMIMEncoding",                      2,      471,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* TLV 22.43.12.2 DEMARCv1.0-I04 Annex B.2 */
+{ 474,    "UpstreamServiceClassName",          3,      471,    (encode_strzero),        (decode_strzero),        2,           16            }, /* TLV 22.43.12.3 DEMARCv1.0-I04 Annex B.3 */
+{ 475,    "DownstreamServiceClassName",        4,      471,    (encode_strzero),        (decode_strzero),        2,           16            }, /* TLV 22.43.12.4 DEMARCv1.0-I04 Annex B.4 */
 
 /* TODO: Vendor Specific support in the IEEE802Classifier */
 
@@ -571,7 +577,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 236,    "SNMPv3AccessViewMask",              3,      233,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 202.54.3 eRouter-I12 Annex B.4.6.3 */
 { 237,    "SNMPv3AccessViewType",              4,      233,    (encode_uchar),          (decode_uchar),          1,           2             }, /* TLV 202.54.4 eRouter-I12 Annex B.4.6.4 */
 
-/* A little more organized -> Start with 470 */
+/* A little more organized -> Start with 476 */
 
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/
 { 998,    "GenericTLV",                        0,      0,      (encode_nothing),        (decode_special),        0,           0             },

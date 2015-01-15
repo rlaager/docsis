@@ -1,0 +1,31 @@
+Main 
+{
+UsPacketClass
+{
+VendorSpecific
+{
+VendorIdentifier 0xffffff;
+ServiceTypeIdentifier "basic";
+DEMARCAutoConfiguration
+{
+DACDisableEnableConfig 1;
+CMIMEncoding 0x0102;
+UpstreamServiceClassName "string1";
+DownstreamServiceClassName "string2";
+}
+}
+ClassifierRef 1;
+ServiceFlowRef 1;
+}
+NetworkAccess 1;
+UsServiceFlow
+{
+UsServiceFlowRef 1;
+QosParamSetType 7;
+}
+DsServiceFlow
+{
+DsServiceFlowRef 2;
+QosParamSetType 7;
+}
+}
