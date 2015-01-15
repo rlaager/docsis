@@ -313,7 +313,12 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 452,    "SAVStaticPrefixRule",               2,      450,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.43.7.2 MULPIv3.0-I24 Annex C.1.1.18.1.7.2 */
 { 453,    "SAVStaticPrefixAddress",            1,      452,    (encode_ip_ip6),         (decode_ip_ip6),         0,           0             }, /* TLV 22.43.7.2.1 MULPIv3.0-I24 Annex C.1.1.18.1.7.2.1 */
 { 454,    "SAVStaticPrefixLength",             2,      452,    (encode_uchar),          (decode_uchar),          0,           0             }, /* TLV 22.43.7.2.2 MULPIv3.0-I24 Annex C.1.1.18.1.7.2.2 */
-{ 201,    "VendorIdentifier",                  8,      200,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 22.43.8 */
+{ 201,    "VendorIdentifier",                  8,      200,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 22.43.8 MULPIv3.0-I24 Annex C.2.1.11 */
+{ 455,    "CMAttributeMasks",                  9,      200,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.43.9 MULPIv3.0-I24 Annex C.1.1.18.1.8 */
+{ 456,    "CMDownstreamRequiredAttributeMask", 1,      455,    (encode_hexstr),         (decode_hexstr),         4,           4             }, /* TLV 22.43.9.1 MULPIv3.0-I24 Annex C.1.1.18.1.8.1 */
+{ 457,    "CMDownstreamForbiddenAttributeMask", 2,     455,    (encode_hexstr),         (decode_hexstr),         4,           4             }, /* TLV 22.43.9.2 MULPIv3.0-I24 Annex C.1.1.18.1.8.2 */
+{ 458,    "CMUpstreamRequiredAttributeMask",   3,      455,    (encode_hexstr),         (decode_hexstr),         4,           4             }, /* TLV 22.43.9.3 MULPIv3.0-I24 Annex C.1.1.18.1.8.3 */
+{ 459,    "CMUpstreamForbiddenAttributeMask",  4,      455,    (encode_hexstr),         (decode_hexstr),         4,           4             }, /* TLV 22.43.9.4 MULPIv3.0-I24 Annex C.1.1.18.1.8.4 */
 
 /* TODO: Vendor Specific support in the IEEE802Classifier */
 
@@ -556,7 +561,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 236,    "SNMPv3AccessViewMask",              3,      233,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 202.54.3 eRouter-I12 Annex B.4.6.3 */
 { 237,    "SNMPv3AccessViewType",              4,      233,    (encode_uchar),          (decode_uchar),          1,           2             }, /* TLV 202.54.4 eRouter-I12 Annex B.4.6.4 */
 
-/* A little more organized -> Start with 455 */
+/* A little more organized -> Start with 460 */
 
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/
 { 998,    "GenericTLV",                        0,      0,      (encode_nothing),        (decode_special),        0,           0             },
