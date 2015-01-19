@@ -1,0 +1,15 @@
+Main 
+{
+NetworkAccess 1;
+UsServiceFlow
+{
+UsServiceFlowRef 1;
+QosParamSetType 7;
+}
+DsServiceFlow
+{
+DsServiceFlowRef 2;
+QosParamSetType 7;
+}
+SubscriberManagementCPEIPv6Table 1111::1:1,2222::2:2,3333::3:3,4444::4:4,5555::5:5;
+}

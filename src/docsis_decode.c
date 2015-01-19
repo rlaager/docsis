@@ -100,6 +100,21 @@ void decode_ip (unsigned char *tlvbuf, symbol_type *sym, size_t length )
 	sym->sym_ident, inet_ntoa(helper) );
 }
 
+void decode_ip_list (unsigned char *tlvbuf, symbol_type *sym, size_t length )
+{
+  static struct in_addr helper;
+  unsigned int i;
+  printf("%s ", sym->sym_ident);
+  for ( i=0; i < length / 4; i++) {
+    memcpy (&helper, tlvbuf + i * 4, 4 );
+    printf( "%s", inet_ntoa(helper) );
+    if (i < (length/4) - 1 ) {
+      printf(",");
+    }
+  }
+  printf(";\n");  
+}
+
 void decode_ip6 (unsigned char *tlvbuf, symbol_type *sym, size_t length )
 {
   static struct in6_addr helper;
@@ -112,6 +127,22 @@ void decode_ip6 (unsigned char *tlvbuf, symbol_type *sym, size_t length )
   memcpy (&helper, tlvbuf, length );
   fprintf (stdout, "%s %s;\n",
 	sym->sym_ident, inet_ntop(AF_INET6,tlvbuf,ipstr,sizeof ipstr) );
+}
+
+void decode_ip6_list (unsigned char *tlvbuf, symbol_type *sym, size_t length )
+{
+  static struct in6_addr helper;
+  char ipstr[INET6_ADDRSTRLEN];
+  unsigned int i;
+  printf("%s ", sym->sym_ident);
+  for ( i=0; i < length / 16; i++) {
+    memcpy (&helper, tlvbuf + i * 16, 16 );
+    printf( "%s", inet_ntop(AF_INET6, tlvbuf + i * 16, ipstr, sizeof ipstr) );
+    if (i < (length/16) - 1 ) {
+      printf(",");
+    }
+  }
+  printf(";\n");  
 }
 
 void decode_ip_ip6 (unsigned char *tlvbuf, symbol_type *sym, size_t length )

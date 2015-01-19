@@ -34,7 +34,9 @@ void decode_uint24 (unsigned char *tlvbuf, struct symbol_entry *sym, size_t leng
 void decode_ushort (unsigned char *tlvbuf, symbol_type *sym, size_t length );
 void decode_uchar (unsigned char *tlvbuf, symbol_type *sym, size_t length );
 void decode_ip (unsigned char *tlvbuf, symbol_type *sym, size_t length );
+void decode_ip_list (unsigned char *tlvbuf, symbol_type *sym, size_t length );
 void decode_ip6 (unsigned char *tlvbuf, symbol_type *sym, size_t length );
+void decode_ip6_list (unsigned char *tlvbuf, symbol_type *sym, size_t length );
 void decode_ip_ip6 (unsigned char *tlvbuf, symbol_type *sym, size_t length );
 void decode_char_ip_ip6 (unsigned char *tlvbuf, symbol_type *sym, size_t length );
 void decode_ip_ip6_port (unsigned char *tlvbuf, symbol_type *sym, size_t length );

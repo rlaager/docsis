@@ -489,6 +489,9 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 134,    "SnmpV3MgrPublicNumber",             2,      132,    (encode_hexstr),         (decode_hexstr),         1,           514           }, /* TLV 34.2 MULPIv3.0-I24 Annex C.1.2.9.2 */
 
 { 154,    "SubMgmtControl",                    35,     0,      (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 35 MULPIv3.0-I24 Annex C.1.1.19.1 */
+
+{ 477,    "SubscriberManagementCPEIPTable",    36,     0,      (encode_ip_list),        (decode_ip_list),        0,           0             }, /* TLV 36 MULPIv3.0-I24 Annex C.1.1.19.2 */
+
 { 155,    "SubMgmtFilters",                    37,     0,      (encode_ushort_list),    (decode_ushort_list),    4,           10            }, /* TLV 37 MULPIv3.0-I24 Annex C.1.1.19.4 */
 
 /* Snmpv3 Notification Receiver */
@@ -547,6 +550,8 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 343,    "CMTSStaticMulticastSessionSource",  2,      341,    (encode_ip_ip6),         (decode_ip_ip6),         0,           0             }, /* TLV 64.2 MULPIv3.0-I24 Annex C.1.1.27.2 */
 { 344,    "CMTSStaticMulticastSessionCMIM",    3,      341,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* TLV 64.3 MULPIv3.0-I24 Annex C.1.1.27.3 */
 
+{ 478,    "SubscriberManagementCPEIPv6Table",  67,     0,      (encode_ip6_list),       (decode_ip6_list),       0,           0             }, /* TLV 67 MULPIv3.0-I24 Annex C.1.1.19.6 */
+
 /* eRouter TLVs */
 { 175,    "eRouter",                           202,    0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 202 eRouter-I12 */
 { 176,    "InitializationMode",                1,      175,    (encode_uchar),          (decode_uchar),          0,           3             }, /* TLV 202.1 eRouter-I12 Annex B.4.2 */
@@ -577,7 +582,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 236,    "SNMPv3AccessViewMask",              3,      233,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 202.54.3 eRouter-I12 Annex B.4.6.3 */
 { 237,    "SNMPv3AccessViewType",              4,      233,    (encode_uchar),          (decode_uchar),          1,           2             }, /* TLV 202.54.4 eRouter-I12 Annex B.4.6.4 */
 
-/* A little more organized -> Start with 476 */
+/* A little more organized -> Start with 479 */
 
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/
 { 998,    "GenericTLV",                        0,      0,      (encode_nothing),        (decode_special),        0,           0             },
