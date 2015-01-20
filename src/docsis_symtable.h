@@ -552,6 +552,9 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 
 { 478,    "SubscriberManagementCPEIPv6Table",  67,     0,      (encode_ip6_list),       (decode_ip6_list),       0,           0             }, /* TLV 67 MULPIv3.0-I24 Annex C.1.1.19.6 */
 
+{ 495,    "NetworkTimingProfile",              73,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 73 MULPIv3.0-I24 Annex C.1.2.19 */
+{ 496,    "NetworkTimingProfileReference",     1,      495,    (encode_ushort),         (decode_ushort),         1,           65536         }, /* TLV 73.1 MULPIv3.0-I24 Annex C.1.2.19.1 */
+{ 497,    "NetworkTimingProfileName",          2,      495,    (encode_strzero),        (decode_strzero),        2,           16            }, /* TLV 73.2 MULPIv3.0-I24 Annex C.1.2.19.2 */
 { 481,    "EnergyManagementParameter",         74,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 74 MULPIv3.0-I24 Annex C.1.1.30 */
 { 482,    "EnergyManagementFeatureControl",    1,      481,    (encode_uint),           (decode_uint),           0,           1             }, /* TLV 74.1 MULPIv3.0-I24 Annex C.1.1.30.1 */
 { 483,    "EnergyManagement1x1Mode",           2,      481,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 74.2 MULPIv3.0-I24 Annex C.1.1.30.2 */
@@ -599,7 +602,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 236,    "SNMPv3AccessViewMask",              3,      233,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 202.54.3 eRouter-I12 Annex B.4.6.3 */
 { 237,    "SNMPv3AccessViewType",              4,      233,    (encode_uchar),          (decode_uchar),          1,           2             }, /* TLV 202.54.4 eRouter-I12 Annex B.4.6.4 */
 
-/* A little more organized -> Start with 495 */
+/* A little more organized -> Start with 498 */
 
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/
 { 998,    "GenericTLV",                        0,      0,      (encode_nothing),        (decode_special),        0,           0             },
