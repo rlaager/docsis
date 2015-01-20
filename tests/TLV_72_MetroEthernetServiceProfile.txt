@@ -1,0 +1,37 @@
+Main 
+{
+NetworkAccess 1;
+UsServiceFlow
+{
+UsServiceFlowRef 1;
+QosParamSetType 7;
+}
+DsServiceFlow
+{
+DsServiceFlowRef 2;
+QosParamSetType 7;
+}
+MetroEthernetServiceProfile
+{
+MESPReference 1;
+MESPBandwidthProfile
+{
+CIR 1024;
+CBR 2048;
+EIR 512;
+EBS 256;
+CouplingFlag 1;
+ColorMode
+{
+ColorIdentificationField 8;
+ColorIdentificationFieldValue 0x01;
+}
+ColorMarking
+{
+ColorMarkingField 4;
+ColorMarkingFieldValue 0x01;
+}
+}
+MESPName "MESPName";
+}
+}
