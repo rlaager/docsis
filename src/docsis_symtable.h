@@ -555,7 +555,14 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 514,    "MACAddressLearningControlEncoding", 69,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 69 MULPIv3.0-I24 Annex C.1.2.18 */
 { 515,    "MACAddressLearningControl",         1,      514,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 69.1 MULPIv3.0-I24 Annex C.1.2.18.1 */
 { 516,    "MACAddressLearningHoldoffTimer",    2,      514,    (encode_uchar),          (decode_uchar),          0,           10            }, /* TLV 69.2 MULPIv3.0-I24 Annex C.1.2.18.2 */
-
+{ 517,    "UpstreamAggregateServiceFlow",      70,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 70 MULPIv3.0-I24 Annex C.2.2.3 */
+{ 518,    "UpstreamServiceFlowReference",      1,      517,    (encode_ushort),         (decode_ushort),         1,           65535         }, /* TLV 70.1 MULPIv3.0-I24 Annex C.2.2.5.1 */
+{ 519,    "UpstreamAggregateServiceFlowReference", 36, 517,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 70.36 MULPIv3.0-I24 Annex C.2.2.5.10 */
+{ 520,    "UpstreamMESPReference",             37,     517,    (encode_ushort),         (decode_ushort),         1,           65535         }, /* TLV 70.37 MULPIv3.0-I24 Annex C.2.2.5.11 */
+{ 521,    "DownstreamAggregateServiceFlow",    71,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 71 MULPIv3.0-I24 Annex C.2.2.3 */
+{ 522,    "DownstreamServiceFlowReference",    1,      521,    (encode_ushort),         (decode_ushort),         1,           65535         }, /* TLV 71.1 MULPIv3.0-I24 Annex C.2.2.5.1 */
+{ 523,    "DownstreamAggregateServiceFlowReference", 36, 521,  (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 71.36 MULPIv3.0-I24 Annex C.2.2.5.10 */
+{ 524,    "DownstreamMESPReference",           37,     521,    (encode_ushort),         (decode_ushort),         1,           65535         }, /* TLV 71.37 MULPIv3.0-I24 Annex C.2.2.5.11 */
 { 498,    "MetroEthernetServiceProfile",       72,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 72 MULPIv3.0-I24 Annex C.2.2.10 */
 { 499,    "MESPReference",                     1,      498,    (encode_uchar),          (decode_uchar),          1,           255           }, /* TLV 72.1 MULPIv3.0-I24 Annex C.2.2.10.1 */
 { 500,    "MESPBandwidthProfile",              2,      498,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 72.2 MULPIv3.0-I24 Annex C.2.2.10.2 */
@@ -621,7 +628,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 236,    "SNMPv3AccessViewMask",              3,      233,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 202.54.3 eRouter-I12 Annex B.4.6.3 */
 { 237,    "SNMPv3AccessViewType",              4,      233,    (encode_uchar),          (decode_uchar),          1,           2             }, /* TLV 202.54.4 eRouter-I12 Annex B.4.6.4 */
 
-/* A little more organized -> Start with 517 */
+/* A little more organized -> Start with 525 */
 
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/
 { 998,    "GenericTLV",                        0,      0,      (encode_nothing),        (decode_special),        0,           0             },
