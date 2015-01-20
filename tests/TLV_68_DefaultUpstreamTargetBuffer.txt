@@ -1,0 +1,15 @@
+Main 
+{
+DefaultUpstreamTargetBuffer 1000;
+NetworkAccess 1;
+UsServiceFlow
+{
+UsServiceFlowRef 1;
+QosParamSetType 7;
+}
+DsServiceFlow
+{
+DsServiceFlowRef 2;
+QosParamSetType 7;
+}
+}
