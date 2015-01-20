@@ -1,0 +1,36 @@
+Main 
+{
+NetworkAccess 1;
+UsServiceFlow
+{
+UsServiceFlowRef 1;
+QosParamSetType 7;
+}
+DsServiceFlow
+{
+DsServiceFlowRef 2;
+QosParamSetType 7;
+}
+EnergyManagementParameter
+{
+EnergyManagementFeatureControl 1;
+EnergyManagement1x1Mode
+{
+DownstreamActivityDetectionParameters
+{
+DownstreamEntryBitrateThreshold 1024;
+DownstreamEntryTimeThreshold 3600;
+DownstreamExitBitrateThreshold 1024;
+DownstreamExitTimeThreshold 60;
+}
+UpstreamActivityDetectionParameters
+{
+UpstreamEntryBitrateThreshold 0;
+UpstreamEntryTimeThreshold 1;
+UpstreamExitBitrateThreshold 0;
+UpstreamExitTimeThreshold 1;
+}
+}
+EnergyManagementCyclePeriod 900;
+}
+}

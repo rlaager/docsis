@@ -552,6 +552,23 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 
 { 478,    "SubscriberManagementCPEIPv6Table",  67,     0,      (encode_ip6_list),       (decode_ip6_list),       0,           0             }, /* TLV 67 MULPIv3.0-I24 Annex C.1.1.19.6 */
 
+{ 481,    "EnergyManagementParameter",         74,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 74 MULPIv3.0-I24 Annex C.1.1.30 */
+{ 482,    "EnergyManagementFeatureControl",    1,      481,    (encode_uint),           (decode_uint),           0,           1             }, /* TLV 74.1 MULPIv3.0-I24 Annex C.1.1.30.1 */
+{ 483,    "EnergyManagement1x1Mode",           2,      481,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 74.2 MULPIv3.0-I24 Annex C.1.1.30.2 */
+{ 484,    "DownstreamActivityDetectionParameters", 1,  483,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 74.2.1 MULPIv3.0-I24 Annex C.1.1.30.2.1 */
+{ 485,    "DownstreamEntryBitrateThreshold",   1,      484,    (encode_uint),           (decode_uint),           0,           0             }, /* TLV 74.2.1.1 MULPIv3.0-I24 Annex C.1.1.30.2.1.1 */
+{ 486,    "DownstreamEntryTimeThreshold",      2,      484,    (encode_ushort),         (decode_ushort),         1,           65535         }, /* TLV 74.2.1.2 MULPIv3.0-I24 Annex C.1.1.30.2.1.2 */
+{ 487,    "DownstreamExitBitrateThreshold",    3,      484,    (encode_uint),           (decode_uint),           0,           0             }, /* TLV 74.2.1.3 MULPIv3.0-I24 Annex C.1.1.30.2.1.3 */
+{ 488,    "DownstreamExitTimeThreshold",       4,      484,    (encode_ushort),         (decode_ushort),         1,           65535         }, /* TLV 74.2.1.4 MULPIv3.0-I24 Annex C.1.1.30.2.1.4 */
+{ 489,    "UpstreamActivityDetectionParameters", 2,    483,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 74.2.2 MULPIv3.0-I24 Annex C.1.1.30.2.2 */
+{ 490,    "UpstreamEntryBitrateThreshold",     1,      489,    (encode_uint),           (decode_uint),           0,           0             }, /* TLV 74.2.2.1 MULPIv3.0-I24 Annex C.1.1.30.2.2.1 */
+{ 491,    "UpstreamEntryTimeThreshold",        2,      489,    (encode_ushort),         (decode_ushort),         1,           65535         }, /* TLV 74.2.2.2 MULPIv3.0-I24 Annex C.1.1.30.2.2.2 */
+{ 492,    "UpstreamExitBitrateThreshold",      3,      489,    (encode_uint),           (decode_uint),           0,           0             }, /* TLV 74.2.2.3 MULPIv3.0-I24 Annex C.1.1.30.2.2.3 */
+{ 493,    "UpstreamExitTimeThreshold",         4,      489,    (encode_ushort),         (decode_ushort),         1,           65535         }, /* TLV 74.2.2.4 MULPIv3.0-I24 Annex C.1.1.30.2.2.4 */
+{ 494,    "EnergyManagementCyclePeriod",       3,      481,    (encode_ushort),         (decode_ushort),         0,           0             }, /* TLV 74.2.3 MULPIv3.0-I24 Annex C.1.1.30.3 */
+{ 479,    "EnergyManagement1x1ModeIndicator",  75,     0,      (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 75 MULPIv3.0-I24 Annex C.1.4.4 */
+{ 480,    "CMUpstreamAQMDisable",              76,     0,      (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 76 MULPIv3.0-I24 Annex C.1.2.20 */
+
 /* eRouter TLVs */
 { 175,    "eRouter",                           202,    0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 202 eRouter-I12 */
 { 176,    "InitializationMode",                1,      175,    (encode_uchar),          (decode_uchar),          0,           3             }, /* TLV 202.1 eRouter-I12 Annex B.4.2 */
@@ -582,7 +599,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 236,    "SNMPv3AccessViewMask",              3,      233,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 202.54.3 eRouter-I12 Annex B.4.6.3 */
 { 237,    "SNMPv3AccessViewType",              4,      233,    (encode_uchar),          (decode_uchar),          1,           2             }, /* TLV 202.54.4 eRouter-I12 Annex B.4.6.4 */
 
-/* A little more organized -> Start with 479 */
+/* A little more organized -> Start with 495 */
 
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/
 { 998,    "GenericTLV",                        0,      0,      (encode_nothing),        (decode_special),        0,           0             },
