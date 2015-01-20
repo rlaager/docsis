@@ -550,6 +550,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 343,    "CMTSStaticMulticastSessionSource",  2,      341,    (encode_ip_ip6),         (decode_ip_ip6),         0,           0             }, /* TLV 64.2 MULPIv3.0-I24 Annex C.1.1.27.2 */
 { 344,    "CMTSStaticMulticastSessionCMIM",    3,      341,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* TLV 64.3 MULPIv3.0-I24 Annex C.1.1.27.3 */
 
+{ 525,    "ManagementEventControl",            66,     0,      (encode_uint),           (decode_uint),           0,           0             }, /* TLV 66 MULPIv3.0-I24 Annex C.1.2.16 */
 { 478,    "SubscriberManagementCPEIPv6Table",  67,     0,      (encode_ip6_list),       (decode_ip6_list),       0,           0             }, /* TLV 67 MULPIv3.0-I24 Annex C.1.1.19.6 */
 { 513,    "DefaultUpstreamTargetBuffer",       68,     0,      (encode_ushort),         (decode_ushort),         0,           0             }, /* TLV 68 MULPIv3.0-I24 Annex C.1.2.17 */
 { 514,    "MACAddressLearningControlEncoding", 69,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 69 MULPIv3.0-I24 Annex C.1.2.18 */
@@ -628,7 +629,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 236,    "SNMPv3AccessViewMask",              3,      233,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 202.54.3 eRouter-I12 Annex B.4.6.3 */
 { 237,    "SNMPv3AccessViewType",              4,      233,    (encode_uchar),          (decode_uchar),          1,           2             }, /* TLV 202.54.4 eRouter-I12 Annex B.4.6.4 */
 
-/* A little more organized -> Start with 525 */
+/* A little more organized -> Start with 526 */
 
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/
 { 998,    "GenericTLV",                        0,      0,      (encode_nothing),        (decode_special),        0,           0             },
