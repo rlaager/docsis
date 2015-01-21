@@ -40,7 +40,7 @@ int encode_ip_ip6_port  	(unsigned char *buf, void *tval, struct symbol_entry *s
 int encode_lenzero  	(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );
 int encode_ether	(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );
 int encode_dual_qtag	(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );
-int encode_dual_int	(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );
+int encode_char_list	(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );
 int encode_ethermask	(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );
 int encode_string 	(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );
 int encode_strzero	(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );

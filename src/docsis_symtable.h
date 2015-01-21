@@ -162,7 +162,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 49,     "SrcMacAddress",                     2,      47,     (encode_ether),          (decode_ether),          0,           0             }, /* TLV 22.10.2 MULPIv3.0-I24 Annex C.2.1.8.2 */
 { 50,     "EtherType",                         3,      47,     (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 22.10.3 MULPIv3.0-I24 Annex C.2.1.8.3 */
 { 51,     "IEEE802Classifier",                 11,     28,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.11 MULPIv3.0-I24 Annex C.2.1.9 */
-{ 52,     "UserPriority",                      1,      51,     (encode_dual_int),       (decode_dual_int),       0,           0             }, /* TLV 22.11.1 MULPIv3.0-I24 Annex C.2.1.9.1 */
+{ 52,     "UserPriority",                      1,      51,     (encode_char_list),      (decode_char_list),      0,           0             }, /* TLV 22.11.1 MULPIv3.0-I24 Annex C.2.1.9.1 */
 { 53,     "VlanID",                            2,      51,     (encode_ushort),         (decode_ushort),         0,           4096          }, /* TLV 22.11.2 MULPIv3.0-I24 Annex C.2.1.9.2 */
 { 211,    "PcIPv6PacketClassification",        12,     28,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.12 MULPIv3.0-I24 Annex C.2.1.10 */
 { 212,    "PcIPv6TrafficClassRangeAndMask",    1,      211,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 22.12.1 MULPIv3.0-I24 Annex C.2.1.10.1 */
@@ -242,7 +242,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 380,    "SourceAttachmentIndividualID",      6,      202,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* TLV 22.43.5.6 L2VPN-I13 Annex B.3.6 */
 { 381,    "TargetAttachmentIndividualID",      7,      202,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* TLV 22.43.5.7 L2VPN-I13 Annex B.3.7 */
 { 382,    "IngressUserPriority",               8,      202,    (encode_uchar),          (decode_uchar),          0,           7             }, /* TLV 22.43.5.8 L2VPN-I13 Annex B.3.8 */
-{ 383,    "UserPriorityRange",                 9,      202,    (encode_dual_int),       (decode_dual_int),       0,           0             }, /* TLV 22.43.5.9 L2VPN-I13 Annex B.3.9 */
+{ 383,    "UserPriorityRange",                 9,      202,    (encode_char_list),      (decode_char_list),      0,           0             }, /* TLV 22.43.5.9 L2VPN-I13 Annex B.3.9 */
 { 385,    "L2VPNSADescriptorSubtype",          10,     202,    (encode_hexstr),         (decode_hexstr),         14,          14            }, /* TLV 22.43.5.10 L2VPN-I13 Annex B.3.10 */
 { 386,    "PseudowireType",                    12,     202,    (encode_uchar),          (decode_uchar),          4,           5             }, /* TLV 22.43.5.12 L2VPN-I13 Annex B.3.13 */
 { 387,    "L2VPNMode",                         13,     202,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 22.43.5.13 L2VPN-I13 Annex B.3.14 */
@@ -362,7 +362,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 75,     "SrcMacAddress",                     2,      73,     (encode_ether),          (decode_ether),          0,           0             }, /* TLV 23.10.2 MULPIv3.0-I24 Annex C.2.1.8.2 */
 { 76,     "EtherType",                         3,      73,     (encode_hexstr),         (decode_hexstr),         0,           3             }, /* TLV 23.10.3 MULPIv3.0-I24 Annex C.2.1.8.3 */
 { 77,     "IEEE802Classifier",                 11,     54,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.11 MULPIv3.0-I24 Annex C.2.1.9 */
-{ 78,     "UserPriority",                      1,      77,     (encode_dual_int),       (decode_dual_int),       0,           0             }, /* TLV 23.11.1 MULPIv3.0-I24 Annex C.2.1.9.1 */
+{ 78,     "UserPriority",                      1,      77,     (encode_char_list),      (decode_char_list),      0,           0             }, /* TLV 23.11.1 MULPIv3.0-I24 Annex C.2.1.9.1 */
 { 79,     "VlanID",                            2,      77,     (encode_ushort),         (decode_ushort),         0,           0             }, /* TLV 23.11.2 MULPIv3.0-I24 Annex C.2.1.9.2 */
 { 220,    "PcIPv6PacketClassification",        12,     54,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.12 MULPIv3.0-I24 Annex C.2.1.10 */
 { 221,    "PcIPv6TrafficClassRangeAndMask",    1,      220,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* TLV 23.12.1 MULPIv3.0-I24 Annex C.2.1.10.1 */
@@ -544,7 +544,8 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 /* IPv6 */
 { 173,    "SwUpgradeServer6",                  58,     0,      (encode_ip6),            (decode_ip6),            0,           0             }, /* TLV 58 MULPIv3.0-I24 Annex C.1.2.8 */
 
-{ 174,    "SubMgmtCPEIPv6PrefixList",          61,     0,      (encode_ip6_prefix_list), (decode_ip6_prefix_list), 0,         0             }, /* TLV 61 MULPIv3.0-I24 Annex C.1.1.19.3 */
+{ 528,    "SubMgmtCPEIPv6PrefixList",          61,     0,      (encode_ip6_prefix_list), (decode_ip6_prefix_list), 0,         0             }, /* TLV 61 MULPIv3.0-I24 Annex C.1.1.19.3 */
+{ 529,    "UpstreamDropClassifierGroupID",     62,     0,      (encode_char_list),      (decode_char_list),      0,           0             }, /* TLV 62 MULPIv3.0-I24 Annex C.1.1.26 */
 { 174,    "SubMgmtControl6",                   63,     0,      (encode_ushort),         (decode_ushort),         0,           0             }, /* TLV 63 MULPIv3.0-I24 Annex C.1.1.19.5 */
 { 341,    "CMTSStaticMulticastSessionEncodings",  64,  0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 64 MULPIv3.0-I24 Annex C.1.1.27 */
 { 342,    "CMTSStaticMulticastSessionGroup",   1,      341,    (encode_ip_ip6),         (decode_ip_ip6),         0,           0             }, /* TLV 64.1 MULPIv3.0-I24 Annex C.1.1.27.1 */

@@ -444,29 +444,25 @@ int encode_dual_qtag ( unsigned char *buf, void *tval, struct symbol_entry *sym_
     return (sizeof(final));
 }
 
-int encode_dual_int ( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
+int encode_char_list ( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
 {
-    short int i, final;
-    char *token;
-    char *array[2];
+    short int i;
+    char *token, final;
     const char s[2] = ",";
     union t_val *helper;
 
-#ifdef DEBUG
-    fprintf(stderr, "encode_dual_int: found '%s' on line %d\n", helper->strval, line );
-#endif /* DEBUG */
     helper = (union t_val *) tval;
     i = 0;
     token = strtok(helper->strval, s);
     while (token != NULL)
     {
-    	array[i++] = token;
-    	token = strtok (NULL, s);
+        final = (char)atoi(token);
+        memcpy (buf + i, &final, sizeof(char));
+        token = strtok (NULL, s);
+        i++;
     }
-    final = htons(atoi(array[0]) << 8 | atoi(array[1]));
-    memcpy (buf, &final, sizeof(final));
     free(helper->strval);
-    return(sizeof(final));
+    return(i * sizeof(char));
 }
 
 int encode_ethermask ( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
