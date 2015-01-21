@@ -1,0 +1,18 @@
+Main 
+{
+NetworkAccess 1;
+UsServiceFlow
+{
+UsServiceFlowRef 1;
+QosParamSetType 7;
+}
+DsServiceFlow
+{
+DsServiceFlowRef 2;
+QosParamSetType 7;
+}
+SnmpV3TrapReceiver
+{
+SnmpV3TrapRxIP6 2002::2:2;
+}
+}
