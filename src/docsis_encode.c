@@ -263,6 +263,40 @@ int encode_ip6_list( unsigned char *buf, void *tval, struct symbol_entry *sym_pt
   return ( i * sizeof(struct in6_addr));
 }
 
+int encode_ip6_prefix_list( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
+{
+  int j, i;
+  char *token, final;
+  char *array[15];
+  const char s[2] = ",";
+  const char t[2] = "/";
+  struct in6_addr in6;
+  union t_val *helper; /* We only use this to cast the void* we receive to what we think it should be */
+
+  helper = (union t_val *) tval;
+  i = 0;
+  token = strtok(helper->strval, s);
+  while (token != NULL) {
+    array[i] = token;
+    token = strtok (NULL, s);
+    i++;
+  }
+  for (j = 0; j <= i; j++) {
+    token = strtok(array[j], t);
+    while (token != NULL) {
+      if ( inet_pton ( AF_INET6, token, &in6) ) {
+        memcpy ( buf + 17 * j, &in6, sizeof(struct in6_addr));
+      } else {
+        final = (char)atoi(token);
+        memcpy ( buf + 17 * j + sizeof(struct in6_addr),&final,sizeof(unsigned char));
+      }
+      token = strtok (NULL, t);
+    }
+  }
+  free(helper->strval);
+  return ( i * ( sizeof(struct in6_addr) + sizeof(unsigned char) ) );
+}
+
 int encode_ip_ip6( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
 {
   struct in6_addr in6;

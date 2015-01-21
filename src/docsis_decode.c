@@ -145,6 +145,21 @@ void decode_ip6_list (unsigned char *tlvbuf, symbol_type *sym, size_t length )
   printf(";\n");  
 }
 
+void decode_ip6_prefix_list (unsigned char *tlvbuf, symbol_type *sym, size_t length )
+{
+  char ipstr[INET6_ADDRSTRLEN];
+  unsigned int i;
+  printf("%s ", sym->sym_ident);
+  for ( i=0; i < length / 17; i++) {
+    printf( "%s", inet_ntop(AF_INET6, tlvbuf + i * 17, ipstr, sizeof ipstr) );
+    printf( "/%d", tlvbuf[i * 17 + 16] );
+    if (i < (length/17) - 1 ) {
+      printf(",");
+    }
+  }
+  printf(";\n");  
+}
+
 void decode_ip_ip6 (unsigned char *tlvbuf, symbol_type *sym, size_t length )
 {
   static char ip6_addr[INET6_ADDRSTRLEN];

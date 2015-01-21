@@ -73,6 +73,7 @@ struct tlv *_my_tlvtree_head;
 %token <strval>  T_TIMETICKS
 %token <strval>  T_IP_LIST
 %token <strval>  T_IP6_LIST
+%token <strval>  T_IP6_PREFIX_LIST
 
 %token <uintval>  T_ASNTYPE_INT
 %token <uintval>  T_ASNTYPE_UINT
@@ -173,15 +174,17 @@ assignment_stmt:  T_IDENTIFIER T_INTEGER ';' {
 		| T_IDENTIFIER T_IP ';' {
 			$$ = create_tlv ($1, (union t_val *)&$2);}
 		| T_IDENTIFIER T_IP_LIST ';' {
-			$$ = create_tlv ($1, (union t_val *)&$2);}			
+			$$ = create_tlv ($1, (union t_val *)&$2);}
 		| T_IDENTIFIER T_IP6 ';' {
 			$$ = create_tlv ($1, (union t_val *)&$2);}
 		| T_IDENTIFIER T_IP6_LIST ';' {
-			$$ = create_tlv ($1, (union t_val *)&$2);}			
+			$$ = create_tlv ($1, (union t_val *)&$2);}
+		| T_IDENTIFIER T_IP6_PREFIX_LIST ';' {
+			$$ = create_tlv ($1, (union t_val *)&$2);}
 		| T_IDENTIFIER T_DUAL_TAG ';' {
 			$$ = create_tlv ($1, (union t_val *)&$2);}
 		| T_IDENTIFIER T_IP_IP6_PORT ';' {
-			$$ = create_tlv ($1, (union t_val *)&$2);}			
+			$$ = create_tlv ($1, (union t_val *)&$2);}
 		| T_IDENTIFIER T_MAC ';' {
 			$$ = create_tlv ($1, (union t_val *)&$2);}
 		| T_IDENTIFIER T_ETHERMASK ';' {

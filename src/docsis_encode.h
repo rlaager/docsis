@@ -33,6 +33,7 @@ int encode_ip     	(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr
 int encode_ip_list     	(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );
 int encode_ip6     	(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );
 int encode_ip6_list     	(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );
+int encode_ip6_prefix_list  	(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );
 int encode_ip_ip6  	(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );
 int encode_char_ip_ip6  	(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );
 int encode_ip_ip6_port  	(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr );
