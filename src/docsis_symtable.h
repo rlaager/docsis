@@ -537,6 +537,14 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 209,    "DUTControl",                        1,      208,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 45.1 L2VPN-I13 Annex B.2.1 */
 { 210,    "DUTCMIM",                           2,      208,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* TLV 45.2 L2VPN-I13 Annex B.2.2 */
 
+{ 534,    "SNMPv1v2cCoexistenceConfig",        53,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 53 MULPIv3.0-I24 Annex C.1.2.13 */
+{ 535,    "SNMPv1v2cCommunityName",            1,      534,    (encode_string),         (decode_string),         0,           0             }, /* TLV 53.1 MULPIv3.0-I24 Annex C.1.2.13.1 */
+{ 536,    "SNMPv1v2cTransportAddressAccess",   2,      534,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 53.2 MULPIv3.0-I24 Annex C.1.2.13.2 */
+{ 537,    "SNMPv1v2cTransportAddress",         1,      536,    (encode_ip_ip6_port),    (decode_ip_ip6_port),    0,           0             }, /* TLV 53.2.1 MULPIv3.0-I24 Annex C.1.2.13.2.1 */
+{ 538,    "SNMPv1v2cTransportAddressMask",     2,      536,    (encode_ip_ip6_port),    (decode_ip_ip6_port),    0,           0             }, /* TLV 53.2.2 MULPIv3.0-I24 Annex C.1.2.13.2.2 */
+{ 539,    "SNMPv1v2cAccessViewType",           3,      534,    (encode_uchar),          (decode_uchar),          1,           2             }, /* TLV 53.3 MULPIv3.0-I24 Annex C.1.2.13.3 */
+{ 540,    "SNMPv1v2cAccessViewName",           4,      534,    (encode_string),         (decode_string),         0,           0             }, /* TLV 53.4 MULPIv3.0-I24 Annex C.1.2.13.4 */
+
 { 531,    "SNMPCPEAccessControl",              55,     0,      (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 55 MULPIv3.0-I24 Annex C.1.2.15 */
 { 185,    "ChannelAssignmentConfig",           56,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 56 MULPIv3.0-I24 Annex C.1.1.25 */
 { 186,    "CaTransmit",                        1,      185,    (encode_uchar),          (decode_uchar),          0,           255           }, /* TLV 56.1 MULPIv3.0-I24 Annex C.1.1.25.1 */
@@ -633,7 +641,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 236,    "SNMPv3AccessViewMask",              3,      233,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 202.54.3 eRouter-I12 Annex B.4.6.3 */
 { 237,    "SNMPv3AccessViewType",              4,      233,    (encode_uchar),          (decode_uchar),          1,           2             }, /* TLV 202.54.4 eRouter-I12 Annex B.4.6.4 */
 
-/* A little more organized -> Start with 534 */
+/* A little more organized -> Start with 541 */
 
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/
 { 998,    "GenericTLV",                        0,      0,      (encode_nothing),        (decode_special),        0,           0             },

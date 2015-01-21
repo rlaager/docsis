@@ -1,0 +1,25 @@
+Main 
+{
+NetworkAccess 1;
+UsServiceFlow
+{
+UsServiceFlowRef 1;
+QosParamSetType 7;
+}
+DsServiceFlow
+{
+DsServiceFlowRef 2;
+QosParamSetType 7;
+}
+SNMPv1v2cCoexistenceConfig
+{
+SNMPv1v2cCommunityName "public";
+SNMPv1v2cTransportAddressAccess
+{
+SNMPv1v2cTransportAddress 1.2.3.4/69;
+SNMPv1v2cTransportAddressMask 2002::2:2/23;
+}
+SNMPv1v2cAccessViewType 1;
+SNMPv1v2cAccessViewName "public";
+}
+}
