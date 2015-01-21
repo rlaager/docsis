@@ -543,7 +543,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 
 /* IPv6 */
 { 173,    "SwUpgradeServer6",                  58,     0,      (encode_ip6),            (decode_ip6),            0,           0             }, /* TLV 58 MULPIv3.0-I24 Annex C.1.2.8 */
-
+{ 530,    "TFTPProvisionedModemIPv6Address",   59,     0,      (encode_ip6),            (decode_ip6),            0,           0             }, /* TLV 59 MULPIv3.0-I24 Annex C.1.1.10 */
 { 528,    "SubMgmtCPEIPv6PrefixList",          61,     0,      (encode_ip6_prefix_list), (decode_ip6_prefix_list), 0,         0             }, /* TLV 61 MULPIv3.0-I24 Annex C.1.1.19.3 */
 { 529,    "UpstreamDropClassifierGroupID",     62,     0,      (encode_char_list),      (decode_char_list),      0,           0             }, /* TLV 62 MULPIv3.0-I24 Annex C.1.1.26 */
 { 174,    "SubMgmtControl6",                   63,     0,      (encode_ushort),         (decode_ushort),         0,           0             }, /* TLV 63 MULPIv3.0-I24 Annex C.1.1.19.5 */
@@ -632,7 +632,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 236,    "SNMPv3AccessViewMask",              3,      233,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 202.54.3 eRouter-I12 Annex B.4.6.3 */
 { 237,    "SNMPv3AccessViewType",              4,      233,    (encode_uchar),          (decode_uchar),          1,           2             }, /* TLV 202.54.4 eRouter-I12 Annex B.4.6.4 */
 
-/* A little more organized -> Start with 528 */
+/* A little more organized -> Start with 531 */
 
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/
 { 998,    "GenericTLV",                        0,      0,      (encode_nothing),        (decode_special),        0,           0             },
