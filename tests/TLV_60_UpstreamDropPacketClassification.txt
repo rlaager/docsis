@@ -1,0 +1,45 @@
+Main 
+{
+UpstreamDropPacketClassification
+{
+ClassifierReference 1;
+ClassifierIdentifier 65000;
+RulePriority 0;
+DynamicServiceChangeAction 2;
+IPv4PacketClassification
+{
+IPv4Tos 0x00ffff;
+IPProtocol 256;
+IPv4SourceAddress 10.11.0.1;
+IPv4SourceMask 255.255.255.255;
+IPv4DestinationAddress 10.11.0.1;
+IPv4DestinationMask 255.255.255.255;
+SourcePortStart 0;
+SourcePortEnd 65535;
+DestinationPortStart 0;
+DestinationPortEnd 65535;
+}
+EthernetLLCPacketClassification
+{
+DestinationMACAddress 01:02:03:04:05:06/ff:ff:ff:ff:ff:ff;
+SourceMACAddress 01:02:03:04:05:06;
+EthertypeDSAPMacType 0x00ffff;
+}
+IEEE8021PQPacketClassification
+{
+UserPriority 0,0;
+VlanID 0;
+}
+}
+NetworkAccess 1;
+UsServiceFlow
+{
+UsServiceFlowRef 1;
+QosParamSetType 7;
+}
+DsServiceFlow
+{
+DsServiceFlowRef 2;
+QosParamSetType 7;
+}
+}

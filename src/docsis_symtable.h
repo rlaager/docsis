@@ -553,10 +553,40 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 185,    "ChannelAssignmentConfig",           56,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 56 MULPIv3.0-I24 Annex C.1.1.25 */
 { 186,    "CaTransmit",                        1,      185,    (encode_uchar),          (decode_uchar),          0,           255           }, /* TLV 56.1 MULPIv3.0-I24 Annex C.1.1.25.1 */
 { 187,    "CaReceive",                         2,      185,    (encode_uint),           (decode_uint),           88000000,    860000000     }, /* TLV 56.2 MULPIv3.0-I24 Annex C.1.1.25.2 */
-
-/* IPv6 */
 { 173,    "SwUpgradeServer6",                  58,     0,      (encode_ip6),            (decode_ip6),            0,           0             }, /* TLV 58 MULPIv3.0-I24 Annex C.1.2.8 */
 { 530,    "TFTPProvisionedModemIPv6Address",   59,     0,      (encode_ip6),            (decode_ip6),            0,           0             }, /* TLV 59 MULPIv3.0-I24 Annex C.1.1.10 */
+{ 546,    "UpstreamDropPacketClassification",  60,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 60 MULPIv3.0-I24 Annex C.2.1.2 */
+{ 547,    "ClassifierReference",               1,      546,    (encode_uchar),          (decode_uchar),          1,           255           }, /* TLV 60.1 MULPIv3.0-I24 Annex C.2.1.4.1 */
+{ 548,    "ClassifierIdentifier",              2,      546,    (encode_ushort),         (decode_ushort),         1,           65535         }, /* TLV 60.2 MULPIv3.0-I24 Annex C.2.1.4.2 */
+{ 549,    "RulePriority",                      5,      546,    (encode_uchar),          (decode_uchar),          0,           0             }, /* TLV 60.5 MULPIv3.0-I24 Annex C.2.1.4.5 */
+{ 550,    "DynamicServiceChangeAction",        7,      546,    (encode_uchar),          (decode_uchar),          0,           2             }, /* TLV 60.7 MULPIv3.0-I24 Annex C.2.1.4.7 */
+{ 551,    "IPv4PacketClassification",          9,      546,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 60.9 MULPIv3.0-I24 Annex C.2.1.6 */
+{ 552,    "IPv4Tos",                           1,      551,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 60.9.1 MULPIv3.0-I24 Annex C.2.1.6.1 */
+{ 553,    "IPProtocol",                        2,      551,    (encode_ushort),         (decode_ushort),         0,           257           }, /* TLV 60.9.2 MULPIv3.0-I24 Annex C.2.1.6.2 */
+{ 554,    "IPv4SourceAddress",                 3,      551,    (encode_ip),             (decode_ip),             0,           0             }, /* TLV 60.9.3 MULPIv3.0-I24 Annex C.2.1.6.3 */
+{ 555,    "IPv4SourceMask",                    4,      551,    (encode_ip),             (decode_ip),             0,           0             }, /* TLV 60.9.4 MULPIv3.0-I24 Annex C.2.1.6.4 */
+{ 556,    "IPv4DestinationAddress",            5,      551,    (encode_ip),             (decode_ip),             0,           0             }, /* TLV 60.9.5 MULPIv3.0-I24 Annex C.2.1.6.5 */
+{ 557,    "IPv4DestinationMask",               6,      551,    (encode_ip),             (decode_ip),             0,           0             }, /* TLV 60.9.6 MULPIv3.0-I24 Annex C.2.1.6.6 */
+{ 558,    "SourcePortStart",                   7,      551,    (encode_ushort),         (decode_ushort),         0,           0             }, /* TLV 60.9.7 MULPIv3.0-I24 Annex C.2.1.7.1 */
+{ 559,    "SourcePortEnd",                     8,      551,    (encode_ushort),         (decode_ushort),         0,           0             }, /* TLV 60.9.8 MULPIv3.0-I24 Annex C.2.1.7.2 */
+{ 560,    "DestinationPortStart",              9,      551,    (encode_ushort),         (decode_ushort),         0,           0             }, /* TLV 60.9.9 MULPIv3.0-I24 Annex C.2.1.7.3 */
+{ 561,    "DestinationPortEnd",                10,     551,    (encode_ushort),         (decode_ushort),         0,           0             }, /* TLV 60.9.10 MULPIv3.0-I24 Annex C.2.1.7.4 */
+{ 562,    "EthernetLLCPacketClassification",   10,     546,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 60.10 MULPIv3.0-I24 Annex C.2.1.8 */
+{ 563,    "DestinationMACAddress",             1,      562,    (encode_ethermask),      (decode_ethermask),      0,           0             }, /* TLV 60.10.1 MULPIv3.0-I24 Annex C.2.1.8.1 */
+{ 564,    "SourceMACAddress",                  2,      562,    (encode_ether),          (decode_ether),          0,           0             }, /* TLV 60.10.2 MULPIv3.0-I24 Annex C.2.1.8.2 */
+{ 565,    "EthertypeDSAPMacType",              3,      562,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 60.10.3 MULPIv3.0-I24 Annex C.2.1.8.3 */
+{ 566,    "IEEE8021PQPacketClassification",    11,     546,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 60.11 MULPIv3.0-I24 Annex C.2.1.9 */
+{ 567,    "UserPriority",                      1,      566,    (encode_char_list),      (decode_char_list),      0,           0             }, /* TLV 60.11.1 MULPIv3.0-I24 Annex C.2.1.9.1 */
+{ 568,    "VlanID",                            2,      566,    (encode_ushort),         (decode_ushort),         0,           0             }, /* TLV 60.11.2 MULPIv3.0-I24 Annex C.2.1.9.2 */
+{ 569,    "IPv6PacketClassification",          12,     546,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 60.12 MULPIv3.0-I24 Annex C.2.1.10 */
+{ 570,    "IPv6TrafficClassRangeandMask",      1,      569,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 60.12.1 MULPIv3.0-I24 Annex C.2.1.10.1 */
+{ 571,    "IPv6FlowLabel",                     2,      569,    (encode_hexstr),         (decode_hexstr),         4,           4             }, /* TLV 60.12.2 MULPIv3.0-I24 Annex C.2.1.10.2 */
+{ 572,    "IPv6NextHeaderType",                3,      569,    (encode_ushort),         (decode_ushort),         0,           257           }, /* TLV 60.12.3 MULPIv3.0-I24 Annex C.2.1.10.3 */
+{ 573,    "IPv6SourceAddress",                 4,      569,    (encode_ip6),            (decode_ip6),            0,           0             }, /* TLV 60.12.4 MULPIv3.0-I24 Annex C.2.1.10.4 */
+{ 574,    "IPv6SourcePrefixLength",            5,      569,    (encode_uchar),          (decode_uchar),          0,           128           }, /* TLV 60.12.5 MULPIv3.0-I24 Annex C.2.1.10.5 */
+{ 575,    "IPv6DestinationAddress",            6,      569,    (encode_ip6),            (decode_ip6),            0,           0             }, /* TLV 60.12.6 MULPIv3.0-I24 Annex C.2.1.10.6 */
+{ 576,    "IPv6DestinationPrefixLength",       7,      569,    (encode_uchar),          (decode_uchar),          0,           128           }, /* TLV 60.12.7 MULPIv3.0-I24 Annex C.2.1.10.7 */
+
 { 528,    "SubMgmtCPEIPv6PrefixList",          61,     0,      (encode_ip6_prefix_list), (decode_ip6_prefix_list), 0,         0             }, /* TLV 61 MULPIv3.0-I24 Annex C.1.1.19.3 */
 { 529,    "UpstreamDropClassifierGroupID",     62,     0,      (encode_char_list),      (decode_char_list),      0,           0             }, /* TLV 62 MULPIv3.0-I24 Annex C.1.1.26 */
 { 174,    "SubMgmtControl6",                   63,     0,      (encode_ushort),         (decode_ushort),         0,           0             }, /* TLV 63 MULPIv3.0-I24 Annex C.1.1.19.5 */
@@ -645,7 +675,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 236,    "SNMPv3AccessViewMask",              3,      233,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 202.54.3 eRouter-I12 Annex B.4.6.3 */
 { 237,    "SNMPv3AccessViewType",              4,      233,    (encode_uchar),          (decode_uchar),          1,           2             }, /* TLV 202.54.4 eRouter-I12 Annex B.4.6.4 */
 
-/* A little more organized -> Start with 546 */
+/* A little more organized -> Start with 577 */
 
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/
 { 998,    "GenericTLV",                        0,      0,      (encode_nothing),        (decode_special),        0,           0             },

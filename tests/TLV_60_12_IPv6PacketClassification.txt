@@ -1,0 +1,27 @@
+Main 
+{
+UpstreamDropPacketClassification
+{
+IPv6PacketClassification
+{
+IPv6TrafficClassRangeandMask 0x00ffff;
+IPv6FlowLabel 0x00000000;
+IPv6NextHeaderType 0;
+IPv6SourceAddress ::;
+IPv6SourcePrefixLength 0;
+IPv6DestinationAddress ::;
+IPv6DestinationPrefixLength 0;
+}
+}
+NetworkAccess 1;
+UsServiceFlow
+{
+UsServiceFlowRef 1;
+QosParamSetType 7;
+}
+DsServiceFlow
+{
+DsServiceFlowRef 2;
+QosParamSetType 7;
+}
+}
