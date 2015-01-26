@@ -618,6 +618,13 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 606,    "MPLSClassificationEncoding",        17,     546,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 60.17 MULPIv3.0-I24 Annex C.2.1.15 */
 { 607,    "MPLSTCbits",                        1,      606,    (encode_hexstr),         (decode_hexstr),         1,           1             }, /* TLV 60.17.1 MULPIv3.0-I24 Annex C.2.1.15.1 */
 { 608,    "MPLSLabel",                         2,      606,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 60.17.2 MULPIv3.0-I24 Annex C.2.1.15.2 */
+{ 609,    "VendorSpecific",                    43,     546,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 60.43 MULPIv3.0-I24 Annex C.2.1.11 */
+{ 610,    "CMLoadBalancingPolicyID",           1,      609,    (encode_uint),           (decode_uint),           0,           0             }, /* TLV 60.43.1 MULPIv3.0-I24 Annex C.1.1.18.1.1 */
+{ 611,    "CMLoadBalancingPriority",           2,      609,    (encode_uint),           (decode_uint),           0,           0             }, /* TLV 60.43.2 MULPIv3.0-I24 Annex C.1.1.18.1.2 */
+{ 612,    "CMLoadBalancingGroupID",            3,      609,    (encode_uint),           (decode_uint),           0,           0             }, /* TLV 60.43.3 MULPIv3.0-I24 Annex C.1.1.18.1.3 */
+{ 613,    "CMRangingClassIDExtension",         4,      609,    (encode_ushort),         (decode_ushort),         0,           0             }, /* TLV 60.43.4 MULPIv3.0-I24 Annex C.1.1.18.1.4 */
+
+{ 614,    "VendorIdentifier",                  8,      609,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 60.43.8 MULPIv3.0-I24 Annex C.2.1.11 */
 
 { 528,    "SubMgmtCPEIPv6PrefixList",          61,     0,      (encode_ip6_prefix_list), (decode_ip6_prefix_list), 0,         0             }, /* TLV 61 MULPIv3.0-I24 Annex C.1.1.19.3 */
 { 529,    "UpstreamDropClassifierGroupID",     62,     0,      (encode_char_list),      (decode_char_list),      0,           0             }, /* TLV 62 MULPIv3.0-I24 Annex C.1.1.26 */
@@ -707,7 +714,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 236,    "SNMPv3AccessViewMask",              3,      233,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 202.54.3 eRouter-I12 Annex B.4.6.3 */
 { 237,    "SNMPv3AccessViewType",              4,      233,    (encode_uchar),          (decode_uchar),          1,           2             }, /* TLV 202.54.4 eRouter-I12 Annex B.4.6.4 */
 
-/* A little more organized -> Start with 609 */
+/* A little more organized -> Start with 615 */
 
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/
 { 998,    "GenericTLV",                        0,      0,      (encode_nothing),        (decode_special),        0,           0             },
