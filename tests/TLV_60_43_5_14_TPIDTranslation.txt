@@ -1,0 +1,35 @@
+Main 
+{
+UpstreamDropPacketClassification
+{
+VendorSpecific
+{
+VendorIdentifier 0xffffff;
+L2VPNEncoding
+{
+TPIDTranslation
+{
+UpstreamTPIDTranslation 0x0102;
+DownstreamTPIDTranslation 0x0102;
+UpstreamSTPIDTranslation 0x0102;
+DownstreamSTPIDTranslation 0x0102;
+UpstreamBTPIDTranslation 0x0102;
+DownstreamBTPIDTranslation 0x0102;
+UpstreamITPIDTranslation 0x0102;
+DownstreamITPIDTranslation 0x0102;
+}
+}
+}
+}
+NetworkAccess 1;
+UsServiceFlow
+{
+UsServiceFlowRef 1;
+QosParamSetType 7;
+}
+DsServiceFlow
+{
+DsServiceFlowRef 2;
+QosParamSetType 7;
+}
+}

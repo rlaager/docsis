@@ -1,0 +1,34 @@
+Main 
+{
+NetworkAccess 1;
+UsServiceFlow
+{
+UsServiceFlowRef 1;
+QosParamSetType 7;
+}
+DsServiceFlow
+{
+DsServiceFlowRef 2;
+QosParamSetType 7;
+}
+UpstreamDropPacketClassification
+{
+VendorSpecific
+{
+VendorIdentifier 0xffffff;
+L2VPNEncoding
+{
+eSAFEDHCPSnooping 0x000000;
+CMInterfaceMaskCMIMSubtype 0x000080;
+AttachmentGroupID 0x0102;
+SourceAttachmentIndividualID 0x0102;
+TargetAttachmentIndividualID 0x0102;
+IngressUserPriority 1;
+UserPriorityRange 1,2;
+L2VPNSADescriptorSubtype 0x0102030405060708091011121314;
+PseudowireType 4;
+L2VPNMode 1;
+}
+}
+}
+}
