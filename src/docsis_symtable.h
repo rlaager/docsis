@@ -433,7 +433,23 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 99,     "ToleratedGrantJitter",              21,     80,     (encode_uint),           (decode_uint),           0,           0             }, /* TLV 24.21 MULPIv3.0-I24 Annex C.2.2.8.8 */
 { 100,    "GrantsPerInterval",                 22,     80,     (encode_uchar),          (decode_uchar),          0,           127           }, /* TLV 24.22 MULPIv3.0-I24 Annex C.2.2.8.9 */
 { 101,    "IpTosOverwrite",                    23,     80,     (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 24.23 MULPIv3.0-I24 Annex C.2.2.7.9 */
-/* TLV 24 Upstream Service Flow */
+{ 741,    "MultipliertoNumberofBytesRequested", 26,    80,     (encode_uchar),          (decode_uchar),          1,           16            }, /* TLV 24.26 MULPIv3.0-I24 Annex C.2.2.8.12 */
+{ 742,    "UpstreamPeakTrafficRate",           27,     80,     (encode_uint),           (decode_uint),           0,           0             }, /* TLV 24.27 MULPIv3.0-I24 Annex C.2.2.7.10.1 */
+{ 743,    "ServiceFlowRequiredAttributeMask",  31,     80,     (encode_hexstr),         (decode_hexstr),         4,           4             }, /* TLV 24.31 MULPIv3.0-I24 Annex C.2.2.5.6 */
+{ 744,    "ServiceFlowForbiddenAttributeMask", 32,     80,     (encode_hexstr),         (decode_hexstr),         4,           4             }, /* TLV 24.32 MULPIv3.0-I24 Annex C.2.2.5.7 */
+{ 745,    "ServiceFlowAttributeAggregationRuleMask", 33, 80,   (encode_hexstr),         (decode_hexstr),         4,           4             }, /* TLV 24.33 MULPIv3.0-I24 Annex C.2.2.5.8 */
+{ 746,    "ApplicationIdentifier",             34,     80,     (encode_uint),           (decode_uint),           0,           0             }, /* TLV 24.34 MULPIv3.0-I24 Annex C.2.2.5.9 */
+{ 747,    "BufferControl",                     35,     80,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 24.35 MULPIv3.0-I24 Annex C.2.2.7.11.1 */
+{ 748,    "MinimumBuffer",                     1,      747,    (encode_uint),           (decode_uint),           0,           4294967295    }, /* TLV 24.35.1 MULPIv3.0-I24 Annex C.2.2.7.11.3 */
+{ 749,    "TargetBuffer",                      2,      747,    (encode_uint),           (decode_uint),           0,           4294967295    }, /* TLV 24.35.2 MULPIv3.0-I24 Annex C.2.2.7.11.4 */
+{ 750,    "MaximumBuffer",                     3,      747,    (encode_uint),           (decode_uint),           0,           4294967295    }, /* TLV 24.35.3 MULPIv3.0-I24 Annex C.2.2.7.11.5 */
+{ 751,    "UpstreamAggregateServiceFlowReference", 36, 80,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 24.36 MULPIv3.0-I24 Annex C.2.2.5.10 */
+{ 752,    "UpstreamMESPReference",             37,     80,     (encode_ushort),         (decode_ushort),         1,           65535         }, /* TLV 24.37 MULPIv3.0-I24 Annex C.2.2.5.11 */
+{ 753,    "AQMEncodings",                      40,     80,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 24.40 MULPIv3.0-I24 Annex C.2.2.7.12 */
+{ 754,    "SFAQMDisable",                      1,      753,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 24.40.1 MULPIv3.0-I24 Annex C.2.2.7.12.3 */
+{ 755,    "SFAQMLatencyTarget",                2,      753,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 24.40.2 MULPIv3.0-I24 Annex C.2.2.7.12.4 */
+{ 756,    "DataRateUnitSetting",               41,     80,     (encode_uchar),          (decode_uchar),          0,           3             }, /* TLV 24.41 MULPIv3.0-I24 Annex C.2.2.7.13.1 */
+
 { 192,    "VendorSpecific",                    43,     80,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 24.43 MULPIv3.0-I24 Annex C.2.2.7.8 */
 { 194,    "L2VPNEncoding",                     5,      192,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 24.43.5 */
 { 195,    "VPNIdentifier",                     1,      194,    (encode_hexstr),         (decode_hexstr),         4,           255           }, /* TLV 24.43.5.1 */
@@ -838,7 +854,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 236,    "SNMPv3AccessViewMask",              3,      233,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 202.54.3 eRouter-I12 Annex B.4.6.3 */
 { 237,    "SNMPv3AccessViewType",              4,      233,    (encode_uchar),          (decode_uchar),          1,           2             }, /* TLV 202.54.4 eRouter-I12 Annex B.4.6.4 */
 
-/* A little more organized -> Start with 741 */
+/* A little more organized -> Start with 757 */
 
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/
 { 998,    "GenericTLV",                        0,      0,      (encode_nothing),        (decode_special),        0,           0             },
