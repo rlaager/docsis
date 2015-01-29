@@ -413,7 +413,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 80,     "UsServiceFlow",                     24,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 24 MULPIv3.0-I24 Annex C.2.2.5 */
 { 81,     "UsServiceFlowRef",                  1,      80,     (encode_ushort),         (decode_ushort),         1,           65535         }, /* TLV 24.1 MULPIv3.0-I24 Annex C.2.2.5.1 */
 { 82,     "UsServiceFlowId",                   2,      80,     (encode_uint),           (decode_uint),           1,           0xFFFFFFFF    }, /* TLV 24.2 MULPIv3.0-I24 Annex C.2.2.5.2 */
-                                                                                                                                               /* TLV 24.3 MULPIv3.0-I24 Annex C.2.2.5.3 */
+{ 614,    "ServiceIdentifier",                 3,      80,     (encode_ushort),         (decode_ushort),         0,           0             }, /* TLV 24.3 MULPIv3.0-I24 Annex C.2.2.5.3 */                                                                                                                                               /* TLV 24.3 MULPIv3.0-I24 Annex C.2.2.5.3 */
 { 83,     "ServiceClassName",                  4,      80,     (encode_strzero),        (decode_strzero),        2,           16            }, /* TLV 24.4 MULPIv3.0-I24 Annex C.2.2.5.4 */
 { 84,     "QosParamSetType",                   6,      80,     (encode_uchar),          (decode_uchar),          0,           255           }, /* TLV 24.6 MULPIv3.0-I24 Annex C.2.2.5.5 */
 { 85,     "TrafficPriority",                   7,      80,     (encode_uchar),          (decode_uchar),          0,           7             }, /* TLV 24.7 MULPIv3.0-I24 Annex C.2.2.7.1 */
@@ -838,7 +838,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 236,    "SNMPv3AccessViewMask",              3,      233,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 202.54.3 eRouter-I12 Annex B.4.6.3 */
 { 237,    "SNMPv3AccessViewType",              4,      233,    (encode_uchar),          (decode_uchar),          1,           2             }, /* TLV 202.54.4 eRouter-I12 Annex B.4.6.4 */
 
-/* A little more organized -> Start with 741 reuse 614? */
+/* A little more organized -> Start with 741 */
 
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/
 { 998,    "GenericTLV",                        0,      0,      (encode_nothing),        (decode_special),        0,           0             },
