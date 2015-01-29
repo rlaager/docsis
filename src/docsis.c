@@ -2,6 +2,7 @@
  *  DOCSIS configuration file encoder.
  *  Copyright (c) 2001 Cornel Ciocirlan, ctrl@users.sourceforge.net.
  *  Copyright (c) 2002,2003,2004,2005 Evvolve Media SRL,office@evvolve.com
+ *  Copyright (c) 2014 - 2015 Adrian Simionov, daniel.simionov@gmail.com
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -142,7 +143,8 @@ usage ()
 {
   fprintf(stderr, "DOCSIS Configuration File creator, version %s\n", VERSION);
   fprintf(stderr, "Copyright (c) 1999,2000,2001 Cornel Ciocirlan, ctrl@users.sourceforge.net\n");
-  fprintf(stderr, "Copyright (c) 2002,2003,2004,2005 Evvolve Media SRL, docsis@evvolve.com \n\n");
+  fprintf(stderr, "Copyright (c) 2002,2003,2004,2005 Evvolve Media SRL, docsis@evvolve.com\n");
+  fprintf(stderr, "Copyright (c) 2014 - 2015 Adrian Simionov, daniel.simionov@gmail.com\n\n");
 
   fprintf(stderr, "To encode a cable modem configuration file: \n\t docsis -e <modem_cfg_file> <key_file> <output_file>\n");
   fprintf(stderr, "To encode multiple cable modem configuration files: \n\t docsis -m <modem_cfg_file1> ...  <key_file> <new_extension>\n");
