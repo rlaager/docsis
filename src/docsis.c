@@ -158,16 +158,19 @@ usage ()
 		  "\tdocsis -M \"PATH1:PATH2\" -m <modem_cfg_file1> ...  <key_file> <new_extension>\n"
 		  "\tdocsis -M \"PATH1:PATH2\" -p <mta_cfg_file> <output_file>\n"
 		  "\tdocsis -M \"PATH1:PATH2\" -m -p <mta_file1> ...  <new_extension>\n");
-  fprintf(stderr, "\nWhere:\n<cfg_file>\t\t= name of text (human readable) cable modem or MTA \n\t\t\t"
-		  "configuration file\n<key_file>\t\t= text file containing the authentication key \n\t\t\t"
-		  "(shared secret) to be used for the CMTS MIC\n<output_file> \t\t= name of output file where"
-		  "the binary data will\n\t\t\t  be written to (if it does not exist it is created).\n<binary_file>"
-                  "\t\t= name of binary file to be decoded\n<new_extension>\t\t= new extension to be used when encoding multiple files\n");
+  fprintf(stderr, "\nWhere:\n<cfg_file>\t\t= name of text (human readable) cable modem or MTA \n"
+		  "\t\t\t  configuration file;\n"
+		  "<key_file>\t\t= text file containing the authentication key\n"
+		  "\t\t\t  (shared secret) to be used for the CMTS MIC;\n"
+		  "<output_file> \t\t= name of output file where"
+		  " the binary data will\n\t\t\t  be written to (if it does not exist it is created);\n"
+		  "<binary_file>\t\t= name of binary file to be decoded;\n"
+		  "<new_extension>\t\t= new extension to be used when encoding multiple files.\n");
   fprintf(stderr, "\nSee examples/*.cfg for configuration file format.\n");
-  fprintf(stderr, "\nPlease send bugs or questions to docsis-users@lists.sourceforge.net\n\n");
+  fprintf(stderr, "\nPlease report bugs or feature requests on GitHub.");
+  fprintf(stderr, "\nProject repository is https://github.com/rlaager/docsis\n\n");
   exit (-10);
 }
-
 
 int
 main (int argc, char *argv[])
