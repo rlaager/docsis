@@ -1,0 +1,57 @@
+Main 
+{
+DsPacketClass
+{
+VendorSpecific
+{
+VendorIdentifier 0xffffff;
+SAVAuthorizationEncoding
+{
+SAVGroupName "SAVGROUPNAME";
+SAVStaticPrefixRule
+{
+SAVStaticPrefixAddress 0.0.0.0;
+SAVStaticPrefixLength 0;
+}
+}
+CMAttributeMasks
+{
+CMDownstreamRequiredAttributeMask 0x00000000;
+CMDownstreamForbiddenAttributeMask 0x00000000;
+CMUpstreamRequiredAttributeMask 0x00000000;
+CMUpstreamForbiddenAttributeMask 0xe0000001;
+}
+IPMulticastJoinAuthorization
+{
+IPMulticastProfileName "profileName";
+IPMulticastJoinAuthStaticSessionRule
+{
+MulticastRulePriority 0;
+AuthorizationAction 0;
+SourcePrefixAddress 0.0.0.0;
+SourcePrefixAddress 0.0.0.0;
+SourcePrefixLength 32;
+GroupPrefixAddress 0.0.0.0;
+GroupPrefixLength 32;
+}
+MaximumMulticastSessions 0;
+}
+ServiceTypeIdentifier "basic";
+DEMARCAutoConfiguration
+{
+DACDisableEnableConfig 1;
+}
+}
+}
+NetworkAccess 1;
+UsServiceFlow
+{
+UsServiceFlowRef 1;
+QosParamSetType 7;
+}
+DsServiceFlow
+{
+DsServiceFlowRef 2;
+QosParamSetType 7;
+}
+}

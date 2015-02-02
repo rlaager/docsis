@@ -137,8 +137,6 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 169,    "TftpModemAddress",                  20,     0,      (encode_ip),             (decode_ip),             0,           0             }, /* TLV 20 MULPIv3.0-I24 Annex C.1.1.9 */
 { 27,     "SwUpgradeServer",                   21,     0,      (encode_ip),             (decode_ip),             0,           0             }, /* TLV 21 MULPIv3.0-I24 Annex C.1.2.7 */
 
-/* DOCSIS 1.1-2.0-3.0 */
-
 { 28,     "UsPacketClass",                     22,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22 MULPIv3.0-I24 Annex C.2.1.1 */
 { 29,     "ClassifierRef",                     1,      28,     (encode_uchar),          (decode_uchar),          1,           255           }, /* TLV 22.1 MULPIv3.0-I24 Annex C.2.1.4.1 */
 { 30,     "ClassifierId",                      2,      28,     (encode_ushort),         (decode_ushort),         1,           65535         }, /* TLV 22.2 MULPIv3.0-I24 Annex C.2.1.4.2 */
@@ -258,8 +256,8 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 396,    "DownstreamITPIDTranslation",        8,      388,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 22.43.5.14.8 L2VPN-I13 Annex B.3.15.1 */
 { 397,    "L2CPProcessing",                    15,     202,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.43.5.15 L2VPN-I13 Annex B.3.16 */
 { 398,    "L2CPTunnelMode",                    1,      397,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 22.43.5.15.1 L2VPN-I13 Annex B.3.16.1 */
-{ 399,    "L2CPDMACAddress",                   2,      397,    (encode_ether),          (decode_ether),          0,           0             }, /* TLV 22.43.5.15.1 L2VPN-I13 Annex B.3.16.1 */
-{ 400,    "L2CPOverwrotingDMACAddress",        3,      397,    (encode_ether),          (decode_ether),          0,           0             }, /* TLV 22.43.5.15.1 L2VPN-I13 Annex B.3.16.1 */
+{ 399,    "L2CPDMACAddress",                   2,      397,    (encode_ether),          (decode_ether),          0,           0             }, /* TLV 22.43.5.15.2 L2VPN-I13 Annex B.3.16.1 */
+{ 400,    "L2CPOverwrotingDMACAddress",        3,      397,    (encode_ether),          (decode_ether),          0,           0             }, /* TLV 22.43.5.15.3 L2VPN-I13 Annex B.3.16.1 */
 { 401,    "DACDisableEnableConfiguration",     16,     202,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 22.43.5.16 L2VPN-I13 Annex B.3.17 */
 { 402,    "PseudowireClass",                   18,     202,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* TLV 22.43.5.18 L2VPN-I13 Annex B.3.18 */
 { 403,    "ServiceDelimiter",                  19,     202,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.43.5.19 L2VPN-I13 Annex B.3.19 */
@@ -337,8 +335,6 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 474,    "UpstreamServiceClassName",          3,      471,    (encode_strzero),        (decode_strzero),        2,           16            }, /* TLV 22.43.12.3 DEMARCv1.0-I04 Annex B.3 */
 { 475,    "DownstreamServiceClassName",        4,      471,    (encode_strzero),        (decode_strzero),        2,           16            }, /* TLV 22.43.12.4 DEMARCv1.0-I04 Annex B.4 */
 
-/* TODO: Vendor Specific support in the IEEE802Classifier */
-
 { 54,     "DsPacketClass",                     23,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23 MULPIv3.0-I24 Annex C.2.1.3 */
 { 55,     "ClassifierRef",                     1,      54,     (encode_uchar),          (decode_uchar),          1,           255           }, /* TLV 23.1 MULPIv3.0-I24 Annex C.2.1.4.1 */
 { 56,     "ClassifierId",                      2,      54,     (encode_ushort),         (decode_ushort),         1,           65535         }, /* TLV 23.2 MULPIv3.0-I24 Annex C.2.1.4.2 */
@@ -405,9 +401,136 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 338,    "MPLSTCbits",                        1,      337,    (encode_hexstr),         (decode_hexstr),         1,           1             }, /* TLV 23.17.1 MULPIv3.0-I24 Annex C.2.1.15.1 */
 { 339,    "MPLSLabel",                         2,      337,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 23.17.2 MULPIv3.0-I24 Annex C.2.1.15.2 */
 { 204,    "VendorSpecific",                    43,     54,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.43 MULPIv3.0-I24 Annex C.2.1.11 */
-{ 206,    "L2VPNEncoding",                     5,      204,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.43.5 MULPIv3.0-I24 Annex C.1.1.18.1.5 */
-{ 207,    "VPNIdentifier",                     1,      206,    (encode_hexstr),         (decode_hexstr),         4,           255           }, /* TLV 23.43.5.1 L2VPN-I13 Annex B.3.1 */
-{ 205,    "VendorIdentifier",                  8,      204,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 23.43.8 */
+{ 757,    "CMLoadBalancingPolicyID",           1,      204,    (encode_uint),           (decode_uint),           0,           0             }, /* TLV 23.43.1 MULPIv3.0-I24 Annex C.1.1.18.1.1 */
+{ 758,    "CMLoadBalancingPriority",           2,      204,    (encode_uint),           (decode_uint),           0,           0             }, /* TLV 23.43.2 MULPIv3.0-I24 Annex C.1.1.18.1.2 */
+{ 759,    "CMLoadBalancingGroupID",            3,      204,    (encode_uint),           (decode_uint),           0,           0             }, /* TLV 23.43.3 MULPIv3.0-I24 Annex C.1.1.18.1.3 */
+{ 760,    "CMRangingClassIDExtension",         4,      204,    (encode_ushort),         (decode_ushort),         0,           0             }, /* TLV 23.43.4 MULPIv3.0-I24 Annex C.1.1.18.1.4 */
+{ 761,    "L2VPNEncoding",                     5,      204,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.43.5 MULPIv3.0-I24 Annex C.1.1.18.1.5 */
+{ 762,    "VPNIdentifier",                     1,      761,    (encode_hexstr),         (decode_hexstr),         4,           255           }, /* TLV 23.43.5.1 L2VPN-I13 Annex B.3.1 */
+{ 763,    "NSIEncapsulationSubtype",           2,      761,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.43.5.2 L2VPN-I13 Annex B.3.2 */
+{ 764,    "ServiceMultiplexingValueOther",     1,      763,    (encode_lenzero),        (decode_lenzero),        0,           0             }, /* TLV 23.43.5.2.1 L2VPN-I13 Annex B.3.2 */
+{ 765,    "ServiceMultiplexingValueIEEE8021Q", 2,      763,    (encode_ushort),         (decode_ushort),         0,           4096          }, /* TLV 23.43.5.2.2 L2VPN-I13 Annex B.3.2 */
+{ 766,    "ServiceMultiplexingValueIEEE8021ad", 3,     763,    (encode_hexstr),         (decode_hexstr),         4,           4             }, /* TLV 23.43.5.2.3 L2VPN-I13 Annex B.3.2 */
+{ 767,    "ServiceMultiplexingValueMPLSPW",    4,      763,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.43.5.2.4 L2VPN-I13 Annex B.3.2 */
+{ 768,    "MPLSPseudowireID",                  1,      767,    (encode_uint),           (decode_uint),           0,           0             }, /* TLV 23.43.5.2.4.1 L2VPN-I13 Annex B.3.2 */
+{ 769,    "MPLSPeerIpAddress",                 2,      767,    (encode_char_ip_ip6),    (decode_char_ip_ip6),    0,           0             }, /* TLV 23.43.5.2.4.2 L2VPN-I13 Annex B.3.2 */
+{ 770,    "MPLSPseudowireType",                3,      767,    (encode_uchar),          (decode_uchar),          0,           0             }, /* TLV 23.43.5.2.4.3 L2VPN-I13 Annex B.3.2 */
+{ 771,    "MPLSBackupPseudowireID",            4,      767,    (encode_uint),           (decode_uint),           0,           0             }, /* TLV 23.43.5.2.4.4 L2VPN-I13 Annex B.3.2 */
+{ 772,    "MPLSBackupPeerIpAddress",           5,      767,    (encode_char_ip_ip6),    (decode_char_ip_ip6),    0,           0             }, /* TLV 23.43.5.2.4.5 L2VPN-I13 Annex B.3.2 */
+{ 773,    "ServiceMultiplexingValueL2TPv3Peer", 5,     763,    (encode_char_ip_ip6),    (decode_char_ip_ip6),    0,           0             }, /* TLV 23.43.5.2.5 L2VPN-I13 Annex B.3.2 */
+{ 774,    "IEEE8021ahEncapsulation",           6,      763,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.43.5.2.6 L2VPN-I13 Annex B.3.2.2 */
+{ 775,    "ITCIEncapsulation",                 1,      774,    (encode_hexstr),         (decode_hexstr),         4,           4             }, /* TLV 23.43.5.2.6.1 L2VPN-I13 Annex B.3.2.2.1 */
+{ 776,    "BDAEncapsulation",                  2,      774,    (encode_hexstr),         (decode_hexstr),         6,           6             }, /* TLV 23.43.5.2.6.2 L2VPN-I13 Annex B.3.2.2.2 */
+{ 777,    "BTCIEncapsulation",                 3,      774,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 23.43.5.2.6.3 L2VPN-I13 Annex B.3.2.2.3 */
+{ 778,    "ITPIDEncapsulation",                4,      774,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 23.43.5.2.6.4 L2VPN-I13 Annex B.3.2.2.4 */
+{ 779,    "IPCPEncapsulation",                 5,      774,    (encode_hexstr),         (decode_hexstr),         1,           1             }, /* TLV 23.43.5.2.6.5 L2VPN-I13 Annex B.3.2.2.5 */
+{ 780,    "IDEIEncapsulation",                 6,      774,    (encode_hexstr),         (decode_hexstr),         1,           1             }, /* TLV 23.43.5.2.6.6 L2VPN-I13 Annex B.3.2.2.6 */
+{ 781,    "IUCAEncapsulation",                 7,      774,    (encode_hexstr),         (decode_hexstr),         1,           1             }, /* TLV 23.43.5.2.6.7 L2VPN-I13 Annex B.3.2.2.7 */
+{ 782,    "ISIDEncapsulation",                 8,      774,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 23.43.5.2.6.8 L2VPN-I13 Annex B.3.2.2.8 */
+{ 783,    "BTPIDEncapsulation",                9,      774,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 23.43.5.2.6.9 L2VPN-I13 Annex B.3.2.2.9 */
+{ 784,    "BPCPEncapsulation",                 10,     774,    (encode_hexstr),         (decode_hexstr),         1,           1             }, /* TLV 23.43.5.2.6.10 L2VPN-I13 Annex B.3.2.2.10 */
+{ 785,    "BDEIEncapsulation",                 11,     774,    (encode_hexstr),         (decode_hexstr),         1,           1             }, /* TLV 23.43.5.2.6.11 L2VPN-I13 Annex B.3.2.2.11 */
+{ 786,    "BVIDEncapsulation",                 12,     774,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 23.43.5.2.6.12 L2VPN-I13 Annex B.3.2.2.11 */
+{ 787,    "ServiceMultiplexingValueIEEE8021adSTPID", 8, 763,   (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 23.43.5.2.8 L2VPN-I13 Annex B.3.2.1 */
+{ 788,    "eSAFEDHCPSnooping",                 3,      761,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* TLV 23.43.5.3 L2VPN-I13 Annex B.3.3 */
+{ 789,    "CMInterfaceMaskCMIMSubtype",        4,      761,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* TLV 23.43.5.4 L2VPN-I13 Annex B.3.4 */
+{ 790,    "AttachmentGroupID",                 5,      761,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* TLV 23.43.5.5 L2VPN-I13 Annex B.3.5 */
+{ 791,    "SourceAttachmentIndividualID",      6,      761,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* TLV 23.43.5.6 L2VPN-I13 Annex B.3.6 */
+{ 792,    "TargetAttachmentIndividualID",      7,      761,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* TLV 23.43.5.7 L2VPN-I13 Annex B.3.7 */
+{ 793,    "IngressUserPriority",               8,      761,    (encode_uchar),          (decode_uchar),          0,           7             }, /* TLV 23.43.5.8 L2VPN-I13 Annex B.3.8 */
+{ 794,    "UserPriorityRange",                 9,      761,    (encode_char_list),      (decode_char_list),      0,           0             }, /* TLV 23.43.5.9 L2VPN-I13 Annex B.3.9 */
+{ 795,    "L2VPNSADescriptorSubtype",          10,     761,    (encode_hexstr),         (decode_hexstr),         14,          14            }, /* TLV 23.43.5.10 L2VPN-I13 Annex B.3.10 */
+{ 796,    "PseudowireType",                    12,     761,    (encode_uchar),          (decode_uchar),          4,           5             }, /* TLV 23.43.5.12 L2VPN-I13 Annex B.3.13 */
+{ 797,    "L2VPNMode",                         13,     761,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 23.43.5.13 L2VPN-I13 Annex B.3.14 */
+{ 798,    "TPIDTranslation",                   14,     761,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.43.5.14 L2VPN-I13 Annex B.3.15 */
+{ 799,    "UpstreamTPIDTranslation",           1,      798,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 23.43.5.14.1 L2VPN-I13 Annex B.3.15.1 */
+{ 800,    "DownstreamTPIDTranslation",         2,      798,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 23.43.5.14.2 L2VPN-I13 Annex B.3.15.1 */
+{ 801,    "UpstreamSTPIDTranslation",          3,      798,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 23.43.5.14.3 L2VPN-I13 Annex B.3.15.1 */
+{ 802,    "DownstreamSTPIDTranslation",        4,      798,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 23.43.5.14.4 L2VPN-I13 Annex B.3.15.1 */
+{ 803,    "UpstreamBTPIDTranslation",          5,      798,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 23.43.5.14.5 L2VPN-I13 Annex B.3.15.1 */
+{ 804,    "DownstreamBTPIDTranslation",        6,      798,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 23.43.5.14.6 L2VPN-I13 Annex B.3.15.1 */
+{ 805,    "UpstreamITPIDTranslation",          7,      798,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 23.43.5.14.7 L2VPN-I13 Annex B.3.15.1 */
+{ 806,    "DownstreamITPIDTranslation",        8,      798,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 23.43.5.14.8 L2VPN-I13 Annex B.3.15.1 */
+{ 807,    "L2CPProcessing",                    15,     761,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.43.5.15 L2VPN-I13 Annex B.3.16 */
+{ 808,    "L2CPTunnelMode",                    1,      807,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 23.43.5.15.1 L2VPN-I13 Annex B.3.16.1 */
+{ 809,    "L2CPDMACAddress",                   2,      807,    (encode_ether),          (decode_ether),          0,           0             }, /* TLV 23.43.5.15.2 L2VPN-I13 Annex B.3.16.1 */
+{ 810,    "L2CPOverwrotingDMACAddress",        3,      807,    (encode_ether),          (decode_ether),          0,           0             }, /* TLV 23.43.5.15.3 L2VPN-I13 Annex B.3.16.1 */
+{ 811,    "DACDisableEnableConfiguration",     16,     761,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 23.43.5.16 L2VPN-I13 Annex B.3.17 */
+{ 812,    "PseudowireClass",                   18,     761,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* TLV 23.43.5.18 L2VPN-I13 Annex B.3.18 */
+{ 813,    "ServiceDelimiter",                  19,     761,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.43.5.19 L2VPN-I13 Annex B.3.19 */
+{ 814,    "CVIDDelimiter",                     1,      813,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 23.43.5.19.1 L2VPN-I13 Annex B.3.19.1 */
+{ 815,    "SVIDDelimiter",                     2,      813,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 23.43.5.19.2 L2VPN-I13 Annex B.3.19.2 */
+{ 816,    "ISIDDelimiter",                     3,      813,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 23.43.5.19.3 L2VPN-I13 Annex B.3.19.3 */
+{ 817,    "BVIDDelimiter",                     4,      813,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 23.43.5.19.4 L2VPN-I13 Annex B.3.19.4 */
+{ 818,    "VirtualSwitchInstanceEncoding",     20,     761,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.43.5.20 L2VPN-I13 Annex B.3.20 */
+{ 819,    "VPLSClass",                         1,      818,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* TLV 23.43.5.20.1 L2VPN-I13 Annex B.3.20.1 */
+{ 820,    "ETreeRole",                         2,      818,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 23.43.5.20.2 L2VPN-I13 Annex B.3.20.2 */
+{ 821,    "ETreeRootVID",                      3,      818,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 23.43.5.20.3 L2VPN-I13 Annex B.3.20.3 */
+{ 822,    "ETreeLeafVID",                      4,      818,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 23.43.5.20.4 L2VPN-I13 Annex B.3.20.4 */
+{ 823,    "BGPAttribute",                      21,     761,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.43.5.21 L2VPN-I13 Annex B.3.21 */
+{ 824,    "BGPVPNID",                          1,      823,    (encode_uint),           (decode_uint),           0,           0             }, /* TLV 23.43.5.21.1 L2VPN-I13 Annex B.3.21.1 */
+{ 825,    "RouteDistinguisher",                2,      823,    (encode_hexstr),         (decode_hexstr),         8,           8             }, /* TLV 23.43.5.21.2 L2VPN-I13 Annex B.3.21.2 */
+{ 826,    "RouteTargetImport",                 3,      823,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* TLV 23.43.5.21.3 L2VPN-I13 Annex B.3.21.3 */
+{ 827,    "RouteTargetExport",                 4,      823,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* TLV 23.43.5.21.4 L2VPN-I13 Annex B.3.21.4 */
+{ 828,    "CEIDVEID",                          5,      823,    (encode_ushort),         (decode_ushort),         0,           0             }, /* TLV 23.43.5.21.5 L2VPN-I13 Annex B.3.21.5 */
+{ 829,    "PseudowireSignaling",               23,     761,    (encode_uchar),          (decode_uchar),          0,           2             }, /* TLV 23.43.5.23 L2VPN-I13 Annex B.3.23 */
+{ 830,    "SOAMSubtype",                       24,     761,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.43.5.24 L2VPN-I13 Annex B.3.24 */
+{ 831,    "MEPConfiguration",                  1,      830,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.43.5.24.1 L2VPN-I13 Annex B.3.24.1 */
+{ 832,    "MDLevel",                           1,      831,    (encode_uchar),          (decode_uchar),          0,           7             }, /* TLV 23.43.5.24.1.1 L2VPN-I13 Annex B.3.24.1.1 */
+{ 833,    "MDName",                            2,      831,    (encode_string),         (decode_string),         2,           16            }, /* TLV 23.43.5.24.1.2 L2VPN-I13 Annex B.3.24.1.2 */
+{ 834,    "MAName",                            3,      831,    (encode_string),         (decode_string),         2,           28            }, /* TLV 23.43.5.24.1.3 L2VPN-I13 Annex B.3.24.1.3 */
+{ 835,    "MEPID",                             4,      831,    (encode_ushort),         (decode_ushort),         1,           8191          }, /* TLV 23.43.5.24.1.4 L2VPN-I13 Annex B.3.24.1.4 */
+{ 836,    "RemoteMEPConfiguration",            2,      830,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.43.5.24.2 L2VPN-I13 Annex B.3.24.2 */
+{ 837,    "RemoteMDLevel",                     1,      836,    (encode_uchar),          (decode_uchar),          0,           7             }, /* TLV 23.43.5.24.2.1 L2VPN-I13 Annex B.3.24.2.1 */
+{ 838,    "RemoteMDName",                      2,      836,    (encode_string),         (decode_string),         2,           16            }, /* TLV 23.43.5.24.2.2 L2VPN-I13 Annex B.3.24.2.2 */
+{ 839,    "RemoteMAName",                      3,      836,    (encode_string),         (decode_string),         2,           28            }, /* TLV 23.43.5.24.2.3 L2VPN-I13 Annex B.3.24.2.3 */
+{ 840,    "RemoteMEPID",                       4,      836,    (encode_ushort),         (decode_ushort),         1,           8191          }, /* TLV 23.43.5.24.2.4 L2VPN-I13 Annex B.3.24.2.4 */
+{ 841,    "FaultManagementConfiguration",      3,      830,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.43.5.24.3 L2VPN-I13 Annex B.3.24.3 */
+{ 842,    "ContinuityCheckMessages",           1,      841,    (encode_uchar),          (decode_uchar),          0,           2             }, /* TLV 23.43.5.24.3.1 L2VPN-I13 Annex B.3.24.3.1 */
+{ 843,    "LoopbackFunction",                  2,      841,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 23.43.5.24.3.2 L2VPN-I13 Annex B.3.24.3.2 */
+{ 844,    "LinktraceFunction",                 3,      841,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 23.43.5.24.3.3 L2VPN-I13 Annex B.3.24.3.3 */
+{ 845,    "PerformanceManagementConfiguration", 4,     830,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.43.5.24.4 L2VPN-I13 Annex B.3.24.4 */
+{ 846,    "FrameDelayMeasurement",             1,      845,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.43.5.24.4.1 L2VPN-I13 Annex B.3.24.4.1 */
+{ 847,    "FrameDelayMeasurementEnable",       1,      846,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 23.43.5.24.4.1.1 L2VPN-I13 Annex B.3.24.4.1.1 */
+{ 848,    "FrameDelayMeasurementOneWayTwoWay", 2,      846,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 23.43.5.24.4.1.2 L2VPN-I13 Annex B.3.24.4.1.2 */
+{ 849,    "FrameDelayMeasurementTransmissionPeriodicity", 3, 846, (encode_ushort),      (decode_ushort),         0,           0             }, /* TLV 23.43.5.24.4.1.3 L2VPN-I13 Annex B.3.24.4.1.3 */
+{ 850,    "FrameLossMeasurement",              2,      845,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.43.5.24.4.2 L2VPN-I13 Annex B.3.24.4.2 */
+{ 851,    "FrameLossMeasurementEnable",        1,      850,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 23.43.5.24.4.2.1 L2VPN-I13 Annex B.3.24.4.2.1 */
+{ 852,    "FrameLossMeasurementTransmissionPeriodicity", 2, 850, (encode_ushort),       (decode_ushort),         0,           0             }, /* TLV 23.43.5.24.4.2.2 L2VPN-I13 Annex B.3.24.4.2.2 */
+{ 853,    "L2VPNDSID",                         26,     761,    (encode_uint24),         (decode_uint24),         1,           1048575       }, /* TLV 23.43.5.26 L2VPN-I13 Annex B.3.26 */
+{ 854,    "VendorSpecificL2VPNSubtype",        43,     761,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.43.5.43 L2VPN-I13 Annex B.3.11 */
+{ 206,    "VendorIdentifier",                  8,      854,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 23.43.5.43.8 L2VPN-I13 Annex B.3.11 */
+{ 855,    "ExtendedCMTSMICConfigurationSetting", 6,    204,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.43.6 MULPIv3.0-I24 Annex C.1.1.18.1.6 */
+{ 856,    "ExtendedCMTSMICHMACtype",           1,      855,    (encode_uchar),          (decode_uchar),          0,           0             }, /* TLV 23.43.6.1 MULPIv3.0-I24 Annex C.1.1.18.1.6.1 */
+{ 857,    "ExtendedCMTSMICBitmap",             2,      855,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* TLV 23.43.6.2 MULPIv3.0-I24 Annex C.1.1.18.1.6.2 */
+{ 858,    "ExplicitExtendedCMTSMICDigest",     3,      855,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* TLV 23.43.6.3 MULPIv3.0-I24 Annex C.1.1.18.1.6.3 */
+{ 859,    "SAVAuthorizationEncoding",          7,      204,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.43.7 MULPIv3.0-I24 Annex C.1.1.18.1.7 */
+{ 860,    "SAVGroupName",                      1,      859,    (encode_string),         (decode_string),         1,           15            }, /* TLV 23.43.7.1 MULPIv3.0-I24 Annex C.1.1.18.1.7.1 */
+{ 861,    "SAVStaticPrefixRule",               2,      859,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.43.7.2 MULPIv3.0-I24 Annex C.1.1.18.1.7.2 */
+{ 862,    "SAVStaticPrefixAddress",            1,      861,    (encode_ip_ip6),         (decode_ip_ip6),         0,           0             }, /* TLV 23.43.7.2.1 MULPIv3.0-I24 Annex C.1.1.18.1.7.2.1 */
+{ 863,    "SAVStaticPrefixLength",             2,      861,    (encode_uchar),          (decode_uchar),          0,           0             }, /* TLV 23.43.7.2.2 MULPIv3.0-I24 Annex C.1.1.18.1.7.2.2 */
+{ 864,    "VendorIdentifier",                  8,      204,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 23.43.8 MULPIv3.0-I24 Annex C.2.1.11 */
+{ 865,    "CMAttributeMasks",                  9,      204,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.43.9 MULPIv3.0-I24 Annex C.1.1.18.1.8 */
+{ 866,    "CMDownstreamRequiredAttributeMask", 1,      865,    (encode_hexstr),         (decode_hexstr),         4,           4             }, /* TLV 23.43.9.1 MULPIv3.0-I24 Annex C.1.1.18.1.8.1 */
+{ 867,    "CMDownstreamForbiddenAttributeMask", 2,     865,    (encode_hexstr),         (decode_hexstr),         4,           4             }, /* TLV 23.43.9.2 MULPIv3.0-I24 Annex C.1.1.18.1.8.2 */
+{ 868,    "CMUpstreamRequiredAttributeMask",   3,      865,    (encode_hexstr),         (decode_hexstr),         4,           4             }, /* TLV 23.43.9.3 MULPIv3.0-I24 Annex C.1.1.18.1.8.3 */
+{ 869,    "CMUpstreamForbiddenAttributeMask",  4,      865,    (encode_hexstr),         (decode_hexstr),         4,           4             }, /* TLV 23.43.9.4 MULPIv3.0-I24 Annex C.1.1.18.1.8.4 */
+{ 870,    "IPMulticastJoinAuthorization",      10,     204,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.43.10 MULPIv3.0-I24 Annex C.1.1.18.1.9 */
+{ 871,    "IPMulticastProfileName",            1,      870,    (encode_string),         (decode_string),         1,           15            }, /* TLV 23.43.10.1 MULPIv3.0-I24 Annex C.1.1.18.1.9.1 */
+{ 872,    "IPMulticastJoinAuthStaticSessionRule", 2,   870,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.43.10.2 MULPIv3.0-I24 Annex C.1.1.18.1.9.2 */
+{ 873,    "MulticastRulePriority",             1,      872,    (encode_uchar),          (decode_uchar),          0,           255           }, /* TLV 23.43.10.2.1 MULPIv3.0-I24 Annex C.1.1.18.1.9.2.1 */
+{ 874,    "AuthorizationAction",               2,      872,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 23.43.10.2.2 MULPIv3.0-I24 Annex C.1.1.18.1.9.2.2 */
+{ 875,    "SourcePrefixAddress",               3,      872,    (encode_ip_ip6),         (decode_ip_ip6),         0,           0             }, /* TLV 23.43.10.2.3 MULPIv3.0-I24 Annex C.1.1.18.1.9.2.3 */
+{ 876,    "SourcePrefixLength",                4,      872,    (encode_uchar),          (decode_uchar),          0,           128           }, /* TLV 23.43.10.2.4 MULPIv3.0-I24 Annex C.1.1.18.1.9.2.4 */
+{ 877,    "GroupPrefixAddress",                5,      872,    (encode_ip_ip6),         (decode_ip_ip6),         0,           0             }, /* TLV 23.43.10.2.5 MULPIv3.0-I24 Annex C.1.1.18.1.9.2.5 */
+{ 878,    "GroupPrefixLength",                 6,      872,    (encode_uchar),          (decode_uchar),          0,           128           }, /* TLV 23.43.10.2.6 MULPIv3.0-I24 Annex C.1.1.18.1.9.2.6 */
+{ 879,    "MaximumMulticastSessions",          3,      870,    (encode_ushort),         (decode_ushort),         0,           0             }, /* TLV 23.43.10.3 MULPIv3.0-I24 Annex C.1.1.18.1.9.3 */
+{ 880,    "ServiceTypeIdentifier",             11,     204,    (encode_string),         (decode_string),         1,           16            }, /* TLV 23.43.11 MULPIv3.0-I24 Annex C.1.1.18.1.10 */
+{ 881,    "DEMARCAutoConfiguration",           12,     204,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.43.12 MULPIv3.0-I24 Annex C.1.1.18.1.11 */
+{ 882,    "DACDisableEnableConfig",            1,      881,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 23.43.12.1 DEMARCv1.0-I04 Annex B.1 */
+{ 883,    "CMIMEncoding",                      2,      881,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* TLV 23.43.12.2 DEMARCv1.0-I04 Annex B.2 */
+{ 884,    "UpstreamServiceClassName",          3,      881,    (encode_strzero),        (decode_strzero),        2,           16            }, /* TLV 23.43.12.3 DEMARCv1.0-I04 Annex B.3 */
+{ 885,    "DownstreamServiceClassName",        4,      881,    (encode_strzero),        (decode_strzero),        2,           16            }, /* TLV 23.43.12.4 DEMARCv1.0-I04 Annex B.4 */
 
 /* Upstream Service Flow */
 
@@ -855,7 +978,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 236,    "SNMPv3AccessViewMask",              3,      233,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 202.54.3 eRouter-I12 Annex B.4.6.3 */
 { 237,    "SNMPv3AccessViewType",              4,      233,    (encode_uchar),          (decode_uchar),          1,           2             }, /* TLV 202.54.4 eRouter-I12 Annex B.4.6.4 */
 
-/* A little more organized -> Start with 757 */
+/* A little more organized -> Start with 886. re-use 207,205 */
 
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/
 { 998,    "GenericTLV",                        0,      0,      (encode_nothing),        (decode_special),        0,           0             },
