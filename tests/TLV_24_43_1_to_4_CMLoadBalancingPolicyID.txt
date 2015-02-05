@@ -1,0 +1,25 @@
+Main 
+{
+NetworkAccess 1;
+UsServiceFlow
+{
+UsServiceFlowRef 1;
+QosParamSetType 7;
+}
+DsServiceFlow
+{
+DsServiceFlowRef 2;
+QosParamSetType 7;
+}
+UsServiceFlow
+{
+VendorSpecific
+{
+VendorIdentifier 0xffffff;
+CMLoadBalancingPolicyID 1;
+CMLoadBalancingPriority 1;
+CMLoadBalancingGroupID 1;
+CMRangingClassIDExtension 1;
+}
+}
+}
