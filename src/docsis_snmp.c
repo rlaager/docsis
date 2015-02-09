@@ -701,7 +701,6 @@ _docsis_snmp_build_var_op(u_char * data,
                           size_t * listlength)
 {
     size_t          dummyLen, headerLen;
-    u_char	 *tmpDataPtr;
     u_char         *dataPtr;
 
     dummyLen = *listlength;
@@ -722,7 +721,6 @@ _docsis_snmp_build_var_op(u_char * data,
     headerLen = data - dataPtr;
     *listlength -= headerLen;
     DEBUGDUMPHEADER("send", "Name");
-    tmpDataPtr = data;
     data = asn_build_objid(data, listlength,
                            (u_char) (ASN_UNIVERSAL | ASN_PRIMITIVE |
                                      ASN_OBJECT_ID), var_name,
@@ -758,7 +756,6 @@ _docsis_snmp_build_var_op(u_char * data,
     case ASN_IPADDRESS:
     case ASN_OPAQUE:
     case ASN_NSAP:
-    	tmpDataPtr = data;
         data = asn_build_string(data, listlength, var_val_type,
                                 var_val, var_val_len);
         break;
