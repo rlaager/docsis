@@ -40,6 +40,8 @@
  */
 
 %option noyywrap
+%option noinput
+%option nounput
 
 %{
 #include "docsis.h"
