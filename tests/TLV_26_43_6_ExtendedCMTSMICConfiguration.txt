@@ -1,0 +1,27 @@
+Main 
+{
+NetworkAccess 1;
+DsServiceFlow
+{
+UsServiceFlowRef 1;
+QosParamSetType 7;
+}
+DsServiceFlow
+{
+DsServiceFlowRef 2;
+QosParamSetType 7;
+}
+PHS
+{
+VendorSpecific
+{
+VendorIdentifier 0xffffff;
+ExtendedCMTSMICConfigurationSetting
+{
+ExtendedCMTSMICHMACtype 1;
+ExtendedCMTSMICBitmap 0x00;
+ExplicitExtendedCMTSMICDigest 0x00;
+}
+}
+}
+}
