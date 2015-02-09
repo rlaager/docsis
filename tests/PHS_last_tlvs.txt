@@ -1,0 +1,23 @@
+Main 
+{
+	NetworkAccess 1;
+	UsServiceFlow
+	{
+		UsServiceFlowRef 1;
+		QosParamSetType 7;
+	}
+	DsServiceFlow
+	{
+		DsServiceFlowRef 2;
+		QosParamSetType 7;
+	}
+	PHS
+	{
+		PHSClassifierRef 1;
+		PHSDSCAction 1;
+		PHSDBCAction 1;
+	}
+	/* CmMic feda4e054921d449f4ae1d71eacaf37a; */
+	/* CmtsMic 8d57b4bc2fd39f7598c921f89e6510c6; */
+	/*EndOfDataMkr*/
+}

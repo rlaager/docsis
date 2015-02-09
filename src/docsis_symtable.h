@@ -876,12 +876,13 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 117,    "PHSClassifierId",                   2,      115,    (encode_ushort),         (decode_ushort),         1,           65535         }, /* TLV 26.2 MULPIv3.0-I24 Annex C.2.3.1.2 */
 { 118,    "PHSServiceFlowRef",                 3,      115,    (encode_ushort),         (decode_ushort),         1,           65535         }, /* TLV 26.3 MULPIv3.0-I24 Annex C.2.3.1.3 */
 { 119,    "PHSServiceFlowId",                  4,      115,    (encode_uint),           (decode_uint),           1,           0xFFFFFFFF    }, /* TLV 26.4 MULPIv3.0-I24 Annex C.2.3.1.4 */
+{ 1286,   "PHSDSCAction",                      5,      115,    (encode_uchar),          (decode_uchar),          0,           3             }, /* TLV 26.5 MULPIv3.0-I24 Annex C.2.3.1.5 */
 { 120,    "PHSField",                          7,      115,    (encode_hexstr),         (decode_hexstr),         1,           255           }, /* TLV 26.7 MULPIv3.0-I24 Annex C.2.4.2.1 */
 { 121,    "PHSIndex",                          8,      115,    (encode_uchar),          (decode_uchar),          1,           255           }, /* TLV 26.8 MULPIv3.0-I24 Annex C.2.4.2.2 */
 { 122,    "PHSMask",                           9,      115,    (encode_hexstr),         (decode_hexstr),         1,           255           }, /* TLV 26.9 MULPIv3.0-I24 Annex C.2.4.2.3 */
 { 123,    "PHSSize",                           10,     115,    (encode_uchar),          (decode_uchar),          1,           255           }, /* TLV 26.10 MULPIv3.0-I24 Annex C.2.4.2.4 */
 { 124,    "PHSVerify",                         11,     115,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 26.11 MULPIv3.0-I24 Annex C.2.4.2.5 */
-
+{ 1287,   "PHSDBCAction",                      13,     115,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 26.13 MULPIv3.0-I24 Annex C.2.3.1.6 */
 { 1138,   "VendorSpecific",                    43,     115,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 26.43 MULPIv3.0-I24 Annex C.2.1.11 */
 { 1139,   "CMLoadBalancingPolicyID",           1,      1138,   (encode_uint),           (decode_uint),           0,           0             }, /* TLV 26.43.1 MULPIv3.0-I24 Annex C.1.1.18.1.1 */
 { 1140,   "CMLoadBalancingPriority",           2,      1138,   (encode_uint),           (decode_uint),           0,           0             }, /* TLV 26.43.2 MULPIv3.0-I24 Annex C.1.1.18.1.2 */
@@ -1380,7 +1381,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 236,    "SNMPv3AccessViewMask",              3,      233,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 202.54.3 eRouter-I12 Annex B.4.6.3 */
 { 237,    "SNMPv3AccessViewType",              4,      233,    (encode_uchar),          (decode_uchar),          1,           2             }, /* TLV 202.54.4 eRouter-I12 Annex B.4.6.4 */
 
-/* A little more organized -> Start with 1268 */
+/* A little more organized -> Start with 1288 */
 
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/
 { 998,    "GenericTLV",                        0,      0,      (encode_nothing),        (decode_special),        0,           0             },
