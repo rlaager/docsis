@@ -573,7 +573,6 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 754,    "SFAQMDisable",                      1,      753,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 24.40.1 MULPIv3.0-I24 Annex C.2.2.7.12.3 */
 { 755,    "SFAQMLatencyTarget",                2,      753,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 24.40.2 MULPIv3.0-I24 Annex C.2.2.7.12.4 */
 { 756,    "DataRateUnitSetting",               41,     80,     (encode_uchar),          (decode_uchar),          0,           3             }, /* TLV 24.41 MULPIv3.0-I24 Annex C.2.2.7.13.1 */
-
 { 205,    "VendorSpecific",                    43,     80,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 24.43 MULPIv3.0-I24 Annex C.2.1.11 */
 { 207,    "CMLoadBalancingPolicyID",           1,      205,    (encode_uint),           (decode_uint),           0,           0             }, /* TLV 24.43.1 MULPIv3.0-I24 Annex C.1.1.18.1.1 */
 { 192,    "CMLoadBalancingPriority",           2,      205,    (encode_uint),           (decode_uint),           0,           0             }, /* TLV 24.43.2 MULPIv3.0-I24 Annex C.1.1.18.1.2 */
@@ -721,7 +720,23 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 112,    "ActQosParamsTimeout",               12,     102,    (encode_ushort),         (decode_ushort),         0,           65535         }, /* TLV 25.12 MULPIv3.0-I24 Annex C.2.2.7.6 */
 { 113,    "AdmQosParamsTimeout",               13,     102,    (encode_ushort),         (decode_ushort),         0,           65535         }, /* TLV 25.13 MULPIv3.0-I24 Annex C.2.2.7.7 */
 { 114,    "MaxDsLatency",                      14,     102,    (encode_uint),           (decode_uint),           0,           0             }, /* TLV 25.14 MULPIv3.0-I24 Annex C.2.2.9.1 */
-
+{ 1269,   "DsResequencing",                    17,     102,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 25.17 MULPIv3.0-I24 Annex C.2.2.9.2 */
+{ 1270,   "IpTosOverwrite",                    23,     102,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 25.23 MULPIv3.0-I24 Annex C.2.2.7.9 */
+{ 1271,   "DownstreamPeakTrafficRate",         27,     102,    (encode_uint),           (decode_uint),           0,           0             }, /* TLV 25.27 MULPIv3.0-I24 Annex C.2.2.7.10.2 */
+{ 1272,   "ServiceFlowRequiredAttributeMask",  31,     102,    (encode_hexstr),         (decode_hexstr),         4,           4             }, /* TLV 25.31 MULPIv3.0-I24 Annex C.2.2.5.6 */
+{ 1273,   "ServiceFlowForbiddenAttributeMask", 32,     102,    (encode_hexstr),         (decode_hexstr),         4,           4             }, /* TLV 25.32 MULPIv3.0-I24 Annex C.2.2.5.7 */
+{ 1274,   "ServiceFlowAttributeAggregationRuleMask", 33, 102,  (encode_hexstr),         (decode_hexstr),         4,           4             }, /* TLV 25.33 MULPIv3.0-I24 Annex C.2.2.5.8 */
+{ 1275,   "ApplicationIdentifier",             34,     102,    (encode_uint),           (decode_uint),           0,           0             }, /* TLV 25.34 MULPIv3.0-I24 Annex C.2.2.5.9 */
+{ 1276,   "BufferControl",                     35,     102,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 25.35 MULPIv3.0-I24 Annex C.2.2.7.11.1 */
+{ 1277,   "MinimumBuffer",                     1,      1276,   (encode_uint),           (decode_uint),           0,           4294967295    }, /* TLV 25.35.1 MULPIv3.0-I24 Annex C.2.2.7.11.3 */
+{ 1278,   "TargetBuffer",                      2,      1276,   (encode_uint),           (decode_uint),           0,           4294967295    }, /* TLV 25.35.2 MULPIv3.0-I24 Annex C.2.2.7.11.4 */
+{ 1279,   "MaximumBuffer",                     3,      1276,   (encode_uint),           (decode_uint),           0,           4294967295    }, /* TLV 25.35.3 MULPIv3.0-I24 Annex C.2.2.7.11.5 */
+{ 1280,   "DownstreamAggregateServiceFlowReference", 36, 102,  (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 25.36 MULPIv3.0-I24 Annex C.2.2.5.10 */
+{ 1281,   "DownstreamMESPReference",           37,     102,    (encode_ushort),         (decode_ushort),         1,           65535         }, /* TLV 25.37 MULPIv3.0-I24 Annex C.2.2.5.11 */
+{ 1282,   "AQMEncodings",                      40,     102,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 25.40 MULPIv3.0-I24 Annex C.2.2.7.12 */
+{ 1283,   "SFAQMDisable",                      1,      1282,   (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 25.40.1 MULPIv3.0-I24 Annex C.2.2.7.12.3 */
+{ 1284,   "SFAQMLatencyTarget",                2,      1282,   (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 25.40.2 MULPIv3.0-I24 Annex C.2.2.7.12.4 */
+{ 1285,   "DataRateUnitSetting",               41,     102,    (encode_uchar),          (decode_uchar),          0,           3             }, /* TLV 25.41 MULPIv3.0-I24 Annex C.2.2.7.13.1 */
 { 199,    "VendorSpecific",                    43,     102,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 25.43 MULPIv3.0-I24 Annex C.2.1.11 */
 { 196,    "CMLoadBalancingPolicyID",           1,      199,    (encode_uint),           (decode_uint),           0,           0             }, /* TLV 25.43.1 MULPIv3.0-I24 Annex C.1.1.18.1.1 */
 { 197,    "CMLoadBalancingPriority",           2,      199,    (encode_uint),           (decode_uint),           0,           0             }, /* TLV 25.43.2 MULPIv3.0-I24 Annex C.1.1.18.1.2 */
