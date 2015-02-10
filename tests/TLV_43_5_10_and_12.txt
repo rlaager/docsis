@@ -1,0 +1,23 @@
+Main 
+{
+NetworkAccess 1;
+DsServiceFlow
+{
+UsServiceFlowRef 1;
+QosParamSetType 7;
+}
+DsServiceFlow
+{
+DsServiceFlowRef 2;
+QosParamSetType 7;
+}
+VendorSpecific
+{
+VendorIdentifier 0xffffff;
+L2VPNEncoding
+{
+L2VPNSADescriptorSubtype 0x0102030405060708091011121314;
+PseudowireType 5;
+}
+}
+}
