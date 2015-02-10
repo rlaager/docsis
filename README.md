@@ -12,8 +12,6 @@ This build is an experimental one and is based on a fork from the GitHub project
 This tool is fully compliant with the following specs:  
 CM-SP-eRouter-I12  
 DPoE-SP-DEMARCv1.0-I04  
-
-It is partially compliant with:  
 CM-SP-L2VPN-I13  
 CM-SP-MULPIv3.0-I24  
 
