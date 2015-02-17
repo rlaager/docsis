@@ -66,6 +66,6 @@ Please use the GitHub system to report feature request and bugs.
 Known issues
 ------------
 
-Quoting the hex strings will result in a crash. Do not use something similar to "0xABCD".  
+Quoting the hex strings will result in a crash. Known workaround is to not quote HEX definitions.  
   
 There are compilation problems on old gcc variants, you should get an error similar to: docsis.c: multiple definition of `main'. Known workaround is to upgrade to a newer version of gcc.  
