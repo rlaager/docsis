@@ -1,7 +1,0 @@
-- move the symbol table into an XML configuration file. This would make it 
-  very easy to add new symbols without recompiling. It would also enable 
-  people to distribute Vendor Specific-enabled configuration files  
-- use getopt() to get command line arguments. Probably will need to change args 
-  and thus break compatibility ... -- ON HOLD (keep it simple, stupid). 
-- Make loading of SNMP modules configurable (using "-m" switch instead of loading 
-  everything under the sun) 
