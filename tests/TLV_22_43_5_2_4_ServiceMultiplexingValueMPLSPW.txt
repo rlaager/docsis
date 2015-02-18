@@ -7,7 +7,7 @@ VendorSpecific
 VendorIdentifier 0xffffff;
 L2VPNEncoding
 {
-NSIEncapsulationSubtype
+NSIEncapsulation
 {
 ServiceMultiplexingValueMPLSPW
 {

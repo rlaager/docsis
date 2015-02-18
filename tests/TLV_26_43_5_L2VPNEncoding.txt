@@ -8,11 +8,11 @@ VendorIdentifier 0xffffff;
 L2VPNEncoding
 {
 AttachmentGroupID 0x0102;
-NSIEncapsulationSubtype
+NSIEncapsulation
 {
 ServiceMultiplexingValueOther 0x00;
-ServiceMultiplexingValueIEEE8021Q 258;
-ServiceMultiplexingValueIEEE8021ad 0x01020304;
+NSIEncapsulationSingleQTag 258;
+NSIEncapsulationDualQTag 11,22;
 ServiceMultiplexingValueMPLSPW
 {
 MPLSPseudowireID 1;

@@ -18,7 +18,7 @@ VendorSpecific
 VendorIdentifier 0xffffff;
 L2VPNEncoding
 {
-NSIEncapsulationSubtype
+NSIEncapsulation
 {
 ServiceMultiplexingValueOther 0x00;
 }
