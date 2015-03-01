@@ -16,7 +16,7 @@ This was tested on Ubuntu 14.04 amd64 (little endian) ~~and Debian 7.5 Sparc64 (
 
 Dependencies:
 
-    apt-get install automake libtool libsnmp-dev bison make gcc flex git
+    apt-get install automake libtool libsnmp-dev bison make gcc flex git libglib2.0-dev
 
 Installation steps for Debian based systems:
 
