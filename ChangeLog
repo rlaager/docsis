@@ -8,55 +8,55 @@ version 0.9.6 (06/14/2010):
 	* Work properly on 64-bit systems (Oliver Hitz, James Flemer)
 	* Various cleanups to the code, documentation, and build setup
 
-0.9.5			- allow semi-colon characters in strings 
-ctrl			- add support for TimeTicks SNMP encoding. 
-			- simplify and improve parser (it now returns a 
+0.9.5			- allow semi-colon characters in strings
+ctrl			- add support for TimeTicks SNMP encoding.
+			- simplify and improve parser (it now returns a
 		          "parse tree")
-			- add support for ManufacturerCVC and CoSignerCVC 
-			  (reading files directly) 		
+			- add support for ManufacturerCVC and CoSignerCVC
+			  (reading files directly)
 			- print warning if TLV64 present in DOCSIS config files
 			- multiple file encoding in one pass (preliminary)
-			  Performance: up to 200 files / second 
-			- Support Gauge32 and Counter32. Unsigned32 gets 
-			  encoded as a Gauge32 as well. 
+			  Performance: up to 200 files / second
+			- Support Gauge32 and Counter32. Unsigned32 gets
+			  encoded as a Gauge32 as well.
 
 0.9.4			- fix parsing of square brackets in string OID labels
 evvolve			- close the file descriptor in parse_config_file
 ctrl			- re-work of decoding infrastructure for CableHome
 
-0.9.3			- update CMTS MIC calculation per DOCSIS 2.0 (added 
+0.9.3			- update CMTS MIC calculation per DOCSIS 2.0 (added
 evvolve			  SubMgmt settings to CMTS MIC calculation)
 ctrl			- fix decoding of long Strings in SNMP Objects
-ctrl			- add support for long Variable Bindings (>127) 
-ctrl			- add support for TLV64 encode/decode for long SNMP 
+ctrl			- add support for long Variable Bindings (>127)
+ctrl			- add support for TLV64 encode/decode for long SNMP
 ctrl			  Objects.
 evvolve			- add support for Downstream Channel List TLVs
 evvolve			- add support for TftpModemAddress and TftpTimeout TLVs
-ctrl			- make GenericTLVs easier to decode/encode when 
+ctrl			- make GenericTLVs easier to decode/encode when
 ctrl			  printable strings are used
-ctrl			  
+ctrl
 ctrl			- fixed memory leaks (for the sake of it)
-			  
-			
-0.9.2			- add support for ObjectID variable bindings 
+
+
+0.9.2			- add support for ObjectID variable bindings
 evvolve			- fix bug when writing files on Win32
 			- fix the docsis_code for subscriber management filters
 
 
-0.9.1			- add support for ModemCapabilities 
+0.9.1			- add support for ModemCapabilities
 evvolve			- add support for Subscriber Management Filter groups
-			- make SNMP VarBind encoding more "compatible" with 
+			- make SNMP VarBind encoding more "compatible" with
 			  other encoders
 			- cleanup argument handling, fix bug with error printing
 			- fix bug where SnmpMibObject OID output would switch to
-			  numeric format after a decode_oid 
+			  numeric format after a decode_oid
 			- re-organized and beautified source code
-			  
+
 
 0.9.0			- fix range of MaxCPE (1-254)
 evvolve			- add support for Win32 with Cygwin
 			- fix ReAuthTimeout upper limit (30)
-			- add script to generate HTML help from 
+			- add script to generate HTML help from
 			  the symbol table
 			- add NSIS packaging script for Win32
 			- added configure script, re-organized stuff
@@ -65,26 +65,26 @@ evvolve			- add support for Win32 with Cygwin
 0.8.8  02/07/03		- fix handling of label-hinted suffix to OIDs
 evvolve			- check for string length overflow while parsing
 			- added mibs to distribution
-			- change SNMPv3* labels to SNMP* 
+			- change SNMPv3* labels to SNMP*
 			- add Docsis20Enable configuration setting
 			- complete support for SnmpV3NotificationReceiver
-	
-Many thanks to Rudy Zijlstra for pointing out a few bugs. 
+
+Many thanks to Rudy Zijlstra for pointing out a few bugs.
 
 0.8.7  20/6/03		- fix bug with encoding HexStrings with trailing zeros
 Ronald Rosenfeld	- fix double declaration of symbol T_MAC
-			- add support for negative integers 
-evvolve			- change -lcrypto to -lcrypt to make default 
+			- add support for negative integers
+evvolve			- change -lcrypto to -lcrypt to make default
 			  more "mainstream".
 			- add support for ASN_GAUGE encodings
 			- fix VendorSpecific decoding
 			- print label as comment for enums
 
-Many thanks to Ronald Rosenfeld for sending in three patches. 
+Many thanks to Ronald Rosenfeld for sending in three patches.
 
-0.8.6  31/05/03		- add support for SNMPv3Kickstart and 
+0.8.6  31/05/03		- add support for SNMPv3Kickstart and
 evvolve		  	  partial support for SNMPv3 Notification Receiver
-			- fix compilation warnings 
+			- fix compilation warnings
 			- add support for PHS Rule (untested)
 			- cleanup indexes in docsis_symtable.h
 			- add regression test script
@@ -98,53 +98,53 @@ ctrl			- added support for VendorSpecific TLVs
 evvolve			- Updated OID format to accept "-" and "_" in labels
 ctrl			- We can now encode decoded files directly !
 akwong			  (thanks to help from Adrian Kwong)
-			- MIB output format changed. 
-			- NET-SNMP 5.x support. 
-			- Dropped support for ucd-snmp. 
-			- Made SNMP decoding smarter - i.e. output OID	
-			  suffix only; but switch to full-OID output 
-			  if MIBs are not installed. 
-			- Hacked support for encoding MTA configuration files. 
+			- MIB output format changed.
+			- NET-SNMP 5.x support.
+			- Dropped support for ucd-snmp.
+			- Made SNMP decoding smarter - i.e. output OID
+			  suffix only; but switch to full-OID output
+			  if MIBs are not installed.
+			- Hacked support for encoding MTA configuration files.
 			- Added support for Vendor Specific info.
-			- Worked around string formatting issues in NET-SNMP. 
+			- Worked around string formatting issues in NET-SNMP.
 			- Added indent functionality.
 evvolve
 0.7.4  18/02/02		Fix condition too strong in docsis_decode.c.
-evvolve			
+evvolve
 
-0.7.3  16/02/02		Change symbols so that {symbol_name,docsis_code} is 
+0.7.3  16/02/02		Change symbols so that {symbol_name,docsis_code} is
 evvolve			"primary key" (the above pairs are unique in the
 			entire symbol table).
 			Fix errors with IpTos encoding (still buggy)
 			We took over full maintainership from Cornel.
 
 0.7.2  12/02/02		Fix typos in docsis_symtable.h
-evvolve			
+evvolve
 
-0.7.1  08/02/02		Split encoding functions into docsis_encode.{h,c}	
+0.7.1  08/02/02		Split encoding functions into docsis_encode.{h,c}
 evvolve			Implemented Hex String and Ether+Ethermask encoders.
 			Implemented range checking for string and hex string
 			encoders.
-			We added many DOCSIS 1.1 configuration settings to 
+			We added many DOCSIS 1.1 configuration settings to
  			docsis_symtable.h. Got bored, so if you want more please
 			add them yourself and send us a patch.
 			Updated CMTS MIC calculation to use the new 1.1 config
-			settings in addition to the 1.0 ones (as per the 
-			latest DOCSIS RFI). 
+			settings in addition to the 1.0 ones (as per the
+			latest DOCSIS RFI).
 
-0.7.0  06/02/02		New "decoding" framework similar to the encoding 
-evvolve			framework makes adding new "symbols" as easy as 
- 			editing the "docsis_symtable.h" file. 
+0.7.0  06/02/02		New "decoding" framework similar to the encoding
+evvolve			framework makes adding new "symbols" as easy as
+ 			editing the "docsis_symtable.h" file.
 			As an example, support for the DOCSIS 1.1 Downstream
-			Packet Classifiers was added. 
-			Bugs were found and some were even fixed in the 
-			process. 
-			Started adding 1.1 stuff to the project. 
+			Packet Classifiers was added.
+			Bugs were found and some were even fixed in the
+			process.
+			Started adding 1.1 stuff to the project.
 
-0.6.2: 18/07/01		
+0.6.2: 18/07/01
 ctrl			Make the thing compile on Solaris (Makefile.solaris)
 			Fix memory alignment errors on Solaris
-			Updated MD5 implementation to get rid of annoying 
+			Updated MD5 implementation to get rid of annoying
 			warnings
 
 0.6.1:  25/03/01
@@ -152,31 +152,31 @@ ctrl			added -lcrypto to $LIBS to work with ucd-snmp-4.2
 			cleaned up the sourcecode a bit
 			added support for "decoding" a binary file
 			fixed bug in decoding unsigned shorts (MaxBurstUp)
-			
 
-0.6.0:	23/03/01	
+
+0.6.0:	23/03/01
 ctrl			added support for generic hexadecimal strings
 			(needed for docsDevNmAccessInterfaces)
 
 			fixed bug involving multiple String-type SNMP vars
 			in the same config file (uninitialized buffer)
 
-			fixed bug with CpeMacAddress decoding (introduced in 
+			fixed bug with CpeMacAddress decoding (introduced in
 			0.5.8)
 
-0.5.8: 
-ctrl	18/03/01:	various re-organizations 
+0.5.8:
+ctrl	18/03/01:	various re-organizations
 			released to sourceforge
 
-0.5.7: 
-ctrl	17/03/01: 
-			fixed bug in CPE MAC Address encoding (correct 
+0.5.7:
+ctrl	17/03/01:
+			fixed bug in CPE MAC Address encoding (correct
 			type = 14)
 			added "support" for config files in DOS-format text
 
 0.5.5:
 ctrl
-	01/12/00: 	created CHANGES file	
+	01/12/00: 	created CHANGES file
 		 	various small annoyances resolved
 	  		added support for CPE MAC Address configuration setting
 			removed references to _A*_H in *.h

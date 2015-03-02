@@ -77,7 +77,7 @@ int encode_uint24 ( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr
   union t_val *helper; /* We only use this to cast the void* we receive to what we think it should be */
 
   helper = (union t_val *) tval;
-  
+
   byte1 = (helper->uintval >> (0)) & 0xFF;
   byte2 = (helper->uintval >> (8)) & 0xFF;
   byte3 = (helper->uintval >> (16)) & 0xFF;
@@ -191,7 +191,7 @@ int encode_ip_list( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr
   helper = (union t_val *) tval;
   i = 0;
   token = strtok(helper->strval, s);
-  while (token != NULL) 
+  while (token != NULL)
   {
     array[i] = token;
     token = strtok (NULL, s);
@@ -248,7 +248,7 @@ int encode_ip6_list( unsigned char *buf, void *tval, struct symbol_entry *sym_pt
   helper = (union t_val *) tval;
   i = 0;
   token = strtok(helper->strval, s);
-  while (token != NULL) 
+  while (token != NULL)
   {
     array[i] = token;
     token = strtok (NULL, s);
@@ -313,7 +313,7 @@ int encode_ip_ip6( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr 
   } else if ( inet_aton ( helper->strval, &in) ) {
     memcpy ( buf, &in, sizeof(struct in_addr));
     free(helper->strval);
-    return ( sizeof(struct in_addr));    
+    return ( sizeof(struct in_addr));
   } else {
     fprintf(stderr, "Invalid IP address %s at line %d\n", helper->strval, line );
     exit (-1);
@@ -325,7 +325,7 @@ int encode_char_ip_ip6( unsigned char *buf, void *tval, struct symbol_entry *sym
   struct in6_addr in6;
   struct in_addr in;
   union t_val *helper; /* We only use this to cast the void* we receive to what we think it should be */
-  
+
   char ipv4 = 1;
   char ipv6 = 2;
 
@@ -340,7 +340,7 @@ int encode_char_ip_ip6( unsigned char *buf, void *tval, struct symbol_entry *sym
     memcpy ( buf, &ipv4, sizeof(char) );
     memcpy ( buf + 1, &in, sizeof(struct in_addr));
     free(helper->strval);
-    return ( sizeof(char) + sizeof(struct in_addr));    
+    return ( sizeof(char) + sizeof(struct in_addr));
   } else {
     fprintf(stderr, "Invalid IP address %s at line %d\n", helper->strval, line );
     exit (-1);
@@ -356,11 +356,11 @@ int encode_ip_ip6_port( unsigned char *buf, void *tval, struct symbol_entry *sym
   char *token;
   char *array[2];
   const char s[2] = "/";
-  
+
   union t_val *helper; /* We only use this to cast the void* we receive to what we think it should be */
-  
+
   helper = (union t_val *) tval;
-  
+
   i = 0;
   token = strtok(helper->strval, s);
   while (token != NULL)
@@ -369,7 +369,7 @@ int encode_ip_ip6_port( unsigned char *buf, void *tval, struct symbol_entry *sym
     token = strtok (NULL, s);
   }
   port = htons(atoi(array[1]));
-  
+
   if ( inet_pton(AF_INET6, array[0], &in6) ) {
     memcpy ( buf, &in6, sizeof(struct in6_addr));
     memcpy ( buf + sizeof(struct in6_addr),&port,sizeof(unsigned short));
@@ -379,7 +379,7 @@ int encode_ip_ip6_port( unsigned char *buf, void *tval, struct symbol_entry *sym
     memcpy ( buf, &in, sizeof(struct in_addr));
     memcpy ( buf + sizeof(struct in_addr),&port,sizeof(unsigned short));
     free(helper->strval);
-    return ( sizeof(struct in_addr) + sizeof(unsigned short));    
+    return ( sizeof(struct in_addr) + sizeof(unsigned short));
   } else {
     fprintf(stderr, "Invalid IP address / port combination %s at line %d\n", helper->strval, line );
     exit (-1);

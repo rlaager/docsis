@@ -113,7 +113,7 @@ void decode_ip_list (unsigned char *tlvbuf, symbol_type *sym, size_t length )
       printf(",");
     }
   }
-  printf(";\n");  
+  printf(";\n");
 }
 
 void decode_ip6 (unsigned char *tlvbuf, symbol_type *sym, size_t length )
@@ -143,7 +143,7 @@ void decode_ip6_list (unsigned char *tlvbuf, symbol_type *sym, size_t length )
       printf(",");
     }
   }
-  printf(";\n");  
+  printf(";\n");
 }
 
 void decode_ip6_prefix_list (unsigned char *tlvbuf, symbol_type *sym, size_t length )
@@ -158,7 +158,7 @@ void decode_ip6_prefix_list (unsigned char *tlvbuf, symbol_type *sym, size_t len
       printf(",");
     }
   }
-  printf(";\n");  
+  printf(";\n");
 }
 
 void decode_ip_ip6 (unsigned char *tlvbuf, symbol_type *sym, size_t length )
@@ -549,7 +549,7 @@ void decode_main_aggregate (unsigned char *tlvbuf, size_t buflen)
 		decode_unknown(cp, NULL, (size_t) cp[1] );
   	} else {
       		current_symbol->decode_func (cp+1+tlv_llen, current_symbol, tlv_vlen );
-  	} 
+  	}
 #ifdef DEBUG
 	if (cp[0] == 64 )   /* TLV 64 has length encoded as a short */
 	   printf("/* TLV 64, size %hu */ \n", ntohs(*((unsigned short *)(cp+1))) );

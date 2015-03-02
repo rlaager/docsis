@@ -6,7 +6,7 @@ before_install:
   - sudo pip install cpp-coveralls
   - ./autogen.sh
 
-script: 
+script:
   - ./configure CFLAGS='-g -O0 -fprofile-arcs -ftest-coverage'
   - make && sudo make install
   - cd tests/

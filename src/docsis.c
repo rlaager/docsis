@@ -235,7 +235,7 @@ main (int argc, char *argv[])
                 output_file = argv[6];
 	} else {
                 usage();
-        }	
+        }
   } else {
   	switch (argc)
     	{

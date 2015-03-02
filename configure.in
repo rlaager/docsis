@@ -24,7 +24,7 @@ else
   fi
 fi
 
-dnl check for bison, yacc won't help; 
+dnl check for bison, yacc won't help;
 
 AC_PATH_PROG([BISON], [bison], [notfound],
                    [$PATH:${prefix}/bin:${exec_prefix}/bin:/usr/freeware/bin:/usr/gnu/bin:/usr/local/bin:/usr/bin])
@@ -95,12 +95,12 @@ AC_COMPILE_IFELSE(
                    [[netsnmp_init_mib();]])],
   [AC_DEFINE_UNQUOTED(HAVE_NETSNMP_INIT_MIB, 1, [Defines if your net-snmp has the netsnmp_init_mib function])])
 
-dnl end libnetsnmp check 
+dnl end libnetsnmp check
 
-dnl check for Cygwin & NSIS to build docsis_setup.exe 
+dnl check for Cygwin & NSIS to build docsis_setup.exe
 
 AC_MSG_CHECKING([for Cygwin])
-if test "x$host_os" = "xcygwin" ; then 
+if test "x$host_os" = "xcygwin" ; then
 	AC_MSG_RESULT([ found Cygwin, trying to use NSIS to build setup.exe ])
 dnl save current path in DOS format so we can substitute it in in NSIS setup script
 	CYGWIN_BUILDROOT=`cygpath -w $PWD`
@@ -112,7 +112,7 @@ dnl save current path in DOS format so we can substitute it in in NSIS setup scr
 	AC_PATH_PROG([MAKENSIS], [makensis], [notfound],[$PATH:$prefix/bin:/cygdrive/c/Program Files/NSIS])
 	if test "x$MAKENSIS" = "xnotfound"; then
 		AC_MSG_RESULT([makensis not found, no setup.exe...])
-	else 
+	else
 		AC_MSG_RESULT([found makensis at $MAKENSIS ... ])
 	fi
 else
