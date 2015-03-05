@@ -1431,6 +1431,16 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 494,    "EnergyManagementCyclePeriod",       3,      481,    (encode_ushort),         (decode_ushort),         0,           0             }, /* TLV 74.2.3 MULPIv3.0-I24 Annex C.1.1.30.3 */
 { 479,    "EnergyManagement1x1ModeIndicator",  75,     0,      (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 75 MULPIv3.0-I24 Annex C.1.4.4 */
 { 480,    "CMUpstreamAQMDisable",              76,     0,      (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 76 MULPIv3.0-I24 Annex C.1.2.20 */
+{ 130,    "UNIControlEncodings",               79,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 79 MULPIv3.0-I25 Annex C.3.3 */
+{ 131,    "ContextCMIM",                       1,      130,    (encode_hexstr),         (decode_hexstr),         0,           0             }, /* TLV 79.1 MULPIv3.0-I25 Annex C.3.3.1 */
+{ 188,    "UNIAdminStatus",                    2,      130,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 79.2 MULPIv3.0-I25 Annex C.3.3.2 */
+{ 189,    "UNIAutoNegotiationStatus",          3,      130,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 79.3 MULPIv3.0-I25 Annex C.3.3.3 */
+{ 190,    "UNIOperatingSpeed",                 4,      130,    (encode_uchar),          (decode_uchar),          0,           6             }, /* TLV 79.4 MULPIv3.0-I25 Annex C.3.3.4 */
+{ 191,    "UNIDuplex",                         5,      130,    (encode_uchar),          (decode_uchar),          0,           2             }, /* TLV 79.5 MULPIv3.0-I25 Annex C.3.3.5 */
+{ 345,    "EEEStatus",                         6,      130,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 79.6 MULPIv3.0-I25 Annex C.3.3.6 */
+{ 346,    "MaximumFrameSize",                  7,      130,    (encode_ushort),         (decode_ushort),         0,           0             }, /* TLV 79.7 MULPIv3.0-I25 Annex C.3.3.7 */
+{ 347,    "PowerOverEthernetStatus",           8,      130,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 79.8 MULPIv3.0-I25 Annex C.3.3.8 */
+{ 348,    "MediaType",                         9,      130,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 79.9 MULPIv3.0-I25 Annex C.3.3.9 */
 
 /* eRouter TLVs */
 { 175,    "eRouter",                           202,    0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 202 eRouter-I12 */
@@ -1462,7 +1472,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 236,    "SNMPv3AccessViewMask",              3,      233,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 202.54.3 eRouter-I12 Annex B.4.6.3 */
 { 237,    "SNMPv3AccessViewType",              4,      233,    (encode_uchar),          (decode_uchar),          1,           2             }, /* TLV 202.54.4 eRouter-I12 Annex B.4.6.4 */
 
-/* A little more organized -> Start with 1419, recover 130, 188, 189, 190, 191, 345, 346, 347, 348, 131 */
+/* A little more organized -> Start with 1419 */
 
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/
 { 998,    "GenericTLV",                        0,      0,      (encode_nothing),        (decode_special),        0,           0             },
