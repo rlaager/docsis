@@ -1,0 +1,27 @@
+Main 
+{
+VendorSpecific
+{
+VendorIdentifier 0x00407b;
+GenericTLV TlvCode 4 TlvLength 1 TlvValue 0x00;
+GenericTLV TlvCode 6 TlvLength 1 TlvValue 0x01;
+}
+VendorSpecific
+{
+VendorIdentifier 0x000f21;
+GenericTLV TlvCode 4 TlvLength 1 TlvValue 0x00;
+GenericTLV TlvCode 6 TlvLength 1 TlvValue 0x01;
+}
+VendorSpecific
+{
+VendorIdentifier 0x000a73;
+GenericTLV TlvCode 4 TlvLength 1 TlvValue 0x00;
+GenericTLV TlvCode 6 TlvLength 1 TlvValue 0x01;
+}
+VendorSpecific
+{
+VendorIdentifier 0xffffff;
+CMRangingClassIDExtension 2;
+CMLoadBalancingGroupID 3;
+}
+}
