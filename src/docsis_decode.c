@@ -339,12 +339,8 @@ void decode_hexstr (unsigned char *tlvbuf, symbol_type *sym, size_t length )
  }
  printf(";\n");
  if (!strncmp (sym->sym_ident, "VendorIdentifier", 16)) {
-   if (ff != tlvbuf[0]) {
-	   if (ff != tlvbuf[1]) {
-		   if (ff != tlvbuf[2]) {
-			   is_vspecific = TRUE;
-		   }
-	   }
+   if ( (ff != tlvbuf[0]) || (ff != tlvbuf[1]) || (ff != tlvbuf[2]) ) {
+     is_vspecific = TRUE;
    }
  }
  free(helper);
