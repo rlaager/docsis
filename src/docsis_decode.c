@@ -37,6 +37,7 @@
 #include "docsis_snmp.h"
 #include "ethermac.h"
 
+extern unsigned int is_vspecific = FALSE;
 
 struct symbol_entry *
 find_symbol_by_code_and_pid (unsigned char code, unsigned int pid)
@@ -325,6 +326,7 @@ void decode_hexstr (unsigned char *tlvbuf, symbol_type *sym, size_t length )
  char *helper;
  unsigned int i;
  unsigned int len;
+ int ff = 0xFF;
 
 /* TODO */
  len =  length;
@@ -336,6 +338,11 @@ void decode_hexstr (unsigned char *tlvbuf, symbol_type *sym, size_t length )
 	printf("%02x", (unsigned char) helper[i]);
  }
  printf(";\n");
+ if (!strncmp (sym->sym_ident, "VendorIdentifier", 16)) {
+   if ( (ff != tlvbuf[0]) || (ff != tlvbuf[1]) || (ff != tlvbuf[2]) ) {
+     is_vspecific = TRUE;
+   }
+ }
  free(helper);
 }
 
@@ -425,6 +432,10 @@ void decode_aggregate (unsigned char *tlvbuf, symbol_type *sym, size_t length )
   __docsis_indent(INDENT_NOOP, TRUE);
   current_symbol = find_symbol_by_code_and_pid (cp[0], sym->id);
   tlv_vlen = (size_t) cp[1];
+  /* printf("tlvbuf has value: %01x\n", tlvbuf); */
+  if (is_vspecific == TRUE) {
+	  current_symbol = NULL;
+  }
   if (current_symbol == NULL) {
 		decode_unknown(cp, NULL, tlv_vlen );
   	} else {
@@ -436,6 +447,7 @@ void decode_aggregate (unsigned char *tlvbuf, symbol_type *sym, size_t length )
   __docsis_indent(INDENT_DECREMENT, FALSE);
 
   __docsis_indent(INDENT_NOOP, TRUE);
+  is_vspecific = FALSE;
   printf("}\n");
 }
 
