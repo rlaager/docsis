@@ -341,6 +341,11 @@ decode_vbind (unsigned char *data, unsigned int vb_len)
 			      NETSNMP_DS_LIB_OID_OUTPUT_FORMAT,
 			      NETSNMP_OID_OUTPUT_SUFFIX);
 
+  if (netsnmp_ds_get_boolean(NETSNMP_DS_LIBRARY_ID, NETSNMP_OID_OUTPUT_NUMERIC)) {
+        netsnmp_ds_set_int(NETSNMP_DS_LIBRARY_ID, NETSNMP_DS_LIB_OID_OUTPUT_FORMAT,
+                                                  NETSNMP_OID_OUTPUT_NUMERIC);
+  }
+
   snprint_objid (outbuf, 1023, vp->name, vp->name_length);
 
   if (!get_node (outbuf, var_name, &name_len))

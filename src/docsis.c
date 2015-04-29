@@ -189,6 +189,9 @@ main (int argc, char *argv[])
 
   if (!strcmp (argv[1], "-o") ){
 	resolve_oids = 0;
+	  if (!netsnmp_ds_get_boolean(NETSNMP_DS_LIBRARY_ID, NETSNMP_OID_OUTPUT_NUMERIC)) {
+		  netsnmp_ds_toggle_boolean (NETSNMP_DS_LIBRARY_ID, NETSNMP_OID_OUTPUT_NUMERIC);
+	  }
 	if (!strcmp (argv[2], "-d")) {
 		decode_bin = TRUE;
 		config_file = argv[3];
@@ -464,7 +467,7 @@ setup_mib_flags(int resolve_oids, char *custom_mibs) {
 #else
   init_mib ();
 #endif
-
+  
   if (!netsnmp_ds_get_boolean
       (NETSNMP_DS_LIBRARY_ID, NETSNMP_DS_LIB_PRINT_NUMERIC_OIDS))
     {
