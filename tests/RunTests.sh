@@ -31,8 +31,12 @@ FILES=*.txt
 DOCSIS=../src/docsis
 KEYFILE=key
 
+ALL_TESTS=`ls -l *.txt | wc -l`;
+
 for f in $FILES
 do
+  let i++;
+  echo "Progress: $i / $ALL_TESTS";
   TEST=$(echo $f | cut -f1 -d.)
   $DOCSIS -e $TEST.txt $KEYFILE $TEST.cm.new
   if [ ! -f $TEST.cm.new ]; then
