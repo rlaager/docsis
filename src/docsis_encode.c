@@ -266,36 +266,34 @@ int encode_ip6_list( unsigned char *buf, void *tval, struct symbol_entry *sym_pt
 
 int encode_ip6_prefix_list( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
 {
-  int j, i;
-  char *token, final;
-  char *array[15];
-  const char s[2] = ",";
-  const char t[2] = "/";
+  char final;
+  char *str1, *str2, *token, *subtoken;
+  char *saveptr1, *saveptr2;
+  int j;
   struct in6_addr in6;
   union t_val *helper; /* We only use this to cast the void* we receive to what we think it should be */
 
   helper = (union t_val *) tval;
-  i = 0;
-  token = strtok(helper->strval, s);
-  while (token != NULL) {
-    array[i] = token;
-    token = strtok (NULL, s);
-    i++;
-  }
-  for (j = 0; j <= i; j++) {
-    token = strtok(array[j], t);
-    while (token != NULL) {
-      if ( inet_pton ( AF_INET6, token, &in6) ) {
+
+  for (j = 0, str1 = helper->strval; ; j++, str1 = NULL) {
+    token = strtok_r(str1, ",", &saveptr1);
+    if (token == NULL)
+      break;
+    for (str2 = token; ; str2 = NULL) {
+      subtoken = strtok_r(str2, "/", &saveptr2);
+      if (subtoken == NULL)
+        break;
+      if ( inet_pton ( AF_INET6, subtoken, &in6) ) {
         memcpy ( buf + 17 * j, &in6, sizeof(struct in6_addr));
       } else {
-        final = (char)atoi(token);
+        final = (char)atoi(subtoken);
         memcpy ( buf + 17 * j + sizeof(struct in6_addr),&final,sizeof(unsigned char));
       }
-      token = strtok (NULL, t);
     }
   }
+
   free(helper->strval);
-  return ( i * ( sizeof(struct in6_addr) + sizeof(unsigned char) ) );
+  return ( j * ( sizeof(struct in6_addr) + sizeof(unsigned char) ) );
 }
 
 int encode_ip_ip6( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
