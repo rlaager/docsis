@@ -3,6 +3,8 @@ AC_CONFIG_SRCDIR([src/docsis.c])
 AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE([dist-bzip2])
 
+AC_CANONICAL_HOST
+
 AC_LANG([C])
 LT_INIT
 dnl AC_PROG_YACC
@@ -186,6 +188,12 @@ if test "x$GCC" = "xyes"; then
 			AC_MSG_RESULT(no)
 		])
 	fi
+	
+	case $host in
+        *cygwin*)
+                CFLAGS="$CFLAGS -fno-stack-protector"
+                ;;
+        esac
 
 	CFLAGS="-Wall $DEBUG_CFLAGS -g $CFLAGS"
 fi
