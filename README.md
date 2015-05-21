@@ -42,7 +42,12 @@ Tested and working on OS X Mavericks. Dependencies should be installed using Mac
 Windows
 -------
 
-Not tested.
+Tested and working under Cygwin 2.0.2
+
+Packages needed:
+
+    automake libtool net-snmp-utils net-snmp-devel bison make gcc-g++ flex libglib2.0-devel openssl-devel
+  
 
 Installation steps
 ------------------
