@@ -46,6 +46,7 @@
 
 struct tlv *global_tlvtree_head;
 symbol_type *global_symtable;
+unsigned int nohash = 0;
 
 static void setup_mib_flags(int resolve_oids, char *custom_mibs);
 
@@ -188,6 +189,9 @@ usage ()
   fprintf(stderr, "\nTo add SHA1 hash to mta config file, use -na or -eu options:\n");
   fprintf(stderr, "\tdocsis -na|-eu -p <mta_cfg_file> <output_file>\n");
   fprintf(stderr, "\tdocsis -na|-eu -m -p <mta_file1> ...  <new_extension>\n");
+  fprintf(stderr, "\nTo remove hash from MTA config file, use -nohash option:\n");
+  fprintf(stderr, "\tdocsis -nohash -d <mta_cfg_file>\n");
+  fprintf(stderr, "\tdocsis -nohash -o -d <mta_cfg_file>\n");
   fprintf(stderr, "\nWhere:\n<cfg_file>\t\t= name of text (human readable) cable modem or MTA \n"
 		  "\t\t\t  configuration file;\n"
 		  "<key_file>\t\t= text file containing the authentication key\n"
@@ -212,17 +216,37 @@ main (int argc, char *argv[])
   unsigned int encode_docsis = FALSE, decode_bin = FALSE, hash = 0;
   int i;
   int resolve_oids = 1;
-
   if (argc < 2 ) {
 	usage();
   }
 
-  /* option: -o -d */
-  if (!strcmp (argv[1], "-o") ){
+  /* option: -nohash -o -d */
+  if (!strcmp (argv[1], "-nohash") ){
+    nohash = 1;
+    if (!strcmp (argv[2], "-o") ){
+      resolve_oids = 0;
+      if (!netsnmp_ds_get_boolean(NETSNMP_DS_LIBRARY_ID, NETSNMP_OID_OUTPUT_NUMERIC)) {
+        netsnmp_ds_toggle_boolean (NETSNMP_DS_LIBRARY_ID, NETSNMP_OID_OUTPUT_NUMERIC);
+      }
+      if (!strcmp (argv[3], "-d")) {
+        decode_bin = TRUE;
+        config_file = argv[4];
+      } else {
+        usage();
+      }
+    } else if (!strcmp (argv[2], "-d")) {
+      decode_bin = TRUE;
+      config_file = argv[3];
+    } else {
+      usage();
+    }
+  /* option -o -d */
+  } else if (!strcmp (argv[1], "-o") ){
     resolve_oids = 0;
     if (!netsnmp_ds_get_boolean(NETSNMP_DS_LIBRARY_ID, NETSNMP_OID_OUTPUT_NUMERIC)) {
       netsnmp_ds_toggle_boolean (NETSNMP_DS_LIBRARY_ID, NETSNMP_OID_OUTPUT_NUMERIC);
     }
+
     if (!strcmp (argv[2], "-d")) {
       decode_bin = TRUE;
       config_file = argv[3];

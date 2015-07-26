@@ -293,10 +293,42 @@ void decode_oid (unsigned char *tlvbuf, symbol_type *sym, size_t length )
 
 void decode_snmp_object (unsigned char *tlvbuf, symbol_type *sym, size_t length )
 {
+  void *pj = malloc(17);
+  void *pi = malloc(17);
+  void *pk = malloc(15);
+  void *pl = malloc(15);
+
+  if (nohash) {
+    memcpy (pi, "\x30\x26\x06\x0e\x2b\x06\x01\x04\x01\xa3\x0b\x02\x02\x01\x01\x02\x07", 17);
+    memcpy (pj, tlvbuf, 17);
+    if ( *(int*)pi == *(int*)pj ) {
+      printf("/* ");
+      printf("%s ", sym->sym_ident);
+      decode_vbind (tlvbuf, length );
+      printf(" */");
+      printf("\n");
+      return;
+    }
+    memcpy (pk, "\x30\x24\x06\x0c\x2b\x06\x01\x04\x01\xba\x08\x01\x01\x02\x09", 15);
+    memcpy (pl, tlvbuf, 15);
+    if ( *(int*)pk == *(int*)pl ) {
+      printf("/* ");
+      printf("%s ", sym->sym_ident);
+      decode_vbind (tlvbuf, length );
+      printf(" */");
+      printf("\n");
+      return;
+    }
+  }
+
   printf("%s ", sym->sym_ident);
   decode_vbind (tlvbuf, length );
-/*  22-06-03  decode_vbind prints the trailing ';' as well  */
   printf("\n");
+
+  free(pi);
+  free(pj);
+  free(pk);
+  free(pl);
 }
 
 void decode_string (unsigned char *tlvbuf, symbol_type *sym, size_t length )
