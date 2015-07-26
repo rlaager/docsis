@@ -42,6 +42,7 @@
 #include "docsis_symtable.h"
 #include "ethermac.h"
 #include "md5.h"
+#include <openssl/sha.h>
 
 struct tlv *global_tlvtree_head;
 symbol_type *global_symtable;
@@ -134,6 +135,32 @@ add_cmts_mic (unsigned char *tlvbuf, unsigned int tlvbuflen,
   return (tlvbuflen + 18);
 }
 
+static unsigned int
+add_mta_hash (unsigned char *tlvbuf, unsigned int tlvbuflen, unsigned int hash) {
+  SHA_CTX shactx;
+  unsigned char hash_value[SHA_DIGEST_LENGTH];
+
+  SHA1_Init(&shactx);
+  SHA1_Update(&shactx, tlvbuf, tlvbuflen);
+  SHA1_Final(hash_value, &shactx);
+
+  if (hash == 1) {
+    memcpy (tlvbuf + tlvbuflen - 3, "\x0b\x28\x30\x26\x06\x0e\x2b\x06\x01\x04\x01\xa3\x0b\x02\x02\x01\x01\x02\x07\x00\x04\x14", 22);
+    tlvbuflen += 19;
+  }
+  if (hash == 2) {
+    memcpy (tlvbuf + tlvbuflen - 3, "\x0b\x26\x30\x24\x06\x0c\x2b\x06\x01\x04\x01\xba\x08\x01\x01\x02\x09\x00\x04\x14", 20);
+    tlvbuflen += 17;
+  }
+
+  memcpy (tlvbuf + tlvbuflen, hash_value, SHA_DIGEST_LENGTH);
+  tlvbuflen += SHA_DIGEST_LENGTH;
+  memcpy (tlvbuf + tlvbuflen, "\xfe\x01\xff", 3);
+  tlvbuflen += 3;
+
+  return (tlvbuflen);
+}
+
 #ifdef __GNUC__
 static void usage () __attribute__((__noreturn__));
 #endif
@@ -146,18 +173,21 @@ usage ()
   fprintf(stderr, "Copyright (c) 2002,2003,2004,2005 Evvolve Media SRL, docsis@evvolve.com\n");
   fprintf(stderr, "Copyright (c) 2014 - 2015 Adrian Simionov, daniel.simionov@gmail.com\n\n");
 
-  fprintf(stderr, "To encode a cable modem configuration file: \n\t docsis -e <modem_cfg_file> <key_file> <output_file>\n");
-  fprintf(stderr, "To encode multiple cable modem configuration files: \n\t docsis -m <modem_cfg_file1> ...  <key_file> <new_extension>\n");
-  fprintf(stderr, "To encode a MTA configuration file: \n\t docsis -p <mta_cfg_file> <output_file>\n");
-  fprintf(stderr, "To encode multiple MTA configuration files: \n\t docsis -m -p <mta_file1> ...  <new_extension>\n");
-  fprintf(stderr, "To decode a CM or MTA config file: \n\t docsis -d <binary_file>\n");
-  fprintf(stderr, "To decode a CM or MTA config file with OIDs: \n\t docsis -o -d <binary_file>\n");
-  fprintf(stderr, "\nTo specify the MIBPATH encode or decode use: \n"
+  fprintf(stderr, "To encode a cable modem configuration file: \n\tdocsis -e <modem_cfg_file> <key_file> <output_file>\n");
+  fprintf(stderr, "To encode multiple cable modem configuration files: \n\tdocsis -m <modem_cfg_file1> ...  <key_file> <new_extension>\n");
+  fprintf(stderr, "To encode a MTA configuration file: \n\tdocsis -p <mta_cfg_file> <output_file>\n");
+  fprintf(stderr, "To encode multiple MTA configuration files: \n\tdocsis -m -p <mta_file1> ...  <new_extension>\n");
+  fprintf(stderr, "To decode a CM or MTA config file: \n\tdocsis -d <binary_file>\n");
+  fprintf(stderr, "To decode a CM or MTA config file with OIDs: \n\tdocsis -o -d <binary_file>\n");
+  fprintf(stderr, "\nTo specify the MIBPATH encode or decode use:\n"
 		  "\tdocsis -M \"PATH1:PATH2\" -d <binary_file>\n"
 		  "\tdocsis -M \"PATH1:PATH2\" -e <modem_cfg_file> <key_file> <output_file>\n"
 		  "\tdocsis -M \"PATH1:PATH2\" -m <modem_cfg_file1> ...  <key_file> <new_extension>\n"
 		  "\tdocsis -M \"PATH1:PATH2\" -p <mta_cfg_file> <output_file>\n"
 		  "\tdocsis -M \"PATH1:PATH2\" -m -p <mta_file1> ...  <new_extension>\n");
+  fprintf(stderr, "\nTo add SHA1 hash to mta config file, use -na or -eu options:\n");
+  fprintf(stderr, "\tdocsis -na|-eu -p <mta_cfg_file> <output_file>\n");
+  fprintf(stderr, "\tdocsis -na|-eu -m -p <mta_file1> ...  <new_extension>\n");
   fprintf(stderr, "\nWhere:\n<cfg_file>\t\t= name of text (human readable) cable modem or MTA \n"
 		  "\t\t\t  configuration file;\n"
 		  "<key_file>\t\t= text file containing the authentication key\n"
@@ -179,7 +209,7 @@ main (int argc, char *argv[])
   FILE *kf;
   char *config_file=NULL, *key_file=NULL, *output_file=NULL, *extension_string=NULL, *custom_mibs=NULL;
   unsigned int keylen = 0;
-  unsigned int encode_docsis = FALSE, decode_bin = FALSE;
+  unsigned int encode_docsis = FALSE, decode_bin = FALSE, hash = 0;
   int i;
   int resolve_oids = 1;
 
@@ -187,87 +217,124 @@ main (int argc, char *argv[])
 	usage();
   }
 
+  /* option: -o -d */
   if (!strcmp (argv[1], "-o") ){
-	resolve_oids = 0;
-	  if (!netsnmp_ds_get_boolean(NETSNMP_DS_LIBRARY_ID, NETSNMP_OID_OUTPUT_NUMERIC)) {
-		  netsnmp_ds_toggle_boolean (NETSNMP_DS_LIBRARY_ID, NETSNMP_OID_OUTPUT_NUMERIC);
-	  }
-	if (!strcmp (argv[2], "-d")) {
-		decode_bin = TRUE;
-		config_file = argv[3];
-	} else {
-		usage();
-	}
-  }else if (!strcmp (argv[1], "-m") ){ /* variable number of args, encoding multiple files */
-	if (argc < 5 ) {
-		usage();
-	}
-    	extension_string = argv[argc-1];
-        if (!strcmp ( argv[2], "-p")) {
-		key_file = NULL;
-	} else {
-		key_file = argv[argc-2];
-		encode_docsis = TRUE;
-	}
-  } else if (!strcmp (argv[1], "-M") ){ /* define custom MIBDIRS */
-        if (argc < 4 ) {
-                usage();
-        }
-	custom_mibs=argv[2];
-        if (!strcmp (argv[3], "-d")) {
-                decode_bin = TRUE;
-                config_file = argv[4];
-        } else if (!strcmp (argv[3], "-m")) {
-        	if (argc < 5 ) {
-                	usage();
-        	}
-        	extension_string = argv[argc-1];
-        	if (!strcmp ( argv[4], "-p")) {
-                	key_file = NULL;
-        	} else {
-                	key_file = argv[argc-2];
-                	encode_docsis = TRUE;
-        	}
-        } else if (!strcmp (argv[3], "-p")) {
-                config_file = argv[4];
-                output_file = argv[5];
-        } else if (!strcmp (argv[3], "-e")) {
-                encode_docsis = TRUE;
-                config_file = argv[4];
-                key_file = argv[5];
-                output_file = argv[6];
-	} else {
-                usage();
-        }
-  } else {
-  	switch (argc)
-    	{
-    	case 3:
-      		if (strcmp (argv[1], "-d"))
-			usage ();
-      		decode_bin = TRUE;
-      		config_file = argv[2];
-      		break;
-      		;;
-    	case 4:
-      		if (strcmp (argv[1], "-p"))
-			usage ();
-      		config_file = argv[2];
-      		output_file = argv[3];
-      		break;
-      		;;
-    	case 5:
-      		if (strcmp (argv[1], "-e"))
-			usage ();
-      		encode_docsis = TRUE;
-      		config_file = argv[2];
-      		key_file = argv[3];
-      		output_file = argv[4];
-      		break;
-      		;;
-    	default:
-		usage ();
+    resolve_oids = 0;
+    if (!netsnmp_ds_get_boolean(NETSNMP_DS_LIBRARY_ID, NETSNMP_OID_OUTPUT_NUMERIC)) {
+      netsnmp_ds_toggle_boolean (NETSNMP_DS_LIBRARY_ID, NETSNMP_OID_OUTPUT_NUMERIC);
     }
+    if (!strcmp (argv[2], "-d")) {
+      decode_bin = TRUE;
+      config_file = argv[3];
+    } else {
+      usage();
+    }
+  /* option -m -p */
+  } else if (!strcmp (argv[1], "-m") ) {
+    if (argc < 5 ) {
+      usage();
+    }
+    extension_string = argv[argc-1];
+    if (!strcmp ( argv[2], "-p")) {
+      key_file = NULL;
+    } else {
+      key_file = argv[argc-2];
+      encode_docsis = TRUE;
+    }
+  /* option -na -m -p*/
+  } else if (!strcmp (argv[1], "-na")) {
+    hash = 1;
+    if (!strcmp (argv[2], "-m") ) {
+      if (argc < 6) {
+        usage();
+      }
+      extension_string = argv[argc-1];
+      if (!strcmp ( argv[3], "-p")) {
+        key_file = NULL;
+      } else {
+        key_file = argv[argc-2];
+        encode_docsis = TRUE;
+      }
+    /* option -na -p */
+    } else if (!strcmp ( argv[2], "-p" )) {
+        if (argc < 5) {
+          usage ();
+        }
+        config_file = argv[3];
+        output_file = argv[4];
+    }
+  /* option -eu -m -p*/
+  } else if (!strcmp (argv[1], "-eu")) {
+    hash = 2;
+    if (!strcmp (argv[2], "-m") ) {
+      if (argc < 6) {
+        usage();
+      }
+      extension_string = argv[argc-1];
+      if (!strcmp ( argv[3], "-p")) {
+        key_file = NULL;
+      } else {
+        key_file = argv[argc-2];
+        encode_docsis = TRUE;
+      }
+    /* option -eu -p */
+    } else if (!strcmp ( argv[2], "-p" )) {
+        if (argc < 5) {
+          usage ();
+        }
+        config_file = argv[3];
+        output_file = argv[4];
+    }
+  /* option -M */
+  } else if (!strcmp (argv[1], "-M") ) {
+    if (argc < 4 ) {
+      usage();
+    }
+    custom_mibs=argv[2];
+    /* option -M -d */
+    if (!strcmp (argv[3], "-d")) {
+      decode_bin = TRUE;
+      config_file = argv[4];
+    /* option -M -m */
+    } else if (!strcmp (argv[3], "-m")) {
+      if (argc < 5 ) {
+        usage();
+      }
+      extension_string = argv[argc-1];
+      /* option -M -m -p */
+      if (!strcmp ( argv[4], "-p")) {
+        key_file = NULL;
+      } else {
+        key_file = argv[argc-2];
+        encode_docsis = TRUE;
+      }
+    /* option -M -p */
+    } else if (!strcmp (argv[3], "-p")) {
+      config_file = argv[4];
+      output_file = argv[5];
+    /* option -M -e */
+    } else if (!strcmp (argv[3], "-e")) {
+      encode_docsis = TRUE;
+      config_file = argv[4];
+      key_file = argv[5];
+      output_file = argv[6];
+    }
+  /* option -p */
+  } else if (!strcmp (argv[1], "-p") ) {
+    config_file = argv[2];
+    output_file = argv[3];
+  /* option -d */
+  } else if (!strcmp (argv[1], "-d") ) {
+    decode_bin = TRUE;
+    config_file = argv[2];
+  /* option -e */
+  } else if (!strcmp (argv[1], "-e") ) {
+    encode_docsis = TRUE;
+    config_file = argv[2];
+    key_file = argv[3];
+    output_file = argv[4];
+  } else {
+    usage ();
   }
 
   if (encode_docsis)
@@ -303,7 +370,7 @@ main (int argc, char *argv[])
 			}
 
 			fprintf(stderr, "Processing input file %s: output to  %s\n",argv[i], output_file);
-			if (encode_one_file (argv[i], output_file, key, keylen, encode_docsis)) {
+			if (encode_one_file (argv[i], output_file, key, keylen, encode_docsis, hash)) {
 				exit(2);
 			}
 			free (output_file);
@@ -317,7 +384,7 @@ main (int argc, char *argv[])
 				continue;
 			}
 			fprintf (stderr, "Processing input file %s: output to  %s\n",argv[i], output_file);
-			if (encode_one_file (argv[i], output_file, key, keylen, encode_docsis)) {
+			if (encode_one_file (argv[i], output_file, key, keylen, encode_docsis, hash)) {
 				exit(2);
 			}
 			free (output_file);
@@ -325,7 +392,7 @@ main (int argc, char *argv[])
 		}
 	}
   } else {
-	if (encode_one_file (config_file, output_file, key, keylen, encode_docsis)) {
+	if (encode_one_file (config_file, output_file, key, keylen, encode_docsis, hash)) {
 		exit(2);
 	}
 	/* encode argv[1] */
@@ -336,7 +403,7 @@ main (int argc, char *argv[])
 }
 
 int encode_one_file ( char *input_file, char *output_file,
-	 		unsigned char *key, unsigned int keylen, int encode_docsis )
+	 		unsigned char *key, unsigned int keylen, int encode_docsis, unsigned int hash)
 {
   int parse_result=0;
   unsigned int buflen;
@@ -383,6 +450,15 @@ int encode_one_file ( char *input_file, char *output_file,
       buflen = add_cmts_mic (buffer, buflen, key, keylen);
       buflen = add_eod_and_pad (buffer, buflen);
     }
+
+  if (hash == 1) {
+    printf("Adding NA ConfigHash to MTA file.\n");
+    buflen = add_mta_hash (buffer, buflen, hash);
+  }
+  if (hash == 2) {
+    printf("Adding EU ConfigHash to MTA file.\n");
+    buflen = add_mta_hash (buffer, buflen, hash);
+  }
 
   fprintf (stderr, "Final content of config file:\n");
 
