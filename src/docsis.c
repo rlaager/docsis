@@ -222,6 +222,9 @@ main (int argc, char *argv[])
 
   /* option: -nohash -o -d */
   if (!strcmp (argv[1], "-nohash") ){
+    if (argc < 6) {
+      usage();
+    }
     nohash = 1;
     if (!strcmp (argv[2], "-o") ){
       resolve_oids = 0;
@@ -241,12 +244,14 @@ main (int argc, char *argv[])
       usage();
     }
   /* option -o -d */
-  } else if (!strcmp (argv[1], "-o") ){
+  } else if (!strcmp (argv[1], "-o") ) {
+    if (argc < 4 ) {
+      usage();
+    }
     resolve_oids = 0;
     if (!netsnmp_ds_get_boolean(NETSNMP_DS_LIBRARY_ID, NETSNMP_OID_OUTPUT_NUMERIC)) {
       netsnmp_ds_toggle_boolean (NETSNMP_DS_LIBRARY_ID, NETSNMP_OID_OUTPUT_NUMERIC);
     }
-
     if (!strcmp (argv[2], "-d")) {
       decode_bin = TRUE;
       config_file = argv[3];
@@ -334,6 +339,9 @@ main (int argc, char *argv[])
       }
     /* option -M -p */
     } else if (!strcmp (argv[3], "-p")) {
+      if (argc < 6) {
+        usage();
+      }
       config_file = argv[4];
       output_file = argv[5];
     /* option -M -e */
@@ -342,6 +350,8 @@ main (int argc, char *argv[])
       config_file = argv[4];
       key_file = argv[5];
       output_file = argv[6];
+    } else {
+      usage();
     }
   /* option -p */
   } else if (!strcmp (argv[1], "-p") ) {
@@ -349,10 +359,16 @@ main (int argc, char *argv[])
     output_file = argv[3];
   /* option -d */
   } else if (!strcmp (argv[1], "-d") ) {
+    if (argc < 3 ) {
+      usage();
+    }
     decode_bin = TRUE;
     config_file = argv[2];
   /* option -e */
   } else if (!strcmp (argv[1], "-e") ) {
+    if (argc < 5 ) {
+      usage();
+    }
     encode_docsis = TRUE;
     config_file = argv[2];
     key_file = argv[3];
