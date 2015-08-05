@@ -290,11 +290,11 @@ decode_vbind (unsigned char *data, unsigned int vb_len)
   oid objid[MAX_OID_LEN];
   char _docsis_snmp_label[50];	/* To hold the 'name' of the type, i.e. Integer etc */
   char *enum_string = NULL;
-  static char outbuf[1024];
+  static char outbuf[16384];
   struct tree *subtree;
   struct enum_list *enums;
 
-  memset (outbuf, 0, 1024);
+  memset (outbuf, 0, 16384);
 
   vp = (struct variable_list *) malloc (sizeof (struct variable_list));
   if (vp == NULL)
@@ -580,7 +580,7 @@ decode_vbind (unsigned char *data, unsigned int vb_len)
 		{
 		 	snprintf(outbuf, vp->val_len+5, "\"%s\"", vp->val.string);
 		} else {
-			snprint_hexadecimal (outbuf, 1023, (char *) vp->val.string, vp->val_len);
+			snprint_hexadecimal (outbuf, 16383, (char *) vp->val.string, vp->val_len);
       			memset (_docsis_snmp_label, 0, 50);
       			sprintf (_docsis_snmp_label, "HexString");
 		}
