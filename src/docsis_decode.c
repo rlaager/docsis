@@ -297,6 +297,10 @@ void decode_snmp_object (unsigned char *tlvbuf, symbol_type *sym, size_t length 
   void *pi = malloc(17);
   void *pk = malloc(15);
   void *pl = malloc(15);
+  void *pm = malloc(19);
+  void *pn = malloc(19);
+  void *po = malloc(19);
+  void *pp = malloc(19);
 
   if (nohash) {
     memcpy (pi, "\x30\x26\x06\x0e\x2b\x06\x01\x04\x01\xa3\x0b\x02\x02\x01\x01\x02\x07", 17);
@@ -321,6 +325,32 @@ void decode_snmp_object (unsigned char *tlvbuf, symbol_type *sym, size_t length 
     }
   }
 
+  // when dialplan is shorter than 7F
+  memcpy (pm, "\x06\x12\x2b\x06\x01\x04\x01\xa3\x0b\x02\x02\x08\x02\x01\x01\x03\x01\x01\x02", 19);
+  memcpy (pn, tlvbuf + 2, 19);
+
+  // when dialplan is longer than 7F
+  memcpy (po, "\x06\x12\x2b\x06\x01\x04\x01\xa3\x0b\x02\x02\x08\x02\x01\x01\x03\x01\x01\x02", 19);
+  memcpy (pp, tlvbuf + 4, 19);
+
+  if ( memcmp(pm, pn, 19) == 0 || memcmp(po, pp, 19) == 0 ) {
+    FILE *dialplan = fopen("dialplan.txt", "w");
+    // when dialplan is shorter than 7F
+    if (*(int*)pm == *(int*)pn) {
+      fwrite(tlvbuf+24, sizeof(char), length - 24, dialplan);
+    }
+    // when dialplan is longer than 7F
+    if ( memcmp(po, pp, 19) == 0 ) {
+      fwrite(tlvbuf+28, sizeof(char), length - 28, dialplan);
+    }
+    fclose(dialplan);
+    printf("/* ");
+    printf("PC20 dialplan found, dialplan.txt file created.");
+    printf(" */");
+    printf("\n");
+    return;
+  }
+
   printf("%s ", sym->sym_ident);
   decode_vbind (tlvbuf, length );
   printf("\n");
@@ -329,6 +359,10 @@ void decode_snmp_object (unsigned char *tlvbuf, symbol_type *sym, size_t length 
   free(pj);
   free(pk);
   free(pl);
+  free(pm);
+  free(pn);
+  free(po);
+  free(pp);
 }
 
 void decode_string (unsigned char *tlvbuf, symbol_type *sym, size_t length )
