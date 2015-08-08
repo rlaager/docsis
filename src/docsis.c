@@ -47,6 +47,7 @@
 struct tlv *global_tlvtree_head;
 symbol_type *global_symtable;
 unsigned int nohash = 0;
+unsigned int dialplan = 0;
 
 static void setup_mib_flags(int resolve_oids, char *custom_mibs);
 
@@ -159,6 +160,86 @@ add_mta_hash (unsigned char *tlvbuf, unsigned int tlvbuflen, unsigned int hash) 
   memcpy (tlvbuf + tlvbuflen, "\xfe\x01\xff", 3);
   tlvbuflen += 3;
 
+  return (tlvbuflen);
+}
+
+static unsigned int
+add_dialplan (unsigned char *tlvbuf, unsigned int tlvbuflen) {
+  FILE *dialplan_file;
+  char *dialplan_buffer;
+  unsigned int fileSize;
+  unsigned short local_v_len;
+  unsigned short *p_local_v_len = &local_v_len;
+  unsigned char local_char;
+  unsigned char *p_local_char = &local_char;
+
+  dialplan_file = fopen("dialplan.txt", "rb");
+  if (!dialplan_file) {
+    fprintf(stderr, "Cannot open dialplan.txt file, fatal error, closing.\n");
+    exit(-1);
+  }
+  fseek(dialplan_file, 0, SEEK_END);
+  fileSize = ftell (dialplan_file);
+  fseek(dialplan_file, 0, SEEK_SET);
+  dialplan_buffer = malloc(fileSize);
+  if (!dialplan_buffer) {
+    fprintf(stderr, "Fatal error allocating memory for diaplan buffer, closing.\n");
+    exit(-1);
+  }
+  fread(dialplan_buffer, fileSize, 1, dialplan_file);
+  fclose(dialplan_file);
+
+  tlvbuflen -= 3;
+  memcpy(tlvbuf + tlvbuflen, "\x40", 1);
+  tlvbuflen += 1;
+  if (fileSize > 0x7f) {
+    local_v_len = htons(2 + 2 + 20 + 2 + 2 + fileSize);
+  } else if (fileSize > 0x69) {
+    local_v_len = htons(2 + 2 + 20 + 1 + 1 + fileSize);
+  } else {
+    local_v_len = htons(1 + 1 + 20 + 1 + 1 + fileSize);
+  }
+  memcpy(tlvbuf + tlvbuflen, p_local_v_len, sizeof(local_v_len));
+  tlvbuflen += sizeof(local_v_len);
+  memcpy(tlvbuf + tlvbuflen, "\x30", 1);
+  tlvbuflen += 1;
+  local_char = 0x16 + fileSize;
+  if (local_char < 0x80) {
+    memcpy(tlvbuf + tlvbuflen, p_local_char, sizeof(local_char));
+    tlvbuflen += sizeof(local_char);
+  } else {
+    memcpy(tlvbuf + tlvbuflen, "\x82", 1);
+    tlvbuflen += 1;
+    if (fileSize > 0x7f) {
+      local_v_len = htons(20 + 2 + 2 + fileSize);
+    } else {
+      local_v_len = htons(20 + 1 + 1 + fileSize);
+    }
+    memcpy(tlvbuf + tlvbuflen, p_local_v_len, sizeof(local_v_len));
+    tlvbuflen += sizeof(local_v_len);
+  }
+  memcpy(tlvbuf + tlvbuflen, "\x06\x12\x2b\x06\x01\x04\x01\xa3\x0b\x02\x02\x08\x02\x01\x01\x03\x01\x01\x02\x00", 20);
+  tlvbuflen += 20;
+  memcpy(tlvbuf + tlvbuflen, "\x04", 1);
+  tlvbuflen += 1;
+
+  if (fileSize > 0x7f) {
+    memcpy(tlvbuf + tlvbuflen, "\x82", 1);
+    tlvbuflen += 1;
+    local_v_len = (unsigned short) htons(fileSize);
+    memcpy(tlvbuf + tlvbuflen, p_local_v_len, sizeof(local_v_len));
+    tlvbuflen += sizeof(local_v_len);
+  } else {
+    local_char = (char) fileSize;
+    memcpy(tlvbuf + tlvbuflen, p_local_char, sizeof(local_char));
+    tlvbuflen += sizeof(local_char);
+  }
+
+  memcpy(tlvbuf + tlvbuflen, dialplan_buffer, fileSize);
+  tlvbuflen = tlvbuflen + fileSize;
+
+  memcpy (tlvbuf + tlvbuflen, "\xfe\x01\xff", 3);
+  tlvbuflen += 3;
   return (tlvbuflen);
 }
 
@@ -355,8 +436,20 @@ main (int argc, char *argv[])
     }
   /* option -p */
   } else if (!strcmp (argv[1], "-p") ) {
+    if (argc < 4) {
+      usage();
+    }
     config_file = argv[2];
     output_file = argv[3];
+    if (!strcmp (argv[2], "-dialplan")) {
+      if (argc < 5) {
+        usage();
+      } else {
+        dialplan = 1;
+        config_file = argv[3];
+        output_file = argv[4];
+      }
+    }
   /* option -d */
   } else if (!strcmp (argv[1], "-d") ) {
     if (argc < 3 ) {
@@ -472,9 +565,9 @@ int encode_one_file ( char *input_file, char *output_file,
   }
 
 /* walk the tree to find out how much memory we need */
-	/* leave some room for CM MIC, CMTS MIC, pad */
+	/* leave some room for CM MIC, CMTS MIC, pad, and a HUGE PC20 dialplan */
   buflen = tlvtreelen (global_tlvtree_head);
-  buffer = (unsigned char *) malloc ( buflen + 255 );
+  buffer = (unsigned char *) malloc ( buflen + 255 + 8192 );
   buflen = flatten_tlvsubtree(buffer, 0, global_tlvtree_head);
 
 
@@ -490,6 +583,11 @@ int encode_one_file ( char *input_file, char *output_file,
       buflen = add_cmts_mic (buffer, buflen, key, keylen);
       buflen = add_eod_and_pad (buffer, buflen);
     }
+
+  if (dialplan == 1) {
+    printf("Adding PC20 diaplan from external file.\n");
+    buflen = add_dialplan (buffer, buflen);
+  }
 
   if (hash == 1) {
     printf("Adding NA ConfigHash to MTA file.\n");
