@@ -585,7 +585,7 @@ int encode_one_file ( char *input_file, char *output_file,
     }
 
   if (dialplan == 1) {
-    printf("Adding PC20 diaplan from external file.\n");
+    printf("Adding PC20 dialplan from external file.\n");
     buflen = add_dialplan (buffer, buflen);
   }
 
