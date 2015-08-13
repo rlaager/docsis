@@ -367,11 +367,16 @@ main (int argc, char *argv[])
       }
     /* option -na -p */
     } else if (!strcmp ( argv[2], "-p" )) {
-        if (argc < 5) {
-          usage ();
-        }
-        config_file = argv[3];
-        output_file = argv[4];
+      if (argc < 5) {
+        usage ();
+      }
+      config_file = argv[3];
+      output_file = argv[4];
+      if (!strcmp ( argv[3], "-dialplan")) {
+        dialplan = 1;
+        config_file = argv[4];
+        output_file = argv[5];
+      }
     }
   /* option -eu -m -p*/
   } else if (!strcmp (argv[1], "-eu")) {
@@ -389,11 +394,16 @@ main (int argc, char *argv[])
       }
     /* option -eu -p */
     } else if (!strcmp ( argv[2], "-p" )) {
-        if (argc < 5) {
-          usage ();
-        }
-        config_file = argv[3];
-        output_file = argv[4];
+      if (argc < 5) {
+        usage ();
+      }
+      config_file = argv[3];
+      output_file = argv[4];
+      if (!strcmp ( argv[3], "-dialplan")) {
+        dialplan = 1;
+        config_file = argv[4];
+        output_file = argv[5];
+      }
     }
   /* option -M */
   } else if (!strcmp (argv[1], "-M") ) {
