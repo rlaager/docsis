@@ -303,7 +303,7 @@ main (int argc, char *argv[])
 
   /* option: -nohash -o -d */
   if (!strcmp (argv[1], "-nohash") ){
-    if (argc < 6) {
+    if (argc < 5) {
       usage();
     }
     nohash = 1;
