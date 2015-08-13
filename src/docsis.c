@@ -270,6 +270,9 @@ usage ()
   fprintf(stderr, "\nTo add SHA1 hash to mta config file, use -na or -eu options:\n");
   fprintf(stderr, "\tdocsis -na|-eu -p <mta_cfg_file> <output_file>\n");
   fprintf(stderr, "\tdocsis -na|-eu -m -p <mta_file1> ...  <new_extension>\n");
+  fprintf(stderr, "\nTo add PC20 dialplan from external dialplan.txt file, use -dialplan option:\n");
+  fprintf(stderr, "\tdocsis -p -dialplan <mta_cfg_file> <output_file>\n");
+  fprintf(stderr, "\tdocsis -na|-eu -p -dialplan <mta_cfg_file> <output_file>\n");
   fprintf(stderr, "\nTo remove hash from MTA config file, use -nohash option:\n");
   fprintf(stderr, "\tdocsis -nohash -d <mta_cfg_file>\n");
   fprintf(stderr, "\tdocsis -nohash -o -d <mta_cfg_file>\n");
