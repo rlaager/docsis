@@ -183,7 +183,7 @@ add_dialplan (unsigned char *tlvbuf, unsigned int tlvbuflen) {
   fseek(dialplan_file, 0, SEEK_SET);
   dialplan_buffer = malloc(fileSize);
   if (!dialplan_buffer) {
-    fprintf(stderr, "Fatal error allocating memory for diaplan buffer, closing.\n");
+    fprintf(stderr, "Fatal error allocating memory for dialplan buffer, closing.\n");
     exit(-1);
   }
   fread(dialplan_buffer, fileSize, 1, dialplan_file);
