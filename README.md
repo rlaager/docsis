@@ -72,3 +72,5 @@ Known issues
 Quoting the hex strings will result in a crash. Known workaround is to not quote HEX definitions.  
   
 There are compilation problems on old gcc variants, you should get an error similar to: docsis.c: multiple definition of `main'. Known workaround is to upgrade to a newer version of gcc.  
+
+If you want to encode as string something similar to ""value"" you need to escape the extra characters. Config file value should look like "\"value\"".
