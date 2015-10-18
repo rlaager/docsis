@@ -1,6 +1,8 @@
 Docsis utility
 ==============
 
+[![Build Status](https://travis-ci.org/AdrianSimionov/docsis.svg?branch=master)](https://travis-ci.org/AdrianSimionov/docsis)
+
 This program encodes a DOCSIS binary configuration file from a human-readable text configuration file.
 
 It was originaly developed at http://docsis.sourceforge.net and later on moved to https://github.com/rlaager/docsis
