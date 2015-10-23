@@ -170,8 +170,8 @@ add_dialplan (unsigned char *tlvbuf, unsigned int tlvbuflen) {
   unsigned int fileSize;
   unsigned short local_v_len;
   unsigned short *p_local_v_len = &local_v_len;
-  unsigned char local_char;
-  unsigned char *p_local_char = &local_char;
+  unsigned short local_char;
+  unsigned short *p_local_char = &local_char;
 
   dialplan_file = fopen("dialplan.txt", "rb");
   if (!dialplan_file) {
