@@ -425,22 +425,18 @@ int encode_dual_qtag ( unsigned char *buf, void *tval, struct symbol_entry *sym_
   const char s[2] = ",";
   union t_val *helper;
 
-#ifdef DEBUG
-    fprintf(stderr, "encode_dual_qtag: found '%s' on line %d\n", helper->strval, line );
-#endif /* DEBUG */
-
-    helper = (union t_val *) tval;
-    i = 0;
-    token = strtok(helper->strval, s);
-    while (token != NULL)
-    {
-       array[i++] = token;
-       token = strtok (NULL, s);
-    }
-    final = htonl(atoi(array[0]) << 16 | atoi(array[1]));
-    memcpy (buf, &final, sizeof(final));
-    free(helper->strval);
-    return (sizeof(final));
+  helper = (union t_val *) tval;
+  i = 0;
+  token = strtok(helper->strval, s);
+  while (token != NULL)
+  {
+     array[i++] = token;
+     token = strtok (NULL, s);
+  }
+  final = htonl(atoi(array[0]) << 16 | atoi(array[1]));
+  memcpy (buf, &final, sizeof(final));
+  free(helper->strval);
+  return (sizeof(final));
 }
 
 int encode_char_list ( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
