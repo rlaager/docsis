@@ -487,15 +487,16 @@ main (int argc, char *argv[])
   if (encode_docsis)
     {
       if ((kf = fopen (key_file, "r")) == NULL)
-	{
-	  fprintf (stderr, "docsis: error: can't open keyfile %s\n", key_file);
-	  exit (-5);
-	}
+        {
+          fprintf (stderr, "docsis: error: can't open keyfile %s\n", key_file);
+          exit (-5);
+        }
       keylen = fread (key, sizeof (unsigned char), 64, kf);
       while (keylen > 0 && (key[keylen - 1] == 10 || key[keylen - 1] == 13))
-	{
-	  keylen--;		/* eliminate trailing \n or \r */
-	}
+        {
+          keylen--;		/* eliminate trailing \n or \r */
+        }
+      fclose(kf);
     }
 
   init_global_symtable ();
