@@ -37,7 +37,7 @@
 #include "docsis_snmp.h"
 #include "ethermac.h"
 
-extern unsigned int is_vspecific = FALSE;
+unsigned int is_vspecific = FALSE;
 
 struct symbol_entry *
 find_symbol_by_code_and_pid (unsigned char code, unsigned int pid)
