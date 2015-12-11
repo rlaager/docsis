@@ -313,7 +313,6 @@ void decode_snmp_object (unsigned char *tlvbuf, symbol_type *sym, size_t length 
       decode_vbind (tlvbuf, length );
       printf(" */");
       printf("\n");
-      return;
     }
     memcpy (pk, "\x30\x24\x06\x0c\x2b\x06\x01\x04\x01\xba\x08\x01\x01\x02\x09", 15);
     memcpy (pl, tlvbuf, 15);
@@ -323,7 +322,6 @@ void decode_snmp_object (unsigned char *tlvbuf, symbol_type *sym, size_t length 
       decode_vbind (tlvbuf, length );
       printf(" */");
       printf("\n");
-      return;
     }
   }
 
@@ -358,13 +356,11 @@ void decode_snmp_object (unsigned char *tlvbuf, symbol_type *sym, size_t length 
     printf("PC20 dialplan found, dialplan.txt file created.");
     printf(" */");
     printf("\n");
-    return;
+  } else {
+    printf("%s ", sym->sym_ident);
+    decode_vbind (tlvbuf, length );
+    printf("\n");
   }
-
-  printf("%s ", sym->sym_ident);
-  decode_vbind (tlvbuf, length );
-  printf("\n");
-
   free(pi);
   free(pj);
   free(pk);
