@@ -168,6 +168,7 @@ add_dialplan (unsigned char *tlvbuf, unsigned int tlvbuflen) {
   FILE *dialplan_file;
   char *dialplan_buffer;
   unsigned int fileSize;
+  unsigned int readSize;
   unsigned short local_v_len;
   unsigned short *p_local_v_len = &local_v_len;
   unsigned short local_char;
@@ -186,7 +187,11 @@ add_dialplan (unsigned char *tlvbuf, unsigned int tlvbuflen) {
     fprintf(stderr, "Fatal error allocating memory for dialplan buffer, closing.\n");
     exit(-1);
   }
-  fread(dialplan_buffer, fileSize, 1, dialplan_file);
+  readSize = fread(dialplan_buffer, fileSize, 1, dialplan_file);
+  if (!readSize) {
+    fprintf(stderr, "Something went wrong reading the dialplan file, closing.\n");
+    exit(-1);
+  }
   fclose(dialplan_file);
 
   tlvbuflen -= 3;
