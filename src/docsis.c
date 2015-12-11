@@ -205,8 +205,8 @@ add_dialplan (unsigned char *tlvbuf, unsigned int tlvbuflen) {
   tlvbuflen += 1;
   local_char = 0x16 + fileSize;
   if (local_char < 0x80) {
-    memcpy(tlvbuf + tlvbuflen, p_local_char, sizeof(local_char));
-    tlvbuflen += sizeof(local_char);
+    memcpy(tlvbuf + tlvbuflen, p_local_char, sizeof(char));
+    tlvbuflen += sizeof(char);
   } else {
     memcpy(tlvbuf + tlvbuflen, "\x82", 1);
     tlvbuflen += 1;
@@ -230,9 +230,9 @@ add_dialplan (unsigned char *tlvbuf, unsigned int tlvbuflen) {
     memcpy(tlvbuf + tlvbuflen, p_local_v_len, sizeof(local_v_len));
     tlvbuflen += sizeof(local_v_len);
   } else {
-    local_char = (char) fileSize;
-    memcpy(tlvbuf + tlvbuflen, p_local_char, sizeof(local_char));
-    tlvbuflen += sizeof(local_char);
+    local_char = (unsigned short) fileSize;
+    memcpy(tlvbuf + tlvbuflen, p_local_char, sizeof(char));
+    tlvbuflen += sizeof(char);
   }
 
   memcpy(tlvbuf + tlvbuflen, dialplan_buffer, fileSize);
