@@ -237,6 +237,7 @@ add_dialplan (unsigned char *tlvbuf, unsigned int tlvbuflen) {
 
   memcpy(tlvbuf + tlvbuflen, dialplan_buffer, fileSize);
   tlvbuflen = tlvbuflen + fileSize;
+  free(dialplan_buffer);
 
   memcpy (tlvbuf + tlvbuflen, "\xfe\x01\xff", 3);
   tlvbuflen += 3;
