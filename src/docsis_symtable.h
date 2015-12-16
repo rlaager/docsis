@@ -1441,6 +1441,8 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 346,    "MaximumFrameSize",                  7,      130,    (encode_ushort),         (decode_ushort),         0,           0             }, /* TLV 79.7 MULPIv3.0-I25 Annex C.3.3.7 */
 { 347,    "PowerOverEthernetStatus",           8,      130,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 79.8 MULPIv3.0-I25 Annex C.3.3.8 */
 { 348,    "MediaType",                         9,      130,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 79.9 MULPIv3.0-I25 Annex C.3.3.9 */
+{ 1419,   "ManufacturerCVCChain",              81,     0,      (encode_nothing),        (decode_hexstr),         0,           255           }, /* TLV 81 MULPIv3.1-I07 Annex C.1.2.21 */
+{ 1420,   "CoSignerCVCChain",                  82,     0,      (encode_hexstr),         (decode_hexstr),         0,           255           }, /* TLV 82 MULPIv3.1-I07 Annex C.1.2.22 */
 
 /* eRouter TLVs */
 { 175,    "eRouter",                           202,    0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 202 eRouter-I12 */
@@ -1472,7 +1474,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 236,    "SNMPv3AccessViewMask",              3,      233,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 202.54.3 eRouter-I12 Annex B.4.6.3 */
 { 237,    "SNMPv3AccessViewType",              4,      233,    (encode_uchar),          (decode_uchar),          1,           2             }, /* TLV 202.54.4 eRouter-I12 Annex B.4.6.4 */
 
-/* A little more organized -> Start with 1419 */
+/* A little more organized -> Start with 1421 */
 
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/
 { 998,    "GenericTLV",                        0,      0,      (encode_nothing),        (decode_special),        0,           0             },
