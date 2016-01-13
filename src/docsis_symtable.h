@@ -358,6 +358,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 225,    "PcIPv6SourcePrefixLength",          5,      220,    (encode_uchar),          (decode_uchar),          0,           128           }, /* TLV 23.12.5 MULPIv3.0-I24 Annex C.2.1.10.5 */
 { 226,    "PcIPv6DestAddress",                 6,      220,    (encode_ip6),            (decode_ip6),            0,           0             }, /* TLV 23.12.6 MULPIv3.0-I24 Annex C.2.1.10.6 */
 { 227,    "PcIPv6DestPrefixLength",            7,      220,    (encode_uchar),          (decode_uchar),          0,           128           }, /* TLV 23.12.7 MULPIv3.0-I24 Annex C.2.1.10.7 */
+{ 1421,   "PcCMIMEncoding",                    13,     54,     (encode_hexstr),         (decode_hexstr),         0,           0             }, /* TLV 23.13 DsPacketClass CMIM (Needed for ALU DPOE) */
 { 289,    "STagCTagFrameClassification",       14,     54,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.14 MULPIv3.0-I24 Annex C.2.1.13 */
 { 290,    "STPID",                             1,      289,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 23.14.1 MULPIv3.0-I24 Annex C.2.1.13.1 */
 { 291,    "SVID",                              2,      289,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 23.14.2 MULPIv3.0-I24 Annex C.2.1.13.2 */
@@ -1474,7 +1475,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 236,    "SNMPv3AccessViewMask",              3,      233,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 202.54.3 eRouter-I12 Annex B.4.6.3 */
 { 237,    "SNMPv3AccessViewType",              4,      233,    (encode_uchar),          (decode_uchar),          1,           2             }, /* TLV 202.54.4 eRouter-I12 Annex B.4.6.4 */
 
-/* A little more organized -> Start with 1421 */
+/* A little more organized -> Start with 1422 */
 
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/
 { 998,    "GenericTLV",                        0,      0,      (encode_nothing),        (decode_special),        0,           0             },
