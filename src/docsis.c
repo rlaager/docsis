@@ -696,6 +696,9 @@ setup_mib_flags(int resolve_oids, char *custom_mibs) {
      setenv ("MIBS", "ALL", 1);
     }
 
+  /* DOCSIS vendors are notorious for supplying MIBs with invalid syntax */
+  netsnmp_ds_set_boolean(NETSNMP_DS_LIBRARY_ID, NETSNMP_DS_LIB_MIB_PARSE_LABEL, 1);
+
 #ifdef HAVE_NETSNMP_INIT_MIB
   netsnmp_init_mib ();
 #else
