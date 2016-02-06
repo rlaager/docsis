@@ -40,7 +40,7 @@ EXTRA_DIST = $(examples_DATA)
 .cfg.bin: ../src/docsis $(srcdir)/keyfile Makefile
 	export MIBDIRS="`net-snmp-config --default-mibdirs`:$(top_srcdir)/mibs" ; \
 		../src/docsis -e $< $(srcdir)/keyfile $@ | \
-		sed "1,/^Final content/d" > $@.1.txt ; \
+		awk '{if(c){print}; /^Final/ && c++;}' > $@.1.txt ; \
 		../src/docsis -d $@ > $@.2.txt ; \
 		if cmp $@.1.txt $@.2.txt && cmp $(<:.cfg=.txt) $@.2.txt ; then \
 			rm -f $@.1.txt $@.2.txt ; \
@@ -65,6 +65,8 @@ EXTRA_DIST = $(examples_DATA)
 	fi
 	chmod +x $@
 TESTS = $(CONFIGS_SCRIPT)
+
+tests: $(TESTS)
 
 clean-local:
 	-rm -f $(CONFIGS_BINARY)

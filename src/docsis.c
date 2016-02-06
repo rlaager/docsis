@@ -125,9 +125,9 @@ add_cmts_mic (unsigned char *tlvbuf, unsigned int tlvbuflen,
 	    }
 	}
     }
-  fprintf (stderr, "##### Calculating CMTS MIC using TLVs:\n");
+  printf ("##### Calculating CMTS MIC using TLVs:\n");
   decode_main_aggregate (cmts_tlvs, dp - cmts_tlvs);
-  fprintf (stderr, "##### End of CMTS MIC TLVs\n");
+  printf ("##### End of CMTS MIC TLVs\n");
   hmac_md5 (cmts_tlvs, dp - cmts_tlvs, key, keylen, digest);
   md5_print_digest (digest);
   tlvbuf[tlvbuflen] = 7;	/* CMTS MIC */
@@ -580,7 +580,7 @@ int encode_one_file ( char *input_file, char *output_file,
 /* Check whether we're encoding PacketCable */
 
   if (global_tlvtree_head->docs_code == 254) {
-	fprintf(stderr, "First TLV is MtaConfigDelimiter, forcing PacketCable MTA file.\n");
+	printf("First TLV is MtaConfigDelimiter, forcing PacketCable MTA file.\n");
 	encode_docsis=0;
   }
 
@@ -618,7 +618,7 @@ int encode_one_file ( char *input_file, char *output_file,
     buflen = add_mta_hash (buffer, buflen, hash);
   }
 
-  fprintf (stderr, "Final content of config file:\n");
+  printf ("Final content of config file:\n");
 
   decode_main_aggregate (buffer, buflen);
   if (!strcmp (output_file, "-"))

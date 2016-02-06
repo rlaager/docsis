@@ -281,7 +281,7 @@ void decode_snmp_wd (unsigned char *tlvbuf, symbol_type *sym, size_t length )
   /* last char in this TLV is not part of OID */
   decode_snmp_oid (tlvbuf, (unsigned int) length-1 );
 
-  printf(" %d ;\n", (unsigned int) tlvbuf[length-1] );
+  printf(" %d;\n", (unsigned int) tlvbuf[length-1] );
 }
 
 void decode_oid (unsigned char *tlvbuf, symbol_type *sym, size_t length )
