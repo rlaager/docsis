@@ -24,6 +24,8 @@ config.sub
 configure
 depcomp
 docsis-*.*.*
+examples/*.bin
+examples/*.sh
 libtool
 ltmain.sh
 mibs/.index
