@@ -306,187 +306,133 @@ main (int argc, char *argv[])
   unsigned int encode_docsis = FALSE, decode_bin = FALSE, hash = 0;
   int i;
   int resolve_oids = 1;
-  if (argc < 2 ) {
-	usage();
-  }
 
-  /* option: -nohash -o -d */
-  if (!strcmp (argv[1], "-nohash") ){
-    if (argc < 5) {
+  while (argc > 0) {
+    argc--; argv++;
+
+    if (!argc) {
       usage();
     }
-    nohash = 1;
-    if (!strcmp (argv[2], "-o") ){
+
+    /* the initial command-line parameters are flags / modifiers */
+    if (!strcmp (argv[0], "-nohash")) {
+      nohash = 1;
+
+      continue;
+    }
+
+    if (!strcmp (argv[0], "-o")) {
       resolve_oids = 0;
+
       if (!netsnmp_ds_get_boolean(NETSNMP_DS_LIBRARY_ID, NETSNMP_OID_OUTPUT_NUMERIC)) {
         netsnmp_ds_toggle_boolean (NETSNMP_DS_LIBRARY_ID, NETSNMP_OID_OUTPUT_NUMERIC);
       }
-      if (!strcmp (argv[3], "-d")) {
-        decode_bin = TRUE;
-        config_file = argv[4];
-      } else {
+
+      continue;
+    }
+
+    if (!strcmp (argv[0], "-M")) {
+      if (argc < 2 ) {
         usage();
       }
-    } else if (!strcmp (argv[2], "-d")) {
+
+      custom_mibs=argv[1];
+
+      argc--; argv++;
+      continue;
+    }
+
+    if (!strcmp (argv[0], "-na")) {
+      if (hash) {
+        usage();
+      }
+      hash = 1;
+      continue;
+    }
+
+    if (!strcmp (argv[0], "-eu")) {
+      if (hash) {
+        usage();
+      }
+      hash = 2;
+      continue;
+    }
+
+    if (!strcmp (argv[0], "-dialplan")) {
+      dialplan = 1;
+      continue;
+    }
+
+    /* the following command-line parameters are actions */
+
+    if (!strcmp (argv[0], "-d")) {
+      if (argc < 2 ) {
+        usage();
+      }
+
       decode_bin = TRUE;
-      config_file = argv[3];
-    } else {
-      usage();
+      config_file = argv[1];
+
+      break;
     }
-  /* option -o -d */
-  } else if (!strcmp (argv[1], "-o") ) {
-    if (argc < 4 ) {
-      usage();
+
+    if (!strcmp (argv[0], "-e")) {
+      if (argc < 4 ) {
+        usage();
+      }
+
+      encode_docsis = TRUE;
+      config_file = argv[1];
+      key_file = argv[2];
+      output_file = argv[3];
+
+      break;
     }
-    resolve_oids = 0;
-    if (!netsnmp_ds_get_boolean(NETSNMP_DS_LIBRARY_ID, NETSNMP_OID_OUTPUT_NUMERIC)) {
-      netsnmp_ds_toggle_boolean (NETSNMP_DS_LIBRARY_ID, NETSNMP_OID_OUTPUT_NUMERIC);
-    }
-    if (!strcmp (argv[2], "-d")) {
-      decode_bin = TRUE;
-      config_file = argv[3];
-    } else {
-      usage();
-    }
-  /* option -m -p */
-  } else if (!strcmp (argv[1], "-m") ) {
-    if (argc < 5 ) {
-      usage();
-    }
-    extension_string = argv[argc-1];
-    if (!strcmp ( argv[2], "-p")) {
-      key_file = NULL;
-    } else {
+
+    if (!strcmp (argv[0], "-m")) {
+      extension_string = argv[argc-1];
       key_file = argv[argc-2];
       encode_docsis = TRUE;
+
+      continue;
     }
-  /* option -na -m -p*/
-  } else if (!strcmp (argv[1], "-na")) {
-    hash = 1;
-    if (!strcmp (argv[2], "-m") ) {
-      if (argc < 6) {
+
+    if (!strcmp (argv[0], "-p")) {
+      /* encode_docsis may already have been set via the "-m" option */
+      encode_docsis = 0;
+
+      argc--; argv++;
+
+      if (argc < 2 ) {
         usage();
       }
-      extension_string = argv[argc-1];
-      if (!strcmp ( argv[3], "-p")) {
-        key_file = NULL;
-      } else {
-        key_file = argv[argc-2];
-        encode_docsis = TRUE;
-      }
-    /* option -na -p */
-    } else if (!strcmp ( argv[2], "-p" )) {
-      if (argc < 5) {
-        usage ();
-      }
-      config_file = argv[3];
-      output_file = argv[4];
-      if (!strcmp ( argv[3], "-dialplan")) {
+
+      /* -p might be followed by -dialplan.  This is allowed for backwards
+       * compatibility */
+      if (!strcmp (argv[0], "-dialplan")) {
         dialplan = 1;
-        config_file = argv[4];
-        output_file = argv[5];
+        argc--; argv++;
       }
-    }
-  /* option -eu -m -p*/
-  } else if (!strcmp (argv[1], "-eu")) {
-    hash = 2;
-    if (!strcmp (argv[2], "-m") ) {
-      if (argc < 6) {
+
+      if (argc < 2 ) {
         usage();
       }
-      extension_string = argv[argc-1];
-      if (!strcmp ( argv[3], "-p")) {
-        key_file = NULL;
-      } else {
-        key_file = argv[argc-2];
-        encode_docsis = TRUE;
+
+      /* if -m has not already been specified, then we expect "<mta_cfg_file> <output_file>" */
+      if (extension_string == NULL) {
+        config_file = argv[0];
+        output_file = argv[1];
       }
-    /* option -eu -p */
-    } else if (!strcmp ( argv[2], "-p" )) {
-      if (argc < 5) {
-        usage ();
-      }
-      config_file = argv[3];
-      output_file = argv[4];
-      if (!strcmp ( argv[3], "-dialplan")) {
-        dialplan = 1;
-        config_file = argv[4];
-        output_file = argv[5];
-      }
+
+      break;
     }
-  /* option -M */
-  } else if (!strcmp (argv[1], "-M") ) {
-    if (argc < 4 ) {
-      usage();
+
+    /* no more recognisable options means that we've either finished parsing
+     * all arguments or else that the remaining arguments refer to a list of
+     * config files */
+    if (argc) {
+      break;
     }
-    custom_mibs=argv[2];
-    /* option -M -d */
-    if (!strcmp (argv[3], "-d")) {
-      decode_bin = TRUE;
-      config_file = argv[4];
-    /* option -M -m */
-    } else if (!strcmp (argv[3], "-m")) {
-      if (argc < 5 ) {
-        usage();
-      }
-      extension_string = argv[argc-1];
-      /* option -M -m -p */
-      if (!strcmp ( argv[4], "-p")) {
-        key_file = NULL;
-      } else {
-        key_file = argv[argc-2];
-        encode_docsis = TRUE;
-      }
-    /* option -M -p */
-    } else if (!strcmp (argv[3], "-p")) {
-      if (argc < 6) {
-        usage();
-      }
-      config_file = argv[4];
-      output_file = argv[5];
-    /* option -M -e */
-    } else if (!strcmp (argv[3], "-e")) {
-      encode_docsis = TRUE;
-      config_file = argv[4];
-      key_file = argv[5];
-      output_file = argv[6];
-    } else {
-      usage();
-    }
-  /* option -p */
-  } else if (!strcmp (argv[1], "-p") ) {
-    if (argc < 4) {
-      usage();
-    }
-    config_file = argv[2];
-    output_file = argv[3];
-    if (!strcmp (argv[2], "-dialplan")) {
-      if (argc < 5) {
-        usage();
-      } else {
-        dialplan = 1;
-        config_file = argv[3];
-        output_file = argv[4];
-      }
-    }
-  /* option -d */
-  } else if (!strcmp (argv[1], "-d") ) {
-    if (argc < 3 ) {
-      usage();
-    }
-    decode_bin = TRUE;
-    config_file = argv[2];
-  /* option -e */
-  } else if (!strcmp (argv[1], "-e") ) {
-    if (argc < 5 ) {
-      usage();
-    }
-    encode_docsis = TRUE;
-    config_file = argv[2];
-    key_file = argv[3];
-    output_file = argv[4];
-  } else {
-    usage ();
   }
 
   if (encode_docsis)
@@ -515,8 +461,8 @@ main (int argc, char *argv[])
 
   if (extension_string) { /* encoding multiple files */
 	if (encode_docsis) {
-		/* encode argv[argc-3] to argv[2] */
-		for (i=2; i<argc-2; i++)  {
+		/* encode argv[argc-3] to argv[0] */
+		for (i=0; i<argc-2; i++) {
 			if ( (output_file = get_output_name (argv[i], extension_string)) == NULL ) {
 				fprintf(stderr, "Cannot process input file %s, extension too short ?\n",argv[i] );
 				continue;
@@ -530,8 +476,8 @@ main (int argc, char *argv[])
 			output_file = NULL;
 		}
 	} else {
-		/* encode argv[argc-2] to argv[3] */
-		for (i=3; i<argc-1; i++)  {
+		/* encode argv[argc-2] to argv[0] */
+		for (i=0; i<argc-1; i++) {
 			if ( (output_file = get_output_name (argv[i], extension_string)) == NULL ) {
 				fprintf(stderr, "Cannot process input file %s, extension too short ?\n",argv[i] );
 				continue;
