@@ -325,11 +325,6 @@ main (int argc, char *argv[])
 
     if (!strcmp (argv[0], "-o")) {
       resolve_oids = 0;
-
-      if (!netsnmp_ds_get_boolean(NETSNMP_DS_LIBRARY_ID, NETSNMP_OID_OUTPUT_NUMERIC)) {
-        netsnmp_ds_toggle_boolean (NETSNMP_DS_LIBRARY_ID, NETSNMP_OID_OUTPUT_NUMERIC);
-      }
-
       continue;
     }
 
@@ -643,6 +638,12 @@ setup_mib_flags(int resolve_oids, char *custom_mibs) {
     {
      setenv ("MIBS", "ALL", 1);
     }
+
+  if (!resolve_oids) {
+    if (!netsnmp_ds_get_boolean(NETSNMP_DS_LIBRARY_ID, NETSNMP_OID_OUTPUT_NUMERIC)) {
+      netsnmp_ds_toggle_boolean (NETSNMP_DS_LIBRARY_ID, NETSNMP_OID_OUTPUT_NUMERIC);
+    }
+  }
 
   /* DOCSIS vendors are notorious for supplying MIBs with invalid syntax */
   netsnmp_ds_set_boolean(NETSNMP_DS_LIBRARY_ID, NETSNMP_DS_LIB_MIB_PARSE_LABEL, 1);
