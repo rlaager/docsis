@@ -49,7 +49,7 @@ DOCS-IF3-MIB DEFINITIONS ::= BEGIN
               FROM CLAB-DEF-MIB;
 
 docsIf3Mib MODULE-IDENTITY
-     LAST-UPDATED    "201505200000Z" -- May 20, 2015
+     LAST-UPDATED    "201603100000Z" -- March 10, 2016
      ORGANIZATION    "Cable Television Laboratories, Inc."
      CONTACT-INFO
          "
@@ -64,8 +64,12 @@ docsIf3Mib MODULE-IDENTITY
         "This MIB module contains the management objects for the
         management of DOCSIS 3.0 features, primarily channel bonding,
         interface topology and enhanced signal quality monitoring.
-        Copyright 1999-2013 Cable Television Laboratories, Inc.
+        Copyright 1999-2016 Cable Television Laboratories, Inc.
         All rights reserved."
+    REVISION "201603100000Z" -- March 10, 2016
+    DESCRIPTION
+       "Revised Version includes ECNs
+        CCAP-OSSIv3.1-N-1431-1 and OSSIv3.0-N-15.1398-1"
     REVISION    "201505200000Z" -- May 20, 2015
     DESCRIPTION
             "Revised Version includes ECN
@@ -1143,7 +1147,9 @@ docsIf3CmtsCmRegStatusTable OBJECT-TYPE
      STATUS      current
      DESCRIPTION
         "This object defines attributes that represent the CM's
-        registration status as tracked by the CMTS."
+        registration status as tracked by the CMTS.
+        Refer to the individual attribute definitions for
+        applicability to 3.0 and 3.1 Cable Modems."
      ::= { docsIf3MibObjects 3}
 
 docsIf3CmtsCmRegStatusEntry OBJECT-TYPE
@@ -1292,11 +1298,9 @@ docsIf3CmtsCmRegStatusRcpId OBJECT-TYPE
      STATUS      current
      DESCRIPTION
         "This attribute represents the RCP-ID associated
-        with the CM. If the RCP-ID is unknown the CMTS returns
-        a five octet long string of zeros.
-
-        The CMTS implements this object for CMs in 3.0 mode, but
-        it is not applicable for CMs in 3.1 mode."
+        with the CM if the CM is in DOCSIS 3.0 mode. If the
+        RCP-ID is unknown or the CM is in DOCSIS 3.1 mode,
+        the CMTS returns a five octet long string of zeros."
      REFERENCE -- Update reference to 3.1 MULPI
          "DOCSIS 3.0 MAC and Upper Layer Protocols Interface
          Specification CM-SP-MULPIv3.0-I08-080522, RCP-ID
@@ -1311,11 +1315,8 @@ docsIf3CmtsCmRegStatusRccStatusId OBJECT-TYPE
      DESCRIPTION
         "This attribute represents the RCC Id the CMTS used
         to configure the CM receive channel set during the registration
-        process. If unknown, the CMTS returns the
-        value zero.
-
-        The CMTS implements this object for CMs in 3.0 mode, but
-        it is not applicable for CMs in 3.1 mode."
+        process, if the CM is in DOCSIS 3.0 mode. If unknown or the CM
+        is in DOCSIS 3.1 mode, the CMTS returns the value zero."
      ::= { docsIf3CmtsCmRegStatusEntry 10 }
 
 docsIf3CmtsCmRegStatusRcsId OBJECT-TYPE
@@ -2340,7 +2341,8 @@ docsIf3RxModuleStatusRmRmConnectivityId OBJECT-TYPE
         "This attribute represents the Receive Module to which
         this Receive Module connects. Requirements for
         module connectivity are detailed in the RmRmConnectivityId
-        of the RccCfg object."
+        of the RccCfg object. A value of zero indicates that
+        the Receive Module TLV is omitted from the RCC."
      ::= { docsIf3RxModuleStatusEntry 2 }
 
 docsIf3RxModuleStatusFirstCenterFrequency OBJECT-TYPE
@@ -4753,12 +4755,7 @@ docsIf3CmtsCompliance MODULE-COMPLIANCE
      }
 
     OBJECT docsIf3CmtsCmUsStatusRangingStatus
-    SYNTAX      RangingState {other(1),
-                              aborted(2),
-                              retriesExceeded(3),
-                              success(4),
-                              continue(5)
-                             }
+    SYNTAX      RangingState
     DESCRIPTION
         "The CMTS does not report 'timeoutT4'."
     ::= { docsIf3MibCompliances 1 }

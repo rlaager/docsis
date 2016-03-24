@@ -1,0 +1,97 @@
+CLAB-DNS-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+    MODULE-IDENTITY,
+    OBJECT-TYPE
+                       FROM SNMPv2-SMI
+    OBJECT-GROUP,
+    MODULE-COMPLIANCE
+                       FROM SNMPv2-CONF
+    TruthValue
+                       FROM SNMPv2-TC
+    clabCommonMibs
+                       FROM CLAB-DEF-MIB;
+
+clabDNSMib MODULE-IDENTITY
+    LAST-UPDATED "201602240000Z"    -- February 24, 2016
+    ORGANIZATION "Cable Television Laboratories, Inc."
+    CONTACT-INFO
+            "Broadband Network Services
+             Cable Television Laboratories, Inc.
+             858 Coal Creek Circle,
+             Louisville, CO 80027, USA
+             Phone: +1 303-661-9100
+             Email: mibs@cablelabs.com"
+    DESCRIPTION
+        "This MIB module contains the management objects for DNS."
+    REVISION   "201602240000Z"      -- February 24, 2016
+    DESCRIPTION
+        "Initial version of this MIB module
+        created by ECN eRouter-N-15.1413-4."
+    ::= { clabCommonMibs 5 }
+
+
+--
+-- Textual Conventions
+--
+
+-- Administrative assignments
+clabDNSNotifications   OBJECT IDENTIFIER ::= { clabDNSMib 0 }
+clabDNSObjects OBJECT IDENTIFIER ::= { clabDNSMib 1 }
+clabDNSMibConformance  OBJECT IDENTIFIER ::= { clabDNSMib 2 }
+
+clabDNSMibCompliances  OBJECT IDENTIFIER ::= { clabDNSMibConformance 1 }
+clabDNSMibGroups       OBJECT IDENTIFIER ::= { clabDNSMibConformance 2 }
+
+-- No Notifications are defined for this MIB
+
+
+
+--
+-- Textual Conventions
+--
+-- MIB Objects
+--
+clabDnsIpv6QueryForDualMode OBJECT-TYPE
+    SYNTAX      TruthValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+        "This object provides control over the DNS queries transmitted
+         by LAN clients when the Router is configured in either
+         'IPv6 Protocol Enabled' or 'Dual Protocol Enabled' modes.
+         When the value of dnsIPv6QueryForDualProtocolEnabled is set to 'true',
+         the IPv4 DNS query will be transport layer re-encapsulated into
+         IPv6 for transmission across the Service Provider's network.
+         When set to 'false', the IPv4 DNS query will be transmitted
+         natively over IPv4. This attribute has no effect if the router
+         is configured for 'IPv4 Protocol Enabled' mode"
+    REFERENCE
+        "CableLabs eRouter Specification"
+    DEFVAL { false }
+    ::= { clabDNSObjects 1 }
+
+
+--
+-- Compliance Statements
+--
+
+clabDNSCompliance MODULE-COMPLIANCE
+    STATUS current
+    DESCRIPTION
+        "The compliance statement for entities which implement the DNSMIB."
+    MODULE -- this module
+    MANDATORY-GROUPS { clabDNSGroup }
+    ::= { clabDNSMibCompliances 1 }
+
+clabDNSGroup OBJECT-GROUP
+    OBJECTS {
+        clabDnsIpv6QueryForDualMode
+    }
+    STATUS current
+    DESCRIPTION
+        "A collection of objects providing instrumentation and control over DNS"
+    ::= { clabDNSMibGroups 1 }
+
+END
+

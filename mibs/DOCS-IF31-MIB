@@ -1,0 +1,4161 @@
+DOCS-IF31-MIB DEFINITIONS ::= BEGIN
+  IMPORTS
+    MODULE-IDENTITY,
+    OBJECT-TYPE,
+    Integer32,
+    Unsigned32,
+    Counter32,
+    Counter64
+             FROM SNMPv2-SMI         -- RFC 2578
+    TEXTUAL-CONVENTION,
+    TruthValue,
+    DateAndTime,
+    TimeStamp
+             FROM SNMPv2-TC          -- RFC 2579
+    OBJECT-GROUP,
+    MODULE-COMPLIANCE
+             FROM SNMPv2-CONF        -- RFC 2580
+    CounterBasedGauge64
+             FROM HCNUM-TC           -- RFC 2865
+    ifIndex
+             FROM IF-MIB             -- RFC 2863
+    TenthdBmV
+             FROM DOCS-IF-MIB        -- RFC 4546
+    clabProjDocsis
+             FROM CLAB-DEF-MIB
+    docsIf3CmtsCmRegStatusId,
+    docsIf3CmtsCmRegStatusEntry,
+    docsIf3RxChStatusEntry,
+    AttributeMask,
+    RangingState,
+    IfDirection,
+    ChId
+             FROM DOCS-IF3-MIB;
+
+docsIf31Mib MODULE-IDENTITY
+     LAST-UPDATED    "201603100000Z" -- March 10, 2016
+     ORGANIZATION    "Cable Television Laboratories, Inc."
+     CONTACT-INFO
+         "
+         Postal: Cable Television Laboratories, Inc.
+         858 Coal Creek Circle
+         Louisville, Colorado 80027-9750
+         U.S.A.
+         Phone: +1 303-661-9100
+         Fax:   +1 303-661-9199
+         E-mail: mibs@cablelabs.com"
+     DESCRIPTION
+        "This MIB module contains the management objects for the
+        management of DOCSIS 3.1 features, primarily OFDM and OFDMA
+        channels.
+        Copyright 2016 Cable Television Laboratories, Inc.
+        All rights reserved."
+     REVISION "201603100000Z" -- March 10, 2016
+     DESCRIPTION
+        "Revised Version includes ECN
+        CCAP-OSSIv3.1-N-1432-3."
+     REVISION "201511040000Z" -- November 4, 2015
+     DESCRIPTION
+        "Revised per CM-OSSIv3.1-N-15.1385-3,
+         which rolls up changes from the following ECNs:
+         CM-OSSIv3.1-N-15.1375-1 and CCAP-OSSIv3.1-N-15.1376-1,
+         adding additional indices for the
+         docsIf31CmUsOfdmaMinislotCfgStateTable per the OSSI-CM spec."
+     REVISION "201507150000Z" -- July 15, 2015
+     DESCRIPTION
+        "Revised Version includes ECN
+        CCAP-OSSIv3.1-N-15.1324-1"
+     REVISION "201505200000Z" -- May 20, 2015
+     DESCRIPTION
+        "Revised Version includes ECN
+        CCAP-OSSIv3.1-N-15.1308-2
+        Synchronized with
+        CM-SP-CM-OSSIv3.1-I04 and
+        CM-SP-CCAP-OSSIv3.1-I04"
+     REVISION "201504080000Z" -- April 8, 2015
+     DESCRIPTION
+        "Initial version, per CCAP-OSSIv3.1-N-15.1278-4"
+     ::= { clabProjDocsis 28 }
+
+-- Textual Conventions
+
+ClabsDocsisVersion ::= TEXTUAL-CONVENTION
+    STATUS          current
+    DESCRIPTION
+        "Indicates the DOCSIS Radio Frequency specification being
+         referenced.
+         'docsis10' indicates DOCSIS 1.0.
+         'docsis11' indicates DOCSIS 1.1.
+         'docsis20' indicates DOCSIS 2.0.
+         'docsis30' indicates DOCSIS 3.0.
+         'docsis31' indicates DOCSIS 3.1."
+    SYNTAX        INTEGER {
+         other (0),
+         docsis10 (1),
+         docsis11 (2),
+         docsis20 (3),
+         docsis30 (4),
+         docsis31 (5)
+    }
+
+EmIdList ::= TEXTUAL-CONVENTION
+     DISPLAY-HINT "2x,"
+     STATUS      current
+     DESCRIPTION
+        "A list of Energy Management Ids displayed as a comma-separated
+        list of 15-bit hexidecimal values. These values are encoded into
+        16-bits but the high-order bit is always 0."
+    SYNTAX      OCTET STRING (SIZE ( 0 | 2 | 4 | 6 ))
+
+SubcarrierSpacingType ::= TEXTUAL-CONVENTION
+     DISPLAY-HINT "d"
+     STATUS      current
+     DESCRIPTION
+        "This data type defines the subcarrier spacing for the FFT
+        mode in use. For downstream OFDM channels, if the FFT mode
+        is 4K mode, then spacing is 50 kHz; if it is 8K mode, then
+        the spacing is 25 kHz. For upstream OFDMA channels, if the
+        FFT mode is 2K mode, then the spacing is 50kHz; if the mode
+        is 4K mode, then the spacing is 25kHz. In units of kHz."
+     REFERENCE
+         "DOCSIS 3.1 Physical Layer Specification CM-SP-PHYv3.1-I03-140610,
+         Downstream OFDM Parameters and Upstream OFDMA Parameters tables."
+     SYNTAX      Integer32 ( 25 | 50 )
+
+PrimaryDsIndicatorType ::= TEXTUAL-CONVENTION
+     STATUS      current
+     DESCRIPTION
+        "This data type is defined to represent the channel indicator
+        type for the downstream channel."
+     SYNTAX      INTEGER {
+                          other(1),
+                          primary(2),
+                          backupPrimary(3),
+                          nonPrimary(4)
+                         }
+
+DsOfdmCyclicPrefix  ::= TEXTUAL-CONVENTION
+     DISPLAY-HINT "d"
+     STATUS      current
+     DESCRIPTION
+        "This data type is defined to indicate the five possible values
+        for the length of cyclic prefix. The cyclic prefix (in usec) are
+        converted into samples using the sample rate of 204.8 Msamples/s
+        and is an integer multiple of: 1/64 * 20 us."
+     SYNTAX      Unsigned32 (192 | 256 | 512 | 768 | 1024)
+
+UsOfdmaCyclicPrefix  ::= TEXTUAL-CONVENTION
+     DISPLAY-HINT "d"
+     STATUS      current
+     DESCRIPTION
+        "This data type is defined to indicate the eleven possible values
+        for the length of cyclic prefix. The cyclic prefix (in usec) are
+        converted into samples using the sample rate of 102.4 Msamples/s
+        and is an integer multiple of: 1/64 * 20us."
+     SYNTAX      Unsigned32 (96 | 128 | 160 | 192 | 224 | 256 | 288 | 320 |
+                             384 | 512 | 640)
+
+DsOfdmRollOffPeriod  ::= TEXTUAL-CONVENTION
+     DISPLAY-HINT "d"
+     STATUS      current
+     DESCRIPTION
+        "This data type is defined to indicate the five possible values
+        for the windowing roll-off period. The Roll-Off Period is
+        given in microseconds (usec)."
+     SYNTAX      Unsigned32 (0 | 64 | 128 | 192 | 256)
+
+UsOfdmaRollOffPeriod  ::= TEXTUAL-CONVENTION
+     DISPLAY-HINT "d"
+     STATUS      current
+     DESCRIPTION
+        "This data type is defined to indicate the eight possible values
+        for the windowing roll-off period. The Roll-Off Period is given
+        in microseconds."
+     SYNTAX      Unsigned32 (0 | 32 | 64 | 96 | 128 | 160 | 192 | 224)
+
+TimeInterleaverDepth ::= TEXTUAL-CONVENTION
+     DISPLAY-HINT "d"
+     STATUS      current
+     DESCRIPTION
+        "This data type is defined to indicate the depth of time
+        interleaving used for this downstream channel in symbols."
+     SYNTAX      Unsigned32 (1..32)
+
+DsOfdmModulationType ::= TEXTUAL-CONVENTION
+     STATUS      current
+     DESCRIPTION
+        "This data type is defined to indicate the bit loading of
+         subcarriers in an OFDM downstream channel."
+     REFERENCE
+         "DOCSIS 3.1 Physical layer Specification CM-SP-PHYv3.1-I03-140610,
+         Modulation Formats section."
+     SYNTAX      INTEGER {
+                          other(1),
+                          zeroValued(2),
+                          qpsk(3),
+                          qam16(4),
+                          qam64(5),
+                          qam128(6),
+                          qam256(7),
+                          qam512(8),
+                          qam1024(9),
+                          qam2048(10),
+                          qam4096(11),
+                          qam8192(12),
+                          qam16384(13)
+                         }
+
+UsOfdmaModulationType ::= TEXTUAL-CONVENTION
+     STATUS      current
+     DESCRIPTION
+        "This data type is defined to indicate the bit loading of
+         subcarriers in an OFDMA upstream channel."
+     REFERENCE
+         "DOCSIS 3.1 Physical layer Specification CM-SP-PHYv3.1-I03-140610,
+         Modulation Formats section."
+     SYNTAX      INTEGER {
+                          other(1),
+                          zeroValued(2),
+                          bpsk(3),
+                          qpsk(4),
+                          qam8(5),
+                          qam16(6),
+                          qam32(7),
+                          qam64(8),
+                          qam128(9),
+                          qam256(10),
+                          qam512(11),
+                          qam1024(12),
+                          qam2048(13),
+                          qam4096(14)
+                         }
+
+PartialChannelType ::= TEXTUAL-CONVENTION
+     STATUS      current
+     DESCRIPTION
+        "This data type enumerates each of the possible profiles or channel
+        attributes which can contribute to an OFDM channel being considered
+        a Partial Channel by the MAC layer. As more than one of these error
+        conditions can exist at the same time this data type is based on a
+        BITS data type. The bits from low to high are:
+                Bit 0: lostFecLockDsProfile
+                Bit 1: lostFecLockNcpProfile
+                Bit 2: lostFecLockPlc
+                Bit 3: lostFecLockUsProfile"
+     REFERENCE
+        "DOCSIS 3.1 MAC and Upper Layer Protocols Interface
+        Specification CM-SP-MULPIv3.1-I03-140610,
+        CM Status Report section."
+     SYNTAX     BITS {
+                      lostFecLockDsProfile(0),
+                      lostFecLockNcpProfile(1),
+                      lostFecLockPlc(2),
+                      lostFecLockUsProfile(3)
+                     }
+
+PartialServiceType ::= TEXTUAL-CONVENTION
+     STATUS      current
+     DESCRIPTION
+         "This data type enumerates the type of channel issue which the
+         MAC Layer indicates is causing the CM to be in DOCSIS 3.0 Partial
+         Service mode. The possible values are as follows:
+                other(1)
+                none(2)
+                partialSvcDsOnlyImpaired(3)
+                partialSvcUsOnlyImpaired(4)
+                partialSvcDsAndUsImpaired(5)"
+     REFERENCE
+        "DOCSIS 3.1 MAC and Upper Layer Protocols Interface
+        Specification CM-SP-MULPIv3.1-I03-140610,
+        CM Status Report section."
+     SYNTAX      INTEGER {
+                          other(1),
+                          none(2),
+                          partialSvcDsOnlyImpaired(3),
+                          partialSvcUsOnlyImpaired(4),
+                          partialSvcDsAndUsImpaired(5)
+                         }
+
+PartialChanReasonType ::= TEXTUAL-CONVENTION
+     STATUS      current
+     DESCRIPTION
+         "This data type enumerates the CM-STATUS events which
+         a CM can utilize to report a Partial Channel situation."
+     REFERENCE
+        "DOCSIS 3.1 MAC and Upper Layer Protocols Interface
+        Specification CM-SP-MULPIv3.1-I03-140610,
+        CM Status Report section."
+     SYNTAX      INTEGER {
+                          none(0),
+                          dsOfdmProfileFailure(16),
+                          dpdMismatch(18),
+                          invalidDpd(19),
+                          ncpProfileFailure(20),
+                          lostFecLockPlc(21),
+                          ofdmaProfileFailure(25)
+                         }
+
+PartialSvcReasonType ::= TEXTUAL-CONVENTION
+     STATUS      current
+     DESCRIPTION
+         "This data type enumerates the CM-STATUS events which
+         a CM can utilize to report a Partial Service situation."
+     REFERENCE
+        "DOCSIS 3.1 MAC and Upper Layer Protocols Interface
+        Specification CM-SP-MULPIv3.1-I03-140610,
+        CM Status Report section."
+     SYNTAX      INTEGER {
+                          none(0),
+                          secondaryChanMddTimeout(1),
+                          lostFecLock(2)
+                         }
+
+HundredthdBmV ::= TEXTUAL-CONVENTION
+     DISPLAY-HINT "d-2"
+     STATUS       current
+     DESCRIPTION
+         "This data type represents power levels that are normally
+          expressed in dBmV.  Units are in hundredths of a dBmV;
+          for example, 5.17 dBmV will be represented as 517."
+     SYNTAX       Integer32
+
+HundredthdB ::= TEXTUAL-CONVENTION
+     DISPLAY-HINT "d-2"
+     STATUS       current
+     DESCRIPTION
+         "This data type represents power levels that are normally
+          expressed in dB.  Units are in hundredths of a dB;
+          for example, 5.17 dB will be represented as 517."
+     SYNTAX       Integer32
+
+-- Object Definitions
+docsIf31Notifications  OBJECT IDENTIFIER ::= { docsIf31Mib 0 }
+docsIf31MibObjects  OBJECT IDENTIFIER ::= { docsIf31Mib 1 }
+
+--
+-- Notifications
+--
+-- DOCSIS 3.1 events are sent in DOCS-IF3-MIB notification objects.
+-- Specifically docsIf3CmtsEventNotif for CCAP events and
+-- docsIf3CmEventNotif for CM events
+--
+
+-- ***************************************************************
+--
+-- RFC-4546 Objects & Tables
+--
+-- The DOCS-IF-MIB defined in RFC-4546 has a number of tables which
+-- cannot be readily adapted to support OFDM channels. After much
+-- consideration the D3.1 OSSI Working Group decided that it was
+-- preferable to create completely new tables for D3.1 OFDM/OFDMA
+-- channels than to augment or otherwise extend the original tables
+-- where few, if any, columns were applicable to the new modulation
+-- types. To ease the transition to D3.1, rules were developed for
+-- rows to be included in the original tables, but with dummy values.
+--
+-- The tables in this MIB contain meaningful values for OFMD channels
+-- and should be used instead of values in RFC-4546 tables. For
+-- additional information refer to:
+--
+--       DOCSIS 3.1 Cable Modem Operations Support System Interface
+--       Specification CM-SP-CM-OSSIv3.1-I03-15MMDD
+--
+-- Tables from RFC-4546 which are not used for OFDM channels include:
+--       docsIfDownChannelTable
+--       docsIfUpChannelTable
+--       docsIfCmtsModulationTable
+--       docsIfCmtsChannelUtilizationTable
+--       docsIfCmtsDownChannelCtrTable
+--       docsIfCmtsUpChannelCtrTable
+--
+-- The only other table from RFC-4546 which is supported as documented
+-- by a D3.1 CCAP is:
+--       docsIfCmtsMacToCmTable
+--
+-- ***************************************************************
+
+docsIf31CmDocsisBaseCapability OBJECT-TYPE
+     SYNTAX      ClabsDocsisVersion
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "Indication of the DOCSIS capability of the device.
+
+         This replaces docsIfDocsisBaseCapability for D3.1 CMs."
+     ::= { docsIf31MibObjects 1 }
+
+-- ***************************************************************
+--
+-- DOCS-IF3-MIB Extensions
+--
+-- ***************************************************************
+
+--
+-- Extensions to the docsIf3RxChStatusTable
+--
+docsIf31RxChStatusTable OBJECT-TYPE
+     SYNTAX      SEQUENCE OF DocsIf31RxChStatusEntry
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+         "The Receive Channel Status object reports the status
+         of the statically-configured and dynamically-created
+         Receive Channels within an RCC.
+
+         This extends the DOCS-IF3-MIB's docsIf3RxChStatusTable."
+     ::= { docsIf31MibObjects 2 }
+
+docsIf31RxChStatusEntry OBJECT-TYPE
+     SYNTAX      DocsIf31RxChStatusEntry
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+         "The conceptual row of docsIf31RxChStatusTable."
+     AUGMENTS {
+              docsIf3RxChStatusEntry
+              }
+     ::= { docsIf31RxChStatusTable 1 }
+
+DocsIf31RxChStatusEntry ::= SEQUENCE {
+     docsIf31RxChStatusPrimaryDsIndicator     PrimaryDsIndicatorType
+     }
+
+docsIf31RxChStatusPrimaryDsIndicator OBJECT-TYPE
+     SYNTAX      PrimaryDsIndicatorType
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute is used to identify the downstream channel
+         as primary, backup primary or non-primary. A value of
+         'primary(2)' indicates that OFDM channel is assigned to be the
+         CM's primary downstream channel. A value of 'backupPrimary(3)'
+         indicates that the OFDM channel is assigned to be the CM's
+         backup primary downstream channel. A value of 'nonPrimary(4)'
+         indicates the OFDM channel is not assigned to be CM's primary
+         or backup primary downstream channel."
+     ::= { docsIf31RxChStatusEntry 1 }
+
+--
+-- Extensions to the docsIf3CmtsCmRegStatusTable
+--
+docsIf31CmtsCmRegStatusTable OBJECT-TYPE
+     SYNTAX      SEQUENCE OF DocsIf31CmtsCmRegStatusEntry
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+         "This object defines attributes that represent the CM's
+         registration status as tracked by the CMTS.
+         Refer to the individual attribute definitions for
+         applicability to 3.0 and 3.1 Cable Modems.
+
+         This extends the DOCS-IF3-MIB's docsIf3CmtsCmRegStatusTable."
+     ::= { docsIf31MibObjects 3 }
+
+docsIf31CmtsCmRegStatusEntry OBJECT-TYPE
+     SYNTAX      DocsIf31CmtsCmRegStatusEntry
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+         "The conceptual row of docsIf31CmtsCmRegStatusTable."
+     AUGMENTS {
+              docsIf3CmtsCmRegStatusEntry
+              }
+     ::= { docsIf31CmtsCmRegStatusTable 1 }
+
+DocsIf31CmtsCmRegStatusEntry ::= SEQUENCE {
+     docsIf31CmtsCmRegStatusAssignedEmIds          EmIdList,
+     docsIf31CmtsCmRegStatusDsProfileIdList        OCTET STRING,
+     docsIf31CmtsCmRegStatusUsProfileIucList       OCTET STRING,
+     docsIf31CmtsCmRegStatusTcsPhigh               Unsigned32,
+     docsIf31CmtsCmRegStatusTcsDrwTop              Unsigned32,
+     docsIf31CmtsCmRegStatusMinUsableDsFreq        Unsigned32,
+     docsIf31CmtsCmRegStatusMaxUsableDsFreq        Unsigned32,
+     docsIf31CmtsCmRegStatusMaxUsableUsFreq        Unsigned32,
+     docsIf31CmtsCmRegStatusPartialSvcState        PartialServiceType,
+     docsIf31CmtsCmRegStatusPartialChanState       PartialChannelType
+     }
+
+docsIf31CmtsCmRegStatusAssignedEmIds OBJECT-TYPE
+     SYNTAX      EmIdList
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute reports the set of CMTS-assigned EM-IDs for
+         this CM. This attribute is encoded as an array 16-bit binary
+         values with up to 3 elements. The broadcast EM-ID is not
+         included in the list.
+         If the EM-ID is unknown the CMTS returns a zero length string.
+         This object is applicable to DOCSIS 3.1 modems but not to prior
+         versions of DOCSIS modems. If the CM is a pre-DOCSIS 3.1 modem,
+         the CMTS returns a zero length string."
+     ::= { docsIf31CmtsCmRegStatusEntry 1 }
+
+docsIf31CmtsCmRegStatusDsProfileIdList OBJECT-TYPE
+     SYNTAX      OCTET STRING (SIZE (0 | 3..72))
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute is a variable length series of hexadecimal
+         octets where each series entry consists of the following fields
+         (encoded in the following order):
+
+         - The Channel Id (1 octet) of the OFDM channel where the
+         downstream Profile Ids are assigned.
+
+         - The number or count of Profile Ids (1 octet with valid values
+         of 1-4) assigned to the CM on that channel.
+
+         - The list of Profile Ids (1 octet each with valid values of
+         0-15) assigned to this CM on that channel. Profile Id 0 is
+         commonly referred to as Profile A.  Likewise, Profile Ids 1,
+         2 and 3 are commonly referred to as Profiles B, C and D.
+
+         The CCAP encodes each OFDM channel in a CM's RCS as a separate
+         n-octet entry in the ProfileIdList.
+
+         Examples: a CM with a single OFDM channel (channel id 34) and
+         four assigned profiles (Profile Ids 0, 8, 9 and 10) would
+         have a ProfileIdList value of 0x22040008090A. A CM with a 2 OFDM
+         channel bonding group each with two assigned profiles (Profile
+         Ids 0 and 15 on channel 34 and Profile Ids 0 and 14 on channel
+         35) would have a ProfileIdList value of 0x2202000F2302000E).
+
+         Note: the CCAP must not include the transitional profile or
+         test profile in the ProfileIdList.
+
+         Note that octet string lengths greater than 12 are optional.
+
+         This object is applicable to DOCSIS 3.1 modems but not to prior
+         versions of DOCSIS modems. If the CM is a pre-DOCSIS 3.1 modem,
+         the CMTS returns a zero length octet string."
+     ::= { docsIf31CmtsCmRegStatusEntry 2 }
+
+docsIf31CmtsCmRegStatusUsProfileIucList OBJECT-TYPE
+     SYNTAX      OCTET STRING (SIZE (0 | 3..72))
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute is a variable length series of hexadecimal
+         octets where each series entry consists of the following fields
+         (encoded in the following order):
+
+         - The Channel Id (1 octet) of the OFDMA channel where the
+         Profile IUCs are assigned.
+
+         - The number or count of Data IUCs (1 octet with valid values
+         of 1-2) assigned to this CM on that channel.
+
+         - The list of Data IUCs (1 octet each with valid values of
+         5, 6, 9-13) assigned to this CM on that channel.
+
+         The CCAP encodes each OFDMA channel in a CM's TCS as a separate
+         n-octet entry in the UsProfileIucList.
+
+         Examples: a CM with a single OFDMA channel (channel id 36) and two
+         assigned Data IUCs (5 and 6) would have a ProfileIdList value of
+         0x24020506. A CM with a 2 OFDMA channel bonding group each with one
+         assigned Data IUC (IUC 5 on channel 34 and IUC 13 on channel 35)
+         would have a UsProfileIucList value of 0x22010523010D).
+
+         Note: the CCAP MUST NOT include transitional IUCs or test IUCs in
+         the UsProfileIucList.
+
+         Note that octet string lengths greater than 12 are optional.
+
+         This object is applicable to DOCSIS 3.1 modems but not to prior
+         versions of DOCSIS modems. If the CM is a pre-DOCSIS 3.1 modem,
+         the CMTS returns a zero length octet string."
+     ::= { docsIf31CmtsCmRegStatusEntry 3 }
+
+docsIf31CmtsCmRegStatusTcsPhigh OBJECT-TYPE
+     SYNTAX      Unsigned32 (0 | 68..320)
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute reports the P1.6hi value for the CM's Transmit
+         Channel Set.
+         This object is applicable to DOCSIS 3.1 modems but not to prior
+         versions of DOCSIS modems. If the CM is a pre-DOCSIS 3.1 modem,
+         the CMTS returns zero."
+     ::= { docsIf31CmtsCmRegStatusEntry 4 }
+
+docsIf31CmtsCmRegStatusTcsDrwTop OBJECT-TYPE
+     SYNTAX      Unsigned32
+     UNITS       "dBmV"
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute reports the level of the top of the Dynamic Range
+         Window. The value is expressed in dBmV and is the result of a
+         calculation equal to P1.6hi - P1.6load_min_set.
+         This object is applicable to DOCSIS 3.1 modems but not to prior
+         versions of DOCSIS modems. If the CM is a pre-DOCSIS 3.1 modem,
+         the CMTS returns zero."
+     ::= { docsIf31CmtsCmRegStatusEntry 5 }
+
+docsIf31CmtsCmRegStatusMinUsableDsFreq OBJECT-TYPE
+     SYNTAX      Unsigned32
+     UNITS       "Hz"
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute is the higher of the CCAP's minimum supported
+         downstream frequency and the CM's minimum supported downstream
+         frequency. It indicates the lowest downstream frequency the
+         CCAP can use to communicate with this CM taking into account
+         the capabilities of both devices.
+         This object is applicable to DOCSIS 3.1 modems but not to prior
+         versions of DOCSIS modems. If the CM is a pre-DOCSIS 3.1 modem,
+         the CMTS returns zero."
+     ::= { docsIf31CmtsCmRegStatusEntry 6 }
+
+docsIf31CmtsCmRegStatusMaxUsableDsFreq OBJECT-TYPE
+     SYNTAX      Unsigned32
+     UNITS       "Hz"
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute is the lower of the CCAP's maximum supported
+         downstream frequency and the CM's maximum supported downstream
+         frequency. It indicates the highest downstream frequency the
+         CCAP can use to communicate with this CM taking into account
+         the capabilities of both devices.
+         This object is applicable to DOCSIS 3.1 modems but not to prior
+         versions of DOCSIS modems. If the CM is a pre-DOCSIS 3.1 modem,
+         the CMTS returns zero."
+     ::= { docsIf31CmtsCmRegStatusEntry 7 }
+
+docsIf31CmtsCmRegStatusMaxUsableUsFreq OBJECT-TYPE
+     SYNTAX      Unsigned32
+     UNITS       "Hz"
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute is the lower of the CCAP's maximum supported
+         upstream frequency and the CM's maximum supported upstream
+         frequency. It indicates the highest upstream frequency the CCAP
+         can use to receive signals from this CM taking into account the
+         capabilities of both devices.
+
+         Note: there is no minimum usable upstream frequency attribute as
+         this is 5MHz for both CCAP and CM devices.
+
+         This object is applicable to DOCSIS 3.1 modems but not to prior
+         versions of DOCSIS modems. If the CM is a pre-DOCSIS 3.1 modem,
+         the CMTS returns zero."
+     ::= { docsIf31CmtsCmRegStatusEntry 8 }
+
+docsIf31CmtsCmRegStatusPartialSvcState OBJECT-TYPE
+     SYNTAX      PartialServiceType
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute indicates the type of 'bonding group' issue
+         that this CM is experiencing, based on what the MAC-layer
+         shows. See PartialServiceType for further detail.
+         This object is applicable to DOCSIS 3.1 modems but not to prior
+         versions of DOCSIS modems. If the CM is a pre-DOCSIS 3.1 modem,
+         the CMTS returns 'other'."
+     ::= { docsIf31CmtsCmRegStatusEntry 9 }
+
+docsIf31CmtsCmRegStatusPartialChanState OBJECT-TYPE
+     SYNTAX      PartialChannelType
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute is a bit-field which indicates the type of OFDM
+         channel issue that this CM is experiencing, based on what the
+         MAC-layer shows. See PartialChannelType for further detail.
+         This object is applicable to DOCSIS 3.1 modems but not to prior
+         versions of DOCSIS modems. If the CM is a pre-DOCSIS 3.1 modem,
+         the CMTS returns 0x0 (no bits set)."
+     ::= { docsIf31CmtsCmRegStatusEntry 10 }
+
+-- ***************************************************************
+--
+-- DOCSIS 3.1 MIB Objects
+--
+-- ***************************************************************
+
+docsIf31CmtsCmUsOfdmaChannelStatusTable OBJECT-TYPE
+     SYNTAX      SEQUENCE OF DocsIf31CmtsCmUsOfdmaChannelStatusEntry
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+         "This object defines current status information of the CM
+         on each OFDMA upstream channel, as reported by the CMTS."
+     ::= { docsIf31MibObjects 4 }
+
+docsIf31CmtsCmUsOfdmaChannelStatusEntry OBJECT-TYPE
+     SYNTAX      DocsIf31CmtsCmUsOfdmaChannelStatusEntry
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+         "The conceptual row of docsIf31CmtsCmUsOfdmaChannelStatusTable.
+         A separate entry exists for every OFDMA channel of every CM
+         currently assigned to an OFDMA channel."
+     INDEX {
+              docsIf3CmtsCmRegStatusId,
+              ifIndex
+           }
+     ::= { docsIf31CmtsCmUsOfdmaChannelStatusTable 1 }
+
+DocsIf31CmtsCmUsOfdmaChannelStatusEntry ::= SEQUENCE {
+     docsIf31CmtsCmUsOfdmaChannelRxPower                    TenthdBmV,
+     docsIf31CmtsCmUsOfdmaChannelMeanRxMer                  HundredthdB,
+     docsIf31CmtsCmUsOfdmaChannelStdDevRxMer                HundredthdB,
+     docsIf31CmtsCmUsOfdmaChannelRxMerThreshold             Unsigned32,
+     docsIf31CmtsCmUsOfdmaChannelThresholdRxMerValue        HundredthdB,
+     docsIf31CmtsCmUsOfdmaChannelThresholdRxMerHighestFreq  Unsigned32,
+     docsIf31CmtsCmUsOfdmaChannelMicroreflections           Unsigned32,
+     docsIf31CmtsCmUsOfdmaChannelHighResolutionTimingOffset Integer32,
+     docsIf31CmtsCmUsOfdmaChannelIsMuted                    TruthValue,
+     docsIf31CmtsCmUsOfdmaChannelRangingStatus              RangingState,
+     docsIf31CmtsCmUsOfdmaChannelCurPartialSvcReasonCode   PartialSvcReasonType,
+     docsIf31CmtsCmUsOfdmaChannelLastPartialSvcTime        DateAndTime,
+     docsIf31CmtsCmUsOfdmaChannelLastPartialSvcReasonCode  PartialSvcReasonType,
+     docsIf31CmtsCmUsOfdmaChannelNumPartialSvcIncidents    Counter32,
+     docsIf31CmtsCmUsOfdmaChannelNumPartialChanIncidents  Counter32
+     }
+
+docsIf31CmtsCmUsOfdmaChannelRxPower OBJECT-TYPE
+     SYNTAX      TenthdBmV
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute is the total received power in a specified
+         OFDMA channel, normalized to power in a 1.6 MHz bandwidth, at
+         the RF input port of the CMTS for a given CM."
+     REFERENCE
+         "DOCSIS 3.1 Physical layer Specification CM-SP-PHYv3.1-I03-140610,
+         Upstream Channel Power section."
+     ::= { docsIf31CmtsCmUsOfdmaChannelStatusEntry 1 }
+
+docsIf31CmtsCmUsOfdmaChannelMeanRxMer OBJECT-TYPE
+     SYNTAX      HundredthdB
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute is the mean of the dB values of the RxMER
+         measurements of all active subcarriers. The mean is computed
+         directly on the dB values as follows:
+
+         Mean = sum of (RxMER dB values) / number of RxMER values"
+     REFERENCE
+         "DOCSIS 3.1 Physical layer Specification CM-SP-PHYv3.1-I03-140610,
+         Upstream Receive Modulation Error Ratio (RxMER) Per Subcarrier
+         section."
+     ::= { docsIf31CmtsCmUsOfdmaChannelStatusEntry 2 }
+
+docsIf31CmtsCmUsOfdmaChannelStdDevRxMer OBJECT-TYPE
+     SYNTAX      HundredthdB
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute is the standard deviation of the dB values of
+         the RxMER measurements of all active subcarriers. The standard
+         deviation is computed directly on the dB values as follows:
+
+         StdDev = sqrt(sum of (RxMER dB vals - RxMER_mean)^2 / # RxMER vals)"
+     ::= { docsIf31CmtsCmUsOfdmaChannelStatusEntry 3 }
+
+docsIf31CmtsCmUsOfdmaChannelRxMerThreshold OBJECT-TYPE
+     SYNTAX      Unsigned32
+     UNITS       "percentile"
+     MAX-ACCESS  read-write
+     STATUS      current
+     DESCRIPTION
+         "This attribute specifies the percentile (such as 2nd percentile
+         or 5th percentile) of all active subcarriers in an OFDM channel
+         at which the ThresholdRxMerValue occurs. That is, (Percentile) %
+         of the subcarriers have RxMER <= ThresholdRxMerValue."
+     DEFVAL { 2 }
+     ::= { docsIf31CmtsCmUsOfdmaChannelStatusEntry 4 }
+
+docsIf31CmtsCmUsOfdmaChannelThresholdRxMerValue OBJECT-TYPE
+     SYNTAX      HundredthdB
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute is the RxMER value corresponding to the specified
+         docsIf31CmtsCmUsOfdmaChannelRxMerThreshold percentile value. The
+         CCAP sorts the subcarriers in ascending order of RxMER, resulting
+         in a post-sorting subcarrier index ranging from 1 to the number of
+         active subcarriers. If the percentile value corresponds to a non-
+         integer post-sorting subcarrier index, the post-sorting index is
+         truncated (floor function is applied); that is, the post-sorting
+         index is selected which is the greatest integer less than or equal
+         to the corresponding percentile value. For example, if there are
+         3677 active subcarriers and the 2nd percentile is specified, the
+         CCAP computes floor(3677*0.02) = 73.  That is, the RxMER value of
+         the 73rd subcarrier in the sorted list is associated with the 2nd
+         percentile.
+         This is displayed in hundredth of a dB, but is only accurate to
+         a quarter dB."
+     ::= { docsIf31CmtsCmUsOfdmaChannelStatusEntry 5 }
+
+docsIf31CmtsCmUsOfdmaChannelThresholdRxMerHighestFreq OBJECT-TYPE
+     SYNTAX      Unsigned32
+     UNITS       "Hz"
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute is the frequency in Hz of the highest-frequency
+         subcarrier having RxMER = ThresholdRxMer value."
+     ::= { docsIf31CmtsCmUsOfdmaChannelStatusEntry 6 }
+
+docsIf31CmtsCmUsOfdmaChannelMicroreflections OBJECT-TYPE
+     SYNTAX      Unsigned32
+     UNITS       "dBc"
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute represents microreflections received on this
+         upstream channel in dBc."
+     ::= { docsIf31CmtsCmUsOfdmaChannelStatusEntry 7 }
+
+docsIf31CmtsCmUsOfdmaChannelHighResolutionTimingOffset OBJECT-TYPE
+     SYNTAX      Integer32
+     UNITS       "time tick/(64*256)"
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute represents the current measured round trip
+         time on this CM's upstream channel in units of
+         (6.25 microseconds/(64*256)).
+         This attribute returns zero if the value is unknown."
+     ::= { docsIf31CmtsCmUsOfdmaChannelStatusEntry 8 }
+
+docsIf31CmtsCmUsOfdmaChannelIsMuted OBJECT-TYPE
+     SYNTAX      TruthValue
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute has a value 'true' to indicate that the CM's
+         upstream channel has been muted via CM-CTRL-REQ/CM-CTRL-RSP
+         message exchange."
+     ::= { docsIf31CmtsCmUsOfdmaChannelStatusEntry 9 }
+
+docsIf31CmtsCmUsOfdmaChannelRangingStatus OBJECT-TYPE
+     SYNTAX      RangingState
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute denotes the ranging state of the CM."
+    ::= { docsIf31CmtsCmUsOfdmaChannelStatusEntry 10 }
+
+docsIf31CmtsCmUsOfdmaChannelCurPartialSvcReasonCode OBJECT-TYPE
+     SYNTAX      PartialSvcReasonType
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute returns the current CM-STATUS Event Code which
+         indicates the reason that this CM is experiencing Partial Service
+         with a bonding group utilizing this upstream OFDMA channel. A
+         value of 0 indicates that the CM is not currently experiencing
+         Partial Service involving this OFDMA channel."
+     ::= { docsIf31CmtsCmUsOfdmaChannelStatusEntry 11 }
+
+docsIf31CmtsCmUsOfdmaChannelLastPartialSvcTime OBJECT-TYPE
+     SYNTAX      DateAndTime
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute returns the date and time when the MAC indicated
+         that this CM recovered from its most recent Partial Service
+         incident on this upstream OFDMA channel."
+    ::= { docsIf31CmtsCmUsOfdmaChannelStatusEntry 12 }
+
+docsIf31CmtsCmUsOfdmaChannelLastPartialSvcReasonCode OBJECT-TYPE
+     SYNTAX      PartialSvcReasonType
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute returns the last CM-STATUS Event Code which
+         indicates the reason that this CM was experiencing Partial
+         Service on this upstream OFDMA channel. (Note: if the CM is
+         currently experiencing Partial Service, this is the Event Code
+         from the previous Partial Service event.) A value of 0 indicates
+         that the CM has not experienced Partial Service involving this
+         OFDMA channel during the CCAP's history of this CM."
+     ::= { docsIf31CmtsCmUsOfdmaChannelStatusEntry 13 }
+
+docsIf31CmtsCmUsOfdmaChannelNumPartialSvcIncidents OBJECT-TYPE
+     SYNTAX      Counter32
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute returns the number of Partial Service incidents
+         the MAC layer has reported for this CM on this upstream OFDMA
+         channel."
+     ::= { docsIf31CmtsCmUsOfdmaChannelStatusEntry 14 }
+
+docsIf31CmtsCmUsOfdmaChannelNumPartialChanIncidents OBJECT-TYPE
+     SYNTAX      Counter32
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attributes returns the number of Partial Channel incidents
+         the MAC layer has reported for this CM on this upstream OFDMA
+         channel."
+     ::= { docsIf31CmtsCmUsOfdmaChannelStatusEntry 15 }
+
+docsIf31CmtsCmUsOfdmaProfileStatusTable OBJECT-TYPE
+     SYNTAX      SEQUENCE OF DocsIf31CmtsCmUsOfdmaProfileStatusEntry
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+        "This object defines current status information of the CM on
+         each OFDMA upstream channel profile, as reported by the CMTS."
+     ::= { docsIf31MibObjects 5 }
+
+docsIf31CmtsCmUsOfdmaProfileStatusEntry OBJECT-TYPE
+     SYNTAX      DocsIf31CmtsCmUsOfdmaProfileStatusEntry
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+        "The conceptual row of docsIf31CmtsCmUsOfdmaProfileStatusTable.
+         A separate entry exists for every Data IUC assigned to the CM
+         for every OFDMA channel of every CM currently assigned to an
+         OFDMA channel."
+     INDEX {
+              docsIf3CmtsCmRegStatusId,
+              ifIndex,
+              docsIf31CmtsUsOfdmaDataIucStatsDataIuc
+           }
+     ::= { docsIf31CmtsCmUsOfdmaProfileStatusTable 1 }
+
+DocsIf31CmtsCmUsOfdmaProfileStatusEntry ::= SEQUENCE {
+     docsIf31CmtsCmUsOfdmaProfileTotalCodewords            Counter64,
+     docsIf31CmtsCmUsOfdmaProfileCorrectedCodewords        Counter64,
+     docsIf31CmtsCmUsOfdmaProfileUnreliableCodewords       Counter64,
+     docsIf31CmtsCmUsOfdmaProfileLastPartialChanTime       DateAndTime,
+     docsIf31CmtsCmUsOfdmaProfileLastPartialChanReasonCode PartialChanReasonType,
+     docsIf31CmtsCmUsOfdmaProfilePartialChanReasonCode     PartialChanReasonType
+     }
+
+docsIf31CmtsCmUsOfdmaProfileTotalCodewords OBJECT-TYPE
+     SYNTAX      Counter64
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute represents the count of the total number
+         of FEC codewords received from the CM on this Profile/Data
+         IUC for this upstream OFDMA channel.
+
+         Discontinuities in the value of this counter can occur at
+         re-initialization of the managed system, and at other times
+         as indicated by the value of ifCounterDiscontinuityTime for
+         the associated upstream OFDMA channel"
+     ::= { docsIf31CmtsCmUsOfdmaProfileStatusEntry 1 }
+
+docsIf31CmtsCmUsOfdmaProfileCorrectedCodewords OBJECT-TYPE
+     SYNTAX      Counter64
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute represents the count of codewords received
+         that failed the pre-decoding syndrome check, but passed the
+         post-decoding syndrome check from the CM on this Profile/Data
+         IUC for this upstream OFDMA channel.
+
+         Discontinuities in the value of this counter can occur at
+         re-initialization of the managed system, and at other times
+         as indicated by the value of ifCounterDiscontinuityTime for
+         the associated upstream OFDMA channel."
+     ::= { docsIf31CmtsCmUsOfdmaProfileStatusEntry 2 }
+
+docsIf31CmtsCmUsOfdmaProfileUnreliableCodewords OBJECT-TYPE
+     SYNTAX      Counter64
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute represents the count of codewords that
+         failed the post-decoding syndrome check received from the
+         CM on this Profile/Data IUC for this upstream OFDMA channel.
+
+         Discontinuities in the value of this counter can occur at
+         re-initialization of the managed system, and at other times
+         as indicated by the value of ifCounterDiscontinuityTime for
+         the associated upstream OFDMA channel."
+     ::= { docsIf31CmtsCmUsOfdmaProfileStatusEntry 3 }
+
+docsIf31CmtsCmUsOfdmaProfileLastPartialChanTime OBJECT-TYPE
+     SYNTAX      DateAndTime
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute returns the date and time when the MAC
+         indicated that this CM recovered from its most recent
+         Partial Channel incident on this upstream OFDMA channel."
+     ::= { docsIf31CmtsCmUsOfdmaProfileStatusEntry 4 }
+
+docsIf31CmtsCmUsOfdmaProfileLastPartialChanReasonCode OBJECT-TYPE
+     SYNTAX      PartialChanReasonType
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute returns the current CM-STATUS Event Code
+         which indicates the reason that this CM is in a Partial
+         Channel state utilizing this Profile/Data IUC on this upstream
+         OFDMA channel. A value of 0 indicates that the CM is not
+         currently experiencing a Partial Channel event with this Data
+         IUC on this OFDMA channel."
+     ::= { docsIf31CmtsCmUsOfdmaProfileStatusEntry 5 }
+
+docsIf31CmtsCmUsOfdmaProfilePartialChanReasonCode OBJECT-TYPE
+     SYNTAX      PartialChanReasonType
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute returns the current CM-STATUS Event Code
+          which indicates the reason that this CM is in a Partial
+          Channel state utilizing this Profile/Data IUC on this
+          upstream OFDMA channel. A value of 0 indicates that the
+          CM is not currently experiencing a Partial Channel event
+          with this Data IUC on this OFDMA channel."
+     ::= { docsIf31CmtsCmUsOfdmaProfileStatusEntry 6 }
+
+docsIf31CmtsCmDsOfdmChannelStatusTable OBJECT-TYPE
+     SYNTAX      SEQUENCE OF DocsIf31CmtsCmDsOfdmChannelStatusEntry
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+        "This object defines current status information of the CM
+         on each OFDM downstream channel, as reported by the CMTS.
+         A separate entry exists for every OFDMA channel of every CM
+         currently assigned to an OFDMA channel."
+     ::= { docsIf31MibObjects 6 }
+
+docsIf31CmtsCmDsOfdmChannelStatusEntry OBJECT-TYPE
+     SYNTAX      DocsIf31CmtsCmDsOfdmChannelStatusEntry
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+        "The conceptual row of docsIf31CmtsCmDsOfdmChannelStatusTable."
+     INDEX {
+              docsIf3CmtsCmRegStatusId,
+              ifIndex
+           }
+     ::= { docsIf31CmtsCmDsOfdmChannelStatusTable 1 }
+
+DocsIf31CmtsCmDsOfdmChannelStatusEntry ::= SEQUENCE {
+     docsIf31CmtsCmDsOfdmChannelCurPartialSvcReasonCode  PartialSvcReasonType,
+     docsIf31CmtsCmDsOfdmChannelLastPartialSvcTime       DateAndTime,
+     docsIf31CmtsCmDsOfdmChannelLastPartialSvcReasonCode PartialSvcReasonType,
+     docsIf31CmtsCmDsOfdmChannelNumPartialSvcIncidents   Counter32,
+     docsIf31CmtsCmDsOfdmChannelNumPartialChanIncidents  Counter32
+     }
+
+docsIf31CmtsCmDsOfdmChannelCurPartialSvcReasonCode OBJECT-TYPE
+     SYNTAX      PartialSvcReasonType
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute returns the current CM-STATUS Event Code
+         which indicates the reason that this CM is experiencing
+         Partial Service with a bonding group utilizing this downstream
+         OFDM channel. A value of 0 indicates that the CM is not
+         currently experiencing Partial Service involving this OFDM channel."
+     ::= { docsIf31CmtsCmDsOfdmChannelStatusEntry 1 }
+
+docsIf31CmtsCmDsOfdmChannelLastPartialSvcTime OBJECT-TYPE
+     SYNTAX      DateAndTime
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute returns the date and time when the MAC
+         indicated that this CM recovered from its most recent
+         Partial Service incident on this downstream OFDM channel."
+     ::= { docsIf31CmtsCmDsOfdmChannelStatusEntry 2 }
+
+docsIf31CmtsCmDsOfdmChannelLastPartialSvcReasonCode OBJECT-TYPE
+     SYNTAX      PartialSvcReasonType
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute returns the last CM-STATUS Event Code which
+         indicates the reason that this CM was experiencing Partial
+         Service on this downstream OFDM channel. (Note: if the CM is
+         currently experiencing Partial Service, this is the Event Code
+         from the previous Partial Service event.)
+
+         A value of 0 indicates that the CM has not experienced Partial
+         Service involving this OFDM channel during the CCAP's history
+         of this CM."
+     ::= { docsIf31CmtsCmDsOfdmChannelStatusEntry 3 }
+
+docsIf31CmtsCmDsOfdmChannelNumPartialSvcIncidents OBJECT-TYPE
+     SYNTAX      Counter32
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute returns the number of Partial Service incidents
+         the MAC layer has reported for this CM on this downstream OFDM
+         channel"
+     ::= { docsIf31CmtsCmDsOfdmChannelStatusEntry 4 }
+
+docsIf31CmtsCmDsOfdmChannelNumPartialChanIncidents OBJECT-TYPE
+     SYNTAX      Counter32
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute returns the number of Partial Channel incidents
+         the MAC layer has reported for this CM on this downstream OFDM
+         channel"
+     ::= { docsIf31CmtsCmDsOfdmChannelStatusEntry 5 }
+
+docsIf31CmtsCmDsOfdmProfileStatusTable OBJECT-TYPE
+     SYNTAX      SEQUENCE OF DocsIf31CmtsCmDsOfdmProfileStatusEntry
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+        "This object defines current status information of the CM on
+         each OFDMA upstream channel profile, as reported by the CMTS."
+     ::= { docsIf31MibObjects 7 }
+
+docsIf31CmtsCmDsOfdmProfileStatusEntry OBJECT-TYPE
+     SYNTAX      DocsIf31CmtsCmDsOfdmProfileStatusEntry
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+        "The conceptual row of docsIf31CmtsCmDsOfdmProfileStatusTable.
+         A separate entry exists for every Profile assigned to the CM
+         for every OFDM channel of every CM currently assigned to an
+         OFDM channel."
+     INDEX {
+              docsIf3CmtsCmRegStatusId,
+              ifIndex,
+              docsIf31CmtsDsOfdmProfileStatsProfileId
+           }
+     ::= { docsIf31CmtsCmDsOfdmProfileStatusTable 1 }
+
+DocsIf31CmtsCmDsOfdmProfileStatusEntry ::= SEQUENCE {
+     docsIf31CmtsCmDsOfdmProfileTotalCodewords            Counter64,
+     docsIf31CmtsCmDsOfdmProfilePartialChanReasonCode     PartialChanReasonType,
+     docsIf31CmtsCmDsOfdmProfileLastPartialChanTime       DateAndTime,
+     docsIf31CmtsCmDsOfdmProfileLastPartialChanReasonCode PartialChanReasonType
+     }
+
+docsIf31CmtsCmDsOfdmProfileTotalCodewords OBJECT-TYPE
+     SYNTAX      Counter64
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute represents the count of codewords sent
+         to the CM on this Profile/Data IUC for this downstream
+         OFDM channel.
+
+         Discontinuities in the value of this counter can occur
+         at re-initialization of the managed system, and at other
+         times as indicated by the value of ifCounterDiscontinuityTime
+         for the associated downstream OFDM channel."
+     ::= { docsIf31CmtsCmDsOfdmProfileStatusEntry 1 }
+
+docsIf31CmtsCmDsOfdmProfilePartialChanReasonCode OBJECT-TYPE
+     SYNTAX      PartialChanReasonType
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute returns the current CM-STATUS Event Code
+         which indicates the reason that this CM is in a Partial
+         Channel state utilizing this Profile on this downstream
+         OFDM channel.A value of 0 indicates that the CM is not
+         currently experiencing Partial Channel involving this
+         Profile on this OFDM channel."
+     ::= { docsIf31CmtsCmDsOfdmProfileStatusEntry 2 }
+
+docsIf31CmtsCmDsOfdmProfileLastPartialChanTime OBJECT-TYPE
+     SYNTAX      DateAndTime
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute returns the date and time when the MAC
+         indicated that this CM recovered from its most recent
+         Partial Channel incident for this Profile on this downstream
+         OFDM channel."
+     ::= { docsIf31CmtsCmDsOfdmProfileStatusEntry 3 }
+
+docsIf31CmtsCmDsOfdmProfileLastPartialChanReasonCode OBJECT-TYPE
+     SYNTAX      PartialChanReasonType
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute returns the last CM-STATUS Event Code
+         which indicates the reason that this CM was experiencing
+         a Partial Channel event for this Profile on this downstream
+         OFDM channel. A value of 0 indicates that the CM has not
+         experienced a Partial Channel incident involving this Profile
+         on this OFDM channel during the CCAP's history of this CM."
+     ::= { docsIf31CmtsCmDsOfdmProfileStatusEntry 4 }
+
+docsIf31CmtsCmEmStatsTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF DocsIf31CmtsCmEmStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "This table defines Energy Management mode statistics for the
+         CM as reported by the CMTS.  For example, such metrics can
+         provide insight into configuration of appropriate EM 1x1 Mode
+         Activity Detection thresholds on the CM and/or to get feedback
+         on how/if the current thresholds are working well or are
+         causing user experience issues."
+    ::= { docsIf31MibObjects 8 }
+
+docsIf31CmtsCmEmStatsEntry OBJECT-TYPE
+    SYNTAX      DocsIf31CmtsCmEmStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "The conceptual row of docsIf31CmtsCmEmStatsTable.
+
+        A row exists in this table for every CM capable of
+        Energy Management (either 1x1 or DLS)."
+    INDEX { docsIf3CmtsCmRegStatusId }
+    ::= { docsIf31CmtsCmEmStatsTable 1 }
+
+DocsIf31CmtsCmEmStatsEntry ::=
+    SEQUENCE    {
+                docsIf31CmtsCmEmStatsEm1x1ModeTotalDuration    Unsigned32,
+                docsIf31CmtsCmEmStatsDlsModeTotalDuration      Unsigned32,
+                docsIf31CmtsCmEmStatsLastDlsTime               DateAndTime,
+                docsIf31CmtsCmEmStatsDlsWakeupEvents           Counter32
+                }
+
+docsIf31CmtsCmEmStatsEm1x1ModeTotalDuration OBJECT-TYPE
+     SYNTAX      Unsigned32
+     UNITS       "seconds"
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute indicates the total time duration, in seconds
+          since registration, the CM identified by
+          docsIf3CmtsCmRegStatusId has been in Energy Management 1x1
+          mode, as controlled by the DBC-REQ Energy Management 1x1
+          Mode Indicator TLV."
+     ::= { docsIf31CmtsCmEmStatsEntry 1 }
+
+docsIf31CmtsCmEmStatsDlsModeTotalDuration OBJECT-TYPE
+     SYNTAX      Unsigned32
+     UNITS       "seconds"
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute indicates the total time duration, in seconds
+          since registration, the CM identified by
+          docsIf3CmtsCmRegStatusId has been in DLS mode."
+     ::= { docsIf31CmtsCmEmStatsEntry 2 }
+
+docsIf31CmtsCmEmStatsLastDlsTime OBJECT-TYPE
+     SYNTAX      DateAndTime
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute indicates the time of the last DLS wakeup
+         event for this CM. If this CM is currently in DLS mode, then
+         this attribute returns 0."
+     ::= { docsIf31CmtsCmEmStatsEntry 3 }
+
+docsIf31CmtsCmEmStatsDlsWakeupEvents OBJECT-TYPE
+     SYNTAX      Counter32
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute indicates the total number of wakeup events
+         that this CM has experienced over the CCAP's history for this CM."
+     ::= { docsIf31CmtsCmEmStatsEntry 4 }
+
+docsIf31CmDsOfdmChanTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF DocsIf31CmDsOfdmChanEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "This table describes the CM's downstream OFDM channels."
+    ::= { docsIf31MibObjects 9 }
+
+docsIf31CmDsOfdmChanEntry OBJECT-TYPE
+    SYNTAX      DocsIf31CmDsOfdmChanEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "The conceptual row of docsIf31CmDsOfdmChanTable.
+
+         An entry exists in this table for each ifEntry with an
+         ifType value of docsOfdmDownstream(277)."
+    INDEX {
+             ifIndex
+          }
+    ::= { docsIf31CmDsOfdmChanTable 1 }
+
+DocsIf31CmDsOfdmChanEntry ::=
+    SEQUENCE    {
+        docsIf31CmDsOfdmChanChannelId                  Integer32,
+        docsIf31CmDsOfdmChanChanIndicator              PrimaryDsIndicatorType,
+        docsIf31CmDsOfdmChanSubcarrierZeroFreq         Unsigned32,
+        docsIf31CmDsOfdmChanFirstActiveSubcarrierNum   Unsigned32,
+        docsIf31CmDsOfdmChanLastActiveSubcarrierNum    Unsigned32,
+        docsIf31CmDsOfdmChanNumActiveSubcarriers       Unsigned32,
+        docsIf31CmDsOfdmChanSubcarrierSpacing          SubcarrierSpacingType,
+        docsIf31CmDsOfdmChanCyclicPrefix               DsOfdmCyclicPrefix,
+        docsIf31CmDsOfdmChanRollOffPeriod              DsOfdmRollOffPeriod,
+        docsIf31CmDsOfdmChanPlcFreq                    Unsigned32,
+        docsIf31CmDsOfdmChanNumPilots                  Unsigned32,
+        docsIf31CmDsOfdmChanTimeInterleaverDepth       TimeInterleaverDepth,
+        docsIf31CmDsOfdmChanPlcTotalCodewords          Counter64,
+        docsIf31CmDsOfdmChanPlcUnreliableCodewords     Counter64,
+        docsIf31CmDsOfdmChanNcpTotalFields             Counter64,
+        docsIf31CmDsOfdmChanNcpFieldCrcFailures        Counter64
+       }
+
+docsIf31CmDsOfdmChanChannelId OBJECT-TYPE
+     SYNTAX      Integer32 (0..255)
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "The Cable Modem Termination System identification of the
+          OFDM downstream channel within this particular MAC interface.
+          if the interface is down, the object returns the most
+          current value.  If the downstream channel ID is unknown,
+          this object returns a value of 0."
+     ::= { docsIf31CmDsOfdmChanEntry 1 }
+
+docsIf31CmDsOfdmChanChanIndicator OBJECT-TYPE
+    SYNTAX      PrimaryDsIndicatorType
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+         "This attribute is used to identify the OFDM downstream channel
+          as primary, backup primary or non-primary. A value of
+          'primary(2)' indicates that OFDM channel is assigned to be the
+          CM's primary downstream channel. A value of 'backupPrimary(3)'
+          indicates that the OFDM channel is assigned to be the CM's
+          backup primary downstream channel. A value of 'nonPrimary(4)'
+          indicates the OFDM channel is not assigned to be CM's primary
+          or backup primary downstream channel."
+    ::= { docsIf31CmDsOfdmChanEntry 2 }
+
+docsIf31CmDsOfdmChanSubcarrierZeroFreq OBJECT-TYPE
+    SYNTAX      Unsigned32
+    UNITS       "Hz"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+         "This attribute specifies the center frequency of the
+          subcarrier 0 of the OFDM transmission. Note that since
+          subcarrier 0 is always excluded, it will actually be below the
+          allowed downstream spectrum band. This is the frequency of
+          subcarrier X(0) in the definition of the DFT."
+    ::= { docsIf31CmDsOfdmChanEntry 3 }
+
+docsIf31CmDsOfdmChanFirstActiveSubcarrierNum OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+         "This attribute corresponds to the number of the first
+          non-excluded subcarrier. The valid range is 148 to 7895"
+    ::= { docsIf31CmDsOfdmChanEntry 4 }
+
+docsIf31CmDsOfdmChanLastActiveSubcarrierNum OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+         "This attribute corresponds to the number of the last
+          non-excluded subcarrier. The valid range is 148 to 7895"
+    ::= { docsIf31CmDsOfdmChanEntry 5 }
+
+docsIf31CmDsOfdmChanNumActiveSubcarriers OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute represents the number of active data
+        subcarriers within the OFDM downstream channel (i.e. this
+        exclude subcarriers for continuous pilots and the PLC).
+        For 4K FFT mode, the maximum number of subcarriers including
+        continuous pilots and the PLC cannot exceed 3800, and for
+        8K FFT mode, the maximum number of active subcarriers including
+        continuous pilots and the PLC cannot be greater than 7600.
+
+        However, there are a minimum of 56 continuous pilots in a 192MHz
+        channel that has no exclusions, and the size of the PLC is
+        8 subcarriers for 4K FFT mode and 16 subcarriers for 8K FFT mode.
+        Therefore the maximum value of NumActiveSubcarriers is 3736
+        (or 3800 - 56 - 8) for 4K FFT mode and 7528 (or 7600 - 56 - 16)
+        for 8K FFT mode."
+    ::= { docsIf31CmDsOfdmChanEntry 6 }
+
+docsIf31CmDsOfdmChanSubcarrierSpacing OBJECT-TYPE
+    SYNTAX      SubcarrierSpacingType
+    UNITS       "kHz"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute defines the subcarrier spacing associated with
+         a particular FFT mode configured on the OFDM downstream
+         channel. If it is 4K mode, then the subcarrier spacing is
+         50kHz. If it is 8K mode, then the subcarrier spacing is
+         25kHz."
+    ::= { docsIf31CmDsOfdmChanEntry 7 }
+
+docsIf31CmDsOfdmChanCyclicPrefix OBJECT-TYPE
+    SYNTAX      DsOfdmCyclicPrefix
+    UNITS       "number of samples"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Cyclic prefix enables the receiver to overcome the effects of
+         inter-symbol-interference and intercarrier-interference caused
+         by micro-reflections in the channel. There are five possible
+         values for the length of the CP and the choice depends on the
+         delay spread of the channel - a longer delay spread requires a
+         longer cyclic prefix. The cyclic prefix (in usec) are converted
+         into samples using the sample rate of 204.8 Msamples/s and is
+         an integer multiple of: 1/64 * 20 us."
+    ::= { docsIf31CmDsOfdmChanEntry 8 }
+
+docsIf31CmDsOfdmChanRollOffPeriod OBJECT-TYPE
+    SYNTAX      DsOfdmRollOffPeriod
+    UNITS       "number of samples"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Roll off period maximizes channel capacity by sharpening the
+         edges of the spectrum of the OFDM signal. For windowing
+         purposes another segment at the start of the IDFT output is
+         appended to the end of the IDFT output - the roll-off postfix
+         (RP). There are five possible values for the (RP), and the
+         choice depends on the bandwidth of the channel and the number
+         of exclusion bands within the channel. A larger RP provides
+         sharper edges in the spectrum of the OFDM signal; however,
+         there is a time vs. frequency trade-off. Larger RP values
+         reduce the efficiency of transmission in the time domain,
+         but because the spectral edges are sharper, more useful
+         subcarriers appear in the frequency domain. There is an
+         optimum value for the RP that maximizes capacity for a given
+         bandwidth and/or exclusion band scenario."
+    ::= { docsIf31CmDsOfdmChanEntry 9 }
+
+docsIf31CmDsOfdmChanPlcFreq OBJECT-TYPE
+    SYNTAX      Unsigned32
+    UNITS       "Hz"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This is the PHY Link Channel (PLC) frequency. It is the center
+         frequency of the lowest frequency subcarrier of the PLC. The
+         aim of the PLC is for the CMTS to convey to the CM the
+         physical properties of the OFDM channel."
+    ::= { docsIf31CmDsOfdmChanEntry 10 }
+
+docsIf31CmDsOfdmChanNumPilots OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute indicates the number of continuous pilots configured
+         for the OFDM downstream channel as received in the OCD message."
+    ::= { docsIf31CmDsOfdmChanEntry 11 }
+
+docsIf31CmDsOfdmChanTimeInterleaverDepth OBJECT-TYPE
+    SYNTAX      TimeInterleaverDepth
+    UNITS       "symbols"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The time interleaving used for this downstream channel as
+      received in the OCD message."
+    ::= { docsIf31CmDsOfdmChanEntry 12 }
+
+docsIf31CmDsOfdmChanPlcTotalCodewords OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute represents the total number of PLC codewords
+        received by the CM."
+    ::= { docsIf31CmDsOfdmChanEntry 13 }
+
+docsIf31CmDsOfdmChanPlcUnreliableCodewords OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute represents the total number of PLC codewords
+        which failed post-decoding LDPC syndrome check."
+    ::= { docsIf31CmDsOfdmChanEntry 14 }
+
+docsIf31CmDsOfdmChanNcpTotalFields OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute represents the total number of NCP fields
+        received by the CM."
+    ::= { docsIf31CmDsOfdmChanEntry 15 }
+
+docsIf31CmDsOfdmChanNcpFieldCrcFailures OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute represents the total number of NCP fields
+        received by the CM which failed the CRC check."
+    ::= { docsIf31CmDsOfdmChanEntry 16 }
+
+
+docsIf31CmDsOfdmProfileStatsTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF DocsIf31CmDsOfdmProfileStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "This CM object specifies the attributes of the Downstream
+         profile assigned to an OFDM downstream channel."
+    ::= { docsIf31MibObjects 10 }
+
+docsIf31CmDsOfdmProfileStatsEntry OBJECT-TYPE
+    SYNTAX      DocsIf31CmDsOfdmProfileStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "The conceptual row of docsIf31CmDsOfdmProfileStatsTable.
+
+         An entry exists in this table for each DS Profile assigned to
+         this CM on channels with an ifType value of docsOfdmDownstream(277)."
+    INDEX {
+             ifIndex,
+             docsIf31CmDsOfdmProfileStatsProfileId
+          }
+    ::= { docsIf31CmDsOfdmProfileStatsTable 1 }
+
+DocsIf31CmDsOfdmProfileStatsEntry ::=
+    SEQUENCE    {
+        docsIf31CmDsOfdmProfileStatsProfileId                 Unsigned32,
+        docsIf31CmDsOfdmProfileStatsConfigChangeCt            Unsigned32,
+        docsIf31CmDsOfdmProfileStatsTotalCodewords            Counter64,
+        docsIf31CmDsOfdmProfileStatsCorrectedCodewords        Counter64,
+        docsIf31CmDsOfdmProfileStatsUncorrectableCodewords    Counter64,
+        docsIf31CmDsOfdmProfileStatsInOctets                  Counter64,
+        docsIf31CmDsOfdmProfileStatsInUnicastOctets           Counter64,
+        docsIf31CmDsOfdmProfileStatsInMulticastOctets         Counter64,
+        docsIf31CmDsOfdmProfileStatsInFrames                  Counter64,
+        docsIf31CmDsOfdmProfileStatsInUnicastFrames           Counter64,
+        docsIf31CmDsOfdmProfileStatsInMulticastFrames         Counter64,
+        docsIf31CmDsOfdmProfileStatsInFrameCrcFailures        Counter64,
+        docsIf31CmDsOfdmProfileStatsCtrDiscontinuityTime      TimeStamp
+       }
+
+docsIf31CmDsOfdmProfileStatsProfileId OBJECT-TYPE
+    SYNTAX      Unsigned32 (0..255)
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "This attribute is the unique identifier of the downstream
+         profile associated with the OFDM downstream channel. Profile ID
+         with a value of 255 corresponds to NCP profile."
+    REFERENCE
+         "DOCSIS 3.1 MAC and Upper Layer Protocols Interface Specification
+         CM-SP-MULPIv3.1-I03-140610, Downstream Profile Descriptor."
+    ::= { docsIf31CmDsOfdmProfileStatsEntry 1 }
+
+docsIf31CmDsOfdmProfileStatsConfigChangeCt OBJECT-TYPE
+    SYNTAX      Unsigned32 (0..255)
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute contains the value of the Configuration Change
+        Count field in the Downstream Profile Descriptor (DPD) MAC
+        Management Message corresponding to this profile."
+    ::= { docsIf31CmDsOfdmProfileStatsEntry 2 }
+
+docsIf31CmDsOfdmProfileStatsTotalCodewords OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute defines the total number of codewords
+         (including full-length and shortened) measured on this profile."
+    ::= { docsIf31CmDsOfdmProfileStatsEntry 3 }
+
+docsIf31CmDsOfdmProfileStatsCorrectedCodewords OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute defines the number of codewords measured on this
+        profile that failed pre-decoding LDPC syndrome check and passed
+        BCH decoding."
+    ::= { docsIf31CmDsOfdmProfileStatsEntry 4 }
+
+docsIf31CmDsOfdmProfileStatsUncorrectableCodewords OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute defines the number of codewords measured on this
+        profile that failed BCH decoding."
+    ::= { docsIf31CmDsOfdmProfileStatsEntry 5 }
+
+docsIf31CmDsOfdmProfileStatsInOctets OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute is the count of MAC-layer octets received
+        by the CM on this Profile. This value is the size of all
+        unicast, multicast or broadcast frames (including all MAC-
+        layer framing) delivered from the Phy to the MAC; this
+        includes user data, DOCSIS MAC Management Messages, etc.
+
+        Discontinuities in the value of this counter can occur at
+        reinitialization of the managed system, and at other times as
+        indicated by the value of docsIf31CmDsOfdmProfileStats-
+        CtrDiscontinuityTime."
+    ::= { docsIf31CmDsOfdmProfileStatsEntry 6 }
+
+docsIf31CmDsOfdmProfileStatsInUnicastOctets OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute is the count of MAC-layer unicast octets received
+        by the CM on this profile. This value is the size of all unicast
+        frames (including all MAC-layer framing) delivered from the Phy
+        to the MAC; this includes user data, DOCSIS MAC Management
+        Messages, etc.
+
+        Discontinuities in the value of this counter can occur at
+        reinitialization of the managed system, and at other times as
+        indicated by the value of docsIf31CmDsOfdmProfileStats-
+        CtrDiscontinuityTime."
+    ::= { docsIf31CmDsOfdmProfileStatsEntry 7 }
+
+docsIf31CmDsOfdmProfileStatsInMulticastOctets OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute is the count of MAC-layer multicast and broadcast
+        octets received by the CM on this profile. This value is the size
+        of all frames (including all MAC-layer framing) delivered from the
+        Phy to the MAC and addressed to a multicast MAC address;
+        this includes user data, DOCSIS MAC Management Messages, etc.
+
+        Discontinuities in the value of this counter can occur at
+        reinitialization of the managed system, and at other times as
+        indicated by the value of docsIf31CmDsOfdmProfileStats-
+        CtrDiscontinuityTime."
+    ::= { docsIf31CmDsOfdmProfileStatsEntry 8 }
+
+docsIf31CmDsOfdmProfileStatsInFrames OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute is the count of frames received by the CM
+        on this profile. This value is the count of all unicast,
+        multicast or broadcast frames delivered from the Phy to the MAC;
+        this includes user data, DOCSIS MAC Management Messages, etc.
+
+        Discontinuities in the value of this counter can occur at
+        reinitialization of the managed system, and at other times as
+        indicated by the value of docsIf31CmDsOfdmProfileStats-
+        CtrDiscontinuityTime."
+    ::= { docsIf31CmDsOfdmProfileStatsEntry 9 }
+
+docsIf31CmDsOfdmProfileStatsInUnicastFrames OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute is the count of frames received by the CM
+        on this profile. This value is the count of all unicast,
+        multicast or broadcast frames delivered from the Phy to the MAC;
+        this includes user data, DOCSIS MAC Management Messages, etc.
+
+        Discontinuities in the value of this counter can occur at
+        reinitialization of the managed system, and at other times as
+        indicated by the value of docsIf31CmDsOfdmProfileStats-
+        CtrDiscontinuityTime."
+    ::= { docsIf31CmDsOfdmProfileStatsEntry 10 }
+
+docsIf31CmDsOfdmProfileStatsInMulticastFrames OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute is the count of multicast frames received
+        by the CM on this profile. This value is the count of all
+        frames delivered from the Phy to the MAC and addressed to a
+        multicast MAC address; this includes user data, DOCSIS MAC
+        Management Messages, etc., but excludes frames sent to a
+        broadcast address.
+
+        Discontinuities in the value of this counter can occur at
+        reinitialization of the managed system, and at other times as
+        indicated by the value of docsIf31CmDsOfdmProfileStats-
+        CtrDiscontinuityTime."
+    ::= { docsIf31CmDsOfdmProfileStatsEntry 11 }
+
+docsIf31CmDsOfdmProfileStatsInFrameCrcFailures OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute defines the number of MAC frames measured on
+        this profile that failed the MAC frame CRC check."
+    ::= { docsIf31CmDsOfdmProfileStatsEntry 12 }
+
+docsIf31CmDsOfdmProfileStatsCtrDiscontinuityTime OBJECT-TYPE
+    SYNTAX      TimeStamp
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute is the value of sysUpTime on the most recent
+        occasion at which any one or more of this entry's counters
+        suffered a discontinuity. If no such discontinuities have
+        occurred since the last re-initialization of the local
+        management subsystem, then this attribute contains a zero value."
+    ::= { docsIf31CmDsOfdmProfileStatsEntry 13 }
+
+docsIf31CmDsOfdmChannelPowerTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF DocsIf31CmDsOfdmChannelPowerEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "This CM object provides measurements of the channel power
+        in 6 MHz wide bands at the F connector input of the CM."
+    ::= { docsIf31MibObjects 11 }
+
+docsIf31CmDsOfdmChannelPowerEntry OBJECT-TYPE
+    SYNTAX      DocsIf31CmDsOfdmChannelPowerEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "The conceptual row of docsIf31CmDsOfdmChannelPowerTable."
+    INDEX {
+             ifIndex,
+             docsIf31CmDsOfdmChannelBandIndex
+          }
+    ::= { docsIf31CmDsOfdmChannelPowerTable 1 }
+
+DocsIf31CmDsOfdmChannelPowerEntry ::=
+    SEQUENCE    {
+        docsIf31CmDsOfdmChannelBandIndex               Unsigned32,
+        docsIf31CmDsOfdmChannelPowerCenterFrequency    Unsigned32,
+        docsIf31CmDsOfdmChannelPowerRxPower            TenthdBmV
+       }
+
+docsIf31CmDsOfdmChannelBandIndex OBJECT-TYPE
+     SYNTAX      Unsigned32
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+         "This attribute is a unique index used by the CM to identify
+         each of the 6 MHz bands of a given OFDM downstream channel
+         (from the lowest 6MHz band of the Occupied Bandwidth to the
+         highest 6MHz band of the Occupied Bandwidth). The CM assigns
+         indices in frequency order from the OFDM channel's lowest to
+         highest 6 MHz frequency band for each of the 6 MHz bands of
+         the channel, using an index of 1 to represent the lowest frequency
+         band of the Occupied Bandwidth. Thus, an index of 33 represents
+         the highest possible 6 MHz frequency band of the Occupied Bandwidth
+         of a DOCSIS 3.1 OFDM channel. The CM also provides the power of the
+         PLC channel and utilize a value of 0 to represent the PLC
+         channel in this table."
+    ::= { docsIf31CmDsOfdmChannelPowerEntry 1 }
+
+docsIf31CmDsOfdmChannelPowerCenterFrequency OBJECT-TYPE
+     SYNTAX      Unsigned32
+     UNITS       "Hz"
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute corresponds to the center frequency of the 6 MHz
+         band the CM measured the average channel power.
+
+         See Reference for specific details on this attribute."
+     REFERENCE
+        "DOCSIS 3.1 CM Operations Support System Interface
+        Specification CM-SP-CM OSSIv3.1-I03-15MMDD,
+        CenterFrequency"
+    ::= { docsIf31CmDsOfdmChannelPowerEntry 2 }
+
+docsIf31CmDsOfdmChannelPowerRxPower OBJECT-TYPE
+     SYNTAX      TenthdBmV
+     UNITS       "TenthdBmV"
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute provides an estimate of the average power measured
+         at the F connector input of the CM in the receive downstream channel
+         set for this 6 MHz band.
+
+         If the band index is 0, then this attribute provides an
+         estimate of the average power measured at the F connector input
+         of the CM for a 6 MHz encompassed spectrum containing the
+         DOCSIS 3.1 PLC at its center."
+    ::= { docsIf31CmDsOfdmChannelPowerEntry 3 }
+
+docsIf31CmStatusOfdmaUsTable OBJECT-TYPE
+     SYNTAX      SEQUENCE OF DocsIf31CmStatusOfdmaUsEntry
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+        "This object defines PHY and MAC information about
+        the CM's upstream channels operating in OFDMA mode.
+        This object provides per-CM Upstream channel information
+        previously available in the table docsIf3CmStatusTable."
+     ::= { docsIf31MibObjects 12 }
+
+docsIf31CmStatusOfdmaUsEntry OBJECT-TYPE
+     SYNTAX      DocsIf31CmStatusOfdmaUsEntry
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+         "The conceptual row of docsIf31CmStatusOfdmaUsTable.
+         An instance exist for each of the CM's OFDMA upstream channels
+         which are configured for data transmission."
+     INDEX {
+              ifIndex
+           }
+     ::= { docsIf31CmStatusOfdmaUsTable 1 }
+
+DocsIf31CmStatusOfdmaUsEntry ::= SEQUENCE {
+     docsIf31CmStatusOfdmaUsT3Timeouts          Counter32,
+     docsIf31CmStatusOfdmaUsT4Timeouts          Counter32,
+     docsIf31CmStatusOfdmaUsRangingAborteds     Counter32,
+     docsIf31CmStatusOfdmaUsT3Exceededs         Counter32,
+     docsIf31CmStatusOfdmaUsIsMuted             TruthValue,
+     docsIf31CmStatusOfdmaUsRangingStatus       RangingState
+     }
+
+docsIf31CmStatusOfdmaUsT3Timeouts OBJECT-TYPE
+     SYNTAX      Counter32
+     UNITS       "timeouts"
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+        "This attribute denotes the number of times counter
+        T3 expired in the CM for this upstream channel. Discontinuities
+        in the value of this counter can occur at
+        re-initialization of the managed system, and at other
+        times as indicated by the value of ifCounterDiscontinuityTime
+        for the associated upstream channel."
+     REFERENCE
+        "RFC 2863."
+     ::= { docsIf31CmStatusOfdmaUsEntry 2 }
+
+docsIf31CmStatusOfdmaUsT4Timeouts OBJECT-TYPE
+     SYNTAX      Counter32
+     UNITS       "timeouts"
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+        "This attribute denotes the number of times counter
+        T4 expired in the CM for this upstream channel. Discontinuities
+        in the value of this counter can occur at
+        re-initialization of the managed system, and at other
+        times as indicated by the value of ifCounterDiscontinuityTime
+        for the associated upstream channel."
+     REFERENCE
+        "RFC 2863."
+     ::= { docsIf31CmStatusOfdmaUsEntry 3 }
+
+docsIf31CmStatusOfdmaUsRangingAborteds OBJECT-TYPE
+     SYNTAX      Counter32
+     UNITS       "attempts"
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+        "This attribute denotes the number of times the ranging
+        process was aborted by the CMTS. Discontinuities
+        in the value of this counter can occur at re-initialization
+        of the managed system, and at other times as
+        indicated by the value of ifCounterDiscontinuityTime
+        ([RFC2863]) for the associated upstream channel."
+     REFERENCE
+        "RFC 2863."
+     ::= { docsIf31CmStatusOfdmaUsEntry 4 }
+
+docsIf31CmStatusOfdmaUsT3Exceededs OBJECT-TYPE
+     SYNTAX      Counter32
+     UNITS       "timeouts"
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+        "This attribute denotes the number of times for excessive
+        T3 timeouts. Discontinuities in the value of
+        this counter can occur at re-initialization of the managed
+        system, and at other times as indicated by the
+        value of ifCounterDiscontinuityTime for the associated
+        upstream channel."
+     REFERENCE
+        "RFC 2863."
+     ::= { docsIf31CmStatusOfdmaUsEntry 5 }
+
+docsIf31CmStatusOfdmaUsIsMuted OBJECT-TYPE
+     SYNTAX      TruthValue
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+        "This attribute denotes whether the upstream
+        channel is muted."
+     REFERENCE
+         "DOCSIS 3.1 MAC and Upper Layer Protocols Interface
+         Specification CM-SP-MULPIv3.1-I03-140610 CM Control
+         Request section."
+     ::= { docsIf31CmStatusOfdmaUsEntry 6 }
+
+docsIf31CmStatusOfdmaUsRangingStatus OBJECT-TYPE
+     SYNTAX      RangingState
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+        "This attribute denotes the ranging state of the CM."
+     REFERENCE
+         "DOCSIS 3.1 MAC and Upper Layer Protocols Interface
+         Specification CM-SP-MULPIv3.1-I03-140610 Ranging section."
+     ::= { docsIf31CmStatusOfdmaUsEntry 7 }
+
+docsIf31CmUsOfdmaChanTable OBJECT-TYPE
+   SYNTAX      SEQUENCE OF DocsIf31CmUsOfdmaChanEntry
+   MAX-ACCESS  not-accessible
+   STATUS      current
+   DESCRIPTION
+       "This object specifies the CM upstream OFDMA channel."
+   ::= { docsIf31MibObjects 13 }
+
+docsIf31CmUsOfdmaChanEntry OBJECT-TYPE
+   SYNTAX      DocsIf31CmUsOfdmaChanEntry
+   MAX-ACCESS  not-accessible
+   STATUS      current
+   DESCRIPTION
+       "The conceptual row of docsIf31CmUsOfdmaChanTable.
+        An instance exist for the CM OFDMA upstream interface."
+   INDEX {
+            ifIndex
+         }
+   ::= { docsIf31CmUsOfdmaChanTable 1 }
+
+DocsIf31CmUsOfdmaChanEntry ::=
+   SEQUENCE    {
+       docsIf31CmUsOfdmaChanConfigChangeCt                Unsigned32,
+       docsIf31CmUsOfdmaChanSubcarrierZeroFreq            Unsigned32,
+       docsIf31CmUsOfdmaChanFirstActiveSubcarrierNum      Unsigned32,
+       docsIf31CmUsOfdmaChanLastActiveSubcarrierNum       Unsigned32,
+       docsIf31CmUsOfdmaChanNumActiveSubcarriers          Unsigned32,
+       docsIf31CmUsOfdmaChanSubcarrierSpacing             SubcarrierSpacingType,
+       docsIf31CmUsOfdmaChanCyclicPrefix                  UsOfdmaCyclicPrefix,
+       docsIf31CmUsOfdmaChanRollOffPeriod                 UsOfdmaRollOffPeriod,
+       docsIf31CmUsOfdmaChanNumSymbolsPerFrame            Unsigned32,
+       docsIf31CmUsOfdmaChanTxPower                       TenthdBmV,
+       docsIf31CmUsOfdmaChanPreEqEnabled                  TruthValue
+      }
+
+docsIf31CmUsOfdmaChanConfigChangeCt OBJECT-TYPE
+    SYNTAX      Unsigned32 (0..255)
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute contains the value of the Configuration Change
+        Count field in the Upstream Channel Descriptor (UCD) MAC
+        Management Message corresponding to this OFDMA channel."
+    ::= { docsIf31CmUsOfdmaChanEntry 1 }
+
+docsIf31CmUsOfdmaChanSubcarrierZeroFreq OBJECT-TYPE
+    SYNTAX      Unsigned32
+    UNITS       "Hz"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute defines the lower edge frequency of the OFDMA
+         upstream channel"
+    ::= { docsIf31CmUsOfdmaChanEntry 2 }
+
+docsIf31CmUsOfdmaChanFirstActiveSubcarrierNum OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute defines the upper edge of the OFDMA upstream
+         channel. The minimum channel width for an OFDMA upstream
+         channel is 6.4 MHz in 4K mode and 10MHz in 2K mode. The valid
+         range is 74 to 3947."
+    ::= { docsIf31CmUsOfdmaChanEntry 3 }
+
+docsIf31CmUsOfdmaChanLastActiveSubcarrierNum OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute defines the last active subcarrier number.
+        The valid range is 74 to 3947."
+    ::= { docsIf31CmUsOfdmaChanEntry 4 }
+
+docsIf31CmUsOfdmaChanNumActiveSubcarriers OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute defines the number of active subcarriers within
+         the OFDMA upstream channel. The valid range is 1 to 3800."
+    ::= { docsIf31CmUsOfdmaChanEntry 5 }
+
+docsIf31CmUsOfdmaChanSubcarrierSpacing OBJECT-TYPE
+    SYNTAX      SubcarrierSpacingType
+    UNITS       "kHz"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute defines the subcarrier spacing associated with
+        a particular FFT mode configured on the OFDMA upstream
+        channel. If it is 2K mode, then the subcarrier spacing is 50kHz.
+        If it is 4K mode, then the subcarrier spacing is 25kHz."
+    ::= { docsIf31CmUsOfdmaChanEntry 6 }
+
+docsIf31CmUsOfdmaChanCyclicPrefix OBJECT-TYPE
+    SYNTAX      UsOfdmaCyclicPrefix
+    UNITS       "number of samples"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Cyclic prefix is added in order to enable the receiver to
+        overcome the effects of inter-symbol interference (ISI) and
+        inter-carrier interference caused by microreflections in the
+        channel. The cyclic prefix (in usec) is converted into samples
+        using the sample rate of 102.4 Msamples/s. There are eleven
+        values for the length of the CP and the choice depends on the
+        delay spread of the channel; a longer delay spread requires a
+        longer cyclic prefix."
+    ::= { docsIf31CmUsOfdmaChanEntry 7 }
+
+docsIf31CmUsOfdmaChanRollOffPeriod OBJECT-TYPE
+    SYNTAX      UsOfdmaRollOffPeriod
+    UNITS       "number of samples"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Windowing is applied in order to maximize channel capacity
+         by sharpening the edges of the spectrum of the OFDMA signal.
+         Windowing is applied in the time domain by tapering (or
+         rolling off) the edges using a raised cosine function. There
+         are eight possible values of roll-off prefix. The Roll-Off
+         Period is given in us and in number of samples using the
+         sample rate of 102.4 Msamples/s. The configuration where
+         Roll-off prefix value is greater than or equal to cyclic
+         prefix value is considered invalid."
+    ::= { docsIf31CmUsOfdmaChanEntry 8 }
+
+docsIf31CmUsOfdmaChanNumSymbolsPerFrame OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute is the number of symbol periods per frame.
+         For channel bandwidth greater than 72MHz, the maximum number
+         of symbol periods per frame is 18 for 2K mode and 9 for 4K
+         mode. For channel bandwidth less than 72 MHz but greater than
+         48MHz, the maximum number of symbols per frame is 24 for 2K
+         mode and 12 for 4K mode. For channel bandwidth less than
+         48MHz, the maximum number of symbol periods is 36 for 2K mode
+         and 18 for 4K mode. The minimum number of symbol periods per
+         frame is 6 for both the FFT modes and is independent of the
+         channel bandwidth."
+    ::= { docsIf31CmUsOfdmaChanEntry 9 }
+
+docsIf31CmUsOfdmaChanTxPower OBJECT-TYPE
+    SYNTAX      TenthdBmV
+    UNITS       "dBmV"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute represents the operational transmit power for
+         the associated OFDMA upstream channel."
+    ::= { docsIf31CmUsOfdmaChanEntry 10 }
+
+docsIf31CmUsOfdmaChanPreEqEnabled OBJECT-TYPE
+    SYNTAX      TruthValue
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute defines whether pre-equalization is enabled on
+         the associated OFDMA upstream channel."
+    ::= { docsIf31CmUsOfdmaChanEntry 11 }
+
+docsIf31CmUsOfdmaProfileStatsTable OBJECT-TYPE
+   SYNTAX      SEQUENCE OF DocsIf31CmUsOfdmaProfileStatsEntry
+   MAX-ACCESS  not-accessible
+   STATUS      current
+   DESCRIPTION
+       "This CM object specifies the attributes of the Upstream
+        profile assigned to an OFDM upstream channel."
+   ::= { docsIf31MibObjects 14 }
+
+docsIf31CmUsOfdmaProfileStatsEntry OBJECT-TYPE
+   SYNTAX      DocsIf31CmUsOfdmaProfileStatsEntry
+   MAX-ACCESS  not-accessible
+   STATUS      current
+   DESCRIPTION
+       "The conceptual row of docsIf31CmUsOfdmaProfileStatsTable.
+        An instance exist for each profile associated with the OFDMA
+        upstream interface."
+   INDEX {
+            ifIndex,
+            docsIf31CmUsOfdmaProfileStatsIuc
+         }
+   ::= { docsIf31CmUsOfdmaProfileStatsTable 1 }
+
+DocsIf31CmUsOfdmaProfileStatsEntry ::=
+   SEQUENCE    {
+        docsIf31CmUsOfdmaProfileStatsIuc                  Unsigned32,
+        docsIf31CmUsOfdmaProfileStatsOutOctets            Counter64,
+        docsIf31CmUsOfdmaProfileStatsCtrDiscontinuityTime TimeStamp
+        }
+
+docsIf31CmUsOfdmaProfileStatsIuc OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "This attribute is the unique identifier of the upstream
+         profile/IUC associated with the OFDMA upstream channel. It
+         is a key defined to provide an index into the table. In
+         DOCSIS 3.1 the valid Data Profile IUCs are: 5, 6, 9, 10,
+         11, 12 and 13."
+     REFERENCE
+        "DOCSIS 3.1 MAC and Upper Layer Protocols Interface
+        Specification CM-SP-MULPIv3.1-I03-140610,
+        Required Burst Attributes on OFDMA Channels."
+    ::= { docsIf31CmUsOfdmaProfileStatsEntry 1 }
+
+docsIf31CmUsOfdmaProfileStatsOutOctets OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute is the count of MAC-layer octets transmitted by
+        the CM using this Data IUC profile. This value is the size of
+        all unicast, multicast or broadcast frames (including all MAC-
+        layer framing) delivered from the MAC to the Phy -- this includes
+        user data, DOCSIS MAC Management Messages, etc.
+
+        Discontinuities in the value of this counter can occur at
+        reinitialization of the managed system, and at other times as
+        indicated by the value of docsIf31CmUsOfdmaProfileStats-
+        CtrDiscontinuityTime."
+    ::= { docsIf31CmUsOfdmaProfileStatsEntry 2 }
+
+docsIf31CmUsOfdmaProfileStatsCtrDiscontinuityTime OBJECT-TYPE
+    SYNTAX      TimeStamp
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute is the value of sysUpTime on the most recent
+        occasion at which any one or more of this entry's counters
+        suffered a discontinuity. If no such discontinuities have
+        occurred since the last re-initialization of the local
+        management subsystem, then this attribute contains a zero value."
+    ::= { docsIf31CmUsOfdmaProfileStatsEntry 3 }
+
+docsIf31CmUsOfdmaMinislotCfgStateTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF DocsIf31CmUsOfdmaMinislotCfgStateEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+       "This CM object specifies the attributes of the minislot
+        configuration associated with a OFDMA upstream channel."
+    ::= { docsIf31MibObjects 15 }
+
+docsIf31CmUsOfdmaMinislotCfgStateEntry OBJECT-TYPE
+    SYNTAX      DocsIf31CmUsOfdmaMinislotCfgStateEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "The conceptual row of docsIf31CmUsOfdmaMinislotCfgStateTable.
+         An instance exists for each OFDMA minislot."
+    INDEX {
+              ifIndex,
+              docsIf31CmUsOfdmaProfileStatsIuc,
+              docsIf31CmUsOfdmaMinislotCfgStateStartMinislotNum
+          }
+    ::= { docsIf31CmUsOfdmaMinislotCfgStateTable 1 }
+
+DocsIf31CmUsOfdmaMinislotCfgStateEntry ::=
+    SEQUENCE    {
+        docsIf31CmUsOfdmaMinislotCfgStateStartMinislotNum            Unsigned32,
+        docsIf31CmUsOfdmaMinislotCfgStateFirstSubcarrierId           Unsigned32,
+        docsIf31CmUsOfdmaMinislotCfgStateNumConsecutiveMinislots     Unsigned32,
+        docsIf31CmUsOfdmaMinislotCfgStateMinislotPilotPattern        Unsigned32,
+        docsIf31CmUsOfdmaMinislotCfgStateDataSymbolModulation
+                                                          UsOfdmaModulationType
+      }
+
+docsIf31CmUsOfdmaMinislotCfgStateStartMinislotNum OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "This attribute is the unique identifier of the starting
+         minislot in the group of consecutive minislots. The
+         valid range is 1 to 240."
+    ::= { docsIf31CmUsOfdmaMinislotCfgStateEntry 1 }
+
+docsIf31CmUsOfdmaMinislotCfgStateFirstSubcarrierId OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute is subcarrier identifier of the first
+         subcarrier in the minislot. The valid range is 0 to 4095."
+    ::= { docsIf31CmUsOfdmaMinislotCfgStateEntry 2 }
+
+docsIf31CmUsOfdmaMinislotCfgStateNumConsecutiveMinislots OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute defines the number of continuous minislots
+         which have the same bit loading, starting with the StartMinislotNum,
+         defined in the associated upstream profile. The valid range
+         is 1 to 237."
+    ::= { docsIf31CmUsOfdmaMinislotCfgStateEntry 3 }
+
+docsIf31CmUsOfdmaMinislotCfgStateMinislotPilotPattern OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute specifies the id of the pilot pattern used for
+         the minislot.  The actual range varies depending on the FFT
+         size in use, either 1-8 for 2K or 1-14 for 4K mode. The valid
+         range is 1 to 14."
+    ::= { docsIf31CmUsOfdmaMinislotCfgStateEntry 4 }
+
+docsIf31CmUsOfdmaMinislotCfgStateDataSymbolModulation OBJECT-TYPE
+    SYNTAX      UsOfdmaModulationType
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute defines the bit loading of the data
+         subcarriers in the minislot."
+    ::= { docsIf31CmUsOfdmaMinislotCfgStateEntry 5 }
+
+docsIf31CmEmDlsStatsTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF DocsIf31CmEmDlsStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "This CM object provides statistics on the DLS feature, when
+        enabled."
+    ::= { docsIf31MibObjects 16 }
+
+docsIf31CmEmDlsStatsEntry OBJECT-TYPE
+    SYNTAX      DocsIf31CmEmDlsStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "The conceptual row of docsIf31CmEmDlsStatsTable. An
+        instance exists for each of the Cable Modem's MAC Domains.
+        It is indexed by the ifIndex of the corresponding MAC Domain."
+    INDEX {
+             ifIndex
+          }
+    ::= { docsIf31CmEmDlsStatsTable 1 }
+
+DocsIf31CmEmDlsStatsEntry ::=
+    SEQUENCE    {
+        docsIf31CmEmDlsStatsNumberTimesCrossedBelowUsEntryThrshlds   Unsigned32,
+        docsIf31CmEmDlsStatsNumberTimesCrossedBelowDsEntryThrshlds   Unsigned32,
+        docsIf31CmEmDlsStatsTotalDuration                            Unsigned32,
+        docsIf31CmEmDlsStatsTotalDurationBelowUsThrshlds             Unsigned32,
+        docsIf31CmEmDlsStatsTotalDurationBelowDsThrshlds             Unsigned32,
+        docsIf31CmEmDlsStatsTotalDurationBelowUsDsThrshlds           Unsigned32,
+        docsIf31CmEmDlsStatsNumSleepLatencyTriggers                  Counter32,
+        docsIf31CmEmDlsStatsNumSleepByteCtTriggers                   Counter32
+        }
+
+docsIf31CmEmDlsStatsNumberTimesCrossedBelowUsEntryThrshlds OBJECT-TYPE
+     SYNTAX      Unsigned32
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute indicates the number of times since
+          registration the CM crossed below the upstream entry bitrate
+          threshold for a number of consecutive seconds equal to or
+          exceeding the upstream entry time threshold."
+     ::= { docsIf31CmEmDlsStatsEntry 1 }
+
+docsIf31CmEmDlsStatsNumberTimesCrossedBelowDsEntryThrshlds OBJECT-TYPE
+     SYNTAX      Unsigned32
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute indicates the number of times since
+          registration the CM crossed below the downstream entry
+          bitrate threshold for a number of consecutive seconds equal
+          to or exceeding the downstream entry time threshold."
+     ::= { docsIf31CmEmDlsStatsEntry 2 }
+
+docsIf31CmEmDlsStatsTotalDuration OBJECT-TYPE
+     SYNTAX      Unsigned32
+     UNITS       "seconds"
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute indicates the total time duration, in seconds
+          since registration, the CM has been in Energy Management DLS
+          mode, as controlled by the DBC-REQ Energy Management DLS Mode
+          Indicator TLV. This attribute differs from
+          docsIf31CmEmDlsStatsTotalDurationBelowUsDsThrshlds because it
+          is dependent on effects of the Energy Management Cycle
+          Period, and processing of EM-REQ/EM-RSP messages and DBC
+          messages that specifically indicate entry into or exit from
+          Energy Management DLS mode."
+     ::= { docsIf31CmEmDlsStatsEntry 3 }
+
+docsIf31CmEmDlsStatsTotalDurationBelowUsThrshlds OBJECT-TYPE
+     SYNTAX      Unsigned32
+     UNITS       "seconds"
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute indicates the total time duration, in seconds
+          since registration, the CM satisfied upstream conditions for
+          entry into or remaining in Energy Management DLS mode."
+     ::= { docsIf31CmEmDlsStatsEntry 4 }
+
+docsIf31CmEmDlsStatsTotalDurationBelowDsThrshlds OBJECT-TYPE
+     SYNTAX      Unsigned32
+     UNITS       "seconds"
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute indicates the total time duration, in seconds
+          since registration, the CM satisfied downstream conditions for
+          entry into or remaining in Energy Management DLS mode."
+     ::= { docsIf31CmEmDlsStatsEntry 5 }
+
+docsIf31CmEmDlsStatsTotalDurationBelowUsDsThrshlds OBJECT-TYPE
+     SYNTAX      Unsigned32
+     UNITS       "seconds"
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute indicates the total time duration, in seconds
+          since registration, the CM, with respect to both upstream and
+          downstream entry and exit thresholds, satisfied conditions for
+          entry into and remaining in Energy Management DLS mode.  This
+          attribute differs from docsIf31CmEmDlsStatsTotalDuration
+          because it is not dependent on effects of the Energy
+          Management Cycle Period or processing of EM-REQ/EM-RSP
+          messages and DBC messages that specifically indicate entry
+          into or exit from Energy Management DLS mode."
+     ::= { docsIf31CmEmDlsStatsEntry 6 }
+
+docsIf31CmEmDlsStatsNumSleepLatencyTriggers OBJECT-TYPE
+     SYNTAX      Counter32
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute indicates the number of times since
+          registration the CM transitioned to the DLS wake state
+          due to the DLS Maximum Sleep Latency being exceeded."
+     ::= { docsIf31CmEmDlsStatsEntry 7 }
+
+docsIf31CmEmDlsStatsNumSleepByteCtTriggers OBJECT-TYPE
+     SYNTAX      Counter32
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute indicates the number of times since
+          registration the CM transitioned to the DLS wake state
+          due to the DLS Maximum Byte Count being exceeded."
+     ::= { docsIf31CmEmDlsStatsEntry 8 }
+
+docsIf31CmEmDlsStatusTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF DocsIf31CmEmDlsStatusEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "This CM object provides statistics on the DLS feature, when
+        enabled."
+    ::= { docsIf31MibObjects 17 }
+
+docsIf31CmEmDlsStatusEntry OBJECT-TYPE
+    SYNTAX      DocsIf31CmEmDlsStatusEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "The conceptual row of docsIf31CmEmDlsStatusTable. An
+        instance exists for each of the Cable Modem's MAC Domains.
+        It is indexed by the ifIndex of the corresponding MAC Domain."
+    INDEX {
+             ifIndex
+          }
+    ::= { docsIf31CmEmDlsStatusTable 1 }
+
+DocsIf31CmEmDlsStatusEntry ::=
+    SEQUENCE    {
+        docsIf31CmEmDlsStatusAssignedEmIds     EmIdList,
+        docsIf31CmEmDlsStatusReceiveTimer      Unsigned32,
+        docsIf31CmEmDlsStatusMaxSleepLatency   Unsigned32,
+        docsIf31CmEmDlsStatusMaxSleepBytes     Unsigned32
+        }
+
+docsIf31CmEmDlsStatusAssignedEmIds OBJECT-TYPE
+     SYNTAX      EmIdList
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+         "This attribute reports the set of CMTS-assigned EM-IDs for this CM.
+         This attribute is encoded as an array 16-bit binary values with up
+         to 3 elements. The broadcast EM-ID is not included in the list"
+    ::= { docsIf31CmEmDlsStatusEntry 1 }
+
+docsIf31CmEmDlsStatusReceiveTimer OBJECT-TYPE
+     SYNTAX      Unsigned32
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute specifies how long the CM is required to
+         continue listening on the downstream for traffic, after
+         reception of the EMM with Sleep Time with a non-zero value.
+         The CMTS communicates the EM Receive Timer to the CM during
+         registration or in DBC message. The DLS Receive Timer is
+         specified in units of PLC frame intervals. The valid range
+         is 0 - 2."
+    ::= { docsIf31CmEmDlsStatusEntry 2 }
+
+docsIf31CmEmDlsStatusMaxSleepLatency OBJECT-TYPE
+     SYNTAX      Unsigned32 (1..255)
+     UNITS       "milliseconds"
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute specifies the amount of time the CM would allow
+         an upstream channel to queue the packets without transitioning
+         to DLS wake state. The Max Sleep Latency is specified in msec."
+    ::= { docsIf31CmEmDlsStatusEntry 3 }
+
+docsIf31CmEmDlsStatusMaxSleepBytes OBJECT-TYPE
+     SYNTAX      Unsigned32 (1..65535)
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute specifies the maximum number of bytes a CM would
+         allow an upstream service flow to enqueue without transitioning
+         to DLS wake state. The MaxSleepBytes is specified in bytes."
+    ::= { docsIf31CmEmDlsStatusEntry 4 }
+
+docsIf31CmSystemCfgState OBJECT IDENTIFIER ::= { docsIf31MibObjects 18 }
+
+docsIf31CmSystemCfgStateDiplexerCapability OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute specifies the maximum diplexer upper band edge
+        supported by the CM device. This corresponds to the maxmimum
+        capability of the CM device itself independent of its current
+        configuration."
+    REFERENCE
+         "DOCSIS 3.1 Physical layer Specification CM-SP-PHYv3.1-I03-140610,
+         Upstream CM Spectrum section."
+    ::= { docsIf31CmSystemCfgState 1 }
+
+docsIf31CmSystemCfgStateDiplexerCfgBandEdge OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute specifies the current configured value for the
+        upper band edge of the diplexer in the CM device. This corresponds
+        to the Diplexer Upper Band Edge Support reported by the CM in its
+        REG-REQ."
+    REFERENCE
+         "DOCSIS 3.1 MAC and Upper Layer Protocols Interface
+         Specification CM-SP-MULPIv3.1-I03-140610,
+         Diplexer Upper Band Edge Support section."
+    ::= { docsIf31CmSystemCfgState 2 }
+
+docsIf31CmtsDsOfdmChanTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF DocsIf31CmtsDsOfdmChanEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "This CMTS object reports the status of the downstream OFDM channels."
+    ::= { docsIf31MibObjects 19 }
+
+docsIf31CmtsDsOfdmChanEntry OBJECT-TYPE
+    SYNTAX      DocsIf31CmtsDsOfdmChanEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "The conceptual row of docsIf31CmtsDsOfdmTable.
+         An instance exists for each downstream OFDM channel."
+    INDEX {
+             ifIndex
+          }
+    ::= { docsIf31CmtsDsOfdmChanTable 1 }
+
+DocsIf31CmtsDsOfdmChanEntry ::=
+    SEQUENCE    {
+        docsIf31CmtsDsOfdmChanChannelId                Integer32,
+        docsIf31CmtsDsOfdmChanLowerBdryFreq            Unsigned32,
+        docsIf31CmtsDsOfdmChanUpperBdryFreq            Unsigned32,
+        docsIf31CmtsDsOfdmChanLowerBdryEncompSpectrum  Unsigned32,
+        docsIf31CmtsDsOfdmChanUpperBdryEncompSpectrum  Unsigned32,
+        docsIf31CmtsDsOfdmChanPlcFreq                  Unsigned32,
+        docsIf31CmtsDsOfdmChanSubcarrierZeroFreq       Unsigned32,
+        docsIf31CmtsDsOfdmChanFirstActiveSubcarrierNum Unsigned32,
+        docsIf31CmtsDsOfdmChanLastActiveSubcarrierNum  Unsigned32,
+        docsIf31CmtsDsOfdmChanNumActiveSubcarriers     Unsigned32,
+        docsIf31CmtsDsOfdmChanSubcarrierSpacing        SubcarrierSpacingType,
+        docsIf31CmtsDsOfdmChanLowerGuardbandWidth      Unsigned32,
+        docsIf31CmtsDsOfdmChanUpperGuardbandWidth      Unsigned32,
+        docsIf31CmtsDsOfdmChanCyclicPrefix             DsOfdmCyclicPrefix,
+        docsIf31CmtsDsOfdmChanRollOffPeriod            DsOfdmRollOffPeriod,
+        docsIf31CmtsDsOfdmChanTimeInterleaverDepth     TimeInterleaverDepth,
+        docsIf31CmtsDsOfdmChanNumPilots                Unsigned32,
+        docsIf31CmtsDsOfdmChanPilotScaleFactor         Unsigned32,
+        docsIf31CmtsDsOfdmChanNcpModulation            DsOfdmModulationType,
+        docsIf31CmtsDsOfdmChanUtilization              Unsigned32
+       }
+
+docsIf31CmtsDsOfdmChanChannelId OBJECT-TYPE
+     SYNTAX      Integer32 (0..255)
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "The Cable Modem Termination System identification of the
+          OFDM downstream channel within this particular MAC interface.
+          if the interface is down, the object returns the most
+          current value.  If the downstream channel ID is unknown,
+          this object returns a value of 0."
+     ::= { docsIf31CmtsDsOfdmChanEntry 1 }
+
+docsIf31CmtsDsOfdmChanLowerBdryFreq OBJECT-TYPE
+    SYNTAX      Unsigned32
+    UNITS       "Hz"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+         "This attribute represents either the lower boundary frequency
+         of the lower guardband or (if no guardband is defined) the
+         lower boundary frequency of the lowest active subcarrier of the
+         OFDM downstream channel."
+    ::= { docsIf31CmtsDsOfdmChanEntry 2 }
+
+docsIf31CmtsDsOfdmChanUpperBdryFreq OBJECT-TYPE
+    SYNTAX      Unsigned32
+    UNITS       "Hz"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+         "This attribute represents either the upper boundary frequency
+         of the upper guardband or (if no guardband is defined) the
+         upper boundary frequency of the highest active subcarrier of the
+         OFDM downstream channel."
+    ::= { docsIf31CmtsDsOfdmChanEntry 3 }
+
+docsIf31CmtsDsOfdmChanLowerBdryEncompSpectrum OBJECT-TYPE
+    SYNTAX      Unsigned32
+    UNITS       "Hz"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+         "This attribute represents the lower boundary frequency
+         of the encompassed spectrum."
+    ::= { docsIf31CmtsDsOfdmChanEntry 4 }
+
+docsIf31CmtsDsOfdmChanUpperBdryEncompSpectrum OBJECT-TYPE
+    SYNTAX      Unsigned32
+    UNITS       "Hz"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+         "This attribute represents the upper boundary frequency
+         of the encompassed spectrum."
+    ::= { docsIf31CmtsDsOfdmChanEntry 5 }
+
+docsIf31CmtsDsOfdmChanPlcFreq OBJECT-TYPE
+    SYNTAX      Unsigned32
+    UNITS       "Hz"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This is the PHY Link Channel (PLC) frequency. It is the center
+         frequency of the lowest frequency subcarrier of the PLC. The
+         aim of the PLC is for the CMTS to convey to the CM the
+         physical properties of the OFDM channel."
+    ::= { docsIf31CmtsDsOfdmChanEntry 6 }
+
+docsIf31CmtsDsOfdmChanSubcarrierZeroFreq OBJECT-TYPE
+    SYNTAX      Unsigned32
+    UNITS       "Hz"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+         "This attribute specifies the center frequency of the
+          subcarrier 0 of the OFDM transmission. Note that since
+          subcarrier 0 is always excluded, it will actually be below the
+          allowed downstream spectrum band. This is the frequency of
+          subcarrier X(0) in the definition of the DFT."
+    ::= { docsIf31CmtsDsOfdmChanEntry 7 }
+
+docsIf31CmtsDsOfdmChanFirstActiveSubcarrierNum OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+         "This attribute corresponds to the number of the first
+          non-excluded subcarrier. The valid range is 148 to 7895."
+    ::= { docsIf31CmtsDsOfdmChanEntry 8 }
+
+docsIf31CmtsDsOfdmChanLastActiveSubcarrierNum OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+         "This attribute corresponds to the number of the last
+          non-excluded subcarrier. The valid range is 148 to 7895"
+    ::= { docsIf31CmtsDsOfdmChanEntry 9 }
+
+docsIf31CmtsDsOfdmChanNumActiveSubcarriers OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute represents the number of active data
+        subcarriers within the OFDM downstream channel (i.e. this
+        exclude subcarriers for continuous pilots and the PLC).
+        For 4K FFT mode, the maximum number of subcarriers including
+        continuous pilots and the PLC cannot exceed 3800, and for
+        8K FFT mode, the maximum number of active subcarriers including
+        continuous pilots and the PLC cannot be greater than 7600.
+
+        However, there are a minimum of 56 continuous pilots in a 192MHz
+        channel that has no exclusions, and the size of the PLC is
+        8 subcarriers for 4K FFT mode and 16 subcarriers for 8K FFT mode.
+        Therefore the maximum value of NumActiveSubcarriers is 3736
+        (or 3800 - 56 - 8) for 4K FFT mode and 7528 (or 7600 - 56 - 16)
+        for 8K FFT mode."
+    ::= { docsIf31CmtsDsOfdmChanEntry 10 }
+
+docsIf31CmtsDsOfdmChanSubcarrierSpacing OBJECT-TYPE
+    SYNTAX      SubcarrierSpacingType
+    UNITS       "kHz"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute defines the subcarrier spacing associated with
+         a particular FFT mode configured on the OFDM downstream
+         channel. If it is 4K mode, then the subcarrier spacing is
+         50kHz. If it is 8K mode, then the subcarrier spacing is
+         25kHz."
+    ::= { docsIf31CmtsDsOfdmChanEntry 11 }
+
+docsIf31CmtsDsOfdmChanLowerGuardbandWidth OBJECT-TYPE
+     SYNTAX      Unsigned32
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute is the width in Hertz of the lower guard
+         band of the OFDM channel. The valid range is 0 or
+         1MHz to 1.77GHz."
+    ::= { docsIf31CmtsDsOfdmChanEntry 12 }
+
+docsIf31CmtsDsOfdmChanUpperGuardbandWidth OBJECT-TYPE
+     SYNTAX      Unsigned32
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute is the width in Hertz of the upper guard
+         band of the OFDM channel. The valid range is 0 or
+         1MHz to 1.77GHz"
+    ::= { docsIf31CmtsDsOfdmChanEntry 13 }
+
+docsIf31CmtsDsOfdmChanCyclicPrefix OBJECT-TYPE
+    SYNTAX      DsOfdmCyclicPrefix
+    UNITS       "number of samples"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Cyclic prefix enables the receiver to overcome the effects of
+         inter-symbol-interference and intercarrier-interference caused
+         by micro-reflections in the channel. There are five possible
+         values for the length of the CP and the choice depends on the
+         delay spread of the channel - a longer delay spread requires a
+         longer cyclic prefix. The cyclic prefix (in usec) are converted
+         into samples using the sample rate of 204.8 Msamples/s and is
+         an integer multiple of: 1/64 * 20 us."
+    ::= { docsIf31CmtsDsOfdmChanEntry 14 }
+
+docsIf31CmtsDsOfdmChanRollOffPeriod OBJECT-TYPE
+    SYNTAX      DsOfdmRollOffPeriod
+    UNITS       "number of samples"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Roll off period maximizes channel capacity by sharpening the
+         edges of the spectrum of the OFDM signal. For windowing
+         purposes another segment at the start of the IDFT output is
+         appended to the end of the IDFT output - the roll-off postfix
+         (RP). There are five possible values for the (RP), and the
+         choice depends on the bandwidth of the channel and the number
+         of exclusion bands within the channel. A larger RP provides
+         sharper edges in the spectrum of the OFDM signal; however,
+         there is a time vs. frequency trade-off. Larger RP values
+         reduce the efficiency of transmission in the time domain,
+         but because the spectral edges are sharper, more useful
+         subcarriers appear in the frequency domain. There is an
+         optimum value for the RP that maximizes capacity for a given
+         bandwidth and/or exclusion band scenario."
+    ::= { docsIf31CmtsDsOfdmChanEntry 15 }
+
+docsIf31CmtsDsOfdmChanTimeInterleaverDepth OBJECT-TYPE
+    SYNTAX      TimeInterleaverDepth
+    UNITS       "symbols"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute represents the number of samples for the
+        OFDM Downstream channel. This is limited to 16 samples for
+        and 32 samples for 50 kHz and 25 kHz Subcarrier Spacing,
+        respectively."
+    ::= { docsIf31CmtsDsOfdmChanEntry 16 }
+
+docsIf31CmtsDsOfdmChanNumPilots OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute is the number of continuous pilots
+        for the OFDM downstream channel."
+    ::= { docsIf31CmtsDsOfdmChanEntry 17 }
+
+docsIf31CmtsDsOfdmChanPilotScaleFactor OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute represents the scale factor for calculating
+        the number of continuous pilots. "
+    ::= { docsIf31CmtsDsOfdmChanEntry 18 }
+
+docsIf31CmtsDsOfdmChanNcpModulation OBJECT-TYPE
+    SYNTAX      DsOfdmModulationType
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute represents the modulation of all subcarriers in
+        the NCP channel. Valid values are qpsk, qam16 and qam64."
+    ::= { docsIf31CmtsDsOfdmChanEntry 19 }
+
+docsIf31CmtsDsOfdmChanUtilization OBJECT-TYPE
+    SYNTAX       Unsigned32 (0..100)
+    UNITS        "percent"
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+        "The utilization for this OFDM downstream channel, accurate as
+        of the most recent docsIfCmtsChannelUtilizationInterval.
+
+        See Reference for specific details on this attribute."
+     REFERENCE
+        "DOCSIS 3.1 CCAP Operations Support System Interface
+        Specification CM-SP-CCAP OSSIv3.1-I04-15MMDD,
+        OfdmChannelUtilization."
+    ::= { docsIf31CmtsDsOfdmChanEntry 20 }
+
+docsIf31CmtsDsOfdmProfileStatsTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF DocsIf31CmtsDsOfdmProfileStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "This CMTS table provides DS OFDM statistics on a per Profile basis."
+    ::= { docsIf31MibObjects 20 }
+
+docsIf31CmtsDsOfdmProfileStatsEntry OBJECT-TYPE
+    SYNTAX      DocsIf31CmtsDsOfdmProfileStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "The conceptual row of docsIf31CmtsDsOfdmProfileStatsTable.
+         An instance exists for each Profile Id on a given DS OFDM channel."
+    INDEX {
+             ifIndex,
+             docsIf31CmtsDsOfdmProfileStatsProfileId
+          }
+    ::= { docsIf31CmtsDsOfdmProfileStatsTable 1 }
+
+DocsIf31CmtsDsOfdmProfileStatsEntry ::=
+    SEQUENCE    {
+        docsIf31CmtsDsOfdmProfileStatsProfileId            Unsigned32,
+        docsIf31CmtsDsOfdmProfileStatsConfigChangeCt       Unsigned32,
+        docsIf31CmtsDsOfdmProfileStatsFullChannelSpeed     CounterBasedGauge64,
+        docsIf31CmtsDsOfdmProfileStatsOutOctets            Counter64,
+        docsIf31CmtsDsOfdmProfileStatsOutUnicastOctets     Counter64,
+        docsIf31CmtsDsOfdmProfileStatsOutMulticastOctets   Counter64,
+        docsIf31CmtsDsOfdmProfileStatsOutFrames            Counter64,
+        docsIf31CmtsDsOfdmProfileStatsOutUnicastFrames     Counter64,
+        docsIf31CmtsDsOfdmProfileStatsOutMulticastFrames   Counter64,
+        docsIf31CmtsDsOfdmProfileStatsCtrDiscontinuityTime TimeStamp
+       }
+
+docsIf31CmtsDsOfdmProfileStatsProfileId OBJECT-TYPE
+    SYNTAX      Unsigned32 (0..255)
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "This attribute is the unique identifier of the downstream
+         profile associated with the OFDM downstream channel. Profile ID
+         with a value of 255 corresponds to NCP profile."
+    REFERENCE
+         "DOCSIS 3.1 MAC and Upper Layer Protocols Interface Specification
+         CM-SP-MULPIv3.1-I03-140610, Downstream Profile Descriptor."
+    ::= { docsIf31CmtsDsOfdmProfileStatsEntry 1 }
+
+docsIf31CmtsDsOfdmProfileStatsConfigChangeCt OBJECT-TYPE
+    SYNTAX      Unsigned32 (0..255)
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute contains the value of the Configuration Change
+        Count field in the Downstream Profile Descriptor (DPD) MAC
+        Management Message corresponding to this profile."
+    ::= { docsIf31CmtsDsOfdmProfileStatsEntry 2 }
+
+docsIf31CmtsDsOfdmProfileStatsFullChannelSpeed OBJECT-TYPE
+    SYNTAX      CounterBasedGauge64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute is the speed of the associated channel in bps
+        if this were the only profile and 100% of data-capable subcarriers
+        were utilized to transmit MAC frames in full codewords.
+
+        See Reference for specific details on this attribute."
+     REFERENCE
+        "DOCSIS 3.1 CCAP Operations Support System Interface
+        Specification CM-SP-CCAP OSSIv3.1-I03-15MMDD,
+        ProfileFullChannelSpeed."
+    ::= { docsIf31CmtsDsOfdmProfileStatsEntry 3 }
+
+docsIf31CmtsDsOfdmProfileStatsOutOctets OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute is the count of MAC-layer octets transmitted
+        by the CCAP using this profile. This value is the size of all
+        unicast, multicast or broadcast frames (including all MAC-layer
+        framing) delivered from the MAC to the Phy -- this includes user
+        data, DOCSIS MAC Management Messages, etc.
+
+        Discontinuities in the value of this counter can occur at
+        reinitialization of the managed system, and at other times as
+        indicated by the value of docsIf31CmtsDsOfdmProfileStats-
+        CtrDiscontinuityTime."
+    ::= { docsIf31CmtsDsOfdmProfileStatsEntry 4 }
+
+docsIf31CmtsDsOfdmProfileStatsOutUnicastOctets OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute is the count of MAC-layer Unicast octets transmitted
+        by the CCAP using this profile. This value is the size of all unicast
+        frames (including all MAC-layer framing) delivered from the
+        MAC to the Phy -- this includes user data, DOCSIS MAC Management
+        Messages, etc.
+
+        Discontinuities in the value of this counter can occur at
+        reinitialization of the managed system, and at other times as
+        indicated by the value of docsIf31CmtsDsOfdmProfileStats-
+        CtrDiscontinuityTime."
+    ::= { docsIf31CmtsDsOfdmProfileStatsEntry 5 }
+
+docsIf31CmtsDsOfdmProfileStatsOutMulticastOctets OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute is the count of MAC-layer Multicast and broadcast
+        octets transmitted by the CCAP using this profile. This value is
+        the size of all frames (including all MAC-layer framing) delivered
+        from the MAC to the Phy and addressed to a multicast MAC address
+        -- this includes user data, DOCSIS MAC Management Messages, etc.
+
+        Discontinuities in the value of this counter can occur at
+        reinitialization of the managed system, and at other times as
+        indicated by the value of docsIf31CmtsDsOfdmProfileStats-
+        CtrDiscontinuityTime."
+    ::= { docsIf31CmtsDsOfdmProfileStatsEntry 6 }
+
+docsIf31CmtsDsOfdmProfileStatsOutFrames OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute is the count of frames transmitted by the CCAP
+        using this profile. This value is the count of all unicast,
+        multicast or broadcast frames delivered from the MAC to the Phy
+        -- this includes user data, DOCSIS MAC Management Messages, etc.
+
+        Discontinuities in the value of this counter can occur at
+        reinitialization of the managed system, and at other times as
+        indicated by the value of docsIf31CmtsDsOfdmProfileStats-
+        CtrDiscontinuityTime."
+    ::= { docsIf31CmtsDsOfdmProfileStatsEntry 7 }
+
+docsIf31CmtsDsOfdmProfileStatsOutUnicastFrames OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute is the count of unicast frames transmitted by
+        the CCAP using this profile. This value is the count of all
+        frames delivered from the MAC to the Phy and addressed to a
+        unicast MAC address -- this include user data, DOCSIS MAC Management
+        Messages, etc.
+
+        Discontinuities in the value of this counter can occur at
+        reinitialization of the managed system, and at other times as
+        indicated by the value of docsIf31CmtsDsOfdmProfileStats-
+        CtrDiscontinuityTime."
+    ::= { docsIf31CmtsDsOfdmProfileStatsEntry 8 }
+
+docsIf31CmtsDsOfdmProfileStatsOutMulticastFrames OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute is the count of multicast frames transmitted
+        by the CCAP using this profile. This value is the count of all
+        frames delivered from the MAC to the Phy and addressed to a
+        multicast MAC address -- this include user data, DOCSIS MAC
+        Management Messages, etc, but excludes frames sent to a broadcast
+        address.
+
+        Discontinuities in the value of this counter can occur at
+        reinitialization of the managed system, and at other times as
+        indicated by the value of docsIf31CmtsDsOfdmProfileStats-
+        CtrDiscontinuityTime."
+    ::= { docsIf31CmtsDsOfdmProfileStatsEntry 9 }
+
+docsIf31CmtsDsOfdmProfileStatsCtrDiscontinuityTime OBJECT-TYPE
+    SYNTAX      TimeStamp
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute is the value of sysUpTime on the most recent
+        occasion at which any one or more of this entry's counters
+        suffered a discontinuity. If no such discontinuities have
+        occurred since the last re-initialization of the local
+        management subsystem, then this attribute contains a zero value."
+    ::= { docsIf31CmtsDsOfdmProfileStatsEntry 10 }
+
+docsIf31CmtsDsOfdmSubcarrierStatusTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF DocsIf31CmtsDsOfdmSubcarrierStatusEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "This CMTS object provides the status of each of the OFDM subcarriers
+        which comprise this OFDM channel."
+    ::= { docsIf31MibObjects 21 }
+
+docsIf31CmtsDsOfdmSubcarrierStatusEntry OBJECT-TYPE
+    SYNTAX      DocsIf31CmtsDsOfdmSubcarrierStatusEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "The conceptual row of docsIf31CmtsDsOfdmSubcarrierStatusTable.
+         An instance exists for each Profile on a given OFDM downstream."
+    INDEX {
+              ifIndex,
+              docsIf31CmtsDsOfdmProfileStatsProfileId,
+              docsIf31CmtsDsOfdmSubcarrierStatusStartId
+          }
+    ::= { docsIf31CmtsDsOfdmSubcarrierStatusTable 1 }
+
+DocsIf31CmtsDsOfdmSubcarrierStatusEntry ::=
+    SEQUENCE    {
+        docsIf31CmtsDsOfdmSubcarrierStatusStartId     Unsigned32,
+        docsIf31CmtsDsOfdmSubcarrierStatusEndId       Unsigned32,
+        docsIf31CmtsDsOfdmSubcarrierStatusModulation  DsOfdmModulationType
+       }
+
+docsIf31CmtsDsOfdmSubcarrierStatusStartId OBJECT-TYPE
+     SYNTAX      Unsigned32
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+         "This attribute is an identifier for the first subcarrier
+         in the range of active subcarriers with the same modulation."
+    ::= { docsIf31CmtsDsOfdmSubcarrierStatusEntry 1 }
+
+docsIf31CmtsDsOfdmSubcarrierStatusEndId OBJECT-TYPE
+     SYNTAX      Unsigned32
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute is the subcarrier number of the last subcarrier
+          in the group."
+    ::= { docsIf31CmtsDsOfdmSubcarrierStatusEntry 2 }
+
+docsIf31CmtsDsOfdmSubcarrierStatusModulation OBJECT-TYPE
+     SYNTAX      DsOfdmModulationType
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute indicates the modulation of the subcarrier range."
+    ::= { docsIf31CmtsDsOfdmSubcarrierStatusEntry 3 }
+
+docsIf31CmtsDsOfdmChanPowerTable OBJECT-TYPE
+     SYNTAX      SEQUENCE OF DocsIf31CmtsDsOfdmChanPowerEntry
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+        "This object provides measurements of the downstream OFDM channel
+         power in 6 MHz-wide bands at the output of the CCAP."
+     ::= { docsIf31MibObjects 22 }
+
+docsIf31CmtsDsOfdmChanPowerEntry OBJECT-TYPE
+     SYNTAX      DocsIf31CmtsDsOfdmChanPowerEntry
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+         "The conceptual row of the docsIf31CmtsDsOfdmChanPowerTable."
+     INDEX {
+             ifIndex,
+             docsIf31CmtsDsOfdmChanPowerBandIndex
+           }
+     ::= { docsIf31CmtsDsOfdmChanPowerTable 1 }
+
+DocsIf31CmtsDsOfdmChanPowerEntry ::= SEQUENCE {
+     docsIf31CmtsDsOfdmChanPowerBandIndex            Unsigned32,
+     docsIf31CmtsDsOfdmChanPowerCenterFrequency      Unsigned32,
+     docsIf31CmtsDsOfdmChanPowerTxPower              TenthdBmV
+     }
+
+docsIf31CmtsDsOfdmChanPowerBandIndex OBJECT-TYPE
+     SYNTAX      Unsigned32
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+         "This attribute is a unique index used by the CCAP to
+         identify each of the 6 MHz bands of a given OFDM downstream
+         channel (from the lowest 6MHz band of the Occupied Bandwidth
+         to the highest 6MHz band of the Occupied Bandwidth). The CCAP
+         assigns indices in frequency order from the OFDM channel's
+         lowest to highest 6 MHz frequency band for each of the 6 MHz
+         bands of the channel, using an index of 1 to represent the lowest
+         frequency band of the Occupied Bandwidth.  Thus, an index of 33
+         represents the highest possible 6 MHz frequency band of the
+         Occupied Bandwidth of an OFDM channel.
+
+         The CCAP also provides the power of the PLC channel and utilizes
+         a value of 0 to represent the PLC channel in this table. "
+    ::= { docsIf31CmtsDsOfdmChanPowerEntry 1 }
+
+docsIf31CmtsDsOfdmChanPowerCenterFrequency OBJECT-TYPE
+     SYNTAX      Unsigned32
+     UNITS       "Hz"
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute corresponds to the center frequency of the 6 MHz
+         band the CM measured the average channel power.
+
+         See Reference for specific details on this attribute."
+     REFERENCE
+        "DOCSIS 3.1 CCAP Operations Support System Interface
+        Specification CM-SP-CCAP OSSIv3.1-I04-15MMDD,
+        CenterFrequency"
+    ::= { docsIf31CmtsDsOfdmChanPowerEntry 2 }
+
+docsIf31CmtsDsOfdmChanPowerTxPower OBJECT-TYPE
+     SYNTAX      TenthdBmV
+     UNITS       "TenthdBmV"
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute provides an estimate of the average power
+         measured at the output of the CCAP in the downstream channel
+         set for this 6 MHz band.
+
+         If the docsIf31CmtsDsOfdmChanPowerBandIndex is 0, then this
+         attribute provides an estimate of the average power measured
+         at the output of the CCAP for a 6 MHz encompassed spectrum
+         containing the DOCSIS 3.1 PLC at its center."
+    ::= { docsIf31CmtsDsOfdmChanPowerEntry 3 }
+
+docsIf31CmtsUsOfdmaChanTable OBJECT-TYPE
+     SYNTAX      SEQUENCE OF DocsIf31CmtsUsOfdmaChanEntry
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+        "This object provides channel-level visibility into Upstream
+        OFDMA channel configuration and status."
+     ::= { docsIf31MibObjects 23 }
+
+docsIf31CmtsUsOfdmaChanEntry OBJECT-TYPE
+     SYNTAX      DocsIf31CmtsUsOfdmaChanEntry
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+         "The conceptual row of docsIf31CmtsUsOfdmaChanTable."
+     INDEX {
+             ifIndex
+           }
+     ::= { docsIf31CmtsUsOfdmaChanTable 1 }
+
+DocsIf31CmtsUsOfdmaChanEntry ::= SEQUENCE {
+     docsIf31CmtsUsOfdmaChanTemplateIndex            Unsigned32,
+     docsIf31CmtsUsOfdmaChanConfigChangeCt           Unsigned32,
+     docsIf31CmtsUsOfdmaChanTargetRxPower            TenthdBmV,
+     docsIf31CmtsUsOfdmaChanLowerBdryFreq            Unsigned32,
+     docsIf31CmtsUsOfdmaChanUpperBdryFreq            Unsigned32,
+     docsIf31CmtsUsOfdmaChanSubcarrierSpacing        SubcarrierSpacingType,
+     docsIf31CmtsUsOfdmaChanCyclicPrefix             UsOfdmaCyclicPrefix,
+     docsIf31CmtsUsOfdmaChanNumSymbolsPerFrame       Unsigned32,
+     docsIf31CmtsUsOfdmaChanRollOffPeriod            UsOfdmaRollOffPeriod,
+     docsIf31CmtsUsOfdmaChanPreEqEnable              TruthValue,
+     docsIf31CmtsUsOfdmaChanFineRngGuardband         Unsigned32,
+     docsIf31CmtsUsOfdmaChanFineRngNumSubcarriers    Unsigned32,
+     docsIf31CmtsUsOfdmaChanFineRngPreambleLen       Unsigned32,
+     docsIf31CmtsUsOfdmaChanInitRngGuardband         Unsigned32,
+     docsIf31CmtsUsOfdmaChanInitRngNumSubcarriers    Unsigned32,
+     docsIf31CmtsUsOfdmaChanInitRngPreambleLen       Unsigned32,
+     docsIf31CmtsUsOfdmaChanProvAttribMask           AttributeMask,
+     docsIf31CmtsUsOfdmaChanTxBackoffStart           Integer32,
+     docsIf31CmtsUsOfdmaChanTxBackoffEnd             Integer32,
+     docsIf31CmtsUsOfdmaChanRangingBackoffStart      Integer32,
+     docsIf31CmtsUsOfdmaChanRangingBackoffEnd        Integer32,
+     docsIf31CmtsUsOfdmaChanUtilization              Unsigned32,
+     docsIf31CmtsUsOfdmaChanId                       ChId
+     }
+
+docsIf31CmtsUsOfdmaChanTemplateIndex OBJECT-TYPE
+     SYNTAX      Unsigned32
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "The index of the UsOfdmaModulationTemplate object which the
+         CMTS/CCAP utilized when configuring this channel."
+     ::= { docsIf31CmtsUsOfdmaChanEntry 1 }
+
+docsIf31CmtsUsOfdmaChanConfigChangeCt OBJECT-TYPE
+     SYNTAX      Unsigned32 (0..255)
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute contains the value of the Configuration
+         Change Count field in the Upstream Channel Descriptor (UCD) MAC
+         Management Message currently in use on this channel."
+     ::= { docsIf31CmtsUsOfdmaChanEntry 2 }
+
+docsIf31CmtsUsOfdmaChanTargetRxPower OBJECT-TYPE
+     SYNTAX      TenthdBmV
+     UNITS       "TenthdBmV"
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+        "The power of the expected commanded received signal in the channel,
+        referenced to the CCAP input."
+     ::= { docsIf31CmtsUsOfdmaChanEntry 3 }
+
+docsIf31CmtsUsOfdmaChanLowerBdryFreq OBJECT-TYPE
+    SYNTAX      Unsigned32
+    UNITS       "Hz"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+         "This attribute provides the lower frequency for the OFDMA US
+         channel."
+    ::= { docsIf31CmtsUsOfdmaChanEntry 4 }
+
+docsIf31CmtsUsOfdmaChanUpperBdryFreq OBJECT-TYPE
+    SYNTAX      Unsigned32
+    UNITS       "Hz"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+         "This attribute provides the upper frequency for the OFDMA US
+         channel."
+    ::= { docsIf31CmtsUsOfdmaChanEntry 5 }
+
+docsIf31CmtsUsOfdmaChanSubcarrierSpacing OBJECT-TYPE
+    SYNTAX      SubcarrierSpacingType
+    UNITS       "kHz"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute defines the subcarrier spacing associated with
+         a particular FFT mode configured on the OFDMA upstream channel."
+    ::= { docsIf31CmtsUsOfdmaChanEntry 6 }
+
+docsIf31CmtsUsOfdmaChanCyclicPrefix OBJECT-TYPE
+    SYNTAX      UsOfdmaCyclicPrefix
+    UNITS       "number of samples"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The cyclic prefix assigned to this channel for mitigating
+        interference due to microreflections."
+    ::= { docsIf31CmtsUsOfdmaChanEntry 7 }
+
+docsIf31CmtsUsOfdmaChanNumSymbolsPerFrame OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+         "This attribute is the number of symbol periods per frame."
+    ::= { docsIf31CmtsUsOfdmaChanEntry 8 }
+
+docsIf31CmtsUsOfdmaChanRollOffPeriod OBJECT-TYPE
+    SYNTAX      UsOfdmaRollOffPeriod
+    UNITS       "number of samples"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute is the windowing roll-off period."
+    ::= { docsIf31CmtsUsOfdmaChanEntry 9 }
+
+docsIf31CmtsUsOfdmaChanPreEqEnable OBJECT-TYPE
+    SYNTAX      TruthValue
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute indicates pre-equalization is enabled on the
+        OFDMA upstream channel when its value is true, or disabled when
+        its value is false."
+    ::= { docsIf31CmtsUsOfdmaChanEntry 10 }
+
+docsIf31CmtsUsOfdmaChanFineRngGuardband OBJECT-TYPE
+    SYNTAX      Unsigned32
+    UNITS       "Hz"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute is the sum of the upper and lower guard
+        bands for fine ranging in Hz."
+    ::= { docsIf31CmtsUsOfdmaChanEntry 11 }
+
+docsIf31CmtsUsOfdmaChanFineRngNumSubcarriers OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute is the maximum number of subcarriers for
+        fine ranging."
+    ::= { docsIf31CmtsUsOfdmaChanEntry 12 }
+
+docsIf31CmtsUsOfdmaChanFineRngPreambleLen OBJECT-TYPE
+    SYNTAX      Unsigned32
+    UNITS       "bits"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute is the length of the OFDMA fine ranging IUC
+        preamble in bits."
+    ::= { docsIf31CmtsUsOfdmaChanEntry 13 }
+
+docsIf31CmtsUsOfdmaChanInitRngGuardband OBJECT-TYPE
+    SYNTAX      Unsigned32
+    UNITS       "Hz"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute is the sum of the upper and lower guard bands
+        for initial ranging in Hz."
+    ::= { docsIf31CmtsUsOfdmaChanEntry 14 }
+
+docsIf31CmtsUsOfdmaChanInitRngNumSubcarriers OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute is the maximum number of subcarriers for
+        initial ranging."
+    ::= { docsIf31CmtsUsOfdmaChanEntry 15 }
+
+docsIf31CmtsUsOfdmaChanInitRngPreambleLen OBJECT-TYPE
+    SYNTAX      Unsigned32
+    UNITS       "bits"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute is the maximum number of subcarriers for
+        initial ranging."
+    ::= { docsIf31CmtsUsOfdmaChanEntry 16 }
+
+docsIf31CmtsUsOfdmaChanProvAttribMask OBJECT-TYPE
+    SYNTAX      AttributeMask
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute provides the Provisioned Attribute Mask for
+        the OFDMA upstream channel."
+    ::= { docsIf31CmtsUsOfdmaChanEntry 17 }
+
+docsIf31CmtsUsOfdmaChanTxBackoffStart OBJECT-TYPE
+     SYNTAX      Integer32 (0..16)
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "The initial random backoff window to use when retrying
+          transmissions.  Expressed as a power of 2.  A value of 16
+          at the CMTS indicates that a proprietary adaptive retry
+          mechanism is to be used."
+     ::= { docsIf31CmtsUsOfdmaChanEntry 18 }
+
+docsIf31CmtsUsOfdmaChanTxBackoffEnd OBJECT-TYPE
+     SYNTAX      Integer32 (0..16)
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "The final random backoff window to use when retrying
+          transmissions.  Expressed as a power of 2.  A value of 16
+          at the CMTS indicates that a proprietary adaptive retry
+          mechanism is to be used."
+     ::= { docsIf31CmtsUsOfdmaChanEntry 19 }
+
+docsIf31CmtsUsOfdmaChanRangingBackoffStart OBJECT-TYPE
+     SYNTAX      Integer32 (0..16)
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "The initial random backoff window to use when retrying
+          Ranging Requests.  Expressed as a power of 2.  A value of
+          16 at the CMTS indicates that a proprietary adaptive retry
+          mechanism is to be used."
+     ::= { docsIf31CmtsUsOfdmaChanEntry 20 }
+
+docsIf31CmtsUsOfdmaChanRangingBackoffEnd OBJECT-TYPE
+     SYNTAX      Integer32 (0..16)
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "The final random backoff window to use when retrying
+          Ranging Requests.  Expressed as a power of 2.  A value of
+          16 at the CMTS indicates that a proprietary adaptive retry
+          mechanism is to be used."
+     ::= { docsIf31CmtsUsOfdmaChanEntry 21 }
+
+docsIf31CmtsUsOfdmaChanUtilization OBJECT-TYPE
+     SYNTAX       Unsigned32 (0..100)
+     UNITS        "percent"
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "The calculated and truncated utilization for this physical
+         upstream channel, accurate as of the most recent
+         docsIfCmtsChannelUtilizationInterval.
+
+         The upstream channel utilization is expressed as a percentage
+         of minislots utilized on the physical channel, regardless of
+         burst type.
+
+         The utilization calculation can be expressed by the
+         following equation:
+
+         Utilization = MinislotsUtilized/MinislotsAllocated * 100%
+
+         For an Initial Maintenance region, the minislots for the
+         complete region are considered utilized if the CMTS received
+         an upstream burst within the region from any CM on the physical
+         channel. For contention REQ and REQ/DATA regions, the minislots
+         for a transmission opportunity within the region are considered
+         utilized if the CMTS received an upstream burst within the
+         opportunity from any CM on the physical channel. For all other
+         regions, utilized minislots are those in which the CMTS granted
+         bandwidth to any unicast SID on the physical channel.
+
+         For an upstream interface that has multiple logical upstream
+         channels enabled, the utilization index is a weighted sum of
+         utilization indices for the logical channels. The weight for
+         each utilization index is the percentage of upstream mini-slots
+         allocated for the corresponding logical channel.
+
+         Example:
+         If 75% of bandwidth is allocated to the first logical channel
+         and 25% to the second, and the utilization for each are 60 and 40,
+         respectively, the utilization for the upstream physical channel is
+         (60 * 0.75) + (40 * 0.25) = 55. This figure applies to the most
+         recent utilization interval."
+     ::= { docsIf31CmtsUsOfdmaChanEntry 22 }
+
+     docsIf31CmtsUsOfdmaChanId OBJECT-TYPE
+     SYNTAX      ChId
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute is the upstream Channel Id signaled in the
+          DOCSIS protocol for the OFDMA upstream channel. The Channel
+          Id is unique within the associated MacDomain."
+     ::= { docsIf31CmtsUsOfdmaChanEntry 23 }
+
+docsIf31CmtsUsOfdmaDataIucStatsTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF DocsIf31CmtsUsOfdmaDataIucStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "This CMTS table provides DS OFDM statistics on a per Profile basis."
+    ::= { docsIf31MibObjects 24 }
+
+docsIf31CmtsUsOfdmaDataIucStatsEntry OBJECT-TYPE
+    SYNTAX      DocsIf31CmtsUsOfdmaDataIucStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "The conceptual row of docsIf31CmtsUsOfdmaDataIucStatsTable.
+         An instance exists for each Data IUC profile on a given
+         US OFDMA channel."
+    INDEX {
+              ifIndex,
+              docsIf31CmtsUsOfdmaDataIucStatsDataIuc
+          }
+    ::= { docsIf31CmtsUsOfdmaDataIucStatsTable 1 }
+
+DocsIf31CmtsUsOfdmaDataIucStatsEntry ::=
+    SEQUENCE    {
+      docsIf31CmtsUsOfdmaDataIucStatsDataIuc              Unsigned32,
+      docsIf31CmtsUsOfdmaDataIucStatsMinislotPilotPattern Unsigned32,
+      docsIf31CmtsUsOfdmaDataIucStatsMinislotModulation   UsOfdmaModulationType,
+      docsIf31CmtsUsOfdmaDataIucStatsTotalCodewords       Counter64,
+      docsIf31CmtsUsOfdmaDataIucStatsCorrectedCodewords   Counter64,
+      docsIf31CmtsUsOfdmaDataIucStatsUnreliableCodewords  Counter64,
+      docsIf31CmtsUsOfdmaDataIucStatsInOctets             Counter64,
+      docsIf31CmtsUsOfdmaDataIucStatsCtrDiscontinuityTime TimeStamp
+      }
+
+docsIf31CmtsUsOfdmaDataIucStatsDataIuc OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "This attribute represents the OFDMA Data IUC that these
+        statistics correspond to."
+    ::= { docsIf31CmtsUsOfdmaDataIucStatsEntry 1 }
+
+docsIf31CmtsUsOfdmaDataIucStatsMinislotPilotPattern OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute contains the identifier for the default pilot
+        pattern specified in the template for minislots using this
+        Data IUC. The valid range is 1 - 14."
+    ::= { docsIf31CmtsUsOfdmaDataIucStatsEntry 2 }
+
+docsIf31CmtsUsOfdmaDataIucStatsMinislotModulation OBJECT-TYPE
+    SYNTAX      UsOfdmaModulationType
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute contains the default modulation order specified
+        in the template for minislots using this Data IUC."
+    ::= { docsIf31CmtsUsOfdmaDataIucStatsEntry 3 }
+
+docsIf31CmtsUsOfdmaDataIucStatsTotalCodewords OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute contains the count of the total number of
+        FEC codewords received on this channel using this Data IUC.
+
+        Discontinuities in the value of this counter can occur at
+        reinitialization of the managed system, and at other times as
+        indicated by the value of docsIf31CmtsUsOfdmaDataIucStats-
+        CtrDiscontinuityTime."
+    ::= { docsIf31CmtsUsOfdmaDataIucStatsEntry 4 }
+
+docsIf31CmtsUsOfdmaDataIucStatsCorrectedCodewords OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute contains the count of codewords received
+        on this channel using this Data IUC that failed the pre-decoding
+        syndrome check, but passed the post-decoding syndrome check.
+
+        Discontinuities in the value of this counter can occur at
+        reinitialization of the managed system, and at other times as
+        indicated by the value of docsIf31CmtsUsOfdmaDataIucStats-
+        CtrDiscontinuityTime."
+    ::= { docsIf31CmtsUsOfdmaDataIucStatsEntry 5 }
+
+docsIf31CmtsUsOfdmaDataIucStatsUnreliableCodewords OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute contains the count of codewords received on
+        this channel using this Data IUC that failed the post-decoding
+        syndrome check.
+
+        Discontinuities in the value of this counter can occur at
+        reinitialization of the managed system, and at other times as
+        indicated by the value of docsIf31CmtsUsOfdmaDataIucStats-
+        CtrDiscontinuityTime."
+    ::= { docsIf31CmtsUsOfdmaDataIucStatsEntry 6 }
+
+docsIf31CmtsUsOfdmaDataIucStatsInOctets OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute is the count of MAC-layer octets received
+        by the CCAP on this Data IUC. This value is the size of all
+        unicast, multicast or broadcast frames (including all MAC-
+        layer framing) and CCF PMD overhead (segment headers and
+        stuffing bytes) delivered from the Phy to the MAC; this
+        includes user data, DOCSIS MAC Management Messages, etc.
+
+        Discontinuities in the value of this counter can occur at
+        reinitialization of the managed system, and at other times as
+        indicated by the value of docsIf31CmtsUsOfdmaDataIucStats-
+        CtrDiscontinuityTime."
+    ::= { docsIf31CmtsUsOfdmaDataIucStatsEntry 7 }
+
+docsIf31CmtsUsOfdmaDataIucStatsCtrDiscontinuityTime OBJECT-TYPE
+    SYNTAX      TimeStamp
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute is the value of sysUpTime on the most recent
+        occasion at which any one or more of this entry's counters
+        suffered a discontinuity. If no such discontinuities have
+        occurred since the last re-initialization of the local
+        management subsystem, then this attribute contains a zero value."
+    ::= { docsIf31CmtsUsOfdmaDataIucStatsEntry 8 }
+
+docsIf31CmtsUsOfdmaDataIucDetailStatusTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF DocsIf31CmtsUsOfdmaDataIucDetailStatusEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "This CMTS table provides exceptions to the US channel template
+        for this Data IUC."
+    ::= { docsIf31MibObjects 25 }
+
+docsIf31CmtsUsOfdmaDataIucDetailStatusEntry OBJECT-TYPE
+    SYNTAX      DocsIf31CmtsUsOfdmaDataIucDetailStatusEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "The conceptual row of docsIf31CmtsUsOfdmaDataIucDetailStatusTable.
+         An instance exists for each exception to the template for a Data
+         IUC profile on a given US OFDMA channel."
+    INDEX {
+              ifIndex,
+              docsIf31CmtsUsOfdmaDataIucStatsDataIuc,
+              docsIf31CmtsUsOfdmaDataIucDetailStatusLowerFreq
+          }
+    ::= { docsIf31CmtsUsOfdmaDataIucDetailStatusTable 1 }
+
+DocsIf31CmtsUsOfdmaDataIucDetailStatusEntry ::=
+    SEQUENCE    {
+      docsIf31CmtsUsOfdmaDataIucDetailStatusLowerFreq            Unsigned32,
+      docsIf31CmtsUsOfdmaDataIucDetailStatusUpperFreq            Unsigned32,
+      docsIf31CmtsUsOfdmaDataIucDetailStatusMinislotPilotPattern Unsigned32,
+      docsIf31CmtsUsOfdmaDataIucDetailStatusMinislotModulation
+                UsOfdmaModulationType
+      }
+
+docsIf31CmtsUsOfdmaDataIucDetailStatusLowerFreq OBJECT-TYPE
+    SYNTAX      Unsigned32
+    UNITS       "Hz"
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "This attribute indicates the lower frequency where the
+        minislots will use the pilot pattern and modulation"
+    ::= { docsIf31CmtsUsOfdmaDataIucDetailStatusEntry 1 }
+
+docsIf31CmtsUsOfdmaDataIucDetailStatusUpperFreq OBJECT-TYPE
+    SYNTAX      Unsigned32
+    UNITS       "Hz"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute indicates the upper frequency where the
+        minislots will use the pilot pattern and modulation"
+    ::= { docsIf31CmtsUsOfdmaDataIucDetailStatusEntry 2 }
+
+docsIf31CmtsUsOfdmaDataIucDetailStatusMinislotPilotPattern OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute contains the identifier for the pilot
+        pattern this frequency range. All minislots in the frequency
+        range have this pilot pattern. The valid range is 1 - 14."
+    ::= { docsIf31CmtsUsOfdmaDataIucDetailStatusEntry 3 }
+
+docsIf31CmtsUsOfdmaDataIucDetailStatusMinislotModulation OBJECT-TYPE
+    SYNTAX      UsOfdmaModulationType
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute contains the modulation order for this
+        frequency range. All minislots in the frequency range have
+        this modulation."
+    ::= { docsIf31CmtsUsOfdmaDataIucDetailStatusEntry 4 }
+
+docsIf31CmtsUsOfdmaRangingIucStatusTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF DocsIf31CmtsUsOfdmaRangingIucStatusEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "This CMTS table provides details on status of ranging IUCs."
+    ::= { docsIf31MibObjects 26 }
+
+docsIf31CmtsUsOfdmaRangingIucStatusEntry OBJECT-TYPE
+    SYNTAX      DocsIf31CmtsUsOfdmaRangingIucStatusEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "The conceptual row of docsIf31CmtsUsOfdmaRangingIucStatusTable.
+         An instance exists for each Ranging IUC profile on a given
+         US OFDMA channel."
+    INDEX {
+              ifIndex,
+              docsIf31CmtsUsOfdmaRangingIucStatusIuc
+          }
+    ::= { docsIf31CmtsUsOfdmaRangingIucStatusTable 1 }
+
+DocsIf31CmtsUsOfdmaRangingIucStatusEntry ::=
+    SEQUENCE    {
+      docsIf31CmtsUsOfdmaRangingIucStatusIuc                  Unsigned32,
+      docsIf31CmtsUsOfdmaRangingIucStatusGuardband            Unsigned32,
+      docsIf31CmtsUsOfdmaRangingIucStatusNumSubcarriers       Unsigned32
+      }
+
+docsIf31CmtsUsOfdmaRangingIucStatusIuc OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "This attribute indicates the OFDMA Ranging IUC that this
+        status information corresponds to."
+    ::= { docsIf31CmtsUsOfdmaRangingIucStatusEntry 1 }
+
+docsIf31CmtsUsOfdmaRangingIucStatusGuardband OBJECT-TYPE
+    SYNTAX      Unsigned32
+    UNITS       "Hz"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute is the sum of the upper and lower guard bands
+        for this ranging IUC in Hz. "
+    ::= { docsIf31CmtsUsOfdmaRangingIucStatusEntry 2 }
+
+docsIf31CmtsUsOfdmaRangingIucStatusNumSubcarriers OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This attribute indicates the maximum number of subcarriers
+        for this ranging IUC."
+    ::= { docsIf31CmtsUsOfdmaRangingIucStatusEntry 3 }
+
+docsIf31CmtsDsOfdmSubcarrierTypeTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF DocsIf31CmtsDsOfdmSubcarrierTypeEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "This object specifies the subcarrier type for a group of subcarriers
+        in the active spectrum of this OFDM channel. Groups of subcarriers of
+        the same type are presented together; non-data subcarriers in these
+        ranges are ignored."
+    ::= { docsIf31MibObjects 27 }
+
+docsIf31CmtsDsOfdmSubcarrierTypeEntry OBJECT-TYPE
+    SYNTAX      DocsIf31CmtsDsOfdmSubcarrierTypeEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "The conceptual row of docsIf31CmtsDsOfdmSubcarrierTypeTable.
+         An instance exists for each OFDM downstream channel."
+    INDEX {
+              ifIndex,
+              docsIf31CmtsDsOfdmSubcarrierTypeStartSubcarrierId
+          }
+    ::= { docsIf31CmtsDsOfdmSubcarrierTypeTable 1 }
+
+DocsIf31CmtsDsOfdmSubcarrierTypeEntry ::=
+    SEQUENCE    {
+        docsIf31CmtsDsOfdmSubcarrierTypeStartSubcarrierId     Unsigned32,
+        docsIf31CmtsDsOfdmSubcarrierTypeEndSubcarrierId       Unsigned32,
+        docsIf31CmtsDsOfdmSubcarrierTypeSubcarrierType        INTEGER
+       }
+
+docsIf31CmtsDsOfdmSubcarrierTypeStartSubcarrierId OBJECT-TYPE
+     SYNTAX      Unsigned32
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+         "This attribute is a key defined to provide an index into the table
+         and represents the subcarrier number of the first subcarrier in the
+         group. "
+    ::= { docsIf31CmtsDsOfdmSubcarrierTypeEntry 1 }
+
+docsIf31CmtsDsOfdmSubcarrierTypeEndSubcarrierId OBJECT-TYPE
+     SYNTAX      Unsigned32
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute is the subcarrier number of the last subcarrier in
+         the group. "
+    ::= { docsIf31CmtsDsOfdmSubcarrierTypeEntry 2 }
+
+docsIf31CmtsDsOfdmSubcarrierTypeSubcarrierType OBJECT-TYPE
+     SYNTAX      INTEGER {
+                          data(1),
+                          plc(2),
+                          continuousPilot(3),
+                          excluded(4)
+                         }
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute specifies which type of subcarrier is represented in
+         this group."
+    ::= { docsIf31CmtsDsOfdmSubcarrierTypeEntry 3 }
+
+docsIf31CmtsUsOfdmaSubcarrierTypeTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF DocsIf31CmtsUsOfdmaSubcarrierTypeEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "This object specifies the subcarrier type for a group of subcarriers
+        in the active spectrum of this OFDMA channel. Groups of subcarriers of
+        the same type are presented together; non-data subcarriers in these
+        ranges are ignored."
+    ::= { docsIf31MibObjects 28 }
+
+docsIf31CmtsUsOfdmaSubcarrierTypeEntry OBJECT-TYPE
+    SYNTAX      DocsIf31CmtsUsOfdmaSubcarrierTypeEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "The conceptual row of docsIf31CmtsUsOfdmaSubcarrierStatusTable.
+         An instance exists for each Profile on a given OFDMA upstream."
+    INDEX {
+              ifIndex,
+              docsIf31CmtsUsOfdmaSubcarrierTypeStartSubcarrierId
+          }
+    ::= { docsIf31CmtsUsOfdmaSubcarrierTypeTable 1 }
+
+DocsIf31CmtsUsOfdmaSubcarrierTypeEntry ::=
+    SEQUENCE    {
+        docsIf31CmtsUsOfdmaSubcarrierTypeStartSubcarrierId     Unsigned32,
+        docsIf31CmtsUsOfdmaSubcarrierTypeEndSubcarrierId       Unsigned32,
+        docsIf31CmtsUsOfdmaSubcarrierTypeSubcarrierType        INTEGER
+       }
+
+docsIf31CmtsUsOfdmaSubcarrierTypeStartSubcarrierId OBJECT-TYPE
+     SYNTAX      Unsigned32
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+         "This attribute is a key defined to provide an index into the table
+         and represents the subcarrier number of the first subcarrier in the
+         group. "
+    ::= { docsIf31CmtsUsOfdmaSubcarrierTypeEntry 1 }
+
+docsIf31CmtsUsOfdmaSubcarrierTypeEndSubcarrierId OBJECT-TYPE
+     SYNTAX      Unsigned32
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute is the subcarrier number of the last subcarrier in
+         the group. "
+    ::= { docsIf31CmtsUsOfdmaSubcarrierTypeEntry 2 }
+
+docsIf31CmtsUsOfdmaSubcarrierTypeSubcarrierType OBJECT-TYPE
+     SYNTAX      INTEGER {
+                          data(1),
+                          excluded(2),
+                          unused(3)
+                         }
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+         "This attribute specifies which type of subcarrier is represented in
+         this group."
+    ::= { docsIf31CmtsUsOfdmaSubcarrierTypeEntry 3 }
+
+docsIf31CmStatusTable OBJECT-TYPE
+     SYNTAX      SEQUENCE OF DocsIf31CmStatusEntry
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+        "This object defines attributes of the CM status.
+         This object is an extension to the SNMP table
+         docsIf3CmStatusTable."
+     ::= { docsIf31MibObjects 29 }
+
+docsIf31CmStatusEntry OBJECT-TYPE
+     SYNTAX      DocsIf31CmStatusEntry
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+         "The conceptual row of docsIf31CmStatusTable.
+         An instance exist for the CM MAC Domain Interface."
+     INDEX {
+             ifIndex
+           }
+     ::= { docsIf31CmStatusTable 1 }
+
+DocsIf31CmStatusEntry ::= SEQUENCE {
+     docsIf31CmStatusEmDlsOperStatus
+                  TruthValue
+     }
+
+docsIf31CmStatusEmDlsOperStatus OBJECT-TYPE
+     SYNTAX      TruthValue
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+        "This attribute indicates whether the CM is currently operating
+         in Energy Management DLS Mode. If this attribute returns true,
+         the CM is operating in Energy Management DLS Mode."
+     REFERENCE
+        "DOCSIS 3.1 MAC and Upper Layer Protocols Interface
+        Specification CM-SP-MULPIv3.1-I08-151210,
+        Energy Management Mode Indicator section."
+     ::= { docsIf31CmStatusEntry 1 }
+
+docsIf31CmEmDlsCfgTable OBJECT-TYPE
+     SYNTAX      SEQUENCE OF DocsIf31CmEmDlsCfgEntry
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+        "This object provides configuration state information
+         on the CM for the Energy Management 1x1 Mode feature."
+     REFERENCE
+         "DOCSIS 3.1 MAC and Upper Layer Protocols Interface
+         Specification CM-SP-MULPIv3.1-I08-151210,
+         Energy Management DLS Encodings section."
+     ::= { docsIf31MibObjects 30 }
+
+docsIf31CmEmDlsCfgEntry OBJECT-TYPE
+     SYNTAX      DocsIf31CmEmDlsCfgEntry
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+         "The conceptual row of docsIf31CmEmDlsCfgTable."
+     INDEX {
+             docsIf31CmEmDlsCfgDirection
+           }
+     ::= { docsIf31CmEmDlsCfgTable 1 }
+
+DocsIf31CmEmDlsCfgEntry ::= SEQUENCE {
+     docsIf31CmEmDlsCfgDirection
+                  IfDirection,
+     docsIf31CmEmDlsCfgEntryBitrateThrshld
+                  Unsigned32,
+     docsIf31CmEmDlsCfgEntryTimeThrshld
+                  Unsigned32,
+     docsIf31CmEmDlsCfgExitBitrateThrshld
+                  Unsigned32,
+     docsIf31CmEmDlsCfgExitTimeThrshld
+                  Unsigned32
+     }
+
+docsIf31CmEmDlsCfgDirection OBJECT-TYPE
+     SYNTAX      IfDirection
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+        "This index indicates whether the threshold applies to the
+        upstream or downstream."
+     ::= { docsIf31CmEmDlsCfgEntry 1 }
+
+docsIf31CmEmDlsCfgEntryBitrateThrshld OBJECT-TYPE
+     SYNTAX      Unsigned32
+     UNITS       "bps"
+     MAX-ACCESS  read-write
+     STATUS      current
+     DESCRIPTION
+        "This attribute specifies the upstream or downstream bitrate
+        threshold (in bps) below which the CM will request to enter
+        Energy Management DLS Mode operation."
+     ::= { docsIf31CmEmDlsCfgEntry 2 }
+
+docsIf31CmEmDlsCfgEntryTimeThrshld OBJECT-TYPE
+     SYNTAX      Unsigned32 (1..65535)
+     UNITS       "seconds"
+     MAX-ACCESS  read-write
+     STATUS      current
+     DESCRIPTION
+        "This attribute specifies the number of consecutive seconds
+        that the upstream or downstream data rate needs to remain below
+        the Upstream or Downstream Entry Bitrate Threshold in order to
+        determine that a transition to Energy Management DLS Mode is
+        required."
+     ::= { docsIf31CmEmDlsCfgEntry 3 }
+
+docsIf31CmEmDlsCfgExitBitrateThrshld OBJECT-TYPE
+     SYNTAX      Unsigned32
+     UNITS       "bps"
+     MAX-ACCESS  read-write
+     STATUS      current
+     DESCRIPTION
+        "This attribute specifies the upstream or downstream bitrate
+        threshold (in bps) above which the CM will request to leave
+        Energy Management DLS Mode operation."
+     ::= { docsIf31CmEmDlsCfgEntry 4 }
+
+docsIf31CmEmDlsCfgExitTimeThrshld OBJECT-TYPE
+     SYNTAX      Unsigned32 (1..65535)
+     UNITS       "seconds"
+     MAX-ACCESS  read-write
+     STATUS      current
+     DESCRIPTION
+        "This attribute specifies the number of consecutive seconds
+        that the upstream or downstream data rate needs to remain above
+        the Upstream or Downstream Exit Bitrate Threshold in order to
+        determine that a transition out of Energy Management DLS Mode
+        is required."
+     ::= { docsIf31CmEmDlsCfgEntry 5 }
+
+-- Conformance Definitions
+docsIf31MibConformance OBJECT IDENTIFIER ::= { docsIf31Mib 2 }
+docsIf31MibCompliances OBJECT IDENTIFIER ::= { docsIf31MibConformance 1 }
+docsIf31MibGroups      OBJECT IDENTIFIER ::= { docsIf31MibConformance 2 }
+
+docsIf31CmtsCompliance MODULE-COMPLIANCE
+    STATUS      current
+    DESCRIPTION
+        "The compliance statement for the CMTS."
+
+    MODULE -- this MODULE
+    MANDATORY-GROUPS {
+     docsIf31CmtsGroup
+     }
+
+    ::= { docsIf31MibCompliances 1 }
+
+docsIf31CmCompliance MODULE-COMPLIANCE
+    STATUS      current
+    DESCRIPTION
+        "The compliance statement for the CM."
+
+    MODULE -- this MODULE
+    MANDATORY-GROUPS {
+     docsIf31CmGroup
+     }
+
+    ::= { docsIf31MibCompliances 2 }
+
+docsIf31CmtsGroup OBJECT-GROUP
+    OBJECTS {
+     docsIf31RxChStatusPrimaryDsIndicator,
+     docsIf31CmtsCmRegStatusDsProfileIdList,
+     docsIf31CmtsCmRegStatusUsProfileIucList,
+     docsIf31CmtsCmRegStatusTcsPhigh,
+     docsIf31CmtsCmRegStatusTcsDrwTop,
+     docsIf31CmtsCmRegStatusMinUsableDsFreq,
+     docsIf31CmtsCmRegStatusMaxUsableDsFreq,
+     docsIf31CmtsCmRegStatusMaxUsableUsFreq,
+     docsIf31CmtsCmRegStatusPartialSvcState,
+     docsIf31CmtsCmRegStatusPartialChanState,
+     docsIf31CmtsCmUsOfdmaChannelRxPower,
+     docsIf31CmtsCmUsOfdmaChannelMeanRxMer,
+     docsIf31CmtsCmUsOfdmaChannelStdDevRxMer,
+     docsIf31CmtsCmUsOfdmaChannelRxMerThreshold,
+     docsIf31CmtsCmUsOfdmaChannelThresholdRxMerValue,
+     docsIf31CmtsCmUsOfdmaChannelThresholdRxMerHighestFreq,
+     docsIf31CmtsCmUsOfdmaChannelMicroreflections,
+     docsIf31CmtsCmUsOfdmaChannelHighResolutionTimingOffset,
+     docsIf31CmtsCmUsOfdmaChannelIsMuted,
+     docsIf31CmtsCmUsOfdmaChannelRangingStatus,
+     docsIf31CmtsCmUsOfdmaChannelCurPartialSvcReasonCode,
+     docsIf31CmtsCmUsOfdmaChannelLastPartialSvcTime,
+     docsIf31CmtsCmUsOfdmaChannelLastPartialSvcReasonCode,
+     docsIf31CmtsCmUsOfdmaChannelNumPartialSvcIncidents,
+     docsIf31CmtsCmUsOfdmaChannelNumPartialChanIncidents,
+     docsIf31CmtsCmUsOfdmaProfileTotalCodewords,
+     docsIf31CmtsCmUsOfdmaProfileCorrectedCodewords,
+     docsIf31CmtsCmUsOfdmaProfileUnreliableCodewords,
+     docsIf31CmtsCmUsOfdmaProfileLastPartialChanTime,
+     docsIf31CmtsCmUsOfdmaProfileLastPartialChanReasonCode,
+     docsIf31CmtsCmUsOfdmaProfilePartialChanReasonCode,
+     docsIf31CmtsCmDsOfdmChannelCurPartialSvcReasonCode,
+     docsIf31CmtsCmDsOfdmChannelLastPartialSvcTime,
+     docsIf31CmtsCmDsOfdmChannelLastPartialSvcReasonCode,
+     docsIf31CmtsCmDsOfdmChannelNumPartialSvcIncidents,
+     docsIf31CmtsCmDsOfdmChannelNumPartialChanIncidents,
+     docsIf31CmtsCmDsOfdmProfileTotalCodewords,
+     docsIf31CmtsCmDsOfdmProfilePartialChanReasonCode,
+     docsIf31CmtsCmDsOfdmProfileLastPartialChanTime,
+     docsIf31CmtsCmDsOfdmProfileLastPartialChanReasonCode,
+     docsIf31CmtsCmEmStatsEm1x1ModeTotalDuration,
+     docsIf31CmtsCmEmStatsDlsModeTotalDuration,
+     docsIf31CmtsCmEmStatsLastDlsTime,
+     docsIf31CmtsCmEmStatsDlsWakeupEvents,
+     docsIf31CmtsDsOfdmChanChannelId,
+     docsIf31CmtsDsOfdmChanLowerBdryFreq,
+     docsIf31CmtsDsOfdmChanUpperBdryFreq,
+     docsIf31CmtsDsOfdmChanLowerBdryEncompSpectrum,
+     docsIf31CmtsDsOfdmChanUpperBdryEncompSpectrum,
+     docsIf31CmtsDsOfdmChanPlcFreq,
+     docsIf31CmtsDsOfdmChanSubcarrierZeroFreq,
+     docsIf31CmtsDsOfdmChanFirstActiveSubcarrierNum,
+     docsIf31CmtsDsOfdmChanLastActiveSubcarrierNum,
+     docsIf31CmtsDsOfdmChanNumActiveSubcarriers,
+     docsIf31CmtsDsOfdmChanSubcarrierSpacing,
+     docsIf31CmtsDsOfdmChanLowerGuardbandWidth,
+     docsIf31CmtsDsOfdmChanUpperGuardbandWidth,
+     docsIf31CmtsDsOfdmChanCyclicPrefix,
+     docsIf31CmtsDsOfdmChanRollOffPeriod,
+     docsIf31CmtsDsOfdmChanTimeInterleaverDepth,
+     docsIf31CmtsDsOfdmChanNumPilots,
+     docsIf31CmtsDsOfdmChanPilotScaleFactor,
+     docsIf31CmtsDsOfdmChanNcpModulation,
+     docsIf31CmtsDsOfdmChanUtilization,
+     docsIf31CmtsDsOfdmProfileStatsConfigChangeCt,
+     docsIf31CmtsDsOfdmProfileStatsFullChannelSpeed,
+     docsIf31CmtsDsOfdmProfileStatsOutOctets,
+     docsIf31CmtsDsOfdmProfileStatsOutUnicastOctets,
+     docsIf31CmtsDsOfdmProfileStatsOutMulticastOctets,
+     docsIf31CmtsDsOfdmProfileStatsOutFrames,
+     docsIf31CmtsDsOfdmProfileStatsOutUnicastFrames,
+     docsIf31CmtsDsOfdmProfileStatsOutMulticastFrames,
+     docsIf31CmtsDsOfdmProfileStatsCtrDiscontinuityTime,
+     docsIf31CmtsDsOfdmSubcarrierStatusEndId,
+     docsIf31CmtsDsOfdmSubcarrierStatusModulation,
+     docsIf31CmtsDsOfdmChanPowerCenterFrequency,
+     docsIf31CmtsDsOfdmChanPowerTxPower,
+     docsIf31CmtsUsOfdmaChanTemplateIndex,
+     docsIf31CmtsUsOfdmaChanConfigChangeCt,
+     docsIf31CmtsUsOfdmaChanTargetRxPower,
+     docsIf31CmtsUsOfdmaChanLowerBdryFreq,
+     docsIf31CmtsUsOfdmaChanUpperBdryFreq,
+     docsIf31CmtsUsOfdmaChanSubcarrierSpacing,
+     docsIf31CmtsUsOfdmaChanCyclicPrefix,
+     docsIf31CmtsUsOfdmaChanNumSymbolsPerFrame,
+     docsIf31CmtsUsOfdmaChanRollOffPeriod,
+     docsIf31CmtsUsOfdmaChanPreEqEnable,
+     docsIf31CmtsUsOfdmaChanFineRngGuardband,
+     docsIf31CmtsUsOfdmaChanFineRngNumSubcarriers,
+     docsIf31CmtsUsOfdmaChanFineRngPreambleLen,
+     docsIf31CmtsUsOfdmaChanInitRngGuardband,
+     docsIf31CmtsUsOfdmaChanInitRngNumSubcarriers,
+     docsIf31CmtsUsOfdmaChanInitRngPreambleLen,
+     docsIf31CmtsUsOfdmaChanProvAttribMask,
+     docsIf31CmtsUsOfdmaChanTxBackoffStart,
+     docsIf31CmtsUsOfdmaChanTxBackoffEnd,
+     docsIf31CmtsUsOfdmaChanRangingBackoffStart,
+     docsIf31CmtsUsOfdmaChanRangingBackoffEnd,
+     docsIf31CmtsUsOfdmaChanUtilization,
+     docsIf31CmtsUsOfdmaChanId,
+     docsIf31CmtsUsOfdmaDataIucStatsMinislotPilotPattern,
+     docsIf31CmtsUsOfdmaDataIucStatsMinislotModulation,
+     docsIf31CmtsUsOfdmaDataIucStatsTotalCodewords,
+     docsIf31CmtsUsOfdmaDataIucStatsCorrectedCodewords,
+     docsIf31CmtsUsOfdmaDataIucStatsUnreliableCodewords,
+     docsIf31CmtsUsOfdmaDataIucStatsInOctets,
+     docsIf31CmtsUsOfdmaDataIucStatsCtrDiscontinuityTime,
+     docsIf31CmtsUsOfdmaDataIucDetailStatusUpperFreq,
+     docsIf31CmtsUsOfdmaDataIucDetailStatusMinislotPilotPattern,
+     docsIf31CmtsUsOfdmaDataIucDetailStatusMinislotModulation,
+     docsIf31CmtsDsOfdmSubcarrierTypeEndSubcarrierId,
+     docsIf31CmtsDsOfdmSubcarrierTypeSubcarrierType,
+     docsIf31CmtsUsOfdmaSubcarrierTypeEndSubcarrierId,
+     docsIf31CmtsUsOfdmaSubcarrierTypeSubcarrierType
+     }
+    STATUS      current
+    DESCRIPTION
+         "Group of objects implemented in a DOCSIS 3.1 CMTS"
+    ::= { docsIf31MibGroups 1 }
+
+docsIf31CmGroup OBJECT-GROUP
+    OBJECTS {
+     docsIf31CmDocsisBaseCapability,
+     docsIf31CmDsOfdmChanChannelId,
+     docsIf31CmDsOfdmChanChanIndicator,
+     docsIf31CmDsOfdmChanSubcarrierZeroFreq,
+     docsIf31CmDsOfdmChanFirstActiveSubcarrierNum,
+     docsIf31CmDsOfdmChanLastActiveSubcarrierNum,
+     docsIf31CmDsOfdmChanNumActiveSubcarriers,
+     docsIf31CmDsOfdmChanSubcarrierSpacing,
+     docsIf31CmDsOfdmChanCyclicPrefix,
+     docsIf31CmDsOfdmChanRollOffPeriod,
+     docsIf31CmDsOfdmChanPlcFreq,
+     docsIf31CmDsOfdmChanNumPilots,
+     docsIf31CmDsOfdmChanTimeInterleaverDepth,
+     docsIf31CmDsOfdmChanPlcTotalCodewords,
+     docsIf31CmDsOfdmChanPlcUnreliableCodewords,
+     docsIf31CmDsOfdmChanNcpTotalFields,
+     docsIf31CmDsOfdmChanNcpFieldCrcFailures,
+     docsIf31CmEmDlsStatsNumberTimesCrossedBelowUsEntryThrshlds,
+     docsIf31CmEmDlsStatsNumberTimesCrossedBelowDsEntryThrshlds,
+     docsIf31CmEmDlsStatsTotalDuration,
+     docsIf31CmEmDlsStatsTotalDurationBelowUsThrshlds,
+     docsIf31CmEmDlsStatsTotalDurationBelowDsThrshlds,
+     docsIf31CmEmDlsStatsTotalDurationBelowUsDsThrshlds,
+     docsIf31CmEmDlsStatsNumSleepLatencyTriggers,
+     docsIf31CmEmDlsStatsNumSleepByteCtTriggers,
+     docsIf31CmEmDlsStatusReceiveTimer,
+     docsIf31CmEmDlsStatusMaxSleepLatency,
+     docsIf31CmEmDlsStatusMaxSleepBytes,
+     docsIf31CmSystemCfgStateDiplexerCapability,
+     docsIf31CmSystemCfgStateDiplexerCfgBandEdge,
+     docsIf31CmDsOfdmProfileStatsConfigChangeCt,
+     docsIf31CmDsOfdmProfileStatsTotalCodewords,
+     docsIf31CmDsOfdmProfileStatsCorrectedCodewords,
+     docsIf31CmDsOfdmProfileStatsUncorrectableCodewords,
+     docsIf31CmDsOfdmProfileStatsInOctets,
+     docsIf31CmDsOfdmProfileStatsInUnicastOctets,
+     docsIf31CmDsOfdmProfileStatsInMulticastOctets,
+     docsIf31CmDsOfdmProfileStatsInFrames,
+     docsIf31CmDsOfdmProfileStatsInUnicastFrames,
+     docsIf31CmDsOfdmProfileStatsInMulticastFrames,
+     docsIf31CmDsOfdmProfileStatsInFrameCrcFailures,
+     docsIf31CmDsOfdmProfileStatsCtrDiscontinuityTime,
+     docsIf31CmDsOfdmChannelPowerCenterFrequency,
+     docsIf31CmDsOfdmChannelPowerRxPower,
+     docsIf31CmStatusOfdmaUsT3Timeouts,
+     docsIf31CmStatusOfdmaUsT4Timeouts,
+     docsIf31CmStatusOfdmaUsRangingAborteds,
+     docsIf31CmStatusOfdmaUsT3Exceededs,
+     docsIf31CmStatusOfdmaUsIsMuted,
+     docsIf31CmStatusOfdmaUsRangingStatus,
+     docsIf31CmUsOfdmaChanConfigChangeCt,
+     docsIf31CmUsOfdmaChanSubcarrierZeroFreq,
+     docsIf31CmUsOfdmaChanFirstActiveSubcarrierNum,
+     docsIf31CmUsOfdmaChanLastActiveSubcarrierNum,
+     docsIf31CmUsOfdmaChanNumActiveSubcarriers,
+     docsIf31CmUsOfdmaChanSubcarrierSpacing,
+     docsIf31CmUsOfdmaChanCyclicPrefix,
+     docsIf31CmUsOfdmaChanRollOffPeriod,
+     docsIf31CmUsOfdmaChanNumSymbolsPerFrame,
+     docsIf31CmUsOfdmaChanTxPower,
+     docsIf31CmUsOfdmaChanPreEqEnabled,
+     docsIf31CmUsOfdmaProfileStatsOutOctets,
+     docsIf31CmUsOfdmaProfileStatsCtrDiscontinuityTime,
+     docsIf31CmUsOfdmaMinislotCfgStateFirstSubcarrierId,
+     docsIf31CmUsOfdmaMinislotCfgStateNumConsecutiveMinislots,
+     docsIf31CmUsOfdmaMinislotCfgStateMinislotPilotPattern,
+     docsIf31CmUsOfdmaMinislotCfgStateDataSymbolModulation,
+     docsIf31CmStatusEmDlsOperStatus,
+     docsIf31CmEmDlsCfgEntryBitrateThrshld,
+     docsIf31CmEmDlsCfgEntryTimeThrshld,
+     docsIf31CmEmDlsCfgExitBitrateThrshld,
+     docsIf31CmEmDlsCfgExitTimeThrshld
+     }
+    STATUS      current
+    DESCRIPTION
+         "Group of objects implemented in a DOCSIS 3.1 CM"
+    ::= { docsIf31MibGroups 2 }
+
+END

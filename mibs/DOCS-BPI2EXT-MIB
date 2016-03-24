@@ -1,0 +1,286 @@
+DOCS-BPI2EXT-MIB DEFINITIONS ::= BEGIN
+  IMPORTS
+    MODULE-IDENTITY,
+    OBJECT-TYPE
+             FROM SNMPv2-SMI          -- RFC 2578
+    TEXTUAL-CONVENTION,
+    DateAndTime
+             FROM SNMPv2-TC           -- RFC 2579
+    OBJECT-GROUP,
+    MODULE-COMPLIANCE
+             FROM SNMPv2-CONF         -- RFC 2580
+    SnmpAdminString
+             FROM SNMP-FRAMEWORK-MIB  -- RFC 3411
+    ifIndex
+             FROM IF-MIB              -- RFC 2863
+    clabProjDocsis
+             FROM CLAB-DEF-MIB
+    DocsX509ASN1DEREncodedCertificate
+             FROM DOCS-IETF-BPI2-MIB;
+
+docsBpi2Ext31Mib MODULE-IDENTITY
+     LAST-UPDATED    "201601130000Z" -- January 13, 2016
+     ORGANIZATION    "Cable Television Laboratories, Inc."
+     CONTACT-INFO
+         "
+         Postal: Cable Television Laboratories, Inc.
+         858 Coal Creek Circle
+         Louisville, Colorado 80027-9750
+         U.S.A.
+         Phone: +1 303-661-9100
+         Fax:   +1 303-661-9199
+         E-mail: mibs@cablelabs.com"
+     DESCRIPTION
+        "This MIB module adds to the BPI management objects that are defined in
+        the DOCS-IETF-BPI2-MIB (RFC-4131). These objects are in addition to and
+        separate from RFC-4131 and provide management support for new DOCSIS 3.1
+        features.  The following MIBs from RFC-4131 are used to support legacy PKI
+	CM certificate functions defined in the DOCSIS 3.0 security specification:
+	docsBpi2CmDeviceCertTable, docsBpi2CodeMfgOrgName, docsBpi2CodeMfgCodeAccessStart,
+	docsBpi2CodeMfgCvcAccessStart, docsBpi2CodeCoSignerOrgName,
+	docsBpi2CodeCoSignerCodeAccessStart, docsBpi2CodeCoSignerCvcAccessStart, and
+	docsBpi2CodeCvcUpdate.  The following MIBs defined in this MIB module are used
+	to support new PKI CM certificate functions defined in the DOCSIS 3.1 security
+	specification: docsBpi2Ext31CmDeviceCmCert, docsBpi2Ext31CodeUpdateCvcChain,
+	docsBpi2Ext31CodeMfgOrgName, docsBpi2Ext31CodeMfgCodeAccessStart,
+	docsBpi2Ext31CodeMfgCvcAccessStart, docsBpi2Ext31CodeCoSignerOrgName,
+	docsBpi2Ext31CodeCoSignerCodeAccessStart, and docsBpi2Ext31CodeCoSignerCvcAccessStart.
+        Copyright 2015 Cable Television Laboratories, Inc.
+        All rights reserved."
+     REVISION "201601130000Z" -- January 13, 2016
+     DESCRIPTION
+       "Initial version, per ECN CM-OSSIv3.1-N-15.1393-6."
+     ::= {clabProjDocsis 29}
+
+-- ---------------------------------------------------------------------
+-- Textual Conventions
+-- ---------------------------------------------------------------------
+DocsCvcCaCertificateChain ::= TEXTUAL-CONVENTION
+    DISPLAY-HINT "50x"
+    STATUS      current
+    DESCRIPTION
+      "A degenerate PKCS7 signedData structure that contains the CVC and the
+       CVC CA certificate chain in the certificates field."
+    SYNTAX      OCTET STRING (SIZE (0..8192))
+
+
+-- Administrative assignments
+docsBpi2Ext31Notifications   OBJECT IDENTIFIER ::= { docsBpi2Ext31Mib 0 }
+docsBpi2Ext31MibObjects      OBJECT IDENTIFIER ::= { docsBpi2Ext31Mib 1 }
+docsBpi2Ext31Conformance     OBJECT IDENTIFIER ::= { docsBpi2Ext31Mib 2 }
+
+docsBpi2Ext31Compliances     OBJECT IDENTIFIER ::= { docsBpi2Ext31Conformance 1 }
+docsBpi2Ext31Groups          OBJECT IDENTIFIER ::= { docsBpi2Ext31Conformance 2 }
+
+-- No Notifications are defined for this MIB
+
+docsBpi2Ext31CmObjects     OBJECT IDENTIFIER ::= { docsBpi2Ext31MibObjects 1 }
+docsBpi2Ext31CmCertObjects OBJECT IDENTIFIER ::= { docsBpi2Ext31CmObjects 1 }
+
+
+-- ---------------------------------------------------------------------
+-- The CM Device Cert Table
+-- ---------------------------------------------------------------------
+docsBpi2Ext31CmDeviceCertTable  OBJECT-TYPE
+    SYNTAX         SEQUENCE OF DocsBpi2Ext31CmDeviceCertEntry
+    MAX-ACCESS     not-accessible
+    STATUS         current
+    DESCRIPTION
+       "This table describes the Baseline Privacy Plus
+        device certificates issued from the new PKI defined in DOCSIS 3.1 for
+        each CM MAC interface."
+    ::= { docsBpi2Ext31CmCertObjects 1 }
+
+docsBpi2Ext31CmDeviceCertEntry  OBJECT-TYPE
+    SYNTAX         DocsBpi2Ext31CmDeviceCertEntry
+    MAX-ACCESS     not-accessible
+    STATUS         current
+    DESCRIPTION
+       "Each entry contains the device certificates of
+        one CM MAC interface.  An entry in this table exists for
+        each ifEntry with an ifType of docsCableMaclayer(127)."
+    INDEX    { ifIndex }
+    ::= { docsBpi2Ext31CmDeviceCertTable 1 }
+
+DocsBpi2Ext31CmDeviceCertEntry ::= SEQUENCE {
+    docsBpi2Ext31CmDeviceCmCert       DocsX509ASN1DEREncodedCertificate,
+    docsBpi2Ext31CmDeviceManufCert    DocsX509ASN1DEREncodedCertificate
+    }
+
+docsBpi2Ext31CmDeviceCmCert   OBJECT-TYPE
+    SYNTAX         DocsX509ASN1DEREncodedCertificate
+    MAX-ACCESS     read-write
+    STATUS         current
+    DESCRIPTION
+       "The X509 DER-encoded cable modem certificate.
+        Note:  This object can be set only when the value is the
+        zero-length OCTET STRING; otherwise, an error of
+        'inconsistentValue' is returned.  Once the object
+        contains the certificate, its access MUST be read-only
+        and persists after re-initialization of the
+        managed system."
+    REFERENCE
+       "DOCSIS 3.1 Security Specification, CM-SP-SECv3.1-I02-150326"
+    ::= { docsBpi2Ext31CmDeviceCertEntry 1 }
+
+docsBpi2Ext31CmDeviceManufCert     OBJECT-TYPE
+    SYNTAX         DocsX509ASN1DEREncodedCertificate
+    MAX-ACCESS     read-only
+    STATUS         current
+    DESCRIPTION
+       "The X509 DER-encoded manufacturer certificate that
+        signed the cable modem certificate."
+    REFERENCE
+       "DOCSIS 3.1 Security Specification, CM-SP-SECv3.1-I02-150326"
+    ::= { docsBpi2Ext31CmDeviceCertEntry 2 }
+
+-- ---------------------------------------------------------------------
+-- The Download Control Objects
+-- ---------------------------------------------------------------------
+docsBpi2Ext31CodeDownloadControl OBJECT IDENTIFIER   ::= { docsBpi2Ext31MibObjects 2 }
+
+
+docsBpi2Ext31CodeUpdateCvcChain    OBJECT-TYPE
+    SYNTAX         DocsCvcCaCertificateChain
+    MAX-ACCESS     read-write
+    STATUS         current
+    DESCRIPTION
+       "The value of this object is a degenerate PKCS7 signedData
+        structure that contains the CVC and the CVC CA
+        certificate chain in the certificates field. Setting
+        this object triggers the device to verify the CVC and
+        update the cvcAccessStart values associated with the new PKI defined by
+        DOCSIS 3.1. The content of this object is then discarded. If the device
+        is not enabled to upgrade codefiles, or if the CVC verification fails,
+        the CVC will be rejected. Reading this object always
+        returns the zero-length OCTET STRING."
+    REFERENCE
+       "DOCSIS 3.1 Security Specification, CM-SP-SECv3.1-I02-150326,
+        Secure Software Download Section"
+    ::= { docsBpi2Ext31CodeDownloadControl 1 }
+
+docsBpi2Ext31CodeMfgOrgName   OBJECT-TYPE
+    SYNTAX         SnmpAdminString
+    MAX-ACCESS     read-only
+    STATUS         current
+    DESCRIPTION
+       "The value of this object is the device manufacturer's
+        organizationName used to validate the code verification certificate
+        issued from the new PKI defined in DOCSIS 3.1."
+    REFERENCE
+       "DOCSIS 3.1 Security Specification, CM-SP-SECv3.1-I02-150326,
+        Secure Software Download Section"
+    ::= { docsBpi2Ext31CodeDownloadControl 2 }
+
+docsBpi2Ext31CodeMfgCodeAccessStart     OBJECT-TYPE
+    SYNTAX         DateAndTime  (SIZE(11))
+    MAX-ACCESS     read-only
+    STATUS         current
+    DESCRIPTION
+       "The value of this object is the device manufacturer's
+        current codeAccessStart value used with the new PKI defined in
+        DOCSIS 3.1.  This value will always refer to Greenwich Mean Time (GMT),
+        and the value format must contain TimeZone information (fields 8-10)."
+    REFERENCE
+       "DOCSIS 3.1 Security Specification, CM-SP-SECv3.1-I02-150326,
+        Secure Software Download Section "
+    ::= { docsBpi2Ext31CodeDownloadControl 3 }
+
+docsBpi2Ext31CodeMfgCvcAccessStart OBJECT-TYPE
+    SYNTAX         DateAndTime (SIZE(11))
+    MAX-ACCESS     read-only
+    STATUS         current
+    DESCRIPTION
+       "The value of this object is the device manufacturer's
+        current cvcAccessStart value used with the new PKI defined in
+        DOCSIS 3.1. This value will always refer to Greenwich Mean Time (GMT),
+        and the value format must contain TimeZone information (fields 8-10)."
+    REFERENCE
+       "DOCSIS 3.1 Security Specification, CM-SP-SECv3.1-I02-150326,
+        Secure Software Download Section "
+    ::= { docsBpi2Ext31CodeDownloadControl 4 }
+
+docsBpi2Ext31CodeCoSignerOrgName   OBJECT-TYPE
+    SYNTAX         SnmpAdminString
+    MAX-ACCESS     read-only
+    STATUS         current
+    DESCRIPTION
+       "The value of this object is the co-signer's
+        organizationName used to validate the code verification certificate
+        issued from the new PKI defined in DOCSIS 3.1.  The value is a zero
+        length string if the co-signer is not specified."
+    REFERENCE
+       "DOCSIS 3.1 Security Specification, CM-SP-SECv3.1-I02-150326,
+        Secure Software Download Section "
+    ::= { docsBpi2Ext31CodeDownloadControl 5 }
+
+docsBpi2Ext31CodeCoSignerCodeAccessStart     OBJECT-TYPE
+    SYNTAX         DateAndTime (SIZE(11))
+    MAX-ACCESS     read-only
+    STATUS         current
+    DESCRIPTION
+       "The value of this object is the co-signer's current
+        codeAccessStart value used with the new PKI defined in DOCSIS 3.1.
+        This value will always refer to Greenwich Mean Time (GMT), and the
+        value format must contain TimeZone information (fields 8-10).
+        If docsBpi2CodeCoSignerOrgName is a zero
+        length string, the value of this object is meaningless."
+    REFERENCE
+       "DOCSIS 3.1 Security Specification, CM-SP-SECv3.1-I02-150326,
+        Secure Software Download Section "
+    ::= { docsBpi2Ext31CodeDownloadControl 6 }
+
+docsBpi2Ext31CodeCoSignerCvcAccessStart OBJECT-TYPE
+    SYNTAX         DateAndTime (SIZE(11))
+    MAX-ACCESS     read-only
+    STATUS         current
+    DESCRIPTION
+       "The value of this object is the co-signer's current
+        cvcAccessStart value used with the new PKI defined in DOCSIS 3.1.
+        This value will always refer to Greenwich Mean Time (GMT), and the
+        value format must contain TimeZone information (fields 8-10).
+        If docsBpi2CodeCoSignerOrgName is a zero-length string, the value of
+        this object is meaningless."
+    REFERENCE
+       "DOCSIS 3.1 Security Specification, CM-SP-SECv3.1-I02-150326,
+        Secure Software Download Section "
+    ::= { docsBpi2Ext31CodeDownloadControl 7 }
+
+-- ---------------------------------------------------------------------
+-- Compliance Statements
+-- ---------------------------------------------------------------------
+
+docsBpi2Ext31MIBCompliance MODULE-COMPLIANCE
+STATUS      current
+DESCRIPTION
+        "The compliance statement for implementations of the DOC-BPI2EXT-MIB."
+    MODULE  -- this MODULE
+    MANDATORY-GROUPS {
+            docsBpi2Ext31CmGroup
+            }
+::= { docsBpi2Ext31Compliances 1 }
+
+--
+-- Compliance Groups
+--
+
+docsBpi2Ext31CmGroup OBJECT-GROUP
+    OBJECTS {
+        docsBpi2Ext31CmDeviceCmCert,
+        docsBpi2Ext31CmDeviceManufCert,
+
+        docsBpi2Ext31CodeUpdateCvcChain,
+        docsBpi2Ext31CodeMfgOrgName,
+        docsBpi2Ext31CodeMfgCodeAccessStart,
+        docsBpi2Ext31CodeMfgCvcAccessStart,
+        docsBpi2Ext31CodeCoSignerOrgName,
+        docsBpi2Ext31CodeCoSignerCodeAccessStart,
+        docsBpi2Ext31CodeCoSignerCvcAccessStart
+     }
+    STATUS      current
+    DESCRIPTION
+         "The group of objects implemented by the CM"
+    ::= { docsBpi2Ext31Groups 1 }
+
+END
+

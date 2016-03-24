@@ -1,0 +1,252 @@
+CLAB-GW-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+    MODULE-IDENTITY,
+    OBJECT-TYPE,
+    TimeTicks
+                       FROM SNMPv2-SMI
+    OBJECT-GROUP,
+    MODULE-COMPLIANCE
+                       FROM SNMPv2-CONF
+    SnmpAdminString
+                       FROM SNMP-FRAMEWORK-MIB
+    DateAndTime,
+    TruthValue
+                       FROM SNMPv2-TC
+    clabCommonMibs
+                       FROM CLAB-DEF-MIB;
+
+    clabGWMib MODULE-IDENTITY
+
+    LAST-UPDATED  "201602240000Z" -- February 24, 2016
+
+    ORGANIZATION "Cable Television Laboratories, Inc."
+    CONTACT-INFO
+            "Broadband Network Services
+             Cable Television Laboratories, Inc.
+             858 Coal Creek Circle,
+             Louisville, CO 80027, USA
+             Phone: +1 303-661-9100
+             Email: mibs@cablelabs.com"
+     DESCRIPTION
+            "This MIB module contains the management objects
+             for gateways that also support TR-181i2 .
+
+             Copyright 2016 Cable Television Laboratories, Inc.
+             All rights reserved."
+     REVISION "201602240000Z" -- February 24, 2016
+     DESCRIPTION
+            "Original version, created by eRouter-N-15.1413-4."
+
+    ::= { clabCommonMibs 6 }
+
+-- Object Definitions
+clabGWDeviceInfoObjects OBJECT IDENTIFIER ::= { clabGWMib 1 }
+
+clabGWDeviceInfoManufacturer    OBJECT-TYPE
+    SYNTAX      SnmpAdminString (SIZE(64))
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This object is defined in TR-181 Device.DeviceInfo.Manufacturer."
+    REFERENCE
+        "TR-181 Device Data Model for TR-069."
+    ::= { clabGWDeviceInfoObjects 1 }
+
+clabGWDeviceInfoManufacturerOUI    OBJECT-TYPE
+    SYNTAX      SnmpAdminString (SIZE(6))
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This object is defined in TR-181 Device.DeviceInfo.ManufacturerOUI."
+    REFERENCE
+        "TR-181 Device Data Model for TR-069."
+    ::= { clabGWDeviceInfoObjects 2 }
+
+clabGWDeviceInfoDeviceCategory    OBJECT-TYPE
+    SYNTAX      SnmpAdminString (SIZE(127))
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This object is defined in TR-181 Device.DeviceInfo.DeviceCategory."
+    REFERENCE
+        "TR-181 Device Data Model for TR-069."
+    ::= { clabGWDeviceInfoObjects 3 }
+
+clabGWDeviceInfoModelName    OBJECT-TYPE
+    SYNTAX      SnmpAdminString (SIZE(64))
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This object is defined in TR-181 Device.DeviceInfo.ModelName."
+    REFERENCE
+        "TR-181 Device Data Model for TR-069."
+    ::= { clabGWDeviceInfoObjects 4 }
+
+clabGWDeviceInfoModelNumber    OBJECT-TYPE
+    SYNTAX      SnmpAdminString (SIZE(64))
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This object is defined in TR-181 Device.DeviceInfo.ModelNumber."
+    REFERENCE
+        "TR-181 Device Data Model for TR-069."
+    ::= { clabGWDeviceInfoObjects 5 }
+
+clabGWDeviceInfoDescription    OBJECT-TYPE
+    SYNTAX      SnmpAdminString (SIZE(256))
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This object is defined in TR-181 Device.DeviceInfo.Description."
+    REFERENCE
+        "TR-181 Device Data Model for TR-069."
+    ::= { clabGWDeviceInfoObjects 6 }
+
+clabGWDeviceInfoProductClass    OBJECT-TYPE
+    SYNTAX      SnmpAdminString (SIZE(64))
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This object is defined in TR-181 Device.DeviceInfo.ProductClass."
+    REFERENCE
+        "TR-181 Device Data Model for TR-069."
+    ::= { clabGWDeviceInfoObjects 7 }
+
+clabGWDeviceInfoSerialNumber    OBJECT-TYPE
+    SYNTAX      SnmpAdminString (SIZE(64))
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This object is defined in TR-181 Device.DeviceInfo.SerialNumber."
+    REFERENCE
+        "TR-181 Device Data Model for TR-069."
+    ::= { clabGWDeviceInfoObjects 8 }
+
+clabGWDeviceInfoHardwareVersion   OBJECT-TYPE
+    SYNTAX      SnmpAdminString (SIZE(64))
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This object is defined in TR-181 Device.DeviceInfo.HardwareVersion."
+    REFERENCE
+        "TR-181 Device Data Model for TR-069."
+    ::= { clabGWDeviceInfoObjects 9 }
+
+clabGWDeviceInfoSoftwareVersion   OBJECT-TYPE
+    SYNTAX      SnmpAdminString (SIZE(64))
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This object is defined in TR-181 Device.DeviceInfo.SoftwareVersion."
+    REFERENCE
+        "TR-181 Device Data Model for TR-069."
+    ::= { clabGWDeviceInfoObjects 10 }
+
+clabGWDeviceInfoAdditionalHardwareVersion   OBJECT-TYPE
+    SYNTAX      SnmpAdminString (SIZE(64))
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This object is defined in TR-181 Device.DeviceInfo.AdditionalHardwareVersion."
+    REFERENCE
+        "TR-181 Device Data Model for TR-069."
+    ::= { clabGWDeviceInfoObjects 11 }
+
+clabGWDeviceInfoAdditonalSoftwareVersion   OBJECT-TYPE
+    SYNTAX      SnmpAdminString (SIZE(64))
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This object is defined in TR-181 Device.DeviceInfo.AdditonalSoftwareVersion."
+    REFERENCE
+        "TR-181 Device Data Model for TR-069."
+    ::= { clabGWDeviceInfoObjects 12 }
+
+clabGWDeviceInfoProvisioningCode  OBJECT-TYPE
+    SYNTAX      SnmpAdminString (SIZE(64))
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+        "This object is defined in TR-181 Device.DeviceInfo.ProvisioningCode."
+    REFERENCE
+        "TR-181 Device Data Model for TR-069."
+    ::= { clabGWDeviceInfoObjects 13 }
+
+clabGWDeviceInfoUpTime  OBJECT-TYPE
+    SYNTAX      TimeTicks
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This object is defined in TR-181 Device.DeviceInfo.UpTime."
+    REFERENCE
+        "TR-181 Device Data Model for TR-069."
+    ::= { clabGWDeviceInfoObjects 14 }
+
+clabGWDeviceInfoFirstUseDate  OBJECT-TYPE
+    SYNTAX      DateAndTime
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This object is defined in TR-181 Device.DeviceInfo.FirstUseDate."
+    REFERENCE
+        "TR-181 Device Data Model for TR-069."
+    ::= { clabGWDeviceInfoObjects 15 }
+
+clabGWPublicAccessEnabled    OBJECT-TYPE
+    SYNTAX      TruthValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+        "This object is defined in the CableLabs TR-181 extension to
+         Device.DeviceInfo. When set to 'true' will indicate that
+         public access, for example Community WIFI, is enabled on
+         this device. When set to 'false', indicates public access
+         is disabled for this device."
+    REFERENCE
+        "TR-181 Device Data Model for TR-069."
+    ::= { clabGWDeviceInfoObjects 16 }
+
+
+-- Conformance Definitions
+clabGWMibConformance OBJECT IDENTIFIER ::= { clabGWMib 99 }
+clabGWMibCompliances OBJECT IDENTIFIER ::= { clabGWMibConformance 1 }
+clabGWMibGroups      OBJECT IDENTIFIER ::= { clabGWMibConformance 2 }
+
+clabGWCompliance MODULE-COMPLIANCE
+    STATUS      current
+    DESCRIPTION
+         "The compliance statement for the gateway device."
+    MODULE -- this MODULE
+    MANDATORY-GROUPS {
+            clabGWGroup
+            }
+    ::= { clabGWMibCompliances 1 }
+
+clabGWGroup OBJECT-GROUP
+    OBJECTS {
+        clabGWDeviceInfoManufacturer,
+        clabGWDeviceInfoManufacturerOUI,
+	      clabGWDeviceInfoDeviceCategory,
+	      clabGWDeviceInfoModelName,
+	      clabGWDeviceInfoModelNumber,
+	      clabGWDeviceInfoDescription,
+	      clabGWDeviceInfoProductClass,
+	      clabGWDeviceInfoSerialNumber,
+	      clabGWDeviceInfoHardwareVersion,
+	      clabGWDeviceInfoSoftwareVersion,
+	      clabGWDeviceInfoAdditionalHardwareVersion,
+	      clabGWDeviceInfoAdditonalSoftwareVersion,
+	      clabGWDeviceInfoProvisioningCode,
+	      clabGWDeviceInfoUpTime,
+	      clabGWDeviceInfoFirstUseDate,
+        clabGWDeviceInfoDeviceCategory,
+        clabGWPublicAccessEnabled
+            }
+    STATUS      current
+    DESCRIPTION
+             "Objects implemented in the clabGWGroup."
+    ::= { clabGWMibGroups 1 }
+
+END
+

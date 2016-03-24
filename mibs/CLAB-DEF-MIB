@@ -10,7 +10,7 @@ IMPORTS
                     FROM DOCS-IETF-BPI2-MIB; -- RFC 4131
 
 cableLabs MODULE-IDENTITY
-    LAST-UPDATED "201208090000Z" -- August 9, 2012
+    LAST-UPDATED "201603160000Z" -- March 16, 2016
     ORGANIZATION "Cable Television Laboratories, Inc."
     CONTACT-INFO
            "Postal: Cable Television Laboratories
@@ -24,8 +24,12 @@ cableLabs MODULE-IDENTITY
             "This MIB module defines the namespace organization for the
             CableLabs enterprise OID registry.
 
-            Copyright 1999-2012 Cable Television Laboratories, Inc.
+            Copyright 1999-2016 Cable Television Laboratories, Inc.
             All rights reserved."
+    REVISION "201603160000Z" -- March 16, 2016
+    DESCRIPTION
+            "Revised Version includes ECNs MIB-CLABDEF-N-15.0138-1
+             and MIB-CLABDEF-N-16.0142-1."
     REVISION "201208090000Z" -- August 9, 2012
     DESCRIPTION
             "Revised Version includes ECN MIB-CLABDEF-N-12.0113-1
@@ -294,6 +298,47 @@ clabTopoMib OBJECT IDENTIFIER
     -- CableLabs DOCSIS 3.0 OSSI Specification.
     ::= { clabCommonMibs 2 }
 
+clabGREMib OBJECT IDENTIFIER
+    -- This CableLabs cross project MIB module provides
+    -- management objects for the management of
+    -- Generic Routing Encapsulation (GRE)
+    -- Reference:
+    -- CableLabs DOCSIS eRouter Specification.
+    ::= { clabCommonMibs 3 }
+
+clabMAPMib OBJECT IDENTIFIER
+    -- This CableLabs cross project MIB module provides
+    -- management objects for the management of
+    -- Mapping of Address and Port for encapsulation and translation
+    -- (MAP-E and MAP-T)
+    -- Reference:
+    -- CableLabs DOCSIS eRouter Specification.
+    ::= { clabCommonMibs 4 }
+
+clabDNSMib OBJECT IDENTIFIER
+    -- This CableLabs cross project MIB module provides
+    -- management objects for the management of
+    -- DNS proxy forwarding.
+    -- Reference:
+    -- CableLabs DOCSIS eRouter Specification.
+    ::= { clabCommonMibs 5 }
+
+clabGWMib OBJECT IDENTIFIER
+    -- This CableLabs cross project MIB module provides
+    -- management objects for the management of
+    -- Gateway devices.
+    -- Reference:
+    -- CableLabs DOCSIS sRouter Specification.
+    ::= { clabCommonMibs 6 }
+
+clabAniDevMib OBJECT IDENTIFIER
+    -- This CableLabs cross project MIB module provides
+    -- management objects for the management of
+    -- Access Network Independent devices.
+    -- Reference:
+    -- CableLabs DOCSIS sRouter Specification.
+    ::= { clabCommonMibs 7 }
+
 --
 -- Textual Conventions
 --
@@ -369,6 +414,4 @@ DocsL2vpnIfList ::= TEXTUAL-CONVENTION
         eStbDsg(18)
         -- 19..31 reserved for other eSAFE interfaces
     }
-
-
 END
