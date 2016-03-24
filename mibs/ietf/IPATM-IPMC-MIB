@@ -15,35 +15,38 @@ IMPORTS
     InterfaceIndex
         FROM IF-MIB;
 
-marsMIB MODULE-IDENTITY
-    LAST-UPDATED "9804150145Z" -- 15 April 1998
-    ORGANIZATION "Internetworking Over NBMA (ion) Working Group"
-    CONTACT-INFO
-        "        Chris Chung
-         Postal: SAIC
-                 1710 Goodridge Drive
-                 Mail Stop 1-4-7
-                 McLean, VA 22102
-         Tel:    +1 703 448 6485
-         Fax:    +1 703 356 2160
-         E-mail: cchung@tieo.saic.com
+   marsMIB MODULE-IDENTITY
+       LAST-UPDATED "9809010000Z" -- 01 September 1998
+       ORGANIZATION "Internetworking Over NBMA (ion) Working Group"
+       CONTACT-INFO
+           "        Chris Chung (chihschung@aol.com)
+                    Independent Consultant
 
-         Editor: Maria Greene
-         Postal: Independent Contractor
-         E-mail: maria@xedia.com
-        "
-    DESCRIPTION
-        "This module defines a portion of the managed information
-         base (MIB) for managing classical IP multicast address
-         resolution server (MARS) and related entities as
-         described in the RFC2022.  This MIB is meant to be
-         used in conjunction with the ATM-MIB (RFC1695),
-         MIB-II (RFC1213), and optionally the IF-MIB (RFC1573)."
-    ::= { snmpModules 17 }
+            Editor: Maria Greene
+            Postal: Independent Contractor
+            E-mail: maria@xedia.com
+           "
+       DESCRIPTION
+           "This module defines a portion of the managed information
+            base (MIB) for managing classical IP multicast address
+            resolution server (MARS) and related entities as
+            described in the RFC2022.  This MIB is meant to be
+            used in conjunction with the ATM-MIB (RFC1695),
+            MIB-II (RFC1213), and optionally the IF-MIB (RFC1573).
+           "
+       REVISION     "9809010000Z" -- 01 September 1998
+       DESCRIPTION  "Published as RFC 2417. Changes/fixes:
+                     - reroot this MIB from snmpModules to mib-2
+                       to be consistent with location of other MIBs.
+                     - obsoletes RFC2366."
+       REVISION     "9804150145Z" -- 15 April 1998
+       DESCRIPTION  "Initial version, published as RFC 2366"
+       ::= { mib-2 57 }
 
 --***************************************************************
 --  IP ATM MARS Client Object Definitions
 --***************************************************************
+
 marsClientObjects  OBJECT IDENTIFIER ::= { marsMIB 1 }
 
 marsClientTable OBJECT-TYPE
@@ -2107,6 +2110,7 @@ marsMcsRowStatus OBJECT-TYPE
 
          while other objects in this conceptual row can be
          modified irrespective of the value of this object.
+
          Deletion of this row is allowed regardless of
          whether or not a row in any associated tables
          (i.e., marsMcsVcTable) still exists or is in
@@ -2490,6 +2494,7 @@ marsMcsVcRowStatus OBJECT-TYPE
     DESCRIPTION
         "The object is used to create, delete or modify a
          row in this table.
+
          A row cannot be made 'active' until instances of
          all corresponding columns in the row of this table
          are appropriately configured.
@@ -2705,7 +2710,6 @@ marsClientCompliance MODULE-COMPLIANCE
     MIN-ACCESS read-only
     DESCRIPTION
       "Write access is not required."
-
 
     OBJECT marsClientFailureTimer
     MIN-ACCESS read-only
@@ -2970,6 +2974,7 @@ marsServerCompliance MODULE-COMPLIANCE
     MIN-ACCESS read-only
     DESCRIPTION
       "Write access is not required."
+
     OBJECT marsVcEncapsType
     MIN-ACCESS read-only
     DESCRIPTION
@@ -3114,6 +3119,7 @@ marsMcsCompliance MODULE-COMPLIANCE
     MIN-ACCESS read-only
     DESCRIPTION
       "Write access is not required."
+
     OBJECT marsMcsRegisterRetrLimit
     MIN-ACCESS read-only
     DESCRIPTION
