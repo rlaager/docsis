@@ -4,7 +4,7 @@ INTEGRATED-SERVICES-MIB DEFINITIONS ::= BEGIN
             MODULE-IDENTITY, OBJECT-TYPE, Counter32,
             Gauge32, Integer32, mib-2                FROM SNMPv2-SMI
             TimeInterval, TEXTUAL-CONVENTION, RowStatus,
-            TruthValue                               FROM SNMPv2-TC
+            TruthValue, TestAndIncr                  FROM SNMPv2-TC
             MODULE-COMPLIANCE, OBJECT-GROUP          FROM SNMPv2-CONF
             ifIndex, InterfaceIndex                  FROM IF-MIB;
 
