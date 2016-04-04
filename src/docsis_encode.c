@@ -209,6 +209,9 @@ int encode_ip_list( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr
 
 int encode_ip6( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
 {
+#ifdef DEBUG
+  char ip[INET6_ADDRSTRLEN];
+#endif /*DEBUG */
   struct in6_addr in;
   union t_val *helper; /* We only use this to cast the void* we receive to what we think it should be */
 
@@ -229,7 +232,7 @@ int encode_ip6( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
 	exit (-1);
   }
 #ifdef DEBUG
-  fprintf(stderr, "encode_ip: found %s at line %d\n",inet_ntoa(in), line);
+  fprintf(stderr, "encode_ip: found %s at line %d\n", inet_ntop(AF_INET6, &in, ip, sizeof(ip)), line);
 #endif /* DEBUG */
   memcpy ( buf, &in, sizeof(struct in6_addr));
   free(helper->strval);
@@ -683,7 +686,7 @@ unsigned int nr_found=0;
 char *cp;
 char *endptr[1];
 #ifdef DEBUG
-int i;
+unsigned int i;
 #endif
 
 union t_val *helper; /* We only use this to cast the void* we receive to what we think it should be */
