@@ -228,7 +228,7 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
 				    &out_size);
       }
 #ifdef DEBUG
-      fprintf (stderr, "encoded len %ld var_len %d leftover %ud difference %d\n", len, name_len, out_size, (data_ptr - out_buffer) );
+      fprintf (stderr, "encoded len %ld var_len %zd leftover %zd difference %zd\n", len, name_len, out_size, (data_ptr - out_buffer) );
 #endif
       return data_ptr - out_buffer;
       break;
