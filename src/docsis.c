@@ -42,7 +42,7 @@
 #include "docsis_symtable.h"
 #include "ethermac.h"
 #include "md5.h"
-#include <openssl/sha.h>
+#include "sha1.h"
 
 struct tlv *global_tlvtree_head;
 symbol_type *global_symtable;

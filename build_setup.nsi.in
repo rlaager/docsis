@@ -37,7 +37,6 @@ Section "Base DOCSIS kit" SEC01
   File "@CYGWIN_BUILDROOT@\src\docsis.exe"
   CreateShortCut "$DESKTOP\docsis.lnk" "$INSTDIR\docsis.exe"
   File "@CYGWIN_BUILDROOT@\License.txt"
-  File "C:\cygwin\bin\cygcrypto-0.9.7.dll"
   File "C:\cygwin\bin\cygwin1.dll"
   File "@CYGWIN_BUILDROOT@\README"
 
@@ -209,7 +208,6 @@ FunctionEnd
 Section Uninstall
   Delete "$INSTDIR\docsis.exe"
   Delete "$INSTDIR\License.txt"
-  Delete "$INSTDIR\cygcrypto-0.9.7.dll"
   Delete "$INSTDIR\cygwin1.dll"
   Delete "$INSTDIR\README"
   Delete "$INSTDIR\docsis.bat"
