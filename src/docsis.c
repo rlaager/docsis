@@ -573,7 +573,11 @@ int encode_one_file ( char *input_file, char *output_file,
       fprintf (stderr, "docsis: error: can't open output file %s\n", output_file);
       return -2;
     }
-  fwrite (buffer, sizeof (unsigned char), buflen, of);
+  if (fwrite (buffer, 1, buflen, of) != buflen)
+    {
+      fprintf (stderr, "docsis: error: can't write to output file %s\n", output_file);
+      return -2;
+    }
   fclose (of);
   free(buffer);
   return 0;
