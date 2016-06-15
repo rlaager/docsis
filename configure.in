@@ -91,11 +91,21 @@ AC_SUBST(NETSNMP_CFLAGS)
 AC_SUBST(NETSNMP_RPATH)
 AC_SUBST(NETSNMP_PREFIX)
 
-AC_COMPILE_IFELSE(
+AC_MSG_CHECKING([for netsnmp_init_mib])
+orig_CFLAGS="$CFLAGS"
+orig_LIBS="$LIBS"
+CFLAGS="$CFLAGS $NETSNMP_CFLAGS"
+LIBS="$LIBS $NETSNMP_LIBS"
+AC_LINK_IFELSE(
   [AC_LANG_PROGRAM([[#include <net-snmp/net-snmp-config.h>
                      #include <net-snmp/net-snmp-includes.h>]],
                    [[netsnmp_init_mib();]])],
-  [AC_DEFINE_UNQUOTED(HAVE_NETSNMP_INIT_MIB, 1, [Defines if your net-snmp has the netsnmp_init_mib function])])
+  [AC_MSG_RESULT(yes)
+   AC_DEFINE_UNQUOTED(HAVE_NETSNMP_INIT_MIB, 1, [Defines if your net-snmp has the netsnmp_init_mib function])],
+  [AC_MSG_RESULT(no)]
+)
+CFLAGS="$orig_CFLAGS"
+LIBS="$orig_LIBS"
 
 dnl end libnetsnmp check
 
