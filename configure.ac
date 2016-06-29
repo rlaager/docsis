@@ -9,6 +9,9 @@ AC_LANG([C])
 LT_INIT
 dnl AC_PROG_YACC
 AC_PROG_LEX
+if test "x$LEX" != xflex; then
+    AC_MSG_ERROR([flex not found])
+fi
 
 AC_CHECK_LIB(resolv, inet_aton)
 LT_LIB_M
