@@ -427,7 +427,7 @@ main (int argc, char *argv[])
     /* no more recognisable options means that we've either finished parsing
      * all arguments or else that the remaining arguments refer to a list of
      * config files */
-    if (argc) {
+    if ((argc && encode_docsis) || (argc && decode_bin)) {
       break;
     }
   }
