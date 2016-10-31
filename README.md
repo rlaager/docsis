@@ -23,7 +23,7 @@ This was tested on Ubuntu 14.10, Fedora 21, openSUSE 13.2 (little endian) and De
 Dependencies:
 
     Debian/Ubuntu:
-    apt-get install automake libtool libsnmp-dev bison make gcc flex git libglib2.0-dev
+    apt-get install automake libtool libsnmp-dev bison make gcc flex git libglib2.0-dev libfl-dev
     
     Fedore/RedHat/CentOS:
     yum install autoconf automake libtool glib2-devel bison flex net-snmp-devel
