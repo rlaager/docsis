@@ -30,7 +30,7 @@ cat > $1 << EOF
 EOF
 
 grep -e "^{" ../src/docsis_symtable.h \
-	| grep -v "*" \
+	| grep -v "\"/\*" \
 	| grep -v "decode_md5" \
 	| awk '{print $5 "_" $3 " " $7 " " $8 " " $9}' \
 	| sed 's/\"//g' \
