@@ -2,7 +2,7 @@ language: c
 
 before_install:
   - sudo apt-get update -qq
-  - sudo apt-get install automake libtool libsnmp-dev bison make gcc flex git libglib2.0-dev libfl-dev
+  - sudo apt-get install automake libtool libsnmp-dev bison make gcc flex git libglib2.0-dev libfl-dev snmp-mibs-downloader
   - sudo pip install cpp-coveralls
   - ./autogen.sh
 
