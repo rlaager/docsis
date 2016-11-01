@@ -69,7 +69,7 @@ DOCS-CABLE-DEVICE-TRAP-MIB DEFINITIONS ::= BEGIN
                   Docsis 2.0 RF MIB draft were added to the trap
                   definitions."
 
-            REVISION "000926000000Z"
+            REVISION "0009260000Z"
             DESCRIPTION
                 "The CABLE DEVICE TRAP MIB is an extension of the
                  CABLE DEVICE MIB defined in RFC2669. It defines various
