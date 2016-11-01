@@ -1,0 +1,270 @@
+CLAB-ANI-DEV-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+    MODULE-IDENTITY,
+    OBJECT-TYPE,
+    Integer32
+                       FROM SNMPv2-SMI
+    OBJECT-GROUP,
+    MODULE-COMPLIANCE
+                       FROM SNMPv2-CONF
+    SnmpAdminString
+                       FROM SNMP-FRAMEWORK-MIB
+    DateAndTime,
+    TruthValue
+                       FROM SNMPv2-TC
+
+    clabCommonMibs
+                       FROM CLAB-DEF-MIB;
+
+    clabAniDevMib MODULE-IDENTITY
+
+    LAST-UPDATED  "201605190000Z" -- May 19, 2016
+
+    ORGANIZATION "Cable Television Laboratories, Inc."
+    CONTACT-INFO
+            "Broadband Network Services
+             Cable Television Laboratories, Inc.
+             858 Coal Creek Circle,
+             Louisville, CO 80027, USA
+             Phone: +1 303-661-9100
+             Email: mibs@cablelabs.com"
+     DESCRIPTION
+            "This MIB module contains the management objects
+             for sRouter devices under the CableLabs
+             Access Network Independent (ANI) project.
+             Copyright 1999-2016 Cable Television Laboratories, Inc.
+             All rights reserved."
+     REVISION "201605190000Z" -- May 19, 2016
+     DESCRIPTION
+             "Added System Event logging objects
+             per sRouter-N-16.0147-2."
+     REVISION "201603170000Z" -- March 17, 2016
+     DESCRIPTION
+             "Initial version, published as part of the CableLabs
+             Standalone Router Specification, CL-SP-sRouter-I01-160317.
+             Copyright 2016 Cable Television Laboratories, Inc.
+             All rights reserved."
+
+    ::= { clabCommonMibs 7 }
+
+-- Object Definitions
+
+clabAniDevObjects OBJECT IDENTIFIER ::= { clabAniDevMib 1 }
+
+aniDevResetNow OBJECT-TYPE
+	SYNTAX      TruthValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+    	"Setting this object to true(1) causes the device to reset.
+        Reading this object always returns false(2)."
+    ::= { clabAniDevObjects 1 }
+
+clabAniDevSysLoggingObjects OBJECT IDENTIFIER ::= { clabAniDevObjects 2 }
+
+aniDevLoggingCtrlReset OBJECT-TYPE
+	SYNTAX	INTEGER {
+		resetLog(1),
+		pauseLog(2),
+		startLog(3),
+		useDefaultReporting(4)
+		}
+	MAX-ACCESS	read-write
+	STATUS		current
+	DESCRIPTION
+		"Setting this object to resetLog(1) empties the logging
+		table. Setting this object to pauseLog(2) causes the
+		ANI device to stop writing events to the logging table. Setting
+		this object to startLog(3) causes the ANI device to start writing
+		events to the logging table. Reading this object returns
+		either pauseLog(2) or startLog(3). The default is
+		startLog(3). Log event pausing is independent of any other
+		log filtering mechanisms, e.g., levels. Setting it to
+		useDefaultReporting(4) resets the log (i.e., empties) and
+		returns all event levels to the factory-default reporting."
+	::= { clabAniDevSysLoggingObjects 1 }
+
+aniDevSysLoggingSize OBJECT-TYPE
+ 	SYNTAX Unsigned32
+ 	UNITS "bytes"
+ 	MAX-ACCESS read-write
+ 	STATUS current
+ 	DESCRIPTION
+ 	   	"Setting this object modifies the size of the system
+ 	   	logging table. When set to zero, all entries are removed
+ 	   	and new entries are not allowed to be added. When set
+ 	   	less than the current size, the oldest entries are removed
+ 	   	until the new size is reached."
+ 	::= { clabAniDevSysLoggingObjects 2 }
+
+ --
+-- The following Object controls the reporting of the various classes
+-- of system log messages.
+--
+
+aniDevSysLoggingLevelCtrl OBJECT-TYPE
+ 	SYNTAX INTEGER {
+ 		all(1),
+ 		trace(2),
+ 		debug(3),
+ 		info(4),
+ 		warn(5),
+ 		error(6),
+ 		fatal(7),
+ 		off(8)
+ 		}
+ 	MAX-ACCESS read-write
+ 	STATUS current
+ 	DESCRIPTION
+ 	 	"The current logging priority level for system messages.
+ 		 Setting a level sets all levels from the level specified
+ 		 to the highest severity level except for “off”. The level
+ 		 “all” indicates all levels. The log levels are derived from
+ 		 the log4j class.
+
+ 		 all(1) The all level has the lowest possible rank and is intended
+ 		 to turn on all logging.
+
+ 		 trace(2) The trace level designates finer-grained informational
+ 		 events than the DEBUG (see log4j class for further definition).
+
+ 		 debug(3) The debug level designates fine-grained informational
+ 		 events that are most useful to debug an application.
+
+ 		 info(4) The info level designates informational messages that
+ 		 highlight the progress of the application at coarse-grained level.
+
+ 		 warn(5) The warn level designates potentially harmful situations.
+
+ 		 error(6) The error level designates error events that might still
+ 		 allow the application to continue running.
+
+ 		 fatal(7) The fatal level designates very severe error events
+ 		 that will presumably lead the application to abort.
+
+ 		 off(8) The off has the highest possible rank and is intended to
+ 		 turn off logging."
+ 	::= { clabAniDevSysLoggingObjects 3 }
+
+aniDevSysLoggingGroupCtrl OBJECT-TYPE
+ 	SYNTAX BITS {
+ 		none(0),
+ 		all(1),
+ 		Group1(2),
+ 		Group2(3),
+ 		Group3(4),
+ 		Group4(5),
+ 		Group5(6)
+ 		}
+ 	MAX-ACCESS read-write
+ 	STATUS current
+ 	DESCRIPTION
+ 	  	"The system 'group' or 'groups' to be logged.
+ 	  	If all(1) is set, then other bits are
+ 	  	ignored. If set to 'none(0)', messages that do not include
+ 	  	a 'group' are candidates to be logged. Logging Groups for
+ 	  	Event Logs are defined in the controlling Access Network
+ 	  	Independent device specification for equipment implementing
+ 	  	this MIB. Returns WrongValue error if an attempt is made
+ 	  	to set the bit for a Logging Group not supported by the device."
+   DEFVAL {{ none }}
+ 	  	::= { clabAniDevSysLoggingObjects 4 }
+
+ -- The ANI Device System Logging table.
+--
+-- This table is used as an event logging table shared by the system
+-- and applications. Note that network-related events are still
+-- recorded in the aniDevSysLoggingEventTable. The ANI device adds an
+-- event by adding a conceptual row to the end of the table.
+-- Once the table 'fills' by reaching aniDevSysLoggingSize, adding a
+-- new event causes the oldest conceptual row to be removed.
+--
+
+aniDevSysLoggingEventTable OBJECT-TYPE
+	SYNTAX SEQUENCE OF AniDevSysLoggingEventEntry
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"This table is a cyclic table of events."
+	::= { clabAniDevSysLoggingObjects 5 }
+
+aniDevSysLoggingEventEntry OBJECT-TYPE
+ 	SYNTAX AniDevSysLoggingEventEntry
+ 	MAX-ACCESS not-accessible
+ 	STATUS current
+ 	DESCRIPTION
+ 		"A logging event entry."
+ 	INDEX { aniDevSysLoggingEventIndex }
+ 	::= { aniDevSysLoggingEventTable 1 }
+
+AniDevSysLoggingEventEntry::= SEQUENCE {
+ 		aniDevSysLoggingEventIndex 		Integer32,
+ 		aniDevSysLoggingEventTimeStamp 	DateAndTime,
+ 		aniDevSysLoggingEventMessage 	SnmpAdminString
+ 		}
+
+aniDevSysLoggingEventIndex OBJECT-TYPE
+ 	SYNTAX 		Unsigned32
+ 	MAX-ACCESS 	not-accessible
+ 	STATUS 		current
+ 	DESCRIPTION
+ 		"Provides relative ordering of the objects in the event
+ 		log. This object will always increase except when
+ 		(a) the log is reset via
+ 		aniDevSysLoggingEventCtrlReset or
+ 		(b) the device reboots and does not implement
+ 		non-volatile storage for this log.
+        The next entry for all the above cases is 1."
+ 	::= { aniDevSysLoggingEventEntry 1 }
+
+  aniDevSysLoggingEventTimeStamp OBJECT-TYPE
+  	SYNTAX DateAndTime
+  	MAX-ACCESS read-only
+  	STATUS current
+  	DESCRIPTION
+  		"The time stamp of this event logging entry. The timestamp
+  		is established when the event occurs."
+  	::= { aniDevSysLoggingEventEntry 2 }
+
+  aniDevSysLoggingEventMessage OBJECT-TYPE
+  	SYNTAX SnmpAdminString
+  	MAX-ACCESS read-only
+  	STATUS current
+  	DESCRIPTION
+  		"The event message."
+  	::= { aniDevSysLoggingEventEntry 3 }
+
+
+ -- Conformance Definitions
+clabAniDevConformance OBJECT IDENTIFIER ::= { clabAniDevMib 2 }
+clabAniDevCompliances OBJECT IDENTIFIER ::= { clabAniDevConformance 1 }
+clabAniDevGroups      OBJECT IDENTIFIER ::= { clabAniDevConformance 2 }
+
+clabAniDevCompliance MODULE-COMPLIANCE
+    STATUS      current
+    DESCRIPTION
+         "The compliance statement for CableLabs ANI devices."
+    MODULE  --- clabAni
+    MANDATORY-GROUPS {
+            clabAniDevGroup
+            }
+    ::= { clabAniDevCompliances 1 }
+
+clabAniDevGroup OBJECT-GROUP
+    OBJECTS {
+              aniDevResetNow,
+              aniDevLoggingCtrlReset,
+              aniDevSysLoggingSize,
+              aniDevSysLoggingLevelCtrl,
+              aniDevSysloggingGroupCtrl,
+              aniDevSysLoggingEventTimeStamp,
+              aniDevSysLoggingEventMessage
+            }
+    STATUS      current
+    DESCRIPTION
+             "Object(s) implemented for the management of ANI devices."
+    ::= { clabAniDevGroups 1 }
+
+END
+

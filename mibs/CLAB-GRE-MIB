@@ -1,0 +1,1172 @@
+CLAB-GRE-MIB
+
+CLAB-GRE-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+    MODULE-IDENTITY,
+    OBJECT-TYPE,
+    Counter64,
+    Unsigned32,
+    Integer32
+        FROM SNMPv2-SMI
+
+    MODULE-COMPLIANCE,
+    OBJECT-GROUP
+        FROM SNMPv2-CONF
+
+    RowStatus,
+    TruthValue
+        FROM SNMPv2-TC
+
+    SnmpAdminString
+        FROM SNMP-FRAMEWORK-MIB
+
+    clabCommonMibs
+        FROM CLAB-DEF-MIB;
+
+clabGREMib MODULE-IDENTITY
+    LAST-UPDATED "201502040000Z"
+    ORGANIZATION "Cable Television Laboratories, Inc."
+    CONTACT-INFO
+            "Broadband Network Services
+             Cable Television Laboratories, Inc.
+             858 Coal Creek Circle,
+             Louisville, CO 80027, USA
+             Phone: +1 303-661-9100
+             Email: mibs@cablelabs.com"
+    DESCRIPTION
+        "This MIB module contains the management objects for
+         multiple GRE tunnels in residential gateway devices."
+    REVISION      "201502040000Z"
+    DESCRIPTION
+        "Initial version of this MIB module, added to eRouter
+        spec by ECN eRouter-N-1235-3."
+    ::= { clabCommonMibs 3 }
+
+--
+-- Textual Conventions
+--
+
+--
+-- Object Definitions
+--
+
+clabGREObjects OBJECT IDENTIFIER ::= { clabGREMib 1 }
+
+--
+-- MIB Objects
+--
+
+clabGRETunnelNumberOfEntries OBJECT-TYPE
+    SYNTAX      Unsigned32 (0..256)
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Number of configured entries in the Tunnel table."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.GRE.TunnelNumberOfEntries"
+    ::= { clabGREObjects 1 }
+
+clabGREFilterNumberOfEntries OBJECT-TYPE
+    SYNTAX      Unsigned32 (0..256)
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Number of configured entries in the Filter table."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.GRE.FilterNumberOfEntries"
+    ::= { clabGREObjects 2 }
+
+clabGRETunnelTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF ClabGRETunnelEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "This table allows configuration and monitoring of GRE tunnels."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069, Device.GRE.Tunnel"
+    ::= { clabGREObjects 3 }
+
+clabGRETunnelEntry OBJECT-TYPE
+    SYNTAX      ClabGRETunnelEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "This table allows configuration and monitoring of GRE tunnels."
+    INDEX { clabGRETunnelIndex }
+    ::= { clabGRETunnelTable 1 }
+
+ClabGRETunnelEntry ::= SEQUENCE {
+    clabGRETunnelIndex                            Unsigned32,
+    clabGRETunnelRowStatus                        RowStatus,
+    clabGRETunnelEnable                           TruthValue,
+    clabGRETunnelStatus                           INTEGER,
+    clabGRETunnelAlias                            SnmpAdminString,
+    clabGRETunnelRemoteEndpoints                  OCTET STRING,
+    clabGRETunnelKeepAlivePolicy                  INTEGER,
+    clabGRETunnelKeepAliveTimeout                 Unsigned32,
+    clabGRETunnelKeepAliveThreshold               Unsigned32,
+    clabGRETunnelKeepAliveCount                   Unsigned32,
+    clabGRETunnelKeepAliveInterval                Unsigned32,
+    clabGRETunnelKeepAliveFailureInterval         Unsigned32,
+    clabGRETunnelKeepAliveRecoverInterval         Unsigned32,
+    clabGRETunnelDeliveryHeaderProtocol           INTEGER,
+    clabGRETunnelDefaultDscpMark                  Unsigned32,
+    clabGRETunnelConnectedRemoteEndpoint          SnmpAdminString,
+    clabGRETunnelInterfaceNumberOfEntries         Unsigned32,
+    clabGRETunnelTcpMssClamping                   Unsigned32,
+    clabGRETunnelConcentratorServiceName          SnmpAdminString,
+    clabGRETunnnelRemoteEndpointConnectivityState OCTET STRING
+}
+
+clabGRETunnelIndex OBJECT-TYPE
+    SYNTAX      Unsigned32 (400..499)
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "Table index. These ifIndex values are the GRE tunnel index number."
+    ::= { clabGRETunnelEntry 1 }
+
+clabGRETunnelRowStatus OBJECT-TYPE
+    SYNTAX      RowStatus
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "The RowStatus interlock for the creation and deletion of a table
+         entry."
+    ::= { clabGRETunnelEntry 2 }
+
+clabGRETunnelEnable OBJECT-TYPE
+    SYNTAX      TruthValue
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "Enables or disable this GRE tunnel."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069, Device.GRE.Tunnel.{i}.Enable"
+    ::= { clabGRETunnelEntry 3 }
+
+clabGRETunnelStatus OBJECT-TYPE
+    SYNTAX      INTEGER {
+                    disabled(1),
+                    enabled(2),
+                    error(3),
+                    errorMisconfigured(4),
+                    retryWait(5)
+    }
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The status of this tunnel. The errorMisconfigured value indicates
+         that a necessary configuration value is undefined or invalid. The
+         error value MAY be used by the CPE to indicate a locally defined
+         error condition. retryWait indicates that all concentrators have
+         been detected as failed and a FailureInterval is in progress before
+         retrying again."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069, Device.GRE.Tunnel.{i}.Status"
+    DEFVAL      { disabled }
+    ::= { clabGRETunnelEntry 4 }
+
+clabGRETunnelAlias OBJECT-TYPE
+    SYNTAX      SnmpAdminString
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "A non-volatile handle used to reference this instance. Alias
+         provides a mechanism for an ACS to label this instance for future
+         reference."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069, Device.GRE.Tunnel.{i}.Alias"
+    ::= { clabGRETunnelEntry 5 }
+
+clabGRETunnelRemoteEndpoints OBJECT-TYPE
+    SYNTAX      OCTET STRING (SIZE (0..1040))
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "Comma-separated list (up to 4 items) of strings (maximum item length
+         256). The Fully Qualified Domain Name (FQDN) or IP address of the
+         remote GRE tunnel endpoint. If TunnelConcentratorServiceName is set,
+         this field is ignored. If more than one name/address is supplied,
+         they will be tried in turn, i.e. they are in decreasing order of
+         precedence. IPv4 or IPv6 addresses are accepted."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.GRE.Tunnel.{i}.RemoteEndpoints"
+    ::= { clabGRETunnelEntry 6 }
+
+clabGRETunnelKeepAlivePolicy OBJECT-TYPE
+    SYNTAX      INTEGER {
+                    icmp(1),
+                    none(2)
+    }
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "The mechanism used to keep the tunnel from timing out."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.GRE.Tunnel.{i}.KeepAlivePolicy"
+    DEFVAL { none }
+    ::= { clabGRETunnelEntry 7 }
+
+clabGRETunnelKeepAliveTimeout OBJECT-TYPE
+    SYNTAX      Unsigned32
+    UNITS       "seconds"
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "Time to wait for a response to a keep alive message."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.GRE.Tunnel.{i}.KeepAliveTimeout"
+    DEFVAL { 10 }
+    ::= { clabGRETunnelEntry 8 }
+
+clabGRETunnelKeepAliveThreshold OBJECT-TYPE
+    SYNTAX      Unsigned32
+    UNITS       "errors"
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "Number of KeepAlive messages unacknowledged by the
+         ConnectedRemoteEndpoint before the Tunnel is perceived failed."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.GRE.Tunnel.{i}.KeepAliveThreshold"
+    DEFVAL { 3 }
+    ::= { clabGRETunnelEntry 9 }
+
+clabGRETunnelKeepAliveCount OBJECT-TYPE
+    SYNTAX      Unsigned32
+    UNITS       "packets"
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "Number of keep-alive messages sent in a burst at regular intervals."
+    DEFVAL { 3 }
+    ::= { clabGRETunnelEntry 10 }
+
+clabGRETunnelKeepAliveInterval OBJECT-TYPE
+    SYNTAX      Unsigned32
+    UNITS       "seconds"
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "Interval in seconds between keep-alive message bursts."
+    DEFVAL { 60 }
+    ::= { clabGRETunnelEntry 11 }
+
+clabGRETunnelKeepAliveFailureInterval OBJECT-TYPE
+    SYNTAX      Unsigned32 (0..65535)
+    UNITS       "seconds"
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "Time (in seconds) to wait after all available GRE concentrators fail
+         to respond, before retrying first GRE concentrator address."
+    DEFVAL { 300 }
+    ::= { clabGRETunnelEntry 12 }
+
+clabGRETunnelKeepAliveRecoverInterval OBJECT-TYPE
+    SYNTAX      Unsigned32
+    UNITS       "seconds"
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "Time (in seconds) to remain on a secondary GRE concentrator, with
+         clients connected, before retrying primary GRE concentrator. Zero
+         value means no limit. Setting to a small non-zero value will cause
+         an immediate switch from a secondary GRE concentrator back to the
+         primary."
+    DEFVAL { 43200 }
+    ::= { clabGRETunnelEntry 13 }
+
+clabGRETunnelDeliveryHeaderProtocol OBJECT-TYPE
+    SYNTAX      INTEGER {
+                    ipv4(1),
+                    ipv6(2)
+    }
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "If ConcentratorServiceName or RemoteEndpoint FQDNs are provided,
+         TunnelDeliveryHeaderProtocol determines whether IPv4 or IPv6
+         addresses are requested from DNS."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.GRE.Tunnel.{i}.DeliveryHeaderProtocol"
+    ::= { clabGRETunnelEntry 14 }
+
+clabGRETunnelDefaultDscpMark OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "If the specified entries in the Filter table do not match a packet,
+         then the value of this parameter is applied to the delivery header of
+         the packet."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.GRE.Tunnel.{i}.DefaultDSCPMark"
+    ::= { clabGRETunnelEntry 15 }
+
+clabGRETunnelConnectedRemoteEndpoint OBJECT-TYPE
+    SYNTAX      SnmpAdminString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The Fully Qualified Domain Name (FQDN) name or IP address of the
+         currently connected remote GRE tunnel endpoint."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.GRE.Tunnel.{i}.ConnectedRemoteEndpoint"
+    ::= { clabGRETunnelEntry 16 }
+
+clabGRETunnelInterfaceNumberOfEntries OBJECT-TYPE
+    SYNTAX      Unsigned32 (0..256)
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Number of configured entries in the TunnelInterface table for
+         this tunnel."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.GRE.Tunnel.{i}.InterfaceNumberOfEntries"
+    ::= { clabGRETunnelEntry 17 }
+
+clabGRETunnelTcpMssClamping OBJECT-TYPE
+    SYNTAX      Unsigned32 (0..1420)
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "Specifies whether TCP MSS clamping is enabled on the tunnel.
+         0 disables clamping, 1 clamps the MSS depending on the
+         interface MTU. A value > 1 will be used as clamping size.
+		 See Reference: RFC 4459"
+    DEFVAL { 0 }
+    ::= { clabGRETunnelEntry 18 }
+
+clabGRETunnelConcentratorServiceName OBJECT-TYPE
+    SYNTAX      SnmpAdminString
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "FQDN of GRE tunnel concentrator/gw service.
+         If this is set, then a DNS query of type SRV will be used for
+         discovering the FQDN of remote endpoints of GRE tunnel."
+    ::= { clabGRETunnelEntry 19 }
+
+clabGRETunnnelRemoteEndpointConnectivityState OBJECT-TYPE
+    SYNTAX      OCTET STRING (SIZE (0..60))
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Comma-separated list (up to 4 items) of strings. Each item
+         corresponds to one item in the RemoteEndpoints list, and contains
+         one of the following strings: 'Reachable' indicates that the
+         corresponding remote endpoint is responding to any configured
+         KeepAlive messages. 'Unreachable' indicates that the remote
+         endpoint has failed to adequately respond to the most recent
+         KeepAlive attempt. 'NotInUse' indicates that the remote endpoint
+         has not been used. 'NoKeepAlives' indicates that the KeepAlive
+         policy is set to 'none'."
+    ::= { clabGRETunnelEntry 20 }
+
+clabGRETunnelStatsTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF ClabGRETunnelStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "This table provides statistical information of GRE tunnels.
+         This table extends clabGRETunnelTable. The index used is
+         imported from the clabGRETunnelTable. If a row is deleted
+         from clabGRETunnelTable, then the extension row will also be deleted."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.GRE.Tunnel.{i}.Stats"
+    ::= { clabGREObjects 4 }
+
+clabGRETunnelStatsEntry OBJECT-TYPE
+    SYNTAX      ClabGRETunnelStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "Each table entry provides statistical information on a GRE tunnel."
+    AUGMENTS { clabGRETunnelEntry }
+    ::= { clabGRETunnelStatsTable 1 }
+
+ClabGRETunnelStatsEntry ::= SEQUENCE {
+    clabGRETunnelStatsKeepAliveSent            Counter64,
+    clabGRETunnelStatsKeepAliveReceived        Counter64,
+    clabGRETunnelStatsBytesSent                Counter64,
+    clabGRETunnelStatsBytesReceived            Counter64,
+    clabGRETunnelStatsPacketsSent              Counter64,
+    clabGRETunnelStatsPacketsReceived          Counter64,
+    clabGRETunnelStatsErrorsSent               Counter64,
+    clabGRETunnelStatsErrorsReceived           Counter64
+}
+
+clabGRETunnelStatsKeepAliveSent OBJECT-TYPE
+    SYNTAX      Counter64
+    UNITS       "packets"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Number keepalive packets sent."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.GRE.Tunnel.{i}.Stats.KeepAliveSent"
+    ::= { clabGRETunnelStatsEntry 1 }
+
+clabGRETunnelStatsKeepAliveReceived OBJECT-TYPE
+    SYNTAX      Counter64
+    UNITS       "packets"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Number keepalive packets received."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.GRE.Tunnel.{i}.Stats.KeepAliveReceived"
+    ::= { clabGRETunnelStatsEntry 2 }
+
+clabGRETunnelStatsBytesSent OBJECT-TYPE
+    SYNTAX      Counter64
+    UNITS       "bytes"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Number bytes sent."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.GRE.Tunnel.{i}.Stats.BytesSent"
+    ::= { clabGRETunnelStatsEntry 3 }
+
+clabGRETunnelStatsBytesReceived OBJECT-TYPE
+    SYNTAX      Counter64
+    UNITS       "bytes"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Number bytes received."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.GRE.Tunnel.{i}.Stats.BytesReceived"
+    ::= { clabGRETunnelStatsEntry 4 }
+
+clabGRETunnelStatsPacketsSent OBJECT-TYPE
+    SYNTAX      Counter64
+    UNITS       "packets"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Number packets sent."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.GRE.Tunnel.{i}.Stats.PacketsSent"
+    ::= { clabGRETunnelStatsEntry 5 }
+
+clabGRETunnelStatsPacketsReceived OBJECT-TYPE
+    SYNTAX      Counter64
+    UNITS       "packets"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Number packets received."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.GRE.Tunnel.{i}.Stats.PacketsReceived"
+    ::= { clabGRETunnelStatsEntry 6 }
+
+clabGRETunnelStatsErrorsSent OBJECT-TYPE
+    SYNTAX      Counter64
+    UNITS       "packets"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Number packets received that were discarded.
+         Because source network interface is down."
+    ::= { clabGRETunnelStatsEntry 7 }
+
+clabGRETunnelStatsErrorsReceived OBJECT-TYPE
+    SYNTAX      Counter64
+    UNITS       "packets"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Number packets received that were in error.
+         Because tunnel packets are not correct type.
+         Eg. Received IP packet instead of L2 packets."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.GRE.Tunnel.{i}.Stats.ErrorsReceived"
+    ::= { clabGRETunnelStatsEntry 8 }
+
+clabGRETunnelInterfaceTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF ClabGRETunnelInterfaceEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "This table contains information specific to network source interface
+         whose traffic is mapped into a GRE tunnel."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.GRE.Tunnel.{i}.Interface"
+    ::= { clabGREObjects 5 }
+
+clabGRETunnelInterfaceEntry OBJECT-TYPE
+    SYNTAX      ClabGRETunnelInterfaceEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "List of individual source interface entries mapped into GRE tunnels."
+    INDEX {
+        clabGRETunnelIndex,
+        clabGRETunnelInterfaceIndex
+    }
+    ::= { clabGRETunnelInterfaceTable 1 }
+
+ClabGRETunnelInterfaceEntry ::= SEQUENCE {
+    clabGRETunnelInterfaceIndex                          Unsigned32,
+    clabGRETunnelInterfaceRowStatus                      RowStatus,
+    clabGRETunnelInterfaceEnable                         TruthValue,
+    clabGRETunnelInterfaceStatus                         INTEGER,
+    clabGRETunnelInterfaceAlias                          SnmpAdminString,
+    clabGRETunnelInterfaceName                           SnmpAdminString,
+    clabGRETunnelInterfaceLastChange                     Unsigned32,
+    clabGRETunnelInterfaceLowerLayers                    SnmpAdminString,
+    clabGRETunnelInterfaceProtocolIdOverride             Unsigned32,
+    clabGRETunnelInterfaceUseChecksum                    TruthValue,
+    clabGRETunnelInterfaceKeyIdentifierGenerationPolicy  INTEGER,
+    clabGRETunnelInterfaceKeyIdentifier                  Unsigned32,
+    clabGRETunnelInterfaceUseSequenceNumber              TruthValue
+}
+
+clabGRETunnelInterfaceIndex    OBJECT-TYPE
+    SYNTAX      Unsigned32 (1..256)
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "The key for a unique instance of this object."
+    ::= {clabGRETunnelInterfaceEntry 1 }
+
+clabGRETunnelInterfaceRowStatus OBJECT-TYPE
+    SYNTAX      RowStatus
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "The RowStatus interlock for the creation and deletion of a table
+         entry."
+    ::= { clabGRETunnelInterfaceEntry 2 }
+
+clabGRETunnelInterfaceEnable OBJECT-TYPE
+    SYNTAX      TruthValue
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "Enable or disable mapping traffic from network interface into GRE
+         tunnel."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.GRE.Tunnel.{i}.Interface.{i}.Enable"
+    ::= { clabGRETunnelInterfaceEntry 3 }
+
+clabGRETunnelInterfaceStatus OBJECT-TYPE
+    SYNTAX      INTEGER {
+                    down(1),
+                    up(2),
+                    unknown(3),
+                    dormant(4),
+                    notPresent(5),
+                    lowerLayerDown(6),
+                    error(7)
+    }
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The status of this TunnelInterface. When Enable is false then Status
+         SHOULD normally be Down (or NotPresent or Error if there is a
+         fault condition on the interface).
+
+         When Enable is changed to true then Status SHOULD change to Up
+         if and only if the interface is able to transmit and receive
+         network traffic; it SHOULD change to Dormant if and only if the
+         interface is operable but is waiting for external actions before
+         it can transmit and receive network traffic (and subsequently change
+         to Up if still operable when the expected actions have completed);
+         it SHOULD change to LowerLayerDown if and only if the interface is
+         prevented from entering the Up state because one or more of the
+         interfaces beneath it is down; it SHOULD remain in the Error state
+         if there is an error or other fault condition detected on the
+         interface; it SHOULD remain in the NotPresent state if the interface
+         has missing (typically hardware) components; it SHOULD change to
+         Unknown if the state of the interface can not be determined for some
+         reason."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.GRE.Tunnel.{i}.Interface.{i}.Status"
+    DEFVAL { down }
+    ::= { clabGRETunnelInterfaceEntry 4 }
+
+clabGRETunnelInterfaceAlias OBJECT-TYPE
+    SYNTAX      SnmpAdminString
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "A non-volatile handle used to reference this instance. Alias
+         provides a mechanism for an ACS to label this instance for future
+         reference."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.GRE.Tunnel.{i}.Interface.{i}.Alias"
+    ::= { clabGRETunnelInterfaceEntry 5 }
+
+clabGRETunnelInterfaceName OBJECT-TYPE
+    SYNTAX      SnmpAdminString
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "GRE tunnel interface name (The textual name of the tunnel interface
+         as assigned by the CPE)"
+    ::= { clabGRETunnelInterfaceEntry 6 }
+
+clabGRETunnelInterfaceLastChange OBJECT-TYPE
+    SYNTAX      Unsigned32
+    UNITS       "seconds"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The accumulated time in seconds since the tunnel interface entered
+         its current operational state."
+    ::= { clabGRETunnelInterfaceEntry 7 }
+
+clabGRETunnelInterfaceLowerLayers OBJECT-TYPE
+    SYNTAX      SnmpAdminString
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "Comma-separated list of source ifIndex values whose traffic will be
+         passed through the GRE tunnel associated with this TunnelInterface.
+         Interface numbers are defined according to Annex A of the eRouter
+         specification."
+
+    ::= { clabGRETunnelInterfaceEntry 8 }
+
+clabGRETunnelInterfaceProtocolIdOverride OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "The protocol ID assigned to this TunnelInterface. The Protocol ID
+         is the EtherType value used to identify the encapsulated payload.
+         When set to 0 the CPE determines the Protocol Id."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.GRE.Tunnel.{i}.Interface.{i}.ProtocolIdOverride"
+    ::= { clabGRETunnelInterfaceEntry 9 }
+
+clabGRETunnelInterfaceUseChecksum OBJECT-TYPE
+    SYNTAX      TruthValue
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "Enable or disable optional checksum in outgoing GRE packets."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.GRE.Tunnel.{i}.Interface.{i}.UseChecksum"
+    DEFVAL { false }
+    ::= { clabGRETunnelInterfaceEntry 10 }
+
+clabGRETunnelInterfaceKeyIdentifierGenerationPolicy OBJECT-TYPE
+    SYNTAX      INTEGER {
+                    disabled(1),
+                    provisioned(2),
+                    generated(3)
+    }
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "Control over optional Key field in GRE header of outgoing packets.
+         Disabled means key is not present, provisioned uses the value
+         provided in the key field, generated means CPE will generate key."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.GRE.Tunnel.{i}.Interface.{i}.KeyIdentifierGenerationPolicy"
+    DEFVAL { disabled }
+    ::= { clabGRETunnelInterfaceEntry 11 }
+
+clabGRETunnelInterfaceKeyIdentifier OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "When KeyIdentifierGenerationPolicy is provisioned, this is the
+         value for the Key header."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.GRE.Tunnel.{i}.Interface.{i}.KeyIdentifier"
+    ::= { clabGRETunnelInterfaceEntry 12 }
+
+clabGRETunnelInterfaceUseSequenceNumber OBJECT-TYPE
+    SYNTAX      TruthValue
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "Enable or disable optional sequence number field in outgoing GRE
+         packets."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.GRE.Tunnel.{i}.Interface.{i}.UseSequenceNumber"
+    DEFVAL { false }
+    ::= { clabGRETunnelInterfaceEntry 13 }
+
+clabGRETunnelInterfaceStatsTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF ClabGRETunnelInterfaceStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "This table provides statistical information of GRE tunnel interfaces.
+         This table extends clabGRETunnelInterfaceTable. The index used is
+         imported from the clabGRETunnelInterfaceTable. If a row is
+         deleted from clabGRETunnelInterfaceTable, then the extension row
+         will also be deleted."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.GRE.Tunnel.{i}.Interface.{i}.Stats"
+    ::= { clabGREObjects 6 }
+
+clabGRETunnelInterfaceStatsEntry OBJECT-TYPE
+    SYNTAX      ClabGRETunnelInterfaceStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "Each table entry provides statistical information on a GRE tunnel."
+    AUGMENTS { clabGRETunnelInterfaceEntry }
+    ::= { clabGRETunnelInterfaceStatsTable 1 }
+
+ClabGRETunnelInterfaceStatsEntry ::= SEQUENCE {
+    clabGRETunnelInterfaceStatsBytesSent                        Counter64,
+    clabGRETunnelInterfaceStatsBytesReceived                    Counter64,
+    clabGRETunnelInterfaceStatsPacketsSent                      Counter64,
+    clabGRETunnelInterfaceStatsPacketsReceived                  Counter64,
+    clabGRETunnelInterfaceStatsErrorsSent                       Counter64,
+    clabGRETunnelInterfaceStatsErrorsReceived                   Counter64,
+    clabGRETunnelInterfaceStatsDiscardChecksumReceived          Counter64,
+    clabGRETunnelInterfaceStatsDiscardSequenceNumberReceived    Counter64
+}
+
+clabGRETunnelInterfaceStatsBytesSent OBJECT-TYPE
+    SYNTAX      Counter64
+    UNITS       "bytes"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Number bytes sent."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.GRE.Tunnel.{i}.Interface.{i}.Stats.BytesSent"
+    ::= { clabGRETunnelInterfaceStatsEntry 1 }
+
+clabGRETunnelInterfaceStatsBytesReceived OBJECT-TYPE
+    SYNTAX      Counter64
+    UNITS       "bytes"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Number bytes received."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.GRE.Tunnel.{i}.Interface.{i}.Stats.BytesReceived"
+    ::= { clabGRETunnelInterfaceStatsEntry 2 }
+
+clabGRETunnelInterfaceStatsPacketsSent OBJECT-TYPE
+    SYNTAX      Counter64
+    UNITS       "packets"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Number packets sent."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.GRE.Tunnel.{i}.Interface.{i}.Stats.PacketsSent"
+    ::= { clabGRETunnelInterfaceStatsEntry 3 }
+
+clabGRETunnelInterfaceStatsPacketsReceived OBJECT-TYPE
+    SYNTAX      Counter64
+    UNITS       "packets"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Number packets received."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.GRE.Tunnel.{i}.Interface.{i}.Stats.PacketsReceived"
+    ::= { clabGRETunnelInterfaceStatsEntry 4 }
+
+clabGRETunnelInterfaceStatsErrorsSent OBJECT-TYPE
+    SYNTAX      Counter64
+    UNITS       "packets"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Number packets received that were discarded.
+         Because source network interface is down."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.GRE.Tunnel.{i}.Interface.{i}.Stats.ErrorsSent"
+    ::= { clabGRETunnelInterfaceStatsEntry 5 }
+
+clabGRETunnelInterfaceStatsErrorsReceived OBJECT-TYPE
+    SYNTAX      Counter64
+    UNITS       "packets"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Number packets received that were in error.
+         Because tunnel packets are not correct type.
+         Eg. Received IP packet instead of L2 packets."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.GRE.Tunnel.{i}.Interface.{i}.Stats.ErrorsReceived"
+    ::= { clabGRETunnelInterfaceStatsEntry 6 }
+
+clabGRETunnelInterfaceStatsDiscardChecksumReceived OBJECT-TYPE
+    SYNTAX      Counter64
+    UNITS       "packets"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The total number of packets received by the tunnel interface that
+         are discarded because of Checksum errors."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.GRE.Tunnel.{i}.Interface.{i}.Stats.DiscardChecksumReceived"
+    ::= { clabGRETunnelInterfaceStatsEntry 7 }
+
+clabGRETunnelInterfaceStatsDiscardSequenceNumberReceived OBJECT-TYPE
+    SYNTAX      Counter64
+    UNITS       "packets"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The total number of packets received by the tunnel interface that
+         are discarded because of Sequence Number errors."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.GRE.Tunnel.{i}.Interface.{i}.Stats
+         .DiscardSequenceNumberReceived"
+    ::= { clabGRETunnelInterfaceStatsEntry 8 }
+
+clabGREFilterTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF ClabGREFilterEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "This table contains settings to allow packets passing through
+         any tunnel, a particular tunnel, or a particular tunnel interface
+         to have defined header modifications made.
+
+         Entries in this table are applied against the packets that are to be
+         encapsulated within the GRE Tunnel based on the following conditions.
+
+         Filter table entries are in priority order, with the lowest Order
+         values being the highest priority. Only the first enabled matching
+         entry is applied to each packet.
+
+         * If the value of FilterAllInterfaces is true, then this entry
+           applies to all Tunnel and TunnelInterface instances.
+         * Otherwise, this filter applies to the Tunnel or TunnelInterface
+           referenced by FilterInterface.
+         * For enabled table entries, if FilterInterface is not valid,
+           then the table entry is inoperable and the CPE MUST set Status to
+           errorMisconfigured.
+
+         For each packet, enabled entries are checked from lowest to highest
+         Order, and the first table entry that matches according to the
+         AllInterfaces, Interface, VlanIdCheck, and VlanIdExclude criteria
+         is applied to the packet. All other Filter entries are ignored."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069, Device.GRE.Filter"
+    ::= { clabGREObjects 7 }
+
+clabGREFilterEntry OBJECT-TYPE
+    SYNTAX      ClabGREFilterEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "List of individual filter entries."
+    INDEX { clabGREFilterIndex }
+    ::= { clabGREFilterTable 1 }
+
+ClabGREFilterEntry ::= SEQUENCE {
+    clabGREFilterIndex              Unsigned32,
+    clabGREFilterRowStatus          RowStatus,
+    clabGREFilterEnable             TruthValue,
+    clabGREFilterStatus             INTEGER,
+    clabGREFilterOrder              Unsigned32,
+    clabGREFilterAlias              SnmpAdminString,
+    clabGREFilterInterface          SnmpAdminString,
+    clabGREFilterAllInterfaces      TruthValue,
+    clabGREFilterVlanIdCheck        Integer32,
+    clabGREFilterVlanIdExclude      TruthValue,
+    clabGREFilterDscpMarkPolicy     Integer32,
+    clabGREFilterVlanTag            Unsigned32
+}
+
+clabGREFilterIndex    OBJECT-TYPE
+    SYNTAX      Unsigned32 (1..256)
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "The key for a unique instance of this object."
+    ::= { clabGREFilterEntry 1 }
+
+clabGREFilterRowStatus OBJECT-TYPE
+    SYNTAX      RowStatus
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "The RowStatus interlock for the creation and deletion of a table
+         entry."
+    ::= { clabGREFilterEntry 2 }
+
+clabGREFilterEnable    OBJECT-TYPE
+    SYNTAX      TruthValue
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "Enable or disable this filter to modify packets."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069, Device.GRE.Filter.{i}.Enable"
+    DEFVAL { false }
+    ::= { clabGREFilterEntry 3 }
+
+clabGREFilterStatus    OBJECT-TYPE
+    SYNTAX      INTEGER {
+                    disabled(1),
+                    enabled(2),
+                    errorMisconfigured(3),
+                    error(4)
+    }
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The status of this filter. The errorMisconfigured value indicates
+         that a necessary configuration value is undefined or invalid. The
+         error value MAY be used by the CPE to indicate a locally defined
+         error condition."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069, Device.GRE.Filter.{i}.Status"
+    DEFVAL { disabled }
+    ::= { clabGREFilterEntry 4 }
+
+clabGREFilterOrder OBJECT-TYPE
+    SYNTAX      Unsigned32 (1..256)
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "Position of the Filter entry in the order of precedence. A value
+         of 1 indicates the first entry considered (highest precedence).
+         For each packet, the highest ordered entry that matches the filter
+         criteria is applied. All lower order entries are ignored.
+
+         When this value is modified, if the value matches that of an
+         existing entry, the Order value for the existing entry and all
+         lower Order entries is incremented (lowered in precedence) to
+         ensure uniqueness of this value. A deletion causes Order values to
+         be compacted. When a value is changed, incrementing occurs before
+         compaction.
+
+         The value of Order on creation of a Filter table entry MUST be one
+         greater than the largest current value (initially assigned the
+         lowest precedence)."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069, Device.GRE.Filter.{i}.Order"
+    ::= { clabGREFilterEntry 5 }
+
+clabGREFilterAlias OBJECT-TYPE
+    SYNTAX      SnmpAdminString
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "A non-volatile handle used to reference this instance. Alias
+         provides a mechanism for an ACS to label this instance for future
+         reference."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069, Device.GRE.Filter.{i}.Alias"
+    ::= { clabGREFilterEntry 6 }
+
+clabGREFilterInterface      OBJECT-TYPE
+    SYNTAX      SnmpAdminString
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "Filter criterion. This specifies the path name of a row in the
+         Tunnel or TunnelInterface table to which the filter is applied."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.GRE.Filter.{i}.Interface"
+    ::= { clabGREFilterEntry 7 }
+
+clabGREFilterAllInterfaces  OBJECT-TYPE
+    SYNTAX      TruthValue
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "Filter criterion. If false, this filter only applies to the Tunnel
+         or TunnelInterface referred to by FilterInterface. If true, this
+         filter applies to all TunnelInterfaces for all Tunnels."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.GRE.Filter.{i}.AllInterfaces"
+    ::= { clabGREFilterEntry 8 }
+
+clabGREFilterVlanIdCheck    OBJECT-TYPE
+    SYNTAX      Integer32
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "Filter criterion. Current outer Ethernet VLAN ID as defined in
+         802.1Q. A value of -1 indicates this criterion is not used for
+         filtering."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.GRE.Filter.{i}.VLANIDCheck"
+    DEFVAL      { -1 }
+    ::= { clabGREFilterEntry 9 }
+
+clabGREFilterVlanIdExclude    OBJECT-TYPE
+    SYNTAX      TruthValue
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "If false, the filter includes only those packets that match the
+         VlanIdCheck entry, if specified. If true, the filter includes all
+         packets except those that match the VlanIdCheck entry, if specified."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.GRE.Filter.{i}.VLANIDExclude"
+    DEFVAL { false }
+    ::= { clabGREFilterEntry 10 }
+
+clabGREFilterDscpMarkPolicy OBJECT-TYPE
+    SYNTAX      Integer32 (-2..63)
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "The method is used to set the 6 bits of the DSCP field in the
+         IPv4 header or traffic class in IPv6 header of the GRE packet.
+         A value of -1 indicates copy from the upstream packet. A value
+         of -2 indicates automatic marking of DSCP."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.GRE.Filter.{i}.DSCPMarkPolicy"
+    DEFVAL { 0 }
+    ::= { clabGREFilterEntry 11 }
+
+clabGREFilterVlanTag OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "Add VLAN tag consists of 16bit of Tag Protocol Identifier (TPID)
+         and 16 bit of Tag Control Identifier (TCI).
+         Value of 0 will disable adding VLAN tag.
+         Tag Protocol Identifier (TPID) should set to 0x8100."
+    DEFVAL { 0 }
+    ::= { clabGREFilterEntry 12 }
+
+--
+-- Conformance definitions
+--
+clabGREMibConformance  OBJECT IDENTIFIER ::= { clabGREMib 2 }
+
+--
+-- Compliance Statements
+--
+clabGREMibCompliances  OBJECT IDENTIFIER ::= { clabGREMibConformance 1 }
+clabGREMibGroups       OBJECT IDENTIFIER ::= { clabGREMibConformance 2 }
+
+clabGRECompliance MODULE-COMPLIANCE
+    STATUS current
+    DESCRIPTION
+        "The compliance statement for entities which implement the GRE MIB."
+    MODULE -- this module
+    MANDATORY-GROUPS { clabGREGroup }
+    ::= { clabGREMibCompliances 1 }
+
+clabGREGroup OBJECT-GROUP
+    OBJECTS {
+        clabGRETunnelNumberOfEntries,
+        clabGREFilterNumberOfEntries,
+        clabGRETunnelRowStatus,
+        clabGRETunnelEnable,
+        clabGRETunnelStatus,
+        clabGRETunnelAlias,
+        clabGRETunnelRemoteEndpoints,
+        clabGRETunnelKeepAlivePolicy,
+        clabGRETunnelKeepAliveTimeout,
+        clabGRETunnelKeepAliveThreshold,
+        clabGRETunnelKeepAliveCount,
+        clabGRETunnelKeepAliveInterval,
+        clabGRETunnelKeepAliveFailureInterval,
+        clabGRETunnelKeepAliveRecoverInterval,
+        clabGRETunnelDeliveryHeaderProtocol,
+        clabGRETunnelDefaultDscpMark,
+        clabGRETunnelConnectedRemoteEndpoint,
+        clabGRETunnelInterfaceNumberOfEntries,
+        clabGRETunnelTcpMssClamping,
+        clabGRETunnelConcentratorServiceName,
+        clabGRETunnnelRemoteEndpointConnectivityState,
+        clabGRETunnelStatsKeepAliveSent,
+        clabGRETunnelStatsKeepAliveReceived,
+        clabGRETunnelStatsBytesSent,
+        clabGRETunnelStatsBytesReceived,
+        clabGRETunnelStatsPacketsSent,
+        clabGRETunnelStatsPacketsReceived,
+        clabGRETunnelStatsErrorsSent,
+        clabGRETunnelStatsErrorsReceived,
+        clabGRETunnelInterfaceRowStatus,
+        clabGRETunnelInterfaceStatus,
+        clabGRETunnelInterfaceAlias,
+        clabGRETunnelInterfaceName,
+        clabGRETunnelInterfaceLastChange,
+        clabGRETunnelInterfaceLowerLayers,
+        clabGRETunnelInterfaceEnable,
+        clabGRETunnelInterfaceProtocolIdOverride,
+        clabGRETunnelInterfaceUseChecksum,
+        clabGRETunnelInterfaceKeyIdentifierGenerationPolicy,
+        clabGRETunnelInterfaceKeyIdentifier,
+        clabGRETunnelInterfaceUseSequenceNumber,
+        clabGRETunnelInterfaceStatsBytesSent,
+        clabGRETunnelInterfaceStatsBytesReceived,
+        clabGRETunnelInterfaceStatsPacketsSent,
+        clabGRETunnelInterfaceStatsPacketsReceived,
+        clabGRETunnelInterfaceStatsErrorsSent,
+        clabGRETunnelInterfaceStatsErrorsReceived,
+        clabGRETunnelInterfaceStatsDiscardChecksumReceived,
+        clabGRETunnelInterfaceStatsDiscardSequenceNumberReceived,
+        clabGREFilterRowStatus,
+        clabGREFilterEnable,
+        clabGREFilterStatus,
+        clabGREFilterOrder,
+        clabGREFilterAlias,
+        clabGREFilterInterface,
+        clabGREFilterAllInterfaces,
+        clabGREFilterVlanIdCheck,
+        clabGREFilterVlanIdExclude,
+        clabGREFilterVlanTag,
+        clabGREFilterDscpMarkPolicy
+    }
+    STATUS current
+    DESCRIPTION
+        "A collection of objects providing instrumentation and control over
+         GRE tunnels."
+    ::= { clabGREMibGroups 1 }
+
+END
+

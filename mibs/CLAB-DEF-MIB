@@ -10,7 +10,7 @@ IMPORTS
                     FROM DOCS-IETF-BPI2-MIB; -- RFC 4131
 
 cableLabs MODULE-IDENTITY
-    LAST-UPDATED "201603160000Z" -- March 16, 2016
+    LAST-UPDATED "201607280000Z" -- July 28, 2016
     ORGANIZATION "Cable Television Laboratories, Inc."
     CONTACT-INFO
            "Postal: Cable Television Laboratories
@@ -26,6 +26,10 @@ cableLabs MODULE-IDENTITY
 
             Copyright 1999-2016 Cable Television Laboratories, Inc.
             All rights reserved."
+    REVISION "201607280000Z" -- July 28, 2016
+    DESCRIPTION
+            "Revised Version includes ECN MIB-CLABDEF-N-16.0149-3."
+
     REVISION "201603160000Z" -- March 16, 2016
     DESCRIPTION
             "Revised Version includes ECNs MIB-CLABDEF-N-15.0138-1
@@ -307,20 +311,15 @@ clabGREMib OBJECT IDENTIFIER
     ::= { clabCommonMibs 3 }
 
 clabMAPMib OBJECT IDENTIFIER
-    -- This CableLabs cross project MIB module provides
-    -- management objects for the management of
-    -- Mapping of Address and Port for encapsulation and translation
-    -- (MAP-E and MAP-T)
-    -- Reference:
-    -- CableLabs DOCSIS eRouter Specification.
+    -- This CableLabs cross project MIB module was
+    -- incorporated in the clabGWMib.
+    -- This MIB is obsolete.
     ::= { clabCommonMibs 4 }
 
 clabDNSMib OBJECT IDENTIFIER
-    -- This CableLabs cross project MIB module provides
-    -- management objects for the management of
-    -- DNS proxy forwarding.
-    -- Reference:
-    -- CableLabs DOCSIS eRouter Specification.
+    -- This CableLabs cross project MIB module was
+    -- incorporated in the clbGWMib
+    -- This MIB is obsolete.
     ::= { clabCommonMibs 5 }
 
 clabGWMib OBJECT IDENTIFIER
@@ -415,3 +414,4 @@ DocsL2vpnIfList ::= TEXTUAL-CONVENTION
         -- 19..31 reserved for other eSAFE interfaces
     }
 END
+

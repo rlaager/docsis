@@ -3,23 +3,32 @@ CLAB-GW-MIB DEFINITIONS ::= BEGIN
 IMPORTS
     MODULE-IDENTITY,
     OBJECT-TYPE,
-    TimeTicks
-                       FROM SNMPv2-SMI
+    TimeTicks,
+    Counter64,
+    Integer32,
+    Unsigned32
+             FROM SNMPv2-SMI         -- RFC 2578
     OBJECT-GROUP,
     MODULE-COMPLIANCE
-                       FROM SNMPv2-CONF
+             FROM SNMPv2-CONF        -- RFC 2580
+    RowStatus
+             FROM SNMPv2-TC          -- RFC 2579
     SnmpAdminString
-                       FROM SNMP-FRAMEWORK-MIB
+             FROM SNMP-FRAMEWORK-MIB -- RFC 3411
     DateAndTime,
     TruthValue
-                       FROM SNMPv2-TC
+             FROM SNMPv2-TC          -- RFC 2579
+    InetAddressIPv4,
+    InetAddressIPv6,
+    InetAddressPrefixLength
+             FROM INET-ADDRESS-MIB   --  RFC 4001
     clabCommonMibs
-                       FROM CLAB-DEF-MIB;
+             FROM CLAB-DEF-MIB;
 
-    clabGWMib MODULE-IDENTITY
 
-    LAST-UPDATED  "201602240000Z" -- February 24, 2016
+clabGWMib MODULE-IDENTITY
 
+    LAST-UPDATED  "201608040000Z" -- August 4, 2016
     ORGANIZATION "Cable Television Laboratories, Inc."
     CONTACT-INFO
             "Broadband Network Services
@@ -29,19 +38,37 @@ IMPORTS
              Phone: +1 303-661-9100
              Email: mibs@cablelabs.com"
      DESCRIPTION
-            "This MIB module contains the management objects
-             for gateways that also support TR-181i2 .
-
+            "This MIB module contains the management
+             for gateways that also support TR-181i2.
              Copyright 2016 Cable Television Laboratories, Inc.
              All rights reserved."
+     REVISION "201608040000Z" -- August 4, 2016
+     DESCRIPTION
+            "Revised per ECN eRouter-N-16.1513-2."
      REVISION "201602240000Z" -- February 24, 2016
      DESCRIPTION
             "Original version, created by eRouter-N-15.1413-4."
-
     ::= { clabCommonMibs 6 }
 
--- Object Definitions
-clabGWDeviceInfoObjects OBJECT IDENTIFIER ::= { clabGWMib 1 }
+
+-- Administrative assignments
+clabGWNotifications      OBJECT IDENTIFIER ::= { clabGWMib 0 }
+clabGWMibObjects         OBJECT IDENTIFIER ::= { clabGWMib 1 }
+clabGWMibConformance     OBJECT IDENTIFIER ::= { clabGWMib 2 }
+
+clabGWMibCompliances     OBJECT IDENTIFIER ::= { clabGWMibConformance 1 }
+clabGWMibGroups          OBJECT IDENTIFIER ::= { clabGWMibConformance 2 }
+
+-- No Notifications are defined for this MIB
+
+clabGWDeviceInfoObjects  OBJECT IDENTIFIER ::= { clabGWMibObjects 1 }
+clabGWDNSObjects         OBJECT IDENTIFIER ::= { clabGWMibObjects 2 }
+clabGWMAPObjects         OBJECT IDENTIFIER ::= { clabGWMibObjects 3 }
+
+
+-- ---------------------------------------------------------------------
+-- Gateway Device Info Objects
+-- ---------------------------------------------------------------------
 
 clabGWDeviceInfoManufacturer    OBJECT-TYPE
     SYNTAX      SnmpAdminString (SIZE(64))
@@ -94,7 +121,7 @@ clabGWDeviceInfoModelNumber    OBJECT-TYPE
     ::= { clabGWDeviceInfoObjects 5 }
 
 clabGWDeviceInfoDescription    OBJECT-TYPE
-    SYNTAX      SnmpAdminString (SIZE(256))
+    SYNTAX      SnmpAdminString (SIZE(255))
     MAX-ACCESS  read-only
     STATUS      current
     DESCRIPTION
@@ -171,6 +198,7 @@ clabGWDeviceInfoProvisioningCode  OBJECT-TYPE
         "This object is defined in TR-181 Device.DeviceInfo.ProvisioningCode."
     REFERENCE
         "TR-181 Device Data Model for TR-069."
+     DEFVAL {""}
     ::= { clabGWDeviceInfoObjects 13 }
 
 clabGWDeviceInfoUpTime  OBJECT-TYPE
@@ -193,7 +221,7 @@ clabGWDeviceInfoFirstUseDate  OBJECT-TYPE
         "TR-181 Device Data Model for TR-069."
     ::= { clabGWDeviceInfoObjects 15 }
 
-clabGWPublicAccessEnabled    OBJECT-TYPE
+clabGWDevicePublicAccessEnabled    OBJECT-TYPE
     SYNTAX      TruthValue
     MAX-ACCESS  read-write
     STATUS      current
@@ -205,13 +233,953 @@ clabGWPublicAccessEnabled    OBJECT-TYPE
          is disabled for this device."
     REFERENCE
         "TR-181 Device Data Model for TR-069."
+    DEFVAL { false }
     ::= { clabGWDeviceInfoObjects 16 }
 
 
--- Conformance Definitions
-clabGWMibConformance OBJECT IDENTIFIER ::= { clabGWMib 99 }
-clabGWMibCompliances OBJECT IDENTIFIER ::= { clabGWMibConformance 1 }
-clabGWMibGroups      OBJECT IDENTIFIER ::= { clabGWMibConformance 2 }
+-- ---------------------------------------------------------------------
+-- DNS Objects
+-- ---------------------------------------------------------------------
+
+clabGWDeviceDNSIpv6QueryForDualMode OBJECT-TYPE
+    SYNTAX      TruthValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+        "This object provides control over the DNS queries transmitted
+         by LAN clients when the Router is configured in either
+         'IPv6 Protocol Enabled' or 'Dual Protocol Enabled' modes.
+         When the value of clabGWDeviceDNSIpv6QueryForDualMode is set to 'true',
+         the IPv4 DNS query will be transport layer re-encapsulated into
+         IPv6 for transmission across the Service Provider's network.
+         When set to 'false', the IPv4 DNS query will be transmitted.
+         natively over IPv4. This attribute has no effect if the router
+         is configured for 'IPv4 Protocol Enabled' mode"
+    REFERENCE
+        "CableLabs eRouter Specification"
+    DEFVAL { false }
+    ::= { clabGWDNSObjects 1 }
+
+
+-- ---------------------------------------------------------------------
+-- MAP MIB Objects
+-- ---------------------------------------------------------------------
+
+clabGWMAPEnable OBJECT-TYPE
+    SYNTAX      TruthValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+        "Enables or disables MAP."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069, Device.MAP.Enable"
+    DEFVAL { false }
+    ::= { clabGWMAPObjects 1 }
+
+clabGWMAPTunnelDomainNumEntries OBJECT-TYPE
+    SYNTAX      Unsigned32 (0..256)
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Number of configured entries in the Domain table."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.MAP.DomainNumEntries"
+    ::= { clabGWMAPObjects 2 }
+
+--
+-- The MAP Domain Table
+--
+
+clabGWMAPDomainTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF ClabGWMAPDomainEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "MAP domain settings [MAP]. Each instance models a MAP domain.
+         MAP supports two transport modes, both of which use NAPT44 (modified
+         to use a restricted port range):
+           MAP-E (TransportMode = Encapsulation) uses an IPv4-in-IPv6 tunnel.
+           MAP-T (TransportMode = Translation) uses stateless NAT64."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069, Device.MAP.Domain"
+    ::= { clabGWMAPObjects 3 }
+
+clabGWMAPDomainEntry OBJECT-TYPE
+    SYNTAX      ClabGWMAPDomainEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "This table allows configuration and monitoring of MAP Domains."
+    INDEX { clabGWMAPDomainIndex }
+    ::= { clabGWMAPDomainTable 1 }
+
+ClabGWMAPDomainEntry ::= SEQUENCE {
+    clabGWMAPDomainIndex                            Unsigned32,
+    clabGWMAPDomainEnable                           TruthValue,
+    clabGWMAPDomainStatus                           INTEGER,
+    clabGWMAPDomainAlias                            OCTET STRING,
+    clabGWMAPDomainTransportMode                    INTEGER,
+    clabGWMAPDomainWANInterface                     OCTET STRING,
+    clabGWMAPDomainIPv6Prefix                       InetAddressIPv6,
+    clabGWMAPDomainIPv6PrefixLen                    InetAddressPrefixLength,
+    clabGWMAPDomainBRIPv6Prefix                     InetAddressIPv6,
+    clabGWMAPDomainBRIPv6PrefixLen                  InetAddressPrefixLength,
+    clabGWMAPDomainDSCPMarkPolicy                   Integer32,
+    clabGWMAPDomainIncludeSystemPorts               TruthValue,
+    clabGWMAPDomainRuleNumEntries                   Unsigned32,
+    clabGWMAPDomainRowStatus                        RowStatus
+ }
+
+clabGWMAPDomainIndex OBJECT-TYPE
+    SYNTAX      Unsigned32 (1..256)
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "Index value of the clabGWMAPDomainTable."
+    ::= { clabGWMAPDomainEntry 1 }
+
+clabGWMAPDomainEnable OBJECT-TYPE
+    SYNTAX      TruthValue
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "Enables or disable this MAP domain."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069, Device.MAP.Domain.{i}.Enable"
+    DEFVAL { false }
+    ::= { clabGWMAPDomainEntry 2 }
+
+clabGWMAPDomainStatus OBJECT-TYPE
+    SYNTAX      INTEGER {
+                    disabled(1),
+                    enabled(2),
+                    errorMisconfigured(3),
+                    error(4)
+    }
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The current operational state of the MAP domain.
+         The Error_Misconfigured value indicates that a necessary configuration
+         value is undefined or invalid. Enumeration of:
+            Disabled
+            Enabled
+            Error_Misconfigured (OPTIONAL)
+            Error (OPTIONAL)"
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069, Device.MAP.Domain.{i}.Status"
+    DEFVAL  { disabled }
+    ::= { clabGWMAPDomainEntry 3 }
+
+clabGWMAPDomainAlias OBJECT-TYPE
+    SYNTAX      OCTET STRING (SIZE (0..64))
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "A non-volatile handle used to reference this instance. Alias
+         provides a mechanism for an ACS to label this instance for future
+         reference."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069, Device.MAP.Domain.{i}.Alias"
+    DEFVAL { "" }
+    ::= { clabGWMAPDomainEntry 4 }
+
+clabGWMAPDomainTransportMode OBJECT-TYPE
+    SYNTAX      INTEGER {
+                    encapsulation(1),
+                    translation(2)
+                    }
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "The transport mode to use. Corresponds to the [MAP-DHCP] S46_CONT_MAPE
+         and S46_CONT_MAPT container options.
+         Enumeration of:
+            'encapsulation' (MAP-E [MAP])
+            'translation' (MAP-T [MAP-T])"
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.MAP.Domain.{i}.TransportMode"
+    DEFVAL { translation }
+    ::= { clabGWMAPDomainEntry 5 }
+
+clabGWMAPDomainWANInterface OBJECT-TYPE
+    SYNTAX      OCTET STRING (SIZE (0..256))
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "The IP interface with which this MAP domain is associated.
+         This will always be a NAT-ted upstream (WAN) interface.
+         The End-user IPv6 prefix IPv6Prefix is one of this IP interface's
+         prefixes."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.MAP.Domain.{i}.WANInterface"
+    DEFVAL { "" }
+    ::= { clabGWMAPDomainEntry 6 }
+
+clabGWMAPDomainIPv6Prefix OBJECT-TYPE
+    SYNTAX      InetAddressIPv6
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "The MAP domain's End-user IPv6 prefix."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.MAP.Domain.{i}.IPv6Prefix"
+    DEFVAL { '0000000000000000'H }
+    ::= { clabGWMAPDomainEntry 7 }
+
+clabGWMAPDomainIPv6PrefixLen OBJECT-TYPE
+    SYNTAX      InetAddressPrefixLength
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "The MAP domain's End-user IPv6 prefix length"
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.MAP.Domain.{i}.IPv6Prefix"
+    DEFVAL { 0 }
+    ::= { clabGWMAPDomainEntry 8 }
+
+clabGWMAPDomainBRIPv6Prefix OBJECT-TYPE
+    SYNTAX      InetAddressIPv6
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "The MAP Border Relay (BR) address or prefix.
+         For MAP-E this is the BR address and therefore MUST be a /128 [MAP].
+         For MAP-T this is the BR prefix [MAP-T]."
+   REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.MAP.Domain.{i}.BRIPv6Prefix"
+    DEFVAL { '0000000000000000'H }
+    ::= { clabGWMAPDomainEntry 9 }
+
+clabGWMAPDomainBRIPv6PrefixLen OBJECT-TYPE
+    SYNTAX      InetAddressPrefixLength
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "The MAP Border Relay (BR) address or prefix length.
+         For MAP-E this is the BR address and therefore MUST be a /128 [MAP].
+         For MAP-T this is the BR prefix [MAP-T]."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.MAP.Domain.{i}.BRIPv6Prefix"
+    DEFVAL { 64 }
+    ::= { clabGWMAPDomainEntry 10 }
+
+clabGWMAPDomainDSCPMarkPolicy OBJECT-TYPE
+    SYNTAX      Integer32 (-2..63)
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "DSCP with which to mark the outer IP header for traffic that is
+         associated with this MAP domain. Downstream packets are never re-marked.
+         Automatic DSCP marking behavior is a local matter to the device,
+         possibly influenced by other Broadband Forum standards that it supports.
+         A value of -1 indicates copy from the incoming packet.
+         A value of -2 indicates automatic marking of DSCP."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.MAP.Domain.{i}.DSCPMarkPolicy"
+    DEFVAL { 0 }
+    ::= { clabGWMAPDomainEntry 11 }
+
+clabGWMAPDomainIncludeSystemPorts OBJECT-TYPE
+    SYNTAX      TruthValue
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "Whether to include low-numbered (system) ports in the Port-sets.
+         Normally ports in the range [0:2^(16-PSIDOffset)-1] are excluded,
+         e.g. for the default PSIDOffset value of 4, ports [0:4095] are not
+         included in the Port-sets. As specified in [MAP], this parameter is
+         relevant only when PSIDOffset is 0."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.MAP.Domain.{i}.IncludeSystemPorts"
+    DEFVAL { false }
+    ::= { clabGWMAPDomainEntry 12 }
+
+clabGWMAPDomainRuleNumEntries OBJECT-TYPE
+    SYNTAX      Unsigned32 (0..65535)
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Number of configured entries in the TunnelInterface table for
+         this tunnel."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.MAP.Domain.{i}.RuleNumEntries"
+    ::= { clabGWMAPDomainEntry 13 }
+
+clabGWMAPDomainRowStatus OBJECT-TYPE
+    SYNTAX      RowStatus
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "The RowStatus interlock for the creation and deletion of a table
+         entry."
+    ::= { clabGWMAPDomainEntry 14 }
+
+--
+-- The MAP Domain RULE Table
+--
+
+clabGWMAPDomainRuleTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF ClabGWMAPDomainRuleEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "The MAP domain's Mapping Rules [MAP].
+         The rule with the longest match between its IPv6Prefix and the end-user
+         IPv6Prefix is the Basic Mapping Rule (BMR).
+         Any of the rules (including the BMR) can be a Forwarding Mapping Rule.
+         At most one entry in this table (regardless of whether or not it is enabled)
+         can exist with a given value for Alias.
+         On creation of a new table entry, the CPE MUST choose an initial value for Alias
+         such that the new entry does not conflict with any existing entries."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.MAP.Domain.{i}.Rule.{i}"
+    ::= { clabGWMAPObjects 4 }
+
+clabGWMAPDomainRuleEntry OBJECT-TYPE
+    SYNTAX      ClabGWMAPDomainRuleEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "List of individual rules mapped into MAP domains."
+    INDEX {
+        clabGWMAPDomainIndex,
+        clabGWMAPDomainRuleIndex
+    }
+    ::= { clabGWMAPDomainRuleTable 1 }
+
+ClabGWMAPDomainRuleEntry ::= SEQUENCE {
+    clabGWMAPDomainRuleIndex                          Unsigned32,
+    clabGWMAPDomainRuleEnable                         TruthValue,
+    clabGWMAPDomainRuleStatus                         INTEGER,
+    clabGWMAPDomainRuleAlias                          OCTET STRING,
+    clabGWMAPDomainRuleOrigin                         INTEGER,
+    clabGWMAPDomainRuleIPv6Prefix                     InetAddressIPv6,
+    clabGWMAPDomainRuleIPv6PrefixLen                  InetAddressPrefixLength,
+    clabGWMAPDomainRuleIPv4Prefix                     InetAddressIPv4,
+    clabGWMAPDomainRuleIPv4PrefixLen                  InetAddressPrefixLength,
+    clabGWMAPDomainRuleEABitsLength                   Unsigned32,
+    clabGWMAPDomainRuleIsFMR                          TruthValue,
+    clabGWMAPDomainRulePSIDOffset                     Unsigned32,
+    clabGWMAPDomainRulePSIDLength                     Unsigned32,
+    clabGWMAPDomainRulePSID                           Unsigned32,
+    clabGWMAPDomainRuleRowStatus                      RowStatus
+}
+
+clabGWMAPDomainRuleIndex    OBJECT-TYPE
+    SYNTAX      Unsigned32 (1..256)
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "The key for a unique instance of this object."
+    ::= {clabGWMAPDomainRuleEntry 1 }
+
+clabGWMAPDomainRuleEnable OBJECT-TYPE
+    SYNTAX      TruthValue
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "Enable or disable rule instance for MAP domain."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.MAP.Domain.{i}.Rule.{i}.Enable"
+    DEFVAL { false }
+    ::= { clabGWMAPDomainRuleEntry 2 }
+
+clabGWMAPDomainRuleStatus OBJECT-TYPE
+    SYNTAX      INTEGER {
+                    disabled(1),
+                    enabled(2),
+                    error(3)
+                    }
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The status of this Rule instance. Enumeration of:
+         - Disabled
+         - Enabled
+         - Error (OPTIONAL)
+         The Error value MAY be used by the CPE to indicate a locally defined
+         error condition."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.MAP.Domain.{i}.Rule.{i}.Status"
+    DEFVAL { disabled }
+    ::= { clabGWMAPDomainRuleEntry 3 }
+
+clabGWMAPDomainRuleAlias OBJECT-TYPE
+    SYNTAX      OCTET STRING (SIZE (0..64))
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "A non-volatile handle used to reference this instance. Alias
+         provides a mechanism for an ACS to label this instance for future
+         reference."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.MAP.Domain.{i}.Rule.{i}.Alias"
+    DEFVAL { "" }
+    ::= { clabGWMAPDomainRuleEntry 4 }
+
+clabGWMAPDomainRuleOrigin OBJECT-TYPE
+    SYNTAX      INTEGER {
+                    dhcpv6(1),
+                    static(2)
+                    }
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "The mechanism via which the Rule was created
+         Enumeration of:
+         'dhcpv6'
+         'static'"
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.MAP.Domain.{i}.Rule.{i}.Origin"
+    DEFVAL { static }
+    ::= { clabGWMAPDomainRuleEntry 5 }
+
+clabGWMAPDomainRuleIPv6Prefix OBJECT-TYPE
+    SYNTAX      InetAddressIPv6
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "The Rule IPv6 prefix. The Rule IPv6 prefix is a leading part of the
+        end-user IPv6Prefix, i.e. its length MUST be less than or equal to the
+        length of the end-user IPv6Prefix, and it MUST match the end-user
+        IPv6Prefix."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.MAP.Domain.{i}.Rule.{i}.IPv6Prefix"
+    ::= { clabGWMAPDomainRuleEntry 6 }
+
+clabGWMAPDomainRuleIPv6PrefixLen OBJECT-TYPE
+    SYNTAX      InetAddressPrefixLength
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "The Rule IPv6 prefix length."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.MAP.Domain.{i}.Rule.{i}.IPv6Prefix"
+    DEFVAL { 0 }
+    ::= { clabGWMAPDomainRuleEntry 7 }
+
+clabGWMAPDomainRuleIPv4Prefix OBJECT-TYPE
+    SYNTAX      InetAddressIPv4
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "[IPv4Prefix] The Rule IPv4 prefix."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.MAP.Domain.{i}.Rule.{i}.IPv4Prefix"
+    DEFVAL { '00000000'H }
+    ::= { clabGWMAPDomainRuleEntry 8 }
+
+clabGWMAPDomainRuleIPv4PrefixLen OBJECT-TYPE
+    SYNTAX      InetAddressPrefixLength
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "[IPv4Prefix] The Rule IPv4 prefix length."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.MAP.Domain.{i}.Rule.{i}.IPv4Prefix"
+    DEFVAL { 0 }
+    ::= { clabGWMAPDomainRuleEntry 9 }
+
+clabGWMAPDomainRuleEABitsLength OBJECT-TYPE
+    SYNTAX      Unsigned32 (0..48)
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "The length in bits of the Embedded Address (EA) bits in the end-user
+        IPv6Prefix."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.MAP.Domain.{i}.Rule.{i}.EABitsLength"
+    DEFVAL { 0 }
+    ::= { clabGWMAPDomainRuleEntry 10 }
+
+clabGWMAPDomainRuleIsFMR OBJECT-TYPE
+    SYNTAX      TruthValue
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "Indicates whether this rule is a Forwarding Mapping Rule (FMR)."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.MAP.Domain.{i}.Rule.{i}.IsFMR"
+    DEFVAL { false }
+    ::= { clabGWMAPDomainRuleEntry 11 }
+
+clabGWMAPDomainRulePSIDOffset OBJECT-TYPE
+    SYNTAX      Unsigned32 (0..16)
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "Port-set ID (PSID) offset in bits. The number of Port-sets is
+        2^PSIDOffset. Corresponds to the [MAP-DHCP] S46_PORTPARAMS (Port
+        Parameters) option's offset field."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,Device.MAP.Domain.{i}.PSIDOffset
+        but moved on a be on per Rule basis."
+        DEFVAL { 6 }
+    ::= { clabGWMAPDomainRuleEntry 12 }
+
+clabGWMAPDomainRulePSIDLength OBJECT-TYPE
+    SYNTAX      Unsigned32 (0..16)
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "The length in bits of the Port-set id (PSID) configured in the PSID
+        parameter. Corresponds to the [MAP-DHCP] S46_PORTPARAMS (Port
+        Parameters) option's PSID-len field
+        moved on a be on per Rule level."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.MAP.Domain.{i}.PSIDLength
+         but moved on a be on per Rule basis."
+    DEFVAL { 0 }
+    ::= { clabGWMAPDomainRuleEntry 13 }
+
+clabGWMAPDomainRulePSID OBJECT-TYPE
+    SYNTAX      Unsigned32 (0..65535)
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "Port-set ID (PSID) to use in preference to the value extracted from the
+        Embedded Address (EA) bits. Only the high order PSIDLength bits of the
+        PSID value are used, so the parameter is ignored when PSIDLength is zero.
+        Corresponds to the [MAP-DHCP] S46_PORTPARAMS (Port Parameters) option's
+        PSID field."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.MAP.Domain.{i}.PSIDLength
+         but moved on a be on per Rule basis."
+    DEFVAL { 0 }
+    ::= { clabGWMAPDomainRuleEntry 14 }
+
+clabGWMAPDomainRuleRowStatus OBJECT-TYPE
+    SYNTAX      RowStatus
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "The RowStatus interlock for the creation and deletion of a table
+         entry."
+    ::= { clabGWMAPDomainRuleEntry 15 }
+
+--
+-- The MAP Domain IF Table
+--
+
+clabGWMAPDomainIfTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF ClabGWMAPDomainIfEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "This table contains information specific to LAN side MAP domain interface."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.MAP.Domain.{i}.Interface"
+    ::= { clabGWMAPObjects 5 }
+
+clabGWMAPDomainIfEntry OBJECT-TYPE
+    SYNTAX      ClabGWMAPDomainIfEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "List of individual source interface entry mapped into a MAP domain."
+    INDEX {
+        clabGWMAPDomainIndex
+    }
+    ::= { clabGWMAPDomainIfTable 1 }
+
+ClabGWMAPDomainIfEntry ::= SEQUENCE {
+    clabGWMAPDomainIfIndex                          Unsigned32,
+    clabGWMAPDomainIfEnable                         TruthValue,
+    clabGWMAPDomainIfStatus                         INTEGER,
+    clabGWMAPDomainIfAlias                          OCTET STRING,
+    clabGWMAPDomainIfName                           OCTET STRING,
+    clabGWMAPDomainIfLastChange                     Unsigned32,
+    clabGWMAPDomainIfLowerLayers                    OCTET STRING,
+    clabGWMAPDomainIfRowStatus                      RowStatus
+}
+
+clabGWMAPDomainIfIndex    OBJECT-TYPE
+    SYNTAX      Unsigned32 (1..256)
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "The key for a unique instance of this object."
+    ::= { clabGWMAPDomainIfEntry 1 }
+
+clabGWMAPDomainIfEnable OBJECT-TYPE
+    SYNTAX      TruthValue
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "Enable or disable MAP domain interface."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.MAP.Domain.{i}.Interface.Enable"
+    DEFVAL { false }
+    ::= { clabGWMAPDomainIfEntry 2 }
+
+clabGWMAPDomainIfStatus OBJECT-TYPE
+    SYNTAX      INTEGER {
+                    up(1),
+                    down(2),
+                    unknown(3),
+                    dormant(4),
+                    notPresent(5),
+                    lowerLayerDown(6),
+                    error(7)
+                    }
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The status of this TunnelInterface. When Enable is false then Status
+         SHOULD normally be Down (or NotPresent or Error if there is a
+         fault condition on the interface).
+         When Enable is false then Status SHOULD normally be Down
+         (or NotPresent or Error if there is a fault condition on the interface).
+         When Enable is changed to true then Status SHOULD change to Up if and only if
+         the interface is able to transmit and receive network traffic;
+         it SHOULD change to Dormant if and only if the interface is operable but
+         is waiting for external actions before it can transmit and receive network traffic
+         (and subsequently change to Up if still operable when the expected actions have completed);
+         it SHOULD change to LowerLayerDown if and only if the interface is prevented from entering
+         the Up state because one or more of the interfaces beneath it is down;
+         it SHOULD remain in the Error state if there is an error or other fault condition detected
+         on the interface; it SHOULD remain in the NotPresent state if the interface has missing
+         (typically hardware) components; it SHOULD change to Unknown if the state of the interface
+         can not be determined for some reason."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.MAP.Domain.{i}.Interface.Status"
+    ::= { clabGWMAPDomainIfEntry 3 }
+
+clabGWMAPDomainIfAlias OBJECT-TYPE
+    SYNTAX      OCTET STRING (SIZE (0..64))
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "A non-volatile handle used to reference this instance. Alias
+         provides a mechanism for an ACS to label this instance for future
+         reference."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.MAP.Domain.{i}.Interface.Alias"
+    DEFVAL { "" }
+    ::= { clabGWMAPDomainIfEntry 4 }
+
+clabGWMAPDomainIfName OBJECT-TYPE
+    SYNTAX      OCTET STRING (SIZE (0..64))
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "MAP domain interface name (The textual name of the tunnel interface
+         as assigned by the CPE)"
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.MAP.Domain.{i}.Interface.Name"
+    DEFVAL { "" }
+    ::= { clabGWMAPDomainIfEntry 5 }
+
+clabGWMAPDomainIfLastChange OBJECT-TYPE
+    SYNTAX      Unsigned32
+    UNITS       "seconds"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The accumulated time in seconds since the tunnel interface entered
+         its current operational state."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.MAP.Domain.{i}.Interface.LastChange"
+    ::= { clabGWMAPDomainIfEntry 6 }
+
+clabGWMAPDomainIfLowerLayers OBJECT-TYPE
+    SYNTAX      OCTET STRING (SIZE (0..1024))
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "Comma-separated list of source ifIndex values whose traffic will be
+         passed through the MAP domain associated with this Domain Interface."
+    REFERENCE
+           "TR-181 Device:2.8 Data Model for TR-069,
+         Device.MAP.Domain.{i}.Interface.LowerLayers"
+    DEFVAL { "" }
+    ::= { clabGWMAPDomainIfEntry 7 }
+
+clabGWMAPDomainIfRowStatus OBJECT-TYPE
+    SYNTAX      RowStatus
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+        "The RowStatus interlock for the creation and deletion of a table
+         entry."
+    ::= { clabGWMAPDomainIfEntry 8 }
+
+
+--
+-- The MAP Domain IF STATS Table
+--
+
+clabGWMAPDomainIfStatsTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF ClabGWMAPDomainIfStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "This table provides statistical information of MAP Domain interfaces.
+         This table extends clabGWMAPDomainIfTable. The index used is
+         imported from the the clabGWMAPDomainIfTable. If a row is
+         deleted from clabGWMAPDomainRuleTable, then the extension row
+         will also be deleted."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.MAP.Domain.{i}.Interface.Stats"
+    ::= { clabGWMAPObjects 6 }
+
+clabGWMAPDomainIfStatsEntry OBJECT-TYPE
+    SYNTAX      ClabGWMAPDomainIfStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "Each table entry provides statistical information on a MAP Domain interface."
+    INDEX {
+        clabGWMAPDomainIndex
+    }
+    ::= { clabGWMAPDomainIfStatsTable 1 }
+
+ClabGWMAPDomainIfStatsEntry ::= SEQUENCE {
+    clabGWMAPDomainIfStatsBytesSent          Counter64,
+    clabGWMAPDomainIfStatsBytesRcvd          Counter64,
+    clabGWMAPDomainIfStatsPktSent            Counter64,
+    clabGWMAPDomainIfStatsPktRcvd            Counter64,
+    clabGWMAPDomainIfStatsErrorsSent         Counter64,
+    clabGWMAPDomainIfStatsErrsRcvd           Counter64,
+    clabGWMAPDomainIfStatsUcastPktSent       Counter64,
+    clabGWMAPDomainIfStatsUcastPktRcvd       Counter64,
+    clabGWMAPDomainIfStatsDcardPktSent       Counter64,
+    clabGWMAPDomainIfStatsDcardPktRcvd       Counter64,
+    clabGWMAPDomainIfStatsMcastPktSent       Counter64,
+    clabGWMAPDomainIfStatsMcastPktRcvd       Counter64,
+    clabGWMAPDomainIfStatsBcastPktSent       Counter64,
+    clabGWMAPDomainIfStatsBcastPktRcvd       Counter64,
+    clabGWMAPDomainIfStatsUkwnProtoPkt       Counter64,
+    clabGWMAPDomainIfStatsInvV4Pkts          Counter64
+}
+
+clabGWMAPDomainIfStatsBytesSent OBJECT-TYPE
+    SYNTAX      Counter64
+    UNITS       "bytes"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Number of bytes sent."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.MAP.Domain.{i}.Interface.Stats.BytesSent"
+    ::= { clabGWMAPDomainIfStatsEntry 1 }
+
+clabGWMAPDomainIfStatsBytesRcvd OBJECT-TYPE
+    SYNTAX      Counter64
+    UNITS       "bytes"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Number of bytes received."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.MAP.Domain.{i}.Interface.Stats.BytesRcvd"
+    ::= { clabGWMAPDomainIfStatsEntry 2 }
+
+clabGWMAPDomainIfStatsPktSent OBJECT-TYPE
+    SYNTAX      Counter64
+    UNITS       "packets"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Number of packets sent."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.MAP.Domain.{i}.Interface.Stats.PktSent"
+    ::= { clabGWMAPDomainIfStatsEntry 3 }
+
+clabGWMAPDomainIfStatsPktRcvd OBJECT-TYPE
+    SYNTAX      Counter64
+    UNITS       "packets"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Number of packets received."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.MAP.Domain.{i}.Interface.Stats.PktRcvd"
+    ::= { clabGWMAPDomainIfStatsEntry 4 }
+
+clabGWMAPDomainIfStatsErrorsSent OBJECT-TYPE
+    SYNTAX      Counter64
+    UNITS       "packets"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Number of errors sent."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.MAP.Domain.{i}.Interface.Stats.ErrorsSent"
+    ::= { clabGWMAPDomainIfStatsEntry 5 }
+
+clabGWMAPDomainIfStatsErrsRcvd OBJECT-TYPE
+    SYNTAX      Counter64
+    UNITS       "packets"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Number of errors that were received."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.MAP.Domain.{i}.Interface.Stats.ErrsRcvd"
+    ::= { clabGWMAPDomainIfStatsEntry 6 }
+
+clabGWMAPDomainIfStatsUcastPktSent OBJECT-TYPE
+    SYNTAX      Counter64
+    UNITS       "packets"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Number of unicast packets sent."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.MAP.Domain.{i}.Interface.Stats.UcastPktSent"
+    ::= { clabGWMAPDomainIfStatsEntry 7 }
+
+clabGWMAPDomainIfStatsUcastPktRcvd OBJECT-TYPE
+    SYNTAX      Counter64
+    UNITS       "packets"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+    "Number of unicast packets received."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.MAP.Domain.{i}.Interface.Stats.UcastPktRcvd"
+    ::= { clabGWMAPDomainIfStatsEntry 8 }
+
+clabGWMAPDomainIfStatsDcardPktSent OBJECT-TYPE
+    SYNTAX      Counter64
+    UNITS       "packets"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The total number of packets sent that were discarded."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.MAP.Domain.{i}.Interface.Stats.DcardPktSent"
+    ::= { clabGWMAPDomainIfStatsEntry 9 }
+
+clabGWMAPDomainIfStatsDcardPktRcvd OBJECT-TYPE
+    SYNTAX      Counter64
+    UNITS       "packets"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The total number of packets sent that were discarded."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.MAP.Domain.{i}.Interface.Stats.DcardPktRcvd"
+    ::= { clabGWMAPDomainIfStatsEntry 10 }
+
+clabGWMAPDomainIfStatsMcastPktSent OBJECT-TYPE
+    SYNTAX      Counter64
+    UNITS       "packets"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Number of multicast packets sent."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.MAP.Domain.{i}.Interface.Stats.McastPktSent"
+    ::= { clabGWMAPDomainIfStatsEntry 11 }
+
+clabGWMAPDomainIfStatsMcastPktRcvd OBJECT-TYPE
+    SYNTAX      Counter64
+    UNITS       "packets"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+    "Number of multicast packets received."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.MAP.Domain.{i}.Interface.Stats.McastPktRcvd"
+    ::= { clabGWMAPDomainIfStatsEntry 12 }
+
+clabGWMAPDomainIfStatsBcastPktSent OBJECT-TYPE
+    SYNTAX      Counter64
+    UNITS       "packets"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Number of broadcast packets sent."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.MAP.Domain.{i}.Interface.Stats.BcastPktSent"
+    ::= { clabGWMAPDomainIfStatsEntry 13 }
+
+clabGWMAPDomainIfStatsBcastPktRcvd OBJECT-TYPE
+    SYNTAX      Counter64
+    UNITS       "packets"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Number of broadcast packets received."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.MAP.Domain.{i}.Interface.Stats.BcastPktRcvd"
+    ::= { clabGWMAPDomainIfStatsEntry 14 }
+
+clabGWMAPDomainIfStatsUkwnProtoPkt OBJECT-TYPE
+    SYNTAX      Counter64
+    UNITS       "packets"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Number of unknown protocol packets received."
+    REFERENCE
+        "TR-181 Device:2.8 Data Model for TR-069,
+         Device.MAP.Domain.{i}.Interface.Stats.UkwnProtoPkt"
+    ::= { clabGWMAPDomainIfStatsEntry 15 }
+
+clabGWMAPDomainIfStatsInvV4Pkts OBJECT-TYPE
+    SYNTAX      Counter64
+    UNITS       "packets"
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The CE checks that the MAP domain received packets that
+        have a destination port number that is in the range configured
+        for the CE, discarding the packet if it is not."
+    ::= { clabGWMAPDomainIfStatsEntry 16 }
+
+
+
+-- ---------------------------------------------------------------------
+-- Compliance Statements
+-- ---------------------------------------------------------------------
 
 clabGWCompliance MODULE-COMPLIANCE
     STATUS      current
@@ -219,7 +1187,9 @@ clabGWCompliance MODULE-COMPLIANCE
          "The compliance statement for the gateway device."
     MODULE -- this MODULE
     MANDATORY-GROUPS {
-            clabGWGroup
+            clabGWGroup,
+            clabGWDNSGroup,
+            clabGWMAPGroup
             }
     ::= { clabGWMibCompliances 1 }
 
@@ -227,26 +1197,99 @@ clabGWGroup OBJECT-GROUP
     OBJECTS {
         clabGWDeviceInfoManufacturer,
         clabGWDeviceInfoManufacturerOUI,
-	      clabGWDeviceInfoDeviceCategory,
-	      clabGWDeviceInfoModelName,
-	      clabGWDeviceInfoModelNumber,
-	      clabGWDeviceInfoDescription,
-	      clabGWDeviceInfoProductClass,
-	      clabGWDeviceInfoSerialNumber,
-	      clabGWDeviceInfoHardwareVersion,
-	      clabGWDeviceInfoSoftwareVersion,
-	      clabGWDeviceInfoAdditionalHardwareVersion,
-	      clabGWDeviceInfoAdditonalSoftwareVersion,
-	      clabGWDeviceInfoProvisioningCode,
-	      clabGWDeviceInfoUpTime,
-	      clabGWDeviceInfoFirstUseDate,
         clabGWDeviceInfoDeviceCategory,
-        clabGWPublicAccessEnabled
+        clabGWDeviceInfoModelName,
+        clabGWDeviceInfoModelNumber,
+        clabGWDeviceInfoDescription,
+        clabGWDeviceInfoProductClass,
+        clabGWDeviceInfoSerialNumber,
+        clabGWDeviceInfoHardwareVersion,
+        clabGWDeviceInfoSoftwareVersion,
+        clabGWDeviceInfoAdditionalHardwareVersion,
+        clabGWDeviceInfoAdditonalSoftwareVersion,
+        clabGWDeviceInfoProvisioningCode,
+        clabGWDeviceInfoUpTime,
+        clabGWDeviceInfoFirstUseDate,
+        clabGWDevicePublicAccessEnabled
             }
     STATUS      current
     DESCRIPTION
              "Objects implemented in the clabGWGroup."
     ::= { clabGWMibGroups 1 }
 
-END
+clabGWDNSGroup OBJECT-GROUP
+    OBJECTS {
+        clabGWDeviceDNSIpv6QueryForDualMode
+            }
+    STATUS      current
+    DESCRIPTION
+             "Objects implemented in the clabGWDNSGroup."
+    ::= { clabGWMibGroups 3 }
 
+clabGWMAPGroup OBJECT-GROUP
+    OBJECTS {
+        clabGWMAPEnable,
+        clabGWMAPTunnelDomainNumEntries,
+        -- The clabGWMAPDomainTable
+        clabGWMAPDomainEnable,
+        clabGWMAPDomainStatus,
+        clabGWMAPDomainAlias,
+        clabGWMAPDomainTransportMode,
+        clabGWMAPDomainWANInterface,
+        clabGWMAPDomainIPv6Prefix,
+        clabGWMAPDomainIPv6PrefixLen,
+        clabGWMAPDomainBRIPv6Prefix,
+        clabGWMAPDomainBRIPv6PrefixLen,
+        clabGWMAPDomainDSCPMarkPolicy,
+        clabGWMAPDomainIncludeSystemPorts,
+        clabGWMAPDomainRuleNumEntries,
+        clabGWMAPDomainRowStatus,
+
+        -- The clabGWMAPDomainRuleTable
+        clabGWMAPDomainRuleEnable,
+        clabGWMAPDomainRuleStatus,
+        clabGWMAPDomainRuleAlias,
+        clabGWMAPDomainRuleOrigin,
+        clabGWMAPDomainRuleIPv6Prefix,
+        clabGWMAPDomainRuleIPv6PrefixLen,
+        clabGWMAPDomainRuleIPv4Prefix,
+        clabGWMAPDomainRuleIPv4PrefixLen,
+        clabGWMAPDomainRuleEABitsLength,
+        clabGWMAPDomainRuleIsFMR,
+        clabGWMAPDomainRulePSIDOffset,
+        clabGWMAPDomainRulePSIDLength,
+        clabGWMAPDomainRulePSID,
+        clabGWMAPDomainRuleRowStatus,
+
+        -- The clabGWMAPDomainIfTable
+        clabGWMAPDomainIfEnable,
+        clabGWMAPDomainIfStatus,
+        clabGWMAPDomainIfAlias,
+        clabGWMAPDomainIfName,
+        clabGWMAPDomainIfLastChange,
+        clabGWMAPDomainIfLowerLayers,
+        clabGWMAPDomainIfRowStatus,
+
+        -- The clabGWMAPDomainIfStatsTable
+        clabGWMAPDomainIfStatsBytesSent,
+        clabGWMAPDomainIfStatsBytesRcvd,
+        clabGWMAPDomainIfStatsPktSent,
+        clabGWMAPDomainIfStatsPktRcvd,
+        clabGWMAPDomainIfStatsErrorsSent,
+        clabGWMAPDomainIfStatsErrsRcvd,
+        clabGWMAPDomainIfStatsUcastPktSent,
+        clabGWMAPDomainIfStatsUcastPktRcvd,
+        clabGWMAPDomainIfStatsDcardPktSent,
+        clabGWMAPDomainIfStatsDcardPktRcvd,
+        clabGWMAPDomainIfStatsMcastPktSent,
+        clabGWMAPDomainIfStatsMcastPktRcvd,
+        clabGWMAPDomainIfStatsBcastPktSent,
+        clabGWMAPDomainIfStatsBcastPktRcvd,
+        clabGWMAPDomainIfStatsUkwnProtoPkt,
+        clabGWMAPDomainIfStatsInvV4Pkts
+                }
+        STATUS      current
+        DESCRIPTION
+                 "Objects implemented in the clabGWDNSGroup."
+        ::= { clabGWMibGroups 4 }
+END
