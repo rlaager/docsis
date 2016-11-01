@@ -125,9 +125,9 @@ add_cmts_mic (unsigned char *tlvbuf, unsigned int tlvbuflen,
 	    }
 	}
     }
-  fprintf (stderr, "##### Calculating CMTS MIC using TLVs:\n");
+  fprintf (stdout, "##### Calculating CMTS MIC using TLVs:\n");
   decode_main_aggregate (cmts_tlvs, dp - cmts_tlvs);
-  fprintf (stderr, "##### End of CMTS MIC TLVs\n");
+  fprintf (stdout, "##### End of CMTS MIC TLVs\n");
   hmac_md5 (cmts_tlvs, dp - cmts_tlvs, key, keylen, digest);
   md5_print_digest (digest);
   tlvbuf[tlvbuflen] = 7;	/* CMTS MIC */
@@ -561,7 +561,7 @@ int encode_one_file ( char *input_file, char *output_file,
     buflen = add_mta_hash (buffer, buflen, hash);
   }
 
-  fprintf (stderr, "Final content of config file:\n");
+  fprintf (stdout, "Final content of config file:\n");
 
   decode_main_aggregate (buffer, buflen);
   if (!strcmp (output_file, "-"))

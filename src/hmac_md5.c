@@ -35,10 +35,10 @@ void md5_print_digest ( unsigned char *digest )
 {
   int j;
   /* TODO check that the buffer actually contains 16 chars ... */
-  fprintf(stderr, " --- MD5 DIGEST: 0x");
+  fprintf(stdout, " --- MD5 DIGEST: 0x");
   for (j=0;j<16;j++)
-	fprintf(stderr, "%02x", digest[j] );
-  fprintf(stderr, "\n");
+	fprintf(stdout, "%02x", digest[j] );
+  fprintf(stdout, "\n");
 }
 
 /*
