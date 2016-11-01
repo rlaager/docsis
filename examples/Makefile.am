@@ -38,7 +38,7 @@ EXTRA_DIST = $(examples_DATA)
 ../src/docsis:
 	(cd ../src ; $(MAKE) docsis)
 .cfg.bin: ../src/docsis $(srcdir)/keyfile Makefile
-	export MIBDIRS="`net-snmp-config --default-mibdirs`:$(top_srcdir)/mibs:$(top_srcdir)/mibs/iana:$(top_srcdir)/mibs/ietf" ; \
+	export MIBDIRS="$(top_srcdir)/mibs:$(top_srcdir)/mibs/iana:$(top_srcdir)/mibs/ietf" ; \
 		../src/docsis -e $< $(srcdir)/keyfile $@ | \
 		sed -n '/^Final content/,$$p' | grep -v "^Final content" > $@.1.txt ; \
 		../src/docsis -d $@ > $@.2.txt ; \
