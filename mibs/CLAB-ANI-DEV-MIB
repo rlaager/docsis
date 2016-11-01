@@ -257,7 +257,7 @@ clabAniDevGroup OBJECT-GROUP
               aniDevLoggingCtrlReset,
               aniDevSysLoggingSize,
               aniDevSysLoggingLevelCtrl,
-              aniDevSysloggingGroupCtrl,
+              aniDevSysLoggingGroupCtrl,
               aniDevSysLoggingEventTimeStamp,
               aniDevSysLoggingEventMessage
             }
