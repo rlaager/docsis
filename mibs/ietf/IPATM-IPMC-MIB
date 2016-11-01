@@ -4,7 +4,7 @@ IMPORTS
     MODULE-COMPLIANCE, NOTIFICATION-GROUP, OBJECT-GROUP
         FROM SNMPv2-CONF
     snmpModules, MODULE-IDENTITY, NOTIFICATION-TYPE, Counter32,
-        Integer32, Unsigned32, OBJECT-TYPE, IpAddress
+        Integer32, Unsigned32, OBJECT-TYPE, IpAddress, mib-2
         FROM SNMPv2-SMI
     AtmAddr
         FROM ATM-TC-MIB
