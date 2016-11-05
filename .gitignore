@@ -25,7 +25,9 @@ configure
 depcomp
 docsis-*.*.*
 examples/*.bin
+examples/*.log
 examples/*.sh
+examples/*.trs
 libtool
 ltmain.sh
 mibs/.index
