@@ -46,6 +46,7 @@ EXTRA_DIST = $(examples_DATA)
 			rm -f $@.1.txt $@.2.txt ; \
 			true ; \
 		else \
+			diff -u $@.1.txt $@.2.txt ; \
 			rm -f $@ $@.1.txt $@.2.txt ; \
 			false ; \
 		fi
