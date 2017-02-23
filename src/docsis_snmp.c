@@ -3,6 +3,7 @@
  *  Copyright (c) 2001 Cornel Ciocirlan, ctrl@users.sourceforge.net.
  *  Copyright (c) 2002,2003,2004,2005 Evvolve Media SRL,office@evvolve.com
  *  Copyright (c) 2014 - 2015 Adrian Simionov, daniel.simionov@gmail.com
+ *  Copyright (c) 2015 - 2016 Lukasz Sierzega, xarafaxz@gmail.com
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,6 +26,8 @@
 #include "docsis_decode.h"
 
 extern unsigned int line;	/* from a.l */
+
+unsigned int decode_format = NETSNMP_OID_OUTPUT_SUFFIX;
 
 #define PACKET_LENGTH (8 * 1024)
 
@@ -339,12 +342,7 @@ decode_vbind (unsigned char *data, unsigned int vb_len)
 
   netsnmp_ds_set_int (NETSNMP_DS_LIBRARY_ID,
 			      NETSNMP_DS_LIB_OID_OUTPUT_FORMAT,
-			      NETSNMP_OID_OUTPUT_SUFFIX);
-
-  if (netsnmp_ds_get_boolean(NETSNMP_DS_LIBRARY_ID, NETSNMP_OID_OUTPUT_NUMERIC)) {
-        netsnmp_ds_set_int(NETSNMP_DS_LIBRARY_ID, NETSNMP_DS_LIB_OID_OUTPUT_FORMAT,
-                                                  NETSNMP_OID_OUTPUT_NUMERIC);
-  }
+			      decode_format);
 
   snprint_objid (outbuf, 1023, vp->name, vp->name_length);
 
@@ -359,12 +357,12 @@ decode_vbind (unsigned char *data, unsigned int vb_len)
 	  netsnmp_ds_set_int (NETSNMP_DS_LIBRARY_ID,
 			      NETSNMP_DS_LIB_OID_OUTPUT_FORMAT,
 			      NETSNMP_OID_OUTPUT_FULL);
-	  memset (outbuf, 0, 1024);
+	  memset (outbuf, 0, 16384);
 	  snprint_objid (outbuf, 1023, vp->name, vp->name_length);
 	  /* Go back to suffix-mode for better readability */
 	  netsnmp_ds_set_int (NETSNMP_DS_LIBRARY_ID,
 			      NETSNMP_DS_LIB_OID_OUTPUT_FORMAT,
-			      NETSNMP_OID_OUTPUT_SUFFIX);
+			      decode_format);
 	}
     }
 

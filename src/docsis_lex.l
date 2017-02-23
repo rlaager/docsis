@@ -3,6 +3,7 @@
  *  Copyright (c) 2001,2005 Cornel Ciocirlan, ctrl@users.sourceforge.net.
  *  Copyright (c) 2002,2003,2004,2005 Evvolve Media SRL, office@evvolve.com
  *  Copyright (c) 2014 - 2015 Adrian Simionov, daniel.simionov@gmail.com
+ *  Copyright (c) 2015 - 2016 Lukasz Sierzega, xarafaxz@gmail.com
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -69,9 +70,9 @@ char *tsave;
 ([0-9]+\.){3}[0-9]+\/[0-9]+	 	{ TSAVE(yytext);yylval.strval=tsave; return T_IP_IP6_PORT; }
 ([0-9A-Fa-f][0-9A-Fa-f]:){5}[0-9A-Fa-f][0-9A-Fa-f]  { TSAVE(yytext);yylval.strval=tsave; return T_MAC; 			       }
 
-(\.{1})*([A-Za-z0-9_-]+\.)+[A-Za-z0-9]+	{ TSAVE(yytext);yylval.strval=tsave; return T_LABEL_OID; }
-(\.{1})*([A-Za-z0-9_-]+\.)+'[\[A-Za-z0-9@,:_\-\.\]]+'	{ TSAVE(yytext);yylval.strval=tsave; return T_LABEL_OID; }
-(\.{1})*([A-Za-z0-9_-]+\.)+((\"{1})*[A-Za-z0-9,:_\-\.]+(\"{1})*)+	{ TSAVE(yytext);yylval.strval=tsave; return T_LABEL_OID; }
+(\.{1})*([A-Za-z0-9_:-]+\.)+[A-Za-z0-9]+	{ TSAVE(yytext);yylval.strval=tsave; return T_LABEL_OID; }
+(\.{1})*([A-Za-z0-9_:-]+\.)+'[\[A-Za-z0-9@,:_\-\.\]]+'	{ TSAVE(yytext);yylval.strval=tsave; return T_LABEL_OID; }
+(\.{1})*([A-Za-z0-9_:-]+\.)+((\"{1})*[A-Za-z0-9,:_\-\.]+(\"{1})*)+	{ TSAVE(yytext);yylval.strval=tsave; return T_LABEL_OID; }
 ([0-9]+:){3}[0-9]+\.[0-9]+	{ TSAVE(yytext);yylval.strval=tsave; return T_TIMETICKS; }
 [Mm][Aa][Ii][Nn]        { yylval.strval=yytext;return T_MAIN; }
 SnmpWriteControl	{ yylval.symptr=find_symbol_by_name(yytext);return T_IDENT_SNMPW;   }
@@ -146,6 +147,7 @@ TlvType			{ return T_TLV_TYPE;		}
 <COMMENT>\n	{ line ++; }
 <COMMENT>.
 <COMMENT>\/[*]+	{ fprintf(stderr, "line %d: comment-in-comment not supported", line) ; }
+\/\/[^\n]* { COMMENT; }
 <COMMENT>[*]+\/	{ BEGIN 0; }
 
 [0-9]+	 { yylval.intval=atoi(yytext);return T_INTEGER; }

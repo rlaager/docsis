@@ -3,6 +3,7 @@
  *  Copyright (c) 2001 Cornel Ciocirlan, ctrl@users.sourceforge.net.
  *  Copyright (c) 2002,2003,2004,2005 Evvolve Media SRL, office@evvolve.com
  *  Copyright (c) 2014 - 2015 Adrian Simionov, daniel.simionov@gmail.com
+ *  Copyright (c) 2015 - 2016 Lukasz Sierzega, xarafaxz@gmail.com
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -94,11 +95,13 @@ void hmac_md5 (unsigned char *text, int text_len, unsigned char *key,
 void md5_print_digest (unsigned char *digest);
 int init_global_symtable (void);
 unsigned int tlvtreelen  (struct tlv *tlv);
-int parse_config_file (char *file, struct tlv **parse_tree_result);
+int parse_config_file (char *file, struct tlv **parse_tree_result, char *mtahash);
 int yylex (void);
 void decode_file (char *file);
 int encode_one_file (char *input_file, char *output_file,
-		       unsigned char *key, unsigned int keylen, int encode_docsis, unsigned int hash);
+		       unsigned char *key, unsigned int keylen, int encode_docsis, char *mta_hash);
 char *get_output_name (char *input_path, char *new_extension);
+
+extern unsigned int decode_format;
 
 #endif /* __DOCSIS_H */
