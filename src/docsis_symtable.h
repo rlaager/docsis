@@ -1442,7 +1442,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 346,    "MaximumFrameSize",                  7,      130,    (encode_ushort),         (decode_ushort),         0,           0             }, /* TLV 79.7 MULPIv3.0-I25 Annex C.3.3.7 */
 { 347,    "PowerOverEthernetStatus",           8,      130,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 79.8 MULPIv3.0-I25 Annex C.3.3.8 */
 { 348,    "MediaType",                         9,      130,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 79.9 MULPIv3.0-I25 Annex C.3.3.9 */
-{ 1419,   "ManufacturerCVCChain",              81,     0,      (encode_nothing),        (decode_hexstr),         0,           255           }, /* TLV 81 MULPIv3.1-I07 Annex C.1.2.21 */
+{ 1419,   "ManufacturerCVCChain",              81,     0,      (encode_hexstr),         (decode_hexstr),         0,           255           }, /* TLV 81 MULPIv3.1-I07 Annex C.1.2.21 */
 { 1420,   "CoSignerCVCChain",                  82,     0,      (encode_hexstr),         (decode_hexstr),         0,           255           }, /* TLV 82 MULPIv3.1-I07 Annex C.1.2.22 */
 
 /* eRouter TLVs */
