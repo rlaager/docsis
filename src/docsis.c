@@ -223,7 +223,7 @@ add_dialplan (unsigned char *tlvbuf, unsigned int tlvbuflen) {
     memcpy(tlvbuf + tlvbuflen, p_local_v_len, sizeof(local_v_len));
     tlvbuflen += sizeof(local_v_len);
   }
-  memcpy(tlvbuf + tlvbuflen, "\x06\x12\x2b\x06\x01\x04\x01\xa3\x0b\x02\x02\x08\x02\x01\x01\x03\x01\x01\x02\x00", 20);
+  memcpy(tlvbuf + tlvbuflen, "\x06\x12\x2b\x06\x01\x04\x01\xa3\x0b\x02\x02\x08\x02\x01\x01\x03\x01\x01\x02\x01", 20);
   tlvbuflen += 20;
   memcpy(tlvbuf + tlvbuflen, "\x04", 1);
   tlvbuflen += 1;
