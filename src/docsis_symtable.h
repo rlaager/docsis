@@ -289,7 +289,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 439,    "FrameDelayMeasurementTransmissionPeriodicity", 3, 436, (encode_ushort),      (decode_ushort),         0,           0             }, /* TLV 22.43.5.24.4.1.3 L2VPN-I13 Annex B.3.24.4.1.3 */
 { 440,    "FrameLossMeasurement",              2,      435,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.43.5.24.4.2 L2VPN-I13 Annex B.3.24.4.2 */
 { 441,    "FrameLossMeasurementEnable",        1,      440,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 22.43.5.24.4.2.1 L2VPN-I13 Annex B.3.24.4.2.1 */
-{ 442,    "FrameLossMeasurementTransmissionPeriodicity", 2, 440, (encode_ushort),       (decode_ushort),         0,           0             }, /* TLV 22.43.5.24.4.2.2 L2VPN-I13 Annex B.3.24.4.2.2 */
+{ 442,    "FrameLossMeasurementTransmissionPeriodicity", 2, 440, (encode_uchar),        (decode_uchar),         0,           0             }, /* TLV 22.43.5.24.4.2.2 L2VPN-I13 Annex B.3.24.4.2.2 */
 { 443,    "L2VPNDSID",                         26,     202,    (encode_uint24),         (decode_uint24),         1,           1048575       }, /* TLV 22.43.5.26 L2VPN-I13 Annex B.3.26 */
 { 448,    "VendorSpecificL2VPNSubtype",        43,     202,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 22.43.5.43 L2VPN-I13 Annex B.3.11 */
 { 449,    "VendorIdentifier",                  8,      448,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 22.43.5.43.8 L2VPN-I13 Annex B.3.11 */
@@ -486,7 +486,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 849,    "FrameDelayMeasurementTransmissionPeriodicity", 3, 846, (encode_ushort),      (decode_ushort),         0,           0             }, /* TLV 23.43.5.24.4.1.3 L2VPN-I13 Annex B.3.24.4.1.3 */
 { 850,    "FrameLossMeasurement",              2,      845,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.43.5.24.4.2 L2VPN-I13 Annex B.3.24.4.2 */
 { 851,    "FrameLossMeasurementEnable",        1,      850,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 23.43.5.24.4.2.1 L2VPN-I13 Annex B.3.24.4.2.1 */
-{ 852,    "FrameLossMeasurementTransmissionPeriodicity", 2, 850, (encode_ushort),       (decode_ushort),         0,           0             }, /* TLV 23.43.5.24.4.2.2 L2VPN-I13 Annex B.3.24.4.2.2 */
+{ 852,    "FrameLossMeasurementTransmissionPeriodicity", 2, 850, (encode_uchar),       (decode_uchar),         0,           0             }, /* TLV 23.43.5.24.4.2.2 L2VPN-I13 Annex B.3.24.4.2.2 */
 { 853,    "L2VPNDSID",                         26,     761,    (encode_uint24),         (decode_uint24),         1,           1048575       }, /* TLV 23.43.5.26 L2VPN-I13 Annex B.3.26 */
 { 854,    "VendorSpecificL2VPNSubtype",        43,     761,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 23.43.5.43 L2VPN-I13 Annex B.3.11 */
 { 206,    "VendorIdentifier",                  8,      854,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 23.43.5.43.8 L2VPN-I13 Annex B.3.11 */
@@ -656,7 +656,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 973,    "FrameDelayMeasurementTransmissionPeriodicity", 3, 970, (encode_ushort),      (decode_ushort),         0,           0             }, /* TLV 24.43.5.24.4.1.3 L2VPN-I13 Annex B.3.24.4.1.3 */
 { 974,    "FrameLossMeasurement",              2,      969,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 24.43.5.24.4.2 L2VPN-I13 Annex B.3.24.4.2 */
 { 975,    "FrameLossMeasurementEnable",        1,      974,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 24.43.5.24.4.2.1 L2VPN-I13 Annex B.3.24.4.2.1 */
-{ 976,    "FrameLossMeasurementTransmissionPeriodicity", 2, 974, (encode_ushort),       (decode_ushort),         0,           0             }, /* TLV 24.43.5.24.4.2.2 L2VPN-I13 Annex B.3.24.4.2.2 */
+{ 976,    "FrameLossMeasurementTransmissionPeriodicity", 2, 974, (encode_uchar),       (decode_uchar),         0,           0             }, /* TLV 24.43.5.24.4.2.2 L2VPN-I13 Annex B.3.24.4.2.2 */
 { 977,    "L2VPNDSID",                         26,     195,    (encode_uint24),         (decode_uint24),         1,           1048575       }, /* TLV 24.43.5.26 L2VPN-I13 Annex B.3.26 */
 { 978,    "VendorSpecificL2VPNSubtype",        43,     195,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 24.43.5.43 L2VPN-I13 Annex B.3.11 */
 { 979,    "VendorIdentifier",                  8,      978,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 24.43.5.43.8 L2VPN-I13 Annex B.3.11 */
@@ -817,7 +817,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 1100,   "FrameDelayMeasurementTransmissionPeriodicity", 3, 1097, (encode_ushort),     (decode_ushort),         0,           0             }, /* TLV 25.43.5.24.4.1.3 L2VPN-I13 Annex B.3.24.4.1.3 */
 { 1101,   "FrameLossMeasurement",              2,      1096,   (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 25.43.5.24.4.2 L2VPN-I13 Annex B.3.24.4.2 */
 { 1102,   "FrameLossMeasurementEnable",        1,      1101,   (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 25.43.5.24.4.2.1 L2VPN-I13 Annex B.3.24.4.2.1 */
-{ 1103,   "FrameLossMeasurementTransmissionPeriodicity", 2, 1101, (encode_ushort),      (decode_ushort),         0,           0             }, /* TLV 25.43.5.24.4.2.2 L2VPN-I13 Annex B.3.24.4.2.2 */
+{ 1103,   "FrameLossMeasurementTransmissionPeriodicity", 2, 1101, (encode_uchar),      (decode_uchar),         0,           0             }, /* TLV 25.43.5.24.4.2.2 L2VPN-I13 Annex B.3.24.4.2.2 */
 { 1104,   "L2VPNDSID",                         26,     1012,   (encode_uint24),         (decode_uint24),         1,           1048575       }, /* TLV 25.43.5.26 L2VPN-I13 Annex B.3.26 */
 { 1105,   "VendorSpecificL2VPNSubtype",        43,     1012,   (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 25.43.5.43 L2VPN-I13 Annex B.3.11 */
 { 1106,   "VendorIdentifier",                  8,      1105,   (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 25.43.5.43.8 L2VPN-I13 Annex B.3.11 */
@@ -960,7 +960,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 1231,   "FrameDelayMeasurementTransmissionPeriodicity", 3, 1228, (encode_ushort),     (decode_ushort),         0,           0             }, /* TLV 26.43.5.24.4.1.3 L2VPN-I13 Annex B.3.24.4.1.3 */
 { 1232,   "FrameLossMeasurement",              2,      1227,   (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 26.43.5.24.4.2 L2VPN-I13 Annex B.3.24.4.2 */
 { 1233,   "FrameLossMeasurementEnable",        1,      1232,   (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 26.43.5.24.4.2.1 L2VPN-I13 Annex B.3.24.4.2.1 */
-{ 1234,   "FrameLossMeasurementTransmissionPeriodicity", 2, 1232, (encode_ushort),      (decode_ushort),         0,           0             }, /* TLV 26.43.5.24.4.2.2 L2VPN-I13 Annex B.3.24.4.2.2 */
+{ 1234,   "FrameLossMeasurementTransmissionPeriodicity", 2, 1232, (encode_uchar),      (decode_uchar),         0,           0             }, /* TLV 26.43.5.24.4.2.2 L2VPN-I13 Annex B.3.24.4.2.2 */
 { 1235,   "L2VPNDSID",                         26,     1143,   (encode_uint24),         (decode_uint24),         1,           1048575       }, /* TLV 26.43.5.26 L2VPN-I13 Annex B.3.26 */
 { 1236,   "VendorSpecificL2VPNSubtype",        43,     1143,   (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 26.43.5.43 L2VPN-I13 Annex B.3.11 */
 { 1237,   "VendorIdentifier",                  8,      1236,   (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 26.43.5.43.8 L2VPN-I13 Annex B.3.11 */
@@ -1125,7 +1125,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 1381,   "FrameDelayMeasurementTransmissionPeriodicity", 3, 1378, (encode_ushort),     (decode_ushort),         0,           0             }, /* TLV 43.5.24.4.1.3 L2VPN-I13 Annex B.3.24.4.1.3 */
 { 1382,   "FrameLossMeasurement",              2,      1377,   (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 43.5.24.4.2 L2VPN-I13 Annex B.3.24.4.2 */
 { 1383,   "FrameLossMeasurementEnable",        1,      1382,   (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 43.5.24.4.2.1 L2VPN-I13 Annex B.3.24.4.2.1 */
-{ 1384,   "FrameLossMeasurementTransmissionPeriodicity", 2, 1382, (encode_ushort),      (decode_ushort),         0,           0             }, /* TLV 43.5.24.4.2.2 L2VPN-I13 Annex B.3.24.4.2.2 */
+{ 1384,   "FrameLossMeasurementTransmissionPeriodicity", 2, 1382, (encode_uchar),      (decode_uchar),         0,           0             }, /* TLV 43.5.24.4.2.2 L2VPN-I13 Annex B.3.24.4.2.2 */
 { 1385,   "L2VPNDSID",                         26,     1293,   (encode_uint24),         (decode_uint24),         1,           1048575       }, /* TLV 43.5.26 L2VPN-I13 Annex B.3.26 */
 { 1386,   "VendorSpecificL2VPNSubtype",        43,     1293,   (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 43.5.43 L2VPN-I13 Annex B.3.11 */
 { 1387,   "VendorIdentifier",                  8,      1386,   (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 43.5.43.8 L2VPN-I13 Annex B.3.11 */
@@ -1340,7 +1340,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 703,    "FrameDelayMeasurementTransmissionPeriodicity", 3, 700, (encode_ushort),      (decode_ushort),         0,           0             }, /* TLV 60.43.5.24.4.1.3 L2VPN-I13 Annex B.3.24.4.1.3 */
 { 704,    "FrameLossMeasurement",              2,      699,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 60.43.5.24.4.2 L2VPN-I13 Annex B.3.24.4.2 */
 { 705,    "FrameLossMeasurementEnable",        1,      704,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 60.43.5.24.4.2.1 L2VPN-I13 Annex B.3.24.4.2.1 */
-{ 706,    "FrameLossMeasurementTransmissionPeriodicity", 2, 704, (encode_ushort),       (decode_ushort),         0,           0             }, /* TLV 60.43.5.24.4.2.2 L2VPN-I13 Annex B.3.24.4.2.2 */
+{ 706,    "FrameLossMeasurementTransmissionPeriodicity", 2, 704, (encode_uchar),       (decode_uchar),         0,           0             }, /* TLV 60.43.5.24.4.2.2 L2VPN-I13 Annex B.3.24.4.2.2 */
 { 707,    "L2VPNDSID",                         26,     615,    (encode_uint24),         (decode_uint24),         1,           1048575       }, /* TLV 60.43.5.26 L2VPN-I13 Annex B.3.26 */
 { 708,    "VendorSpecificL2VPNSubtype",        43,     615,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 60.43.5.43 L2VPN-I13 Annex B.3.11 */
 { 709,    "VendorIdentifier",                  8,      708,    (encode_hexstr),         (decode_hexstr),         3,           3             }, /* TLV 60.43.5.43.8 L2VPN-I13 Annex B.3.11 */
