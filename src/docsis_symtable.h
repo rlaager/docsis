@@ -1479,7 +1479,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 
 /* eSTB Settings */
 { 1422,    "EstbSettings",                     217,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 217 eDOCSIS-I30 5.2.8.1 */
-{ 1423,    "IpModeControl",                    1,       1422,   (encode_ushort),         (decode_ushort),         0,           2             }, /* TLV 217.1 HOST2.1-I17 15.2.6 */
+{ 1423,    "IpModeControl",                    1,       1422,   (encode_uchar),          (encode_uchar),          0,           2             }, /* TLV 217.1 HOST2.1-I17 15.2.6 */
 { 1424,    "Snmpv1v2Settings",                 53,      1422,   (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 217.53 HOST2.1-I17 15.2.1 */
 { 1425,    "Snmpv1v2CommunityName",            1,       1424,   (encode_string),         (decode_string),         1,           32            }, /* TLV 217.53.1 HOST2.1-I17 15.2.1.1 */
 
