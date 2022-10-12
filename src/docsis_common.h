@@ -21,19 +21,11 @@
  *  DOCSIS is a registered trademark of Cablelabs, http://www.cablelabs.com
  */
 
-/*
-    change history
-	2003-01-10 changed NUM_IDENTIFIERS to match what we have in docsis_symtable.h
-
-*/
-
 #ifndef _DOCSIS_COMMON_H
 #define _DOCSIS_COMMON_H
 
-
-#ifndef NUM_IDENTIFIERS
+/* needed in docsis_symtable.h */
 #define NUM_IDENTIFIERS 1427
-#endif /*  NUM_IDENTIFIERS, needed in docsis_symtable.h  */
 
 #define MAXINT 2000000000
 #define TLV_VSIZE 1024
