@@ -1444,6 +1444,10 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 348,    "MediaType",                         9,      130,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 79.9 MULPIv3.0-I25 Annex C.3.3.9 */
 { 1419,   "ManufacturerCVCChain",              81,     0,      (encode_hexstr),         (decode_hexstr),         0,           255           }, /* TLV 81 MULPIv3.1-I07 Annex C.1.2.21 */
 { 1420,   "CoSignerCVCChain",                  82,     0,      (encode_hexstr),         (decode_hexstr),         0,           255           }, /* TLV 82 MULPIv3.1-I07 Annex C.1.2.22 */
+{ 1422,    "DiplexerBandEdge",                 84,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 84 MULPIv3.1-I19 Annex C.1.2.23 */
+{ 1423,    "DiplexerUpstreamUpperBandEdge",    1,      1422,   (encode_uchar),          (decode_uchar),          0,           4             }, /* TLV 84 MULPIv3.1-I19 Annex C.1.2.23.1 */
+{ 1424,    "DiplexerDownstreamLowerBandEdge",  2,      1422,   (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 84 MULPIv3.1-I19 Annex C.1.2.23.2 */
+{ 1425,    "DiplexerDownstreamUpperBandEdge",  3,      1422,   (encode_uchar),          (decode_uchar),          0,           2             }, /* TLV 84 MULPIv3.1-I19 Annex C.1.2.23.3 */
 
 /* eRouter TLVs */
 { 175,    "eRouter",                           202,    0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 202 eRouter-I12 */
