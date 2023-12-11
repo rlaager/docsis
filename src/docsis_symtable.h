@@ -1580,6 +1580,12 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 236,    "SNMPv3AccessViewMask",              3,      233,    (encode_hexstr),         (decode_hexstr),         2,           2             }, /* TLV 202.54.3 eRouter-I12 Annex B.4.6.3 */
 { 237,    "SNMPv3AccessViewType",              4,      233,    (encode_uchar),          (decode_uchar),          1,           2             }, /* TLV 202.54.4 eRouter-I12 Annex B.4.6.4 */
 
+/* eSTB Settings */
+{ 1532,    "EstbSettings",                     217,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 217 eDOCSIS-I30 5.2.8.1 */
+{ 1533,    "IpModeControl",                    1,       1532,   (encode_uchar),          (encode_uchar),          0,           2             }, /* TLV 217.1 HOST2.1-I17 15.2.6 */
+{ 1534,    "Snmpv1v2Settings",                 53,      1532,   (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 217.53 HOST2.1-I17 15.2.1 */
+{ 1535,    "Snmpv1v2CommunityName",            1,       1534,   (encode_string),         (decode_string),         1,           32            }, /* TLV 217.53.1 HOST2.1-I17 15.2.1.1 */
+
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/
 { 998,    "GenericTLV",                        0,      0,      (encode_nothing),        (decode_special),        0,           0             },
 /* PacketCable MTA Configuration File Delimiter  */
