@@ -3,6 +3,7 @@
  *  Copyright (c) 2001 Cornel Ciocirlan, ctrl@users.sourceforge.net.
  *  Copyright (c) 2002 Evvolve Media SRL, office@evvolve.com
  *  Copyright (c) 2014 - 2015 Adrian Simionov, daniel.simionov@gmail.com
+ *  Copyright (c) 2015 - 2016 Lukasz Sierzega, xarafaxz@gmail.com
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -47,6 +48,8 @@ unsigned char *_docsis_snmp_build_var_op(unsigned char * data,
                   unsigned char * var_val, size_t * listlength);
 
 unsigned char *_docsis_asn_build_sequence(unsigned char * data, size_t * datalength, unsigned char type, size_t length);
+
+extern unsigned int decode_format;
 
 #endif /* _DOCSIS_SNMP_H */
 

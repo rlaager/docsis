@@ -1,3 +1,12 @@
+version 0.9.9 /proposal/:
+	* Feature: Allowing use MIB-MODULE-NAME:: MODULE-NAME-SPACE:: et cetera in SnmpMibObject TLV which i strongly recommend
+		that resolve problems with mibs name colision, for example: PacketCable/EuroPacketCable, Motorola/Compal enterprise mibs.
+		you can use "-f" switch to include MIB-MODULE-NAME:: prefixes in config dump
+	* Feature: Allowing use C-style inline comments "//"
+	* Feature: Allow use custom mib for packetcable hash signing becasuse "-eu" / EuroPacketCable and "-na" PacketCable are not enough
+		use "-H [MIB]" switch to set custom hash mib.
+	* Attempt to cleanup option parsing mess. Now option parsing is getopt based. However due to preserving option compatibility it is create another mess. Just slighty lesser, i think.
+
 version 0.9.8 (??/??/????):
 	* Massive improvements by Adrian Simionov
 
