@@ -25,12 +25,13 @@
 #define _DOCSIS_COMMON_H
 
 /* needed in docsis_symtable.h */
-#define NUM_IDENTIFIERS 1536
+#define NUM_IDENTIFIERS 1537
 
 #define MAXINT 2000000000
-#define TLV_VSIZE 1024
+#define TLV_VSIZE 9000
 #define TRUE 1
 #define FALSE 0
+#define MAX_DIALPLAN_SIZE 8192 /* defined in CL-PKTC-EUE-RST-MIB */
 
 #define INDENT_NOOP 		100
 #define INDENT_CLEAR 		101

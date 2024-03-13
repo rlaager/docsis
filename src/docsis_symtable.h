@@ -1586,6 +1586,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 1534,    "Snmpv1v2Settings",                 53,      1532,   (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 217.53 HOST2.1-I17 15.2.1 */
 { 1535,    "Snmpv1v2CommunityName",            1,       1534,   (encode_string),         (decode_string),         1,           32            }, /* TLV 217.53.1 HOST2.1-I17 15.2.1.1 */
 
+{ 1536,   "DigitMap",                          11,      0,      (encode_nothing),        (decode_snmp_object),    0,           0             },
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/
 { 998,    "GenericTLV",                        0,      0,      (encode_nothing),        (decode_special),        0,           0             },
 /* PacketCable MTA Configuration File Delimiter  */

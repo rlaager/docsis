@@ -37,7 +37,7 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
   oid oid_value[MAX_OID_LEN];
   size_t oid_value_len = MAX_OID_LEN;
   unsigned char *data_ptr;
-  unsigned char buf[SPRINT_MAX_LEN];
+  unsigned char *buf;
   unsigned int ltmp;
   struct tree *tp;
   struct range_list *rp;
@@ -46,7 +46,8 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
   long longval;
   unsigned long ulongval;
 
-  memset (buf, 0, SPRINT_MAX_LEN);
+  buf = (unsigned char *)malloc(TLV_VSIZE);
+  memset (buf, 0, TLV_VSIZE);
   if (!get_node (oid_string, var_name, &name_len))
     {
       if (!read_objid (oid_string, var_name, &name_len))
@@ -171,7 +172,7 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
 	}
       else if (oid_asntype == 's')
 	{
-	  strncpy ((char *) buf, value->strval, SPRINT_MAX_LEN);
+	  strncpy ((char *) buf, value->strval, TLV_VSIZE);
 	  len = strlen ((char *) buf);
 	}
       else if (oid_asntype == 'x')
@@ -185,10 +186,10 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
 	  len = ltmp;
 	}
 
-      if (len < 0 || len > SPRINT_MAX_LEN - 1)
+      if (len < 0 || len > TLV_VSIZE - 1)
 	{
 	  fprintf(stderr, "String too long at line %d, max allowed %d\n", line,
-		  SPRINT_MAX_LEN);
+		  TLV_VSIZE);
 	  return 0;
 	  break;
 	}

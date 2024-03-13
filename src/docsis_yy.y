@@ -62,6 +62,7 @@ struct tlv *_my_tlvtree_head;
 %token <symptr>  T_IDENT_SNMPSET
 %token <symptr>  T_IDENT_GENERIC
 %token <symptr>  T_IDENT_CVC
+%token <symptr>  T_DIGITMAP
 %token <strval>  T_ETHERMASK
 %token <strval>  T_LABEL_OID
 %token <strval>  T_SUBMGT_FILTERS
@@ -215,6 +216,8 @@ assignment_stmt:  T_IDENTIFIER T_INTEGER ';' {
 			$$ = create_generic_str_tlv($1,$3, (union t_val *)&$5); }
 		| T_IDENT_GENERIC T_TLV_CODE T_INTEGER T_TLV_STRZERO_VALUE T_STRING ';' {
 			$$ = create_generic_strzero_tlv($1,$3, (union t_val *)&$5); }
+		| T_DIGITMAP T_STRING ';' {
+			$$ = create_dialplan_tlv($1, (union t_val *)&$2);}
 		| generic_stmt {
 			$$ = $1; }
 		;
@@ -454,6 +457,47 @@ create_external_file_tlv ( struct symbol_entry *sym_ptr,
   }
   fclose (ext_file);
   return first_tlvbuf;
+}
+
+struct tlv * create_dialplan_tlv(struct symbol_entry *sym_ptr, union t_val *value) {
+  struct tlv *tlvbuf=NULL;
+  unsigned int fileSize;
+  FILE *dialplan_file;
+  char *dialplan_buffer;
+  char oidStr[] = "1.3.6.1.4.1.4491.2.2.8.2.1.1.3.1.1.2.1";
+  char *oidStr2;
+
+  if ((dialplan_file = fopen (value->strval, "rb")) == NULL) {
+    fprintf(stderr, "Error: can't open file %s at line %d\n", value->strval, line);
+    exit (-5);
+  }
+  fseek(dialplan_file, 0, SEEK_END);
+  fileSize = ftell(dialplan_file);
+  if (fileSize > MAX_DIALPLAN_SIZE) {
+    fprintf(stderr, "Dialplan file %s too big at line %d. Must <= %d\n",
+            value->strval, line, MAX_DIALPLAN_SIZE);
+    exit(-5);
+  }
+  fseek(dialplan_file, 0, SEEK_SET);
+  dialplan_buffer = (char *)malloc(fileSize);
+  if (!dialplan_buffer) {
+    fprintf(stderr, "Fatal error allocating memory for dialplan buffer, closing.\n");
+    exit(-5);
+  }
+  if (!fread(dialplan_buffer, fileSize, 1, dialplan_file)) {
+    fprintf(stderr, "Something went wrong reading the dialplan file, closing.\n");
+    exit(-5);
+  }
+
+  fclose(dialplan_file);
+
+  value->strval = dialplan_buffer;
+  value->strval[fileSize] = '\0';
+  oidStr2 = (char *)malloc(strlen(oidStr) + 1); // malloc becasue create_snmpset_tlv will free it
+  strcpy(oidStr2, oidStr);
+  tlvbuf = create_snmpset_tlv(sym_ptr, oidStr2, 's', value);
+  free(dialplan_buffer);
+  return tlvbuf;
 }
 
 /* Given a code, type, and value, creates a TLV encoding.

@@ -69,6 +69,8 @@ struct tlv *create_cpemac_tlv (struct symbol_entry *sym_ptr,
 			       union t_val *value);
 struct tlv *create_external_file_tlv (struct symbol_entry *sym_ptr,
 			       union t_val *value);
+struct tlv *create_dialplan_tlv (struct symbol_entry *sym_ptr,
+			       union t_val *value);
 
 
 /* add a TLV to a list; create the list if NULL, otherwise re-alloc new list,

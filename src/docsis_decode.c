@@ -37,6 +37,8 @@
 #include "docsis_snmp.h"
 #include "ethermac.h"
 
+#define DIALPLAN_OUTPUT "dialplan_output.txt"
+
 unsigned int is_vspecific = FALSE;
 
 struct symbol_entry *
@@ -340,7 +342,7 @@ void decode_snmp_object (unsigned char *tlvbuf, symbol_type *sym, size_t length 
   memcpy (pr, tlvbuf + 24, 2);
 
   if ( memcmp(pm, pn, 19) == 0 || memcmp(po, pp, 19) == 0 ) {
-    FILE *dialplan = fopen("dialplan.txt", "w");
+    FILE *dialplan = fopen(DIALPLAN_OUTPUT, "w");
     // when dialplan is shorter than 7F
     if (*(int*)pm == *(int*)pn) {
       fwrite(tlvbuf+24, sizeof(char), length - 24, dialplan);
@@ -354,10 +356,7 @@ void decode_snmp_object (unsigned char *tlvbuf, symbol_type *sym, size_t length 
       }
     }
     fclose(dialplan);
-    printf("/* ");
-    printf("PC20 dialplan found, dialplan.txt file created.");
-    printf(" */");
-    printf("\n");
+    printf("DigitMap \"%s\"; /* file created. */\n", DIALPLAN_OUTPUT);
   } else {
     printf("%s ", sym->sym_ident);
     decode_vbind (tlvbuf, length );
