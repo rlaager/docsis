@@ -45,6 +45,7 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
   int rv;
   long longval;
   unsigned long ulongval;
+  unsigned int retlen = 0;
 
   buf = (unsigned char *)malloc(TLV_VSIZE);
   memset (buf, 0, TLV_VSIZE);
@@ -92,6 +93,7 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
 		      fprintf(stderr, "/* Error: Can't find oid %s at line %d */\n",
 			      oid_string, line);
 		      snmp_perror ("encode_vbind");
+		      free(buf);
 		      return 0;
 		    }
 		}
@@ -110,7 +112,7 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
 				    sizeof (long),
 				    (unsigned char *) &longval,
 				    &out_size);
-      return data_ptr - out_buffer;
+      retlen = data_ptr - out_buffer;
       break;
       ;;
     case 'g':
@@ -122,7 +124,7 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
 				    sizeof (unsigned long),
 				    (unsigned char *) &ulongval,
 				    &out_size);
-      return data_ptr - out_buffer;
+      retlen = data_ptr - out_buffer;
       break;
       ;;
     case 'c':
@@ -134,7 +136,7 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
 				    sizeof (unsigned long),
 				    (unsigned char *) &ulongval,
 				    &out_size);
-      return data_ptr - out_buffer;
+      retlen = data_ptr - out_buffer;
       break;
       ;;
     case 'u':
@@ -146,7 +148,7 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
 				    sizeof (unsigned long),
 				    (unsigned char *) &ulongval,
 				    &out_size);
-      return data_ptr - out_buffer;
+      retlen = data_ptr - out_buffer;
       break;
       ;;
     case 't':
@@ -158,7 +160,7 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
                                     sizeof (unsigned long),
                                     (unsigned char *) &ulongval,
                                     &out_size);
-      return data_ptr - out_buffer;
+      retlen = data_ptr - out_buffer;
       break;
       ;;
     case 's':
@@ -180,7 +182,7 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
 	  if ((rv = hexadecimal_to_binary (value->strval, buf)) == -1)
 	    {
 	      fprintf(stderr, "Invalid hexadecimal string at line %d\n", line);
-	      return 0;
+	      break;
 	    }
 	  ltmp = (unsigned int) rv;
 	  len = ltmp;
@@ -190,7 +192,6 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
 	{
 	  fprintf(stderr, "String too long at line %d, max allowed %d\n", line,
 		  TLV_VSIZE);
-	  return 0;
 	  break;
 	}
       tp = get_tree (var_name, name_len, get_tree_head ());
@@ -208,7 +209,6 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
 	  if (!rp)
 	    {
 	      fprintf(stderr, "Value too long at line %d\n", line);
-	      return 0;
 	      break;
 	    }
 	}
@@ -231,14 +231,14 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
 #ifdef DEBUG
       fprintf (stderr, "encoded len %ld var_len %zd leftover %zd difference %zd\n", len, name_len, out_size, (data_ptr - out_buffer) );
 #endif
-      return data_ptr - out_buffer;
+      retlen = data_ptr - out_buffer;
       break;
       ;;
     case 'a':
       if (!inet_aton (value->strval, (struct in_addr *) &ltmp))
 	{
 	  fprintf(stderr, "Invalid IP address %s at line %d\n", value->strval, line);
-	  return 0;
+	  break;
 	}
       data_ptr = _docsis_snmp_build_var_op (out_buffer,
 				    var_name,
@@ -246,7 +246,7 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
 				    ASN_IPADDRESS,
 				    sizeof (struct in_addr),
 				    (unsigned char *) &ltmp, &out_size);
-      return data_ptr - out_buffer;
+      retlen = data_ptr - out_buffer;
       break;
       ;;
     case 'o':
@@ -257,7 +257,7 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
 	if (!read_objid ((char *) buf, oid_value, &oid_value_len))
 	  {
 		fprintf(stderr, "Can't find oid %s at line %d\n", buf, line);
-		return 0;
+		break;
     	  }
 
 	data_ptr = _docsis_snmp_build_var_op (out_buffer,
@@ -266,16 +266,17 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
                                     ASN_OBJECT_ID,
                                     oid_value_len*sizeof(oid),
                                     (unsigned char *) &oid_value, &out_size);
-	return data_ptr - out_buffer;
+	retlen = data_ptr - out_buffer;
 	break;
 	;;
 
     default:
       fprintf(stderr, "Variable type %s not supported yet\n", &oid_asntype);
-      return 0;
+      break;
       ;;
     }
-/* NOTREACHED */
+    free(buf);
+    return retlen;
 }
 
 
