@@ -37,7 +37,7 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
   oid oid_value[MAX_OID_LEN];
   size_t oid_value_len = MAX_OID_LEN;
   unsigned char *data_ptr;
-  unsigned char buf[SPRINT_MAX_LEN];
+  unsigned char *buf;
   unsigned int ltmp;
   struct tree *tp;
   struct range_list *rp;
@@ -45,8 +45,10 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
   int rv;
   long longval;
   unsigned long ulongval;
+  unsigned int retlen = 0;
 
-  memset (buf, 0, SPRINT_MAX_LEN);
+  buf = (unsigned char *)malloc(TLV_VSIZE);
+  memset (buf, 0, TLV_VSIZE);
   if (!get_node (oid_string, var_name, &name_len))
     {
       if (!read_objid (oid_string, var_name, &name_len))
@@ -91,6 +93,7 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
 		      fprintf(stderr, "/* Error: Can't find oid %s at line %d */\n",
 			      oid_string, line);
 		      snmp_perror ("encode_vbind");
+		      free(buf);
 		      return 0;
 		    }
 		}
@@ -109,7 +112,7 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
 				    sizeof (long),
 				    (unsigned char *) &longval,
 				    &out_size);
-      return data_ptr - out_buffer;
+      retlen = data_ptr - out_buffer;
       break;
       ;;
     case 'g':
@@ -121,7 +124,7 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
 				    sizeof (unsigned long),
 				    (unsigned char *) &ulongval,
 				    &out_size);
-      return data_ptr - out_buffer;
+      retlen = data_ptr - out_buffer;
       break;
       ;;
     case 'c':
@@ -133,7 +136,7 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
 				    sizeof (unsigned long),
 				    (unsigned char *) &ulongval,
 				    &out_size);
-      return data_ptr - out_buffer;
+      retlen = data_ptr - out_buffer;
       break;
       ;;
     case 'u':
@@ -145,7 +148,7 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
 				    sizeof (unsigned long),
 				    (unsigned char *) &ulongval,
 				    &out_size);
-      return data_ptr - out_buffer;
+      retlen = data_ptr - out_buffer;
       break;
       ;;
     case 't':
@@ -157,7 +160,7 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
                                     sizeof (unsigned long),
                                     (unsigned char *) &ulongval,
                                     &out_size);
-      return data_ptr - out_buffer;
+      retlen = data_ptr - out_buffer;
       break;
       ;;
     case 's':
@@ -171,7 +174,7 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
 	}
       else if (oid_asntype == 's')
 	{
-	  strncpy ((char *) buf, value->strval, SPRINT_MAX_LEN);
+	  strncpy ((char *) buf, value->strval, TLV_VSIZE);
 	  len = strlen ((char *) buf);
 	}
       else if (oid_asntype == 'x')
@@ -179,17 +182,16 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
 	  if ((rv = hexadecimal_to_binary (value->strval, buf)) == -1)
 	    {
 	      fprintf(stderr, "Invalid hexadecimal string at line %d\n", line);
-	      return 0;
+	      break;
 	    }
 	  ltmp = (unsigned int) rv;
 	  len = ltmp;
 	}
 
-      if (len < 0 || len > SPRINT_MAX_LEN - 1)
+      if (len < 0 || len > TLV_VSIZE - 1)
 	{
 	  fprintf(stderr, "String too long at line %d, max allowed %d\n", line,
-		  SPRINT_MAX_LEN);
-	  return 0;
+		  TLV_VSIZE);
 	  break;
 	}
       tp = get_tree (var_name, name_len, get_tree_head ());
@@ -207,7 +209,6 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
 	  if (!rp)
 	    {
 	      fprintf(stderr, "Value too long at line %d\n", line);
-	      return 0;
 	      break;
 	    }
 	}
@@ -230,14 +231,14 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
 #ifdef DEBUG
       fprintf (stderr, "encoded len %ld var_len %zd leftover %zd difference %zd\n", len, name_len, out_size, (data_ptr - out_buffer) );
 #endif
-      return data_ptr - out_buffer;
+      retlen = data_ptr - out_buffer;
       break;
       ;;
     case 'a':
       if (!inet_aton (value->strval, (struct in_addr *) &ltmp))
 	{
 	  fprintf(stderr, "Invalid IP address %s at line %d\n", value->strval, line);
-	  return 0;
+	  break;
 	}
       data_ptr = _docsis_snmp_build_var_op (out_buffer,
 				    var_name,
@@ -245,7 +246,7 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
 				    ASN_IPADDRESS,
 				    sizeof (struct in_addr),
 				    (unsigned char *) &ltmp, &out_size);
-      return data_ptr - out_buffer;
+      retlen = data_ptr - out_buffer;
       break;
       ;;
     case 'o':
@@ -256,7 +257,7 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
 	if (!read_objid ((char *) buf, oid_value, &oid_value_len))
 	  {
 		fprintf(stderr, "Can't find oid %s at line %d\n", buf, line);
-		return 0;
+		break;
     	  }
 
 	data_ptr = _docsis_snmp_build_var_op (out_buffer,
@@ -265,16 +266,17 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
                                     ASN_OBJECT_ID,
                                     oid_value_len*sizeof(oid),
                                     (unsigned char *) &oid_value, &out_size);
-	return data_ptr - out_buffer;
+	retlen = data_ptr - out_buffer;
 	break;
 	;;
 
     default:
       fprintf(stderr, "Variable type %s not supported yet\n", &oid_asntype);
-      return 0;
+      break;
       ;;
     }
-/* NOTREACHED */
+    free(buf);
+    return retlen;
 }
 
 
