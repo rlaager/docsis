@@ -1,0 +1,57 @@
+Main 
+{
+	MtaConfigDelimiter 1;
+	SnmpMibObject pktcMtaDevEnabled.0 Integer 1; /* true */
+	SnmpMibObject pktcEUEDevSipPort.0 Gauge32 5060;
+	SnmpMibObject pktcEUEDevOpDomain.1 String "yourOperatorDomain.com";
+	SnmpMibObject pktcEUEDevOpRowStatus.1 Integer 4; /* createAndGo */
+	SnmpMibObject pktcEUEDevPCSCFAddrType.1.1 Integer 1; /* ipv4 */
+	SnmpMibObject pktcEUEDevPCSCFAddr.1.1 String "10.11.12.13";
+	SnmpMibObject pktcEUEDevPCSCFSipPort.1.1 Gauge32 5060;
+	SnmpMibObject pktcEUEDevPCSCFRowStatus.1.1 Integer 4; /* createAndGo */
+	SnmpMibObject pktcEUEUsrIMPUIdType.1 Integer 3; /* publicIdentity */
+	SnmpMibObject pktcEUEUsrIMPUId.1 String "sip:1111@yourOperatorDomain.com";
+	SnmpMibObject pktcEUEUsrIMPUIMPIIndexRef.1 Gauge32 1;
+	SnmpMibObject pktcEUEUsrIMPUOpIndexRefs.1 String "1";
+	SnmpMibObject pktcEUEUsrIMPUSigSecurity.1 Integer 2; /* false */
+	SnmpMibObject pktcEUEUsrIMPUAdditionalInfo.1 String "IEP#9;OEP#9";
+	SnmpMibObject pktcEUEUsrIMPURowStatus.1 Integer 4; /* createAndGo */
+	SnmpMibObject pktcEUEUsrIMPUIdType.2 Integer 3; /* publicIdentity */
+	SnmpMibObject pktcEUEUsrIMPUId.2 String "sip:2222@yourOperatorDomain.com";
+	SnmpMibObject pktcEUEUsrIMPUIMPIIndexRef.2 Gauge32 1;
+	SnmpMibObject pktcEUEUsrIMPUOpIndexRefs.2 String "1";
+	SnmpMibObject pktcEUEUsrIMPUSigSecurity.2 Integer 2; /* false */
+	SnmpMibObject pktcEUEUsrIMPUAdditionalInfo.2 String "IEP#10;OEP#10";
+	SnmpMibObject pktcEUEUsrIMPURowStatus.2 Integer 4; /* createAndGo */
+	SnmpMibObject pktcEUEUsrAppMapAppOrgID.1.1 Gauge32 4491;
+	SnmpMibObject pktcEUEUsrAppMapAppIdentifier.1.1 Gauge32 1;
+	SnmpMibObject pktcEUEUsrAppMapAppIndexRef.1.1 Gauge32 1;
+	SnmpMibObject pktcEUEUsrAppMapRowStatus.1.1 Integer 4; /* createAndGo */
+	SnmpMibObject pktcEUEUsrAppMapAppOrgID.2.1 Gauge32 4491;
+	SnmpMibObject pktcEUEUsrAppMapAppIdentifier.2.1 Gauge32 1;
+	SnmpMibObject pktcEUEUsrAppMapAppIndexRef.2.1 Gauge32 1;
+	SnmpMibObject pktcEUEUsrAppMapRowStatus.2.1 Integer 4; /* createAndGo */
+	SnmpMibObject pktcEUERSTAppFeatID.1.1 Integer 2; /* digitMap */
+	SnmpMibObject pktcEUERSTAppFeatIndexRef.1.1 Gauge32 1;
+	SnmpMibObject pktcEUERSTAppStatus.1.1 Integer 4; /* createAndGo */
+	SnmpMibObject pktcEUERSTAppFeatID.1.2 Integer 3; /* basicCall */
+	SnmpMibObject pktcEUERSTAppFeatIndexRef.1.2 Gauge32 1;
+	SnmpMibObject pktcEUERSTAppStatus.1.2 Integer 4; /* createAndGo */
+	DigitMap "yourOperatorDialPlan.txt";
+	SnmpMibObject pktcEUERSTDMStatus.1 Integer 4; /* createAndGo */
+	SnmpMibObject pktcEUERSTBCallPrefCodecList.1 String "";
+	SnmpMibObject pktcEUERSTBCallStatus.1 Integer 4; /* createAndGo */
+	SnmpMibObject pktcEUERSTNfBCallOrigDTTimer.1 Gauge32 30;
+	SnmpMibObject pktcEUERSTNfBCallTermErrSigTimer.1 Gauge32 120;
+	SnmpMibObject pktcEUERSTNfBCallPermSeqTimer1.1 Gauge32 60;
+	SnmpMibObject pktcEUERSTNfBCallPermSeqTimer2.1 Gauge32 60;
+	SnmpMibObject pktcEUERSTNfBCallPermSeqTimer3.1 Gauge32 60;
+	SnmpMibObject pktcEUERSTNfBCallPermSeqTimer4.1 Gauge32 60;
+	SnmpMibObject pktcEUERSTNfBCallLORTimer.1 Gauge32 2;
+	SnmpMibObject pktcEUERSTNfBCallNEMDSCPValueMedia.1 Gauge32 15;
+	SnmpMibObject pktcEUERSTNfBCallNEMDSCPValueSig.1 Gauge32 15;
+	SnmpMibObject pktcEUERSTNFBCallOrigModLongIntDig.1 Gauge32 16;
+	SnmpMibObject pktcEUERSTNfBCallOverrideNotifyRejected.1 Integer 2; /* false */
+	SnmpMibObject pktcEUERSTNfBCallStatus.1 Integer 4; /* createAndGo */
+	MtaConfigDelimiter 255;
+}

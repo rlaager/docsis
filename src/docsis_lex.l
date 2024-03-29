@@ -103,6 +103,7 @@ TlvValue		{ return T_TLV_VALUE; 	}
 TlvString		{ return T_TLV_STR_VALUE; 	}
 TlvStringZero		{ return T_TLV_STRZERO_VALUE; 	}
 TlvType			{ return T_TLV_TYPE;		}
+DigitMap		{ yylval.symptr=find_symbol_by_name(yytext);return T_DIGITMAP; }
 [A-Za-z]+[A-Za-z0-9]*	{
 				yylval.symptr=find_symbol_by_name(yytext);
 		  	  	if(yydebug)
