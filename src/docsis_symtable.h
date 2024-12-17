@@ -111,6 +111,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 14,     "SwUpgradeFilename",                 9,      0,      (encode_string),         (decode_string),         0,           0             }, /* TLV 9 MULPIv3.0-I24 Annex C.1.2.3 */
 { 15,     "SnmpWriteControl",                  10,     0,      (encode_nothing),        (decode_snmp_wd),        0,           0             }, /* TLV 10 MULPIv3.0-I24 Annex C.1.2.4 */
 { 16,     "SnmpMibObject",                     11,     0,      (encode_nothing),        (decode_snmp_object),    0,           0             }, /* TLV 11 MULPIv3.0-I24 Annex C.1.2.5 */
+{ 1536,   "DigitMap",                          11,     0,      (encode_nothing),        (decode_snmp_object),    0,           0             },
 { 277,    "ModemIPAddress",                    12,     0,      (encode_ip),             (decode_ip),             0,           0             }, /* TLV 12 MULPIv3.0-I24 Annex C.1.3.3 */
 { 17,     "CpeMacAddress",                     14,     0,      (encode_ether),          (decode_ether),          0,           0             }, /* TLV 14 MULPIv3.0-I24 Annex C.1.2.6 */
 { 18,     "BaselinePrivacy",                   17,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 17 SECv3.0-I15 Annex A.1.1.1 */
@@ -1511,7 +1512,9 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 347,    "PowerOverEthernetStatus",           8,      130,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 79.8 MULPIv3.0-I25 Annex C.3.3.8 */
 { 348,    "MediaType",                         9,      130,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 79.9 MULPIv3.0-I25 Annex C.3.3.9 */
 { 1419,   "ManufacturerCVCChain",              81,     0,      (encode_hexstr),         (decode_hexstr),         0,           255           }, /* TLV 81 MULPIv3.1-I07 Annex C.1.2.21 */
+{ 1537,   "ManufacturerCVCChainFile",          81,     0,      (encode_nothing),        (decode_hexstr),         0,           255           },
 { 1420,   "CoSignerCVCChain",                  82,     0,      (encode_hexstr),         (decode_hexstr),         0,           255           }, /* TLV 82 MULPIv3.1-I07 Annex C.1.2.22 */
+{ 1538,   "CoSignerCVCChainFile",              82,     0,      (encode_nothing),        (decode_hexstr),         0,           255           },
 { 1499,   "DTPModeConfiguration",              83,     0,      (encode_uchar),          (decode_uchar),          0,           2             }, /* TLV 83 MULPIv3.1-I25 Annex C.1.1.31 */
 { 1422,   "DiplexerBandEdge",                  84,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 84 MULPIv3.1-I19 Annex C.1.2.23 */
 { 1423,   "DiplexerUpstreamUpperBandEdge",     1,      1422,   (encode_uchar),          (decode_uchar),          0,           4             }, /* TLV 84 MULPIv3.1-I19 Annex C.1.2.23.1 */
@@ -1586,7 +1589,6 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 1534,    "Snmpv1v2Settings",                 53,      1532,   (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 217.53 HOST2.1-I17 15.2.1 */
 { 1535,    "Snmpv1v2CommunityName",            1,       1534,   (encode_string),         (decode_string),         1,           32            }, /* TLV 217.53.1 HOST2.1-I17 15.2.1.1 */
 
-{ 1536,   "DigitMap",                          11,      0,      (encode_nothing),        (decode_snmp_object),    0,           0             },
 /* Generic TLV ... we only use the limits, code and length don't matter ...*/
 { 998,    "GenericTLV",                        0,      0,      (encode_nothing),        (decode_special),        0,           0             },
 /* PacketCable MTA Configuration File Delimiter  */

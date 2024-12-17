@@ -25,7 +25,7 @@
 #define _DOCSIS_COMMON_H
 
 /* needed in docsis_symtable.h */
-#define NUM_IDENTIFIERS 1537
+#define NUM_IDENTIFIERS 1539
 
 #define MAXINT 2000000000
 #define TLV_VSIZE 9000
