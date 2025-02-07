@@ -48,6 +48,7 @@
 /*id  "identifier" docsis_code parent_id encode_func decode_func low_limit high_limit */
 
 symbol_type symtable[NUM_IDENTIFIERS] =  {
+/* id     sym_ident                    docsis_code  parent_id  encode_func              decode_func              low_limit    high_limit */
 { 0,      "/* Pad */",                         0,      0,      (encode_nothing),        (decode_special),        0,           0             },
 { 1,      "DownstreamFrequency",               1,      0,      (encode_uint),           (decode_uint),           88000000,    1008000000    }, /* TLV 1 MULPIv3.0-I24 Annex C.1.1.1 */
 { 2,      "UpstreamChannelId",                 2,      0,      (encode_uchar),          (decode_uchar),          0,           255           }, /* TLV 2 MULPIv3.0-I24 Annex C.1.1.2 */
@@ -111,6 +112,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 14,     "SwUpgradeFilename",                 9,      0,      (encode_string),         (decode_string),         0,           0             }, /* TLV 9 MULPIv3.0-I24 Annex C.1.2.3 */
 { 15,     "SnmpWriteControl",                  10,     0,      (encode_nothing),        (decode_snmp_wd),        0,           0             }, /* TLV 10 MULPIv3.0-I24 Annex C.1.2.4 */
 { 16,     "SnmpMibObject",                     11,     0,      (encode_nothing),        (decode_snmp_object),    0,           0             }, /* TLV 11 MULPIv3.0-I24 Annex C.1.2.5 */
+{ 1536,   "DigitMap",                          11,     0,      (encode_nothing),        (decode_snmp_object),    0,           0             },
 { 277,    "ModemIPAddress",                    12,     0,      (encode_ip),             (decode_ip),             0,           0             }, /* TLV 12 MULPIv3.0-I24 Annex C.1.3.3 */
 { 17,     "CpeMacAddress",                     14,     0,      (encode_ether),          (decode_ether),          0,           0             }, /* TLV 14 MULPIv3.0-I24 Annex C.1.2.6 */
 { 18,     "BaselinePrivacy",                   17,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 17 SECv3.0-I15 Annex A.1.1.1 */
@@ -1511,7 +1513,9 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 347,    "PowerOverEthernetStatus",           8,      130,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 79.8 MULPIv3.0-I25 Annex C.3.3.8 */
 { 348,    "MediaType",                         9,      130,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 79.9 MULPIv3.0-I25 Annex C.3.3.9 */
 { 1419,   "ManufacturerCVCChain",              81,     0,      (encode_hexstr),         (decode_hexstr),         0,           255           }, /* TLV 81 MULPIv3.1-I07 Annex C.1.2.21 */
+{ 1537,   "ManufacturerCVCChainFile",          81,     0,      (encode_nothing),        (decode_hexstr),         0,           255           },
 { 1420,   "CoSignerCVCChain",                  82,     0,      (encode_hexstr),         (decode_hexstr),         0,           255           }, /* TLV 82 MULPIv3.1-I07 Annex C.1.2.22 */
+{ 1538,   "CoSignerCVCChainFile",              82,     0,      (encode_nothing),        (decode_hexstr),         0,           255           },
 { 1499,   "DTPModeConfiguration",              83,     0,      (encode_uchar),          (decode_uchar),          0,           2             }, /* TLV 83 MULPIv3.1-I25 Annex C.1.1.31 */
 { 1422,   "DiplexerBandEdge",                  84,     0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 84 MULPIv3.1-I19 Annex C.1.2.23 */
 { 1423,   "DiplexerUpstreamUpperBandEdge",     1,      1422,   (encode_uchar),          (decode_uchar),          0,           4             }, /* TLV 84 MULPIv3.1-I19 Annex C.1.2.23.1 */
@@ -1549,6 +1553,15 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 1529,   "AdvDiplexerDownstreamLowerBandEdge", 2,     1527,   (encode_ushort),         (decode_ushort),         0,           0             }, /* TLV 96.2 MULPIv4.0-I07 Annex C.1.2.24.2 */
 { 1530,   "AdvDiplexerDownstreamUpperBandEdge", 3,     1527,   (encode_ushort),         (decode_ushort),         0,           0             }, /* TLV 96.3 MULPIv4.0-I07 Annex C.1.2.24.3 */
 { 1531,   "AdvancedBandPlanSupport",           97,     0,      (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 97 MULPIv4.0-I07 Annex C.1.2.25 */
+{ 1539,   "DOCSISSyncConfigurations",          101,    0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 101 SYNC-I03 Annex D.2.1 */
+{ 1540,   "PTPMasterClockEnable",              1,      1539,   (encode_uchar),          (decode_uchar),          1,           2             }, /* TLV 101.1 SYNC-I03 Annex D.2.1.1 */
+{ 1541,   "PTPProfileConfiguration",           2,      1539,   (encode_uchar),          (decode_uchar),          0,           3             }, /* TLV 101.2 SYNC-I03 Annex D.2.1.2 */
+{ 1542,   "PTPMaxNumberofClockSlavesConfiguration", 3, 1539,   (encode_uchar),          (decode_uchar),          0,           255           }, /* TLV 101.2 SYNC-I03 Annex D.2.1.3 */
+{ 1543,   "SyncEClockEnable",                  4,      1539,   (encode_uchar),          (decode_uchar),          1,           2             }, /* TLV 101.2 SYNC-I03 Annex D.2.1.4 */
+{ 1544,   "PTPAddressConfigurations",          102,    0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 102 SYNC-I03 Annex D.2.2 */
+{ 1545,   "PTPSourceIPAddressConfiguration",   1,      1544,   (encode_ip_ip6),         (decode_ip_ip6),         0,           0             }, /* TLV 102.1 SYNC-I03 Annex D.2.2.1 */
+{ 1546,   "CMTSPTPIPAddressConfiguration",     2,      1544,   (encode_ip_ip6),         (decode_ip_ip6),         0,           0             }, /* TLV 102.2 SYNC-I03 Annex D.2.2.2 */
+{ 1547,   "PTPDestMulticastMACAddressConfiguration", 3, 1544,  (encode_ether),          (decode_ether),          0,           0             }, /* TLV 102.3 SYNC-I03 Annex D.2.2.3 */
 
 /* eRouter TLVs */
 { 175,    "eRouter",                           202,    0,      (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 202 eRouter-I12 */

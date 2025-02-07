@@ -24,7 +24,6 @@ config.sub
 configure
 depcomp
 docsis-*.*.*
-examples/*.bin
 examples/*.log
 examples/*.sh
 examples/*.trs

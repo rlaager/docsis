@@ -1,0 +1,52 @@
+Main 
+{
+	NetworkAccess 1;
+	MaxCPE 16;
+	GlobalPrivacyEnable 0;
+	UsServiceFlow
+	{
+		UsServiceFlowRef 1;
+		QosParamSetType 7;
+	}
+	DsServiceFlow
+	{
+		DsServiceFlowRef 6;
+		QosParamSetType 7;
+	}
+	SNMPv1v2cCoexistenceConfig
+	{
+		SNMPv1v2cCommunityName "public";
+		SNMPv1v2cTransportAddressAccess
+		{
+			SNMPv1v2cTransportAddress 0.0.0.0/0;
+			SNMPv1v2cTransportAddressMask 0.0.0.0/0;
+		}
+		SNMPv1v2cTransportAddressAccess
+		{
+			SNMPv1v2cTransportAddress ::/0;
+			SNMPv1v2cTransportAddressMask ::/0;
+		}
+		SNMPv1v2cAccessViewType 2;
+		SNMPv1v2cAccessViewName "docsisManagerView";
+	}
+	SNMPv1v2cCoexistenceConfig
+	{
+		SNMPv1v2cCommunityName "private";
+		SNMPv1v2cTransportAddressAccess
+		{
+			SNMPv1v2cTransportAddress 0.0.0.0/0;
+			SNMPv1v2cTransportAddressMask 0.0.0.0/0;
+		}
+		SNMPv1v2cTransportAddressAccess
+		{
+			SNMPv1v2cTransportAddress ::/0;
+			SNMPv1v2cTransportAddressMask ::/0;
+		}
+		SNMPv1v2cAccessViewType 2;
+		SNMPv1v2cAccessViewName "docsisManagerView";
+	}
+	SNMPCPEAccessControl 1;
+	SnmpMibObject docsDevSwServerTransportProtocol.0 Integer 2; /* http */
+	ManufacturerCVCChainFile "d31mfgcvc.p7b";
+	CoSignerCVCChainFile "d31coscvc.p7b";
+}

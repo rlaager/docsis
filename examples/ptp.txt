@@ -1,0 +1,27 @@
+Main 
+{
+	NetworkAccess 1;
+	UsServiceFlow
+	{
+		UsServiceFlowRef 1;
+		QosParamSetType 7;
+	}
+	DsServiceFlow
+	{
+		DsServiceFlowRef 2;
+		QosParamSetType 7;
+	}
+	DOCSISSyncConfigurations
+	{
+		PTPMasterClockEnable 1; /* Enabled */
+		PTPProfileConfiguration 3; /* ITU-T G.8275.2 */
+		PTPMaxNumberofClockSlavesConfiguration 255;
+		SyncEClockEnable 2; /* Disabled */
+	}
+	PTPAddressConfigurations
+	{
+		PTPSourceIPAddressConfiguration fd10:10:2::4;
+		CMTSPTPIPAddressConfiguration 10.10.2.4;
+		PTPDestMulticastMACAddressConfiguration B4:EE:B4:05:06:07;
+	}
+}
