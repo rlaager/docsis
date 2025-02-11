@@ -127,7 +127,7 @@ TlvType			{ return T_TLV_TYPE;		}
 <STRING>\\ 	{
 			if (strsize<2048)
 			{
-				*str++ = ' ';
+				*str++ = '\\';
 				strsize++;
 			} else {
 			  fprintf(stderr, "line %d: string too long (max 2048 characters)\n",line); exit(-1);
