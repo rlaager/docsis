@@ -38,6 +38,7 @@ extern unsigned int line; 	/* current line number, defined in a.l */
 extern struct tlv *global_tlvtree_head; /* Global list of all config TLVs */
 extern symbol_type *global_symtable;
 extern FILE *yyin;
+extern int yy_scan_string(const char *);
 
 struct tlv *_my_tlvtree_head;
 
@@ -671,15 +672,21 @@ unsigned int tlvtreelen (struct tlv *tlv)
    return current_size;
 }
 
-int parse_config_file ( char *file, struct tlv **parse_tree_result )
+int parse_config_file ( char *file, struct tlv **parse_tree_result, char *mtahash )
 {
   FILE *cf;
   int rval;
+  line = 1;
 
   if ( !strcmp(file, "-") )
   {
 	cf = stdin;
   }
+  else if ( strcmp(mtahash, "") ) {
+            //if cf is not set the encoder runs into a "segmentation fault"!
+    cf = stdin;
+    yy_scan_string(mtahash);
+    } 
   else if ( (cf = fopen ( file, "r" )) == NULL )
   {
 	fprintf (stderr, "docsis: Can't open input file %s\n", file );
