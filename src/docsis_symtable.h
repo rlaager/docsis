@@ -561,7 +561,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 1440,   "SFtoIATCProfileNameReference",      39,     80,     (encode_strzero),        (decode_strzero),        2,           16            }, /* TLV 24.39 MULPIv3.1-I25 Annex C.2.2.7.14 */
 { 753,    "AQMEncodings",                      40,     80,     (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 24.40 MULPIv3.0-I24 Annex C.2.2.7.12 */
 { 754,    "SFAQMDisable",                      1,      753,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 24.40.1 MULPIv3.0-I24 Annex C.2.2.7.12.3 */
-{ 755,    "SFAQMLatencyTarget",                2,      753,    (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 24.40.2 MULPIv3.0-I24 Annex C.2.2.7.12.4 */
+{ 755,    "SFAQMLatencyTarget",                2,      753,    (encode_uchar),          (decode_uchar),          0,           255           }, /* TLV 24.40.2 MULPIv3.0-I24 Annex C.2.2.7.12.4 */
 { 1431,   "AQMAlgorithm",                      3,      753,    (encode_uchar),          (decode_uchar),          0,           2             }, /* TLV 24.40.3 MULPIv3.1-I25 Annex C.2.2.9.15.3 */
 { 1432,   "ImmediateAQMMaxThreshold",          4,      753,    (encode_ushort),         (decode_ushort),         0,           0             }, /* TLV 24.40.4 MULPIv3.1-I25 Annex C.2.2.9.15.4 */
 { 1433,   "ImmediateAQMRangeExponent",         5,      753,    (encode_uchar),          (decode_uchar),          0,           25            }, /* TLV 24.40.5 MULPIv3.1-I25 Annex C.2.2.9.15.5 */
@@ -732,7 +732,7 @@ symbol_type symtable[NUM_IDENTIFIERS] =  {
 { 1441,   "SFtoIATCProfileNameReference",      39,     80,     (encode_strzero),        (decode_strzero),        2,           16            }, /* TLV 24.39 MULPIv3.1-I25 Annex C.2.2.9.14 */
 { 1282,   "AQMEncodings",                      40,     102,    (encode_nothing),        (decode_aggregate),      0,           0             }, /* TLV 25.40 MULPIv3.0-I24 Annex C.2.2.7.12 */
 { 1283,   "SFAQMDisable",                      1,      1282,   (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 25.40.1 MULPIv3.0-I24 Annex C.2.2.7.12.3 */
-{ 1284,   "SFAQMLatencyTarget",                2,      1282,   (encode_uchar),          (decode_uchar),          0,           1             }, /* TLV 25.40.2 MULPIv3.0-I24 Annex C.2.2.7.12.4 */
+{ 1284,   "SFAQMLatencyTarget",                2,      1282,   (encode_uchar),          (decode_uchar),          0,           255           }, /* TLV 25.40.2 MULPIv3.0-I24 Annex C.2.2.7.12.4 */
 { 1442,   "AQMAlgorithm",                      3,      1282,   (encode_uchar),          (decode_uchar),          0,           2             }, /* TLV 24.40.3 MULPIv3.1-I25 Annex C.2.2.9.15.3 */
 { 1443,   "ImmediateAQMMaxThreshold",          4,      1282,   (encode_ushort),         (decode_ushort),         0,           0             }, /* TLV 24.40.4 MULPIv3.1-I25 Annex C.2.2.9.15.4 */
 { 1444,   "ImmediateAQMRangeExponent",         5,      1282,   (encode_uchar),          (decode_uchar),          0,           25            }, /* TLV 24.40.5 MULPIv3.1-I25 Annex C.2.2.9.15.5 */
